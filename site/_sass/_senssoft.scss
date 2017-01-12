@@ -1,0 +1,88 @@
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.site-header {
+  flex: 0 0;
+}
+
+.main-wrapper {
+  flex: 1 0;
+  height: auto;
+  padding-top: 50px;
+}
+
+.footer {
+  flex: 0 0;
+  width: 100%;
+  text-align: center;
+}
+
+#main-menu {
+  height: 50px !important;
+}
+
+.page-wrapper {
+  padding: 2em 0 2em 0;
+}
+
+#main-masthead {
+  padding: 10em;
+  background-image: url("/images/header.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.blank-masthead {
+  padding: 10em !important;
+}
+
+.image-masthead {
+  padding: 6.8em !important;
+}
+
+.docs-wrapper {
+  display: flex;
+}
+
+.docs-sidebar {
+  flex: 1 0 180px;
+  padding: 2em;
+  background-color: $grey;
+  min-height: calc(100vh - 50px);
+}
+
+.docs-content {
+  flex: 8;
+  padding: 2em;
+}
+
+.docs-list {
+  margin-left: 3em !important;
+}
+
+.docs-list > a.item:before {
+  color: $white !important;
+}
+
+.component-image {
+  max-width: 100%;
+  max-height: 170px;
+}
+
+.site-title {
+  white-space: nowrap;
+}
+
+.segment-image {
+  max-width: 100%;
+}
+
+.feature-description {
+  color: $white;
+}
+
+.indented {
+  padding-left: 2em;
+}

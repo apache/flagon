@@ -1,0 +1,14 @@
+#log-feed {
+  height: 720px;
+  overflow-y: hidden;
+}
+
+#map-example {
+  min-height: 300px;
+  width: 100%;
+  z-index: 0;
+}
+
+#demo-dropdown>.default.text {
+  color: $grey !important;
+}
