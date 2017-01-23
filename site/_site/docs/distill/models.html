@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Apache Distill Models</title>
+  <meta name="description" content="Brew Interface class distill.models.brew.Brew">
+
+  <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="/semantic/dist/semantic.min.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="/js/main.js"></script>
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://localhost:4000/docs/distill/models.html">
+  <link rel="alternate" type="application/rss+xml" title="Apache SensSoft" href="/feed.xml">
+
+  
+</head>
+
+
+  <body>
+
+    <div class="site-header">
+  <div id="main-menu" class="ui inverted padded fixed top borderless menu">
+    <a class="site-title" href="/">
+      <h3 class="ui inverted header item">Apache SensSoft</h3>
+    </a>
+
+    <div class="right menu">
+      <div class="ui dropdown item">
+        Components
+        <div class="menu">
+          <a class="item" href="/system">System</a>
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+          <a class="item" href="/tap">Tap</a>
+          <a class="item" href="/stout">Stout</a>
+        </div>
+      </div>
+      <div class="ui dropdown item">
+        <a href="/docs">Docs</a>
+        <div class="menu">
+          <a class="item" href="/docs/system">System</a>
+          <a class="item" href="/docs/userale">UserALE</a>
+          <a class="item" href="/docs/useralejs">UserALE.js</a>
+          <a class="item" href="/docs/useralepyqt">UserALE.pyqt</a>
+          <a class="item" href="/docs/distill">Distill</a>
+          <a class="item" href="/docs/tap">Tap</a>
+          <a class="item" href="/docs/stout">Stout</a>
+        </div>
+      </div>
+      <a class="item" href="/releases">Releases</a>
+      <a class="item" href="/community">Community</a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="main-wrapper">
+      <div class="docs-wrapper">
+  <div class="docs-sidebar">
+    
+
+
+
+
+
+
+
+
+<!-- <div class="ui inverted list">
+  <a class="item" href="/docs">About the Docs</a>
+</div> -->
+<div id="docs-nav" class="ui inverted accordion">
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Apache SensSoft
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/">About the Docs</a>
+      
+        <a class="item" href="/docs/contributing.html">Contributing</a>
+      
+    </div>
+  </div>
+
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    System
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/system/">Getting Started</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/userale/">About UserALE</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE.js
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/useralejs/">Getting Started</a>
+      
+        <a class="item" href="/docs/useralejs/troubleshooting.html">Troubleshooting</a>
+      
+        <a class="item" href="/docs/useralejs/contributing.html">Contributing</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE.pyqt
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/useralepyqt/">Installation</a>
+      
+        <a class="item" href="/docs/useralepyqt/start.html">Getting Started</a>
+      
+        <a class="item" href="/docs/useralepyqt/api.html">API Documentation</a>
+      
+        <a class="item" href="/docs/useralepyqt/changelog.html">Changelog</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="active title">
+  
+    <i class="dropdown icon"></i>
+    Distill
+  </div>
+  
+    <div class="active content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/distill/">Installation</a>
+      
+        <a class="item" href="/docs/distill/start.html">Getting Started</a>
+      
+        <a class="item" href="/docs/distill/api.html">API Documentation</a>
+      
+        <a class="item" href="/docs/distill/utilities.html">Apache Distill Utilities</a>
+      
+        <a class="item" href="/docs/distill/http.html">Apache Distill HTTP Client</a>
+      
+        <a class="item" href="/docs/distill/models.html">Apache Distill Models</a>
+      
+        <a class="item" href="/docs/distill/analytics.html">Apache Distill Analytics</a>
+      
+        <a class="item" href="/docs/distill/changelog.html">Changelog</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Tap
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/tap/">Getting Started</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Stout
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/stout/">About Stout</a>
+      
+        <a class="item" href="/docs/stout/start.html">Getting Started</a>
+      
+    </div>
+  </div>
+</div>
+
+  </div>
+  <div class="docs-content">
+    <h2 class="ui header">Apache Distill Models</h2>
+    <h3 id="brew-interface">Brew Interface</h3>
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">distill</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">brew</span><span class="o">.</span><span class="n">Brew</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p><strong>Bases:</strong> object</p>
+</blockquote>
+
+<blockquote>
+  <p>Distill supports basic CRUD operations and publishes the status of an persistenct database. Eventually it will support ingesting logs sent from an registered application.</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">static</span> <span class="n">create</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Register a new application in Distill</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="p">{</span>
+        <span class="s2">"application"</span> <span class="err">:</span> <span class="s2">"xdata_v3"</span><span class="p">,</span>
+        <span class="s2">"health"</span> <span class="err">:</span> <span class="s2">"green"</span><span class="p">,</span>
+        <span class="s2">"num_docs"</span> <span class="err">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">"status"</span> <span class="err">:</span> <span class="s2">"open"</span>
+<span class="p">}</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p><strong>Parameters:</strong></p>
+  <ul>
+    <li>app – [string] application name (e.g. xdata_v3)</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p><strong>Returns:</strong></p>
+  <ul>
+    <li>[dict] dictionary of application and its meta information</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">static</span> <span class="n">delete</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Technically closes the index so its content is not searchable.</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Parameters:</strong></p>
+  <ul>
+    <li>app – [string] application name (e.g. xdata_v3)</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p><strong>Returns:</strong></p>
+  <ul>
+    <li>[dict] status message of the event</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">static</span> <span class="n">get_applications</span><span class="p">()</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Fetch all the registered applications in Distill.</p>
+</blockquote>
+
+<blockquote>
+  <p><em>Note:</em> Private indexes starting with a period are not included in the result set</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Returns:</strong></p>
+  <ul>
+    <li>[dict] dictionary of all registered applications and meta information</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">static</span> <span class="n">get_status</span><span class="p">()</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Fetch the status of the underlying database instance.</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Returns:</strong></p>
+  <ul>
+    <li>[bool] if connection to database instance has been established</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">static</span> <span class="n">read</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">app_type</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Fetch meta data associated with an application</p>
+</blockquote>
+
+<blockquote>
+  <p>Example:</p>
+  <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="p">{</span>
+        <span class="s2">"application"</span> <span class="err">:</span> <span class="s2">"xdata_v3"</span><span class="p">,</span>
+        <span class="s2">"health"</span> <span class="err">:</span> <span class="s2">"green"</span><span class="p">,</span>
+        <span class="s2">"num_docs"</span> <span class="err">:</span> <span class="s2">"100"</span><span class="p">,</span>
+        <span class="s2">"status"</span> <span class="err">:</span> <span class="s2">"open"</span>
+        <span class="s2">"types"</span> <span class="err">:</span> <span class="p">{</span>
+                <span class="s2">"raw_logs"</span> <span class="err">:</span> <span class="p">{</span>
+                        <span class="s2">"@timestamp"</span> <span class="err">:</span> <span class="s2">"date"</span><span class="p">,</span>
+                        <span class="s2">"action"</span> <span class="err">:</span> <span class="s2">"string"</span><span class="p">,</span>
+                        <span class="s2">"elementId"</span> <span class="err">:</span> <span class="s2">"string"</span>
+                <span class="p">},</span>
+                <span class="s2">"parsed"</span> <span class="err">:</span> <span class="p">{</span>
+                        <span class="s2">"@timestamp"</span> <span class="err">:</span> <span class="s2">"date"</span><span class="p">,</span>
+                        <span class="s2">"elementId_interval"</span> <span class="err">:</span> <span class="s2">"string"</span>
+                <span class="p">},</span>
+                <span class="s2">"graph"</span> <span class="err">:</span> <span class="p">{</span>
+                        <span class="s2">"uniqueID"</span> <span class="err">:</span> <span class="s2">"string"</span><span class="p">,</span>
+                        <span class="s2">"transition_count"</span> <span class="err">:</span> <span class="s2">"long"</span><span class="p">,</span>
+                        <span class="s2">"p_value"</span> <span class="err">:</span> <span class="s2">"float"</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p><strong>Parameters:</strong></p>
+  <ul>
+    <li>app – [string] application name (e.g. xdata_v3)</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p><strong>Returns:</strong></p>
+  <ul>
+    <li>[dict] dictionary of application and its meta information</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">static</span> <span class="n">update</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p><strong>Todo:</strong> Currently not implemented</p>
+</blockquote>
+
+<h3 id="stout-interface">Stout Interface</h3>
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">distill</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">stout</span><span class="o">.</span><span class="n">Stout</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p><strong>Bases:</strong> object</p>
+</blockquote>
+
+<blockquote>
+  <p>Main Stout class to support ingest and search operations.</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">static</span> <span class="n">ingest</span><span class="p">()</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Ingest data coming from Stout to Distill</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">distill</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">stout</span><span class="o">.</span><span class="n">StoutDoc</span><span class="p">(</span><span class="n">meta</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p><strong>Bases:</strong> elasticsearch_dsl.document.DocType</p>
+</blockquote>
+
+<blockquote>
+  <p>Representation of a Stout document.</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">save</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Save data from parsing as a Stout document in Distill</p>
+</blockquote>
+
+<h3 id="userale-interface">UserAle Interface</h3>
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">distill</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">userale</span><span class="o">.</span><span class="n">UserAle</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p><strong>Bases:</strong> object</p>
+</blockquote>
+
+<blockquote>
+  <p>Main method of entry to perform segmentation and integration of STOUT’s master answer table (if STOUT is enabled). Advanced and basic analytics is performed in the distill.algorithms.stats and distill.algorithms.graphs module.</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">static</span> <span class="n">denoise</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">app_type</span><span class="o">=</span><span class="s">'parsed'</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">static</span> <span class="n">search</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">app_type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="p">[],</span>
+<span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">include</span><span class="o">=</span><span class="s">'*'</span><span class="p">,</span> <span class="n">scroll</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">sort_field</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Perform a search query.</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Parameters:</strong></p>
+  <ul>
+    <li>app – [string] application id (e.g. “xdata_v3”)</li>
+    <li>app_type – [string] name of the application type. If None all application types are searched.</li>
+    <li>filters – [list of strings] list of filters for a query.</li>
+    <li>size – [int] maximum number of hits that should be returned</li>
+    <li>sort_field – [string] sorting field. Currently supported fields: “timestamp”, “date”</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p><strong>Returns</strong></p>
+  <ul>
+    <li>[dict] dictionary with processed results. If STOUT is enabled, STOUT data will be merged with final result.</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">static</span> <span class="n">segment</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">app_type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="s">''</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Just support match all for now.</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">userale</span><span class="o">.</span><span class="n">merge_dicts</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">userale</span><span class="o">.</span><span class="n">parse_query_parameters</span><span class="p">(</span><span class="n">indx</span><span class="p">,</span> <span class="n">app_type</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">request_args</span><span class="o">=</span><span class="p">{})</span>
+</code></pre>
+  </div>
+</blockquote>
+
+  </div>
+</div>
+
+    </div>
+
+    <div class="footer ui inverted very padded vertical segment">
+  <div class="ui vertical segment">
+    <div class="ui four column grid">
+      <div class="column">
+        <h4 class="ui inverted header">About</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/system">System</a>
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+          <a class="item" href="/tap">Tap</a>
+          <a class="item" href="/stout">Stout</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Docs</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/docs/system">System</a>
+          <a class="item" href="/docs/userale">UserALE</a>
+          <a class="item" href="/docs/useralejs">UserAle.js</a>
+          <a class="item" href="/docs/useralepyqt">UserAle.pyqt</a>
+          <a class="item" href="/docs/distill">Distill</a>
+          <a class="item" href="/docs/tap">Tap</a>
+          <a class="item" href="/docs/stout">Stout</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Community</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="https://github.com/apache?q=senssoft">GitHub</a>
+          <a class="item" href="http://stackoverflow.com/questions/tagged/apache-senssoft">StackOverflow</a>
+          <a class="item" href="https://issues.apache.org/jira/browse/SENSSOFT">Jira Issue Tracker</a>
+          <a class="item" href="https://cwiki.apache.org/confluence/display/SENSSOFT">Project Wiki</a>
+          <a class="item" href="https://twitter.com/apachesenssoft">Twitter</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Apache</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="http://www.apache.org/licenses/LICENSE-2.0.html">License</a>
+          <a class="item" href="http://www.apache.org/">Apache Software Foundation</a>
+          <a class="item" href="http://incubator.apache.org/">Apache Incubator</a>
+          <a class="item" href="http://www.apache.org/foundation/sponsorship.html">Sponsor Apache</a>
+          <a class="item" href="http://www.apache.org/foundation/thanks.html">Thank you</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui two column middle aligned grid">
+      <div class="column">
+        Apache SensSoft is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
+      </div>
+      <div class="center aligned column">
+        <img class="component-image" src="/images/incubator-logo-white.png">
+        <br>
+        Copyright © 2017 The Apache Software Foundation, Licensed under the Apache License, Version 2.0.  Apache, the Apache feather logo, and the Apache Incubator logo are trademarks of The Apache Software Foundation.  Software as a Sensor is a trademark of the Charles Stark Draper Laboratory, Inc.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </body>
+
+</html>

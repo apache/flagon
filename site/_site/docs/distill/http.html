@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Apache Distill HTTP Client</title>
+  <meta name="description" content="RESTful Endpoints distill.app.create(app_id)">
+
+  <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="/semantic/dist/semantic.min.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="/js/main.js"></script>
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://localhost:4000/docs/distill/http.html">
+  <link rel="alternate" type="application/rss+xml" title="Apache SensSoft" href="/feed.xml">
+
+  
+</head>
+
+
+  <body>
+
+    <div class="site-header">
+  <div id="main-menu" class="ui inverted padded fixed top borderless menu">
+    <a class="site-title" href="/">
+      <h3 class="ui inverted header item">Apache SensSoft</h3>
+    </a>
+
+    <div class="right menu">
+      <div class="ui dropdown item">
+        Components
+        <div class="menu">
+          <a class="item" href="/system">System</a>
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+          <a class="item" href="/tap">Tap</a>
+          <a class="item" href="/stout">Stout</a>
+        </div>
+      </div>
+      <div class="ui dropdown item">
+        <a href="/docs">Docs</a>
+        <div class="menu">
+          <a class="item" href="/docs/system">System</a>
+          <a class="item" href="/docs/userale">UserALE</a>
+          <a class="item" href="/docs/useralejs">UserALE.js</a>
+          <a class="item" href="/docs/useralepyqt">UserALE.pyqt</a>
+          <a class="item" href="/docs/distill">Distill</a>
+          <a class="item" href="/docs/tap">Tap</a>
+          <a class="item" href="/docs/stout">Stout</a>
+        </div>
+      </div>
+      <a class="item" href="/releases">Releases</a>
+      <a class="item" href="/community">Community</a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="main-wrapper">
+      <div class="docs-wrapper">
+  <div class="docs-sidebar">
+    
+
+
+
+
+
+
+
+
+<!-- <div class="ui inverted list">
+  <a class="item" href="/docs">About the Docs</a>
+</div> -->
+<div id="docs-nav" class="ui inverted accordion">
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Apache SensSoft
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/">About the Docs</a>
+      
+        <a class="item" href="/docs/contributing.html">Contributing</a>
+      
+    </div>
+  </div>
+
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    System
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/system/">Getting Started</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/userale/">About UserALE</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE.js
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/useralejs/">Getting Started</a>
+      
+        <a class="item" href="/docs/useralejs/troubleshooting.html">Troubleshooting</a>
+      
+        <a class="item" href="/docs/useralejs/contributing.html">Contributing</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE.pyqt
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/useralepyqt/">Installation</a>
+      
+        <a class="item" href="/docs/useralepyqt/start.html">Getting Started</a>
+      
+        <a class="item" href="/docs/useralepyqt/api.html">API Documentation</a>
+      
+        <a class="item" href="/docs/useralepyqt/changelog.html">Changelog</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="active title">
+  
+    <i class="dropdown icon"></i>
+    Distill
+  </div>
+  
+    <div class="active content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/distill/">Installation</a>
+      
+        <a class="item" href="/docs/distill/start.html">Getting Started</a>
+      
+        <a class="item" href="/docs/distill/api.html">API Documentation</a>
+      
+        <a class="item" href="/docs/distill/utilities.html">Apache Distill Utilities</a>
+      
+        <a class="item" href="/docs/distill/http.html">Apache Distill HTTP Client</a>
+      
+        <a class="item" href="/docs/distill/models.html">Apache Distill Models</a>
+      
+        <a class="item" href="/docs/distill/analytics.html">Apache Distill Analytics</a>
+      
+        <a class="item" href="/docs/distill/changelog.html">Changelog</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Tap
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/tap/">Getting Started</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Stout
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/stout/">About Stout</a>
+      
+        <a class="item" href="/docs/stout/start.html">Getting Started</a>
+      
+    </div>
+  </div>
+</div>
+
+  </div>
+  <div class="docs-content">
+    <h2 class="ui header">Apache Distill HTTP Client</h2>
+    <h3 id="restful-endpoints">RESTful Endpoints</h3>
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">app_id</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Registers an application in Distill.</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XPOST https://localhost:8090/xdata_v3
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p><strong>Parameters:</strong></p>
+  <ul>
+    <li>app_id – Application name</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p><strong>Returns:</strong></p>
+  <ul>
+    <li>Newly created application’s status as JSON blob</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">app_id</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Deletes an application permentantly from Distill</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XDELETE https://localhost:8090/xdata_v3
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p><strong>Parameters:</strong></p>
+  <ul>
+    <li>app_id – Application name</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p><strong>Returns:</strong></p>
+  <ul>
+    <li>Boolean response message as JSON blob</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">denoise</span><span class="p">(</span><span class="n">app_id</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Bootstrap script to cleanup the raw logs. A document type called “parsed” will be stored with new log created unless specified in the request. Have option to save parsed results back to data store. These parsed logs can be intergrated with STOUT results by running the stout bootstrap script.</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XGET https://localhost:8090/denoise/xdata_v3?save<span class="o">=</span><span class="nb">true</span>&amp;type<span class="o">=</span>parsed
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p><strong>Parameters:</strong></p>
+  <ul>
+    <li>app_id – Application name</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p><strong>Returns:</strong></p>
+  <ul>
+    <li>[dict]</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">index</span><span class="p">()</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Show Distill version information, connection status, and all registered applications.</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XGET https://localhost:8090
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="p">{</span>
+        <span class="s2">"author"</span> <span class="err">:</span> <span class="s2">"Michelle Beard"</span><span class="p">,</span>
+        <span class="s2">"email"</span> <span class="err">:</span> <span class="s2">"mbeard@draper.com"</span><span class="p">,</span>
+        <span class="s2">"name"</span><span class="err">:</span> <span class="s2">"Distill"</span><span class="p">,</span>
+        <span class="s2">"status"</span> <span class="err">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="s2">"version"</span> <span class="err">:</span> <span class="s2">"1.0"</span><span class="p">,</span>
+        <span class="s2">"applications"</span> <span class="err">:</span> <span class="p">{</span>
+                <span class="s2">"xdata_v3"</span> <span class="err">:</span> <span class="p">{</span>
+                        <span class="nl">testing</span><span class="p">:</span> <span class="mi">205</span><span class="p">,</span>
+                        <span class="nx">parsed</span><span class="err">:</span> <span class="mi">500</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s2">"test_app"</span> <span class="err">:</span> <span class="p">{</span>
+                        <span class="nl">logs</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span>
+                        <span class="nx">parsed</span><span class="err">:</span> <span class="mi">100</span><span class="p">,</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p><strong>Returns:</strong></p>
+  <ul>
+    <li>Distill’s status information as JSON blob</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">merge_stout</span><span class="p">()</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Bootstrap script to aggregate user ale logs to stout master answer table This will save the merged results back to ES instance at new index stout OR denoise data first, then merge with the stout index… If STOUT is enabled, the select method expects a stout index to exist or otherwise it will return an error message.</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XGET https://locahost:8090/stout/xdata_v3
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p><strong>Returns:</strong></p>
+  <ul>
+    <li>Status message</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">page_not_found</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Generic Error Message</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">segment</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="n">app_type</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Search against an application on various fields.</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XGET https://[hostname]:[port]/search/
+xdata_v3?q<span class="o">=</span>session_id:A1234&amp;size<span class="o">=</span>100
+&amp;scroll<span class="o">=</span><span class="nb">false</span>&amp;fl<span class="o">=</span>param1,param2
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p><strong>Parameters:</strong></p>
+  <ul>
+    <li>app_id – Application name</li>
+    <li>app_type – Optional document type to filter against</li>
+    <li>q – Main search query. To return all documents, pass in q=<em>:</em></li>
+    <li>size – Maximum number of documents to return in request</li>
+    <li>scroll – Scroll id if the number of documents exceeds 10,000</li>
+    <li>fl – List of fields to restrict the result set</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p><strong>Returns:</strong></p>
+  <ul>
+    <li>JSON blob of result set</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="n">app_type</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Generic histogram counts for a single registered application filtered optionally by document type. View the Statistics document page for method definitions and arguments</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XGET https://localhost:8090/stat/xdata_v3/
+testing/?stat<span class="o">=</span>terms&amp;elem<span class="o">=</span>signup&amp;event<span class="o">=</span>click
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p><strong>Parameters:</strong></p>
+  <ul>
+    <li>app_id – Application name</li>
+    <li>app_type – Application type</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p><strong>Returns:</strong></p>
+  <ul>
+    <li>JSON blob of result set</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="n">app_type</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Presents meta information about an registered application, including field names and document types.</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XGET https://localhost:8090/status/xdata_v3
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="p">{</span>
+  <span class="s2">"application"</span><span class="err">:</span> <span class="s2">"xdata_v3"</span><span class="p">,</span>
+  <span class="s2">"health"</span><span class="err">:</span> <span class="s2">"green"</span><span class="p">,</span>
+  <span class="s2">"num_docs"</span><span class="err">:</span> <span class="s2">"433"</span><span class="p">,</span>
+  <span class="s2">"status"</span><span class="err">:</span> <span class="s2">"open"</span>
+<span class="p">}</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p><strong>Parameters:</strong></p>
+  <ul>
+    <li>app_id – Application name</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p><strong>Returns:</strong></p>
+  <ul>
+    <li>Registered applications meta data as JSON blob</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">app_id</span><span class="p">)</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p>Renames a specific application</p>
+</blockquote>
+
+<blockquote>
+
+  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XPOST https://localhost:8090/update/xdata_v3?name<span class="o">=</span><span class="s2">"xdata_v4"</span>
+</code></pre>
+  </div>
+</blockquote>
+
+<blockquote>
+  <p><strong>Parameters:</strong></p>
+  <ul>
+    <li>app_id – Application name</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p><strong>Returns:</strong></p>
+  <ul>
+    <li>Boolean response message as JSON blob</li>
+  </ul>
+</blockquote>
+
+  </div>
+</div>
+
+    </div>
+
+    <div class="footer ui inverted very padded vertical segment">
+  <div class="ui vertical segment">
+    <div class="ui four column grid">
+      <div class="column">
+        <h4 class="ui inverted header">About</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/system">System</a>
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+          <a class="item" href="/tap">Tap</a>
+          <a class="item" href="/stout">Stout</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Docs</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/docs/system">System</a>
+          <a class="item" href="/docs/userale">UserALE</a>
+          <a class="item" href="/docs/useralejs">UserAle.js</a>
+          <a class="item" href="/docs/useralepyqt">UserAle.pyqt</a>
+          <a class="item" href="/docs/distill">Distill</a>
+          <a class="item" href="/docs/tap">Tap</a>
+          <a class="item" href="/docs/stout">Stout</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Community</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="https://github.com/apache?q=senssoft">GitHub</a>
+          <a class="item" href="http://stackoverflow.com/questions/tagged/apache-senssoft">StackOverflow</a>
+          <a class="item" href="https://issues.apache.org/jira/browse/SENSSOFT">Jira Issue Tracker</a>
+          <a class="item" href="https://cwiki.apache.org/confluence/display/SENSSOFT">Project Wiki</a>
+          <a class="item" href="https://twitter.com/apachesenssoft">Twitter</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Apache</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="http://www.apache.org/licenses/LICENSE-2.0.html">License</a>
+          <a class="item" href="http://www.apache.org/">Apache Software Foundation</a>
+          <a class="item" href="http://incubator.apache.org/">Apache Incubator</a>
+          <a class="item" href="http://www.apache.org/foundation/sponsorship.html">Sponsor Apache</a>
+          <a class="item" href="http://www.apache.org/foundation/thanks.html">Thank you</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui two column middle aligned grid">
+      <div class="column">
+        Apache SensSoft is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
+      </div>
+      <div class="center aligned column">
+        <img class="component-image" src="/images/incubator-logo-white.png">
+        <br>
+        Copyright © 2017 The Apache Software Foundation, Licensed under the Apache License, Version 2.0.  Apache, the Apache feather logo, and the Apache Incubator logo are trademarks of The Apache Software Foundation.  Software as a Sensor is a trademark of the Charles Stark Draper Laboratory, Inc.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </body>
+
+</html>
