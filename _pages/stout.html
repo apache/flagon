@@ -1,0 +1,38 @@
+---
+layout: component
+permalink: /stout/
+title: Stout
+image: /images/stout_inverted.png
+component: Stout
+
+description: Apache STOUT (Subject Tracking and Online User Testing) is for UI/UX (and behavioral) researchers that want to perform formal user-testing studies and experiments with web applications. In STOUT, you'll be able to track participants through a series of URLs in a sequence that matches your experimental design–both between and within-subject designs. STOUT makes sure that your participants are sent to the right URLs in the right sequence. You can also set timing parameters so that each task at different URLs are uniformly timed. Participants can also be given directed tasks paired with different URLs. Currently STOUT works well with SurveyMonkey, meaning you can design questionnaires for delivery before, during and after their experience at a given URL. STOUT tracks users with anonymous identifiers (hashes) that are passed to the URLs you send your participants to. These are generated during a registration step, which can also configured for human-subjects testing compliant workflows. This hash is appended with a task ID and then passed to UserALE so that every log generated through web applications during your experiment is traceable to specific users and tasks. STOUT also has features for extracting data from SurveyMonkey and organizing all the data you collect through SurveyMonkey and STOUT throughout experiments, providing you with a simple and easy-to-use .csv file for analysis. Other scripts can be configured to run with STOUT and SurveyMongo for automated post-processing, scale-computation, and truthing. Additionally, STOUT will generate completion codes so that it is easy to use with Amazon Mechanical Turk, and features both an acheivement and email system so that you can communicate with and engage your participants. STOUT is built in Django so its easy to customize STOUT for your specific needs.
+
+features:
+  -
+    icon: lab
+    color: blue
+    title: Perform experiments
+    description: STOUT allows you to track users as they interact with different applications or different versions of the same applications in simple experimental designs. STOUT's Django back end allows you collect task sequence data and even randomize or counterbalance your experiments without losing track of what users are interacting with and when.
+  -
+    icon: database
+    color: yellow
+    title: Wrangle different data sources
+    description: STOUT allows you to track users between different sources of information using an anonymous user hash. Collect demographics and psychometrics from form data, present users with tasks and questions while they interact with applications, and collect user behavior through UserALE without losing track of who generated the data.
+  -
+    icon: cloud download
+    color: red
+    title: Fuse data for analysis
+    description: With the SurveyMongo extension to STOUT you can automate polling for survey data and integrate with STOUT metadata to provide tabular datasets that make statistical analysis easy.
+  -
+    icon: refresh
+    color: green
+    title: Automate data preprocessing
+    description: STOUT's architecture makes it easy to run batch processing scripts in R or python, server-side. Perform your truthing, aggregation, and data transformations automatically, triggered by flags in STOUT, so that you can get straight to analysis.
+  -
+    icon: bar chart
+    color: blue
+    title: Visualize experimental findings
+    description: STOUT features a dashboard so that you can effectively manage multiple experiments and visualize your results using D3 packages.
+
+contentCount: 0
+---

@@ -1,0 +1,60 @@
+---
+layout: default
+---
+
+{% if page.image %}
+  <div class="ui image-masthead masthead padded center aligned inverted vertical segment">
+    <img class="component-image" src="{{ page.image }}">
+  </div>
+{% else %}
+  <div class="ui blank-masthead masthead padded center aligned inverted vertical segment">
+    <h1 class="ui header">{{ page.title }}</h1>
+    <h2 class="ui header">{{ page.subtitle }}</h2>
+  </div>
+{% endif %}
+
+<div class="ui very padded vertical segment">
+  <div class="ui center aligned text container">
+    <p>
+      {{ page.description }}
+    </p>
+  </div>
+</div>
+
+<div class="ui inverted grey very padded vertical segment">
+  <div class="ui center aligned text container">
+    <h2 class="ui inverted header">Features</h2>
+    {% for feature in page.features %}
+      <div class="ui basic padded vertical segment">
+        <div class="ui middle aligned two column grid">
+          <div class="column">
+            <i class="huge circular inverted {{ feature.color }} {{ feature.icon }} icon"></i>
+          </div>
+          <div class="column">
+            <h3 class="ui inverted header">{{ feature.title }}</h3>
+            <div class="feature-description">
+              {{ feature.description }}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{{ content }}
+
+{% assign mod = page.contentCount | modulo: 2 %}
+<div class="ui {% if mod == 1 %}inverted grey{% endif %} very padded vertical segment">
+  <div class="ui center aligned text container">
+    <h2 class="ui {% if mod == 1 %}inverted{% endif %} header">
+      Ready to try {{ page.component }}?
+    </h2>
+    <a class="ui big blue button" href="{{ '/releases' | prepend: site.baseurl }}">
+      Get the Release
+    </a>
+    <a class="ui big yellow button" href="{{ '/docs' | prepend: site.baseurl | append: page.permalink }}">
+      Read the Docs
+    </a>
+  </div>
+</div>
