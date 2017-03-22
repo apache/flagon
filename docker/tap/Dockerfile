@@ -55,6 +55,8 @@ ADD secret.py /usr/src/app/tap/settings
 ADD neon_counts.js /usr/src/app/public
 ADD neon_graph.js /usr/src/app/public
 
+# Add startup script
+ADD wait-for-postgres.sh /usr/src/app
 
 # Startup Application
 RUN gulp build
