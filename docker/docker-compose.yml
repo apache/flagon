@@ -42,7 +42,7 @@ services:
     container_name: senssoft-userale-forwarder
     command: -f /etc/logstash/conf.d
     ports:
-      - 8000:8000
+      - 8080:8080
     volumes: 
       - ./logstash/config/logstash-userale.conf:/etc/logstash/conf.d/logstash-userale.conf
       - ./logstash/templates/userale.json:/usr/share/logstash/templates/userale.json
@@ -51,9 +51,7 @@ services:
     environment:
       LS_HEAP_SIZE: "2048m"
   distill:
-    build: 
-      context: .
-      dockerfile: ./distill/Dockerfile
+    build: ./distill
     container_name: distill
     ports:
       - 8090:8090
@@ -69,7 +67,7 @@ services:
   tap:
     container_name: tap-web
     build: ./tap
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: ["bash", "./wait-for-postgres.sh"]
     ports:
       - "8000:8000"
     depends_on:
