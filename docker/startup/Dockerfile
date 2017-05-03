@@ -13,18 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-[egg_info]
-tag_build = 0.1.4
-tag_svn_revision = false
+FROM ubuntu:latest
+MAINTAINER Michelle Beard <msbeard@apache.org>
 
-[aliases]
-test=pytest
+RUN apt-get update && apt-get install -y wget curl && apt-get clean
 
-[tool:pytest] 
-addopts = --verbose --ignore=build --ignore=setup.py --ignore=dist --junitxml=test-report.xml --cov-report xml --cov=distill distill/. 
-norecursedirs = *.eggs *env* .git 
+RUN wget https://github.com/jwilder/dockerize/releases/download/v0.1.0/dockerize-linux-amd64-v0.1.0.tar.gz
 
-[build_sphinx]
-source-dir = docs
-build-dir = docs/_build
-all_files = 1
+RUN tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.1.0.tar.gz
+
+# Copy Files Over
+COPY ./entrypoint.sh /opt/entrypoint.sh
+
+# Make executable
+RUN chmod +x /opt/*.sh

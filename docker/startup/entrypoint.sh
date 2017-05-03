@@ -13,23 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class QueryBuilder (object):
+#!/bin/bash
 
-	def __init__ (self, query=None):
-		if query:
-			self.query = query
-		else:
-			self.query = {
-				"query" : {
-					"match_all" : {}
-					}
-				}
-
-
-	def add_filters (self, filters):
-		pass
-
-	def add_sorting (self, sort_field='', sort_order=''):
-		pass
-
-	
+# Wait for the Elasticsearch container to be ready before starting Kibana.
+echo "Stalling for Elasticsearch"
+dockerize -wait http://elasticsearch:9200 
