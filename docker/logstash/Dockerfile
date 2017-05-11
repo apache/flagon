@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM logstash:5
+FROM docker.elastic.co/logstash/logstash:5.4.0
 MAINTAINER Michelle Beard <msbeard@apache.org>
 
 # Get GeoIP DB

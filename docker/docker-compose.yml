@@ -37,7 +37,7 @@ services:
 
   # ELK Stack
   elasticsearch:
-    image: elasticsearch:latest
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.4.0
     container_name: senssoft-elastic
     ports:
       - 9200:9200
@@ -51,13 +51,15 @@ services:
 
   # Kibana
   kibana:
-    image: kibana:latest
+    image: docker.elastic.co/kibana/kibana:5.4.0
     container_name: senssoft-kibana
     ports:
       - 5601:5601
     depends_on:
       - "elasticsearch"
       - "startup"
+    environment:
+      XPACK_SECURITY_ENABLED: "false"
 
   # Logstash
   userale-forwarder:
@@ -73,6 +75,7 @@ services:
       - "elasticsearch"
     environment:
       LS_HEAP_SIZE: "2048m"
+      XPACK_MONITORING_ENABLED: "false"
 
   distill:
     build: ./distill
@@ -85,7 +88,7 @@ services:
       - elasticsearch
 
   db:
-    container_name: tap-db 
+    container_name: tap-db
     build: ./db
     ports:
       - "5432:5432"

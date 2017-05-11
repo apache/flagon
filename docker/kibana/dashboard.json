@@ -1,0 +1,26 @@
+[
+  {
+    "_id": "6e6b6380-3673-11e7-b2f7-0b10e220d9ac",
+    "_type": "dashboard",
+    "_source": {
+      "title": "Apache UserALE Monitor",
+      "hits": 0,
+      "description": "Example Kibana Dashboard",
+      "panelsJSON": "[\n  {\n    \"size_x\": 9,\n    \"size_y\": 4,\n    \"panelIndex\": 1,\n    \"type\": \"visualization\",\n    \"id\": \"49fa7860-3673-11e7-b2f7-0b10e220d9ac\",\n    \"col\": 4,\n    \"row\": 4\n  },\n  {\n    \"size_x\": 3,\n    \"size_y\": 3,\n    \"panelIndex\": 2,\n    \"type\": \"visualization\",\n    \"id\": \"6e55ca90-3671-11e7-b2f7-0b10e220d9ac\",\n    \"col\": 1,\n    \"row\": 4\n  },\n  {\n    \"size_x\": 5,\n    \"size_y\": 3,\n    \"panelIndex\": 3,\n    \"type\": \"visualization\",\n    \"id\": \"ef62c4e0-3684-11e7-9c77-0135be018b90\",\n    \"col\": 1,\n    \"row\": 1\n  },\n  {\n    \"size_x\": 7,\n    \"size_y\": 3,\n    \"panelIndex\": 4,\n    \"type\": \"visualization\",\n    \"id\": \"7ee8abd0-3684-11e7-9c77-0135be018b90\",\n    \"col\": 6,\n    \"row\": 1\n  }\n]",
+      "optionsJSON": "{\n  \"darkTheme\": false\n}",
+      "uiStateJSON": "{}",
+      "version": 1,
+      "timeRestore": true,
+      "timeTo": "now",
+      "timeFrom": "now-15m",
+      "refreshInterval": {
+        "display": "Off",
+        "pause": false,
+        "value": 0
+      },
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\n  \"filter\": [\n    {\n      \"query\": {\n        \"query_string\": {\n          \"query\": \"*\",\n          \"analyze_wildcard\": true\n        }\n      }\n    }\n  ],\n  \"highlightAll\": true,\n  \"version\": true\n}"
+      }
+    }
+  }
+]
