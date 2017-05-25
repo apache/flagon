@@ -6,8 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>About UserALE</title>
-  <meta name="description" content="Note: Work on UserALE’s documentation is ongoing. To get involved, see our Contributing guide. To get started with UserALE, try out the full SensSoft system.">
+  <title>Build and Test</title>
+  <meta name="description" content="Building UserALE.js">
 
   <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -16,7 +16,7 @@
   <script src="/js/main.js"></script>
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://senssoft.incubator.apache.org/docs/userale/">
+  <link rel="canonical" href="http://senssoft.incubator.apache.org/docs/useralejs/testing.html">
   <link rel="alternate" type="application/rss+xml" title="Apache SensSoft" href="/feed.xml">
 
   
@@ -113,13 +113,13 @@
   </div>
 
   
-    <div class="active title">
+    <div class="title">
   
     <i class="dropdown icon"></i>
     UserALE
   </div>
   
-    <div class="active content">
+    <div class="content">
   
     <div class="ui inverted bulleted list docs-list">
       
@@ -129,13 +129,13 @@
   </div>
 
   
-    <div class="title">
+    <div class="active title">
   
     <i class="dropdown icon"></i>
     UserALE.js
   </div>
   
-    <div class="content">
+    <div class="active content">
   
     <div class="ui inverted bulleted list docs-list">
       
@@ -237,20 +237,27 @@
 
   </div>
   <div class="docs-content">
-    <h2 class="ui header">About UserALE</h2>
-    <p><em>Note</em>: Work on UserALE’s documentation is ongoing.  To get involved, see our <a href="/docs/contributing">Contributing</a> guide.  To get started with UserALE, <a href="/docs/system">try out the full SensSoft system</a>.</p>
+    <h2 class="ui header">Build and Test</h2>
+    <h3 id="building-useralejs">Building UserALE.js</h3>
 
-<h3 id="about-userale">About UserALE</h3>
+<p>To modify and build your own version of <code class="highlighter-rouge">UserALE.js</code>, first clone the repo, install all dependencies, and make any desired changes. Then build and minify into the build/ folder:</p>
 
-<p>The User Analytic Logging Engine (UserALE) is part of Apache SensSoft. UserALE is for Software Developers, HCI/UX researchers, and project managers who develop user facing software tools—applications that are used for manipulating, analyzing, or visualizing data or other systems.</p>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  git clone https://github.com/apache/incubator-senssoft-useralejs.git
+  npm install
+  npm run build
+</code></pre>
+</div>
 
-<p>UserALE provides an API for instrumenting software tools, turning them into a human usability sensors. With every user interaction User ALE will transmit specially structured messages (JSON) from software tools to an activity logging server (<a href="http://elastic.co">Elasticsearch™</a>). These messages not only report user activities and their timing, but provide sufficient context to understand how those activities are related to the functional organization of the software tool. This allows for greater utility in understanding how users are interacting with software tool features, and seeds more rigorous modeling and analytic approaches to understand not just what users do in software tools, but how they perform tasks with them.</p>
+<h3 id="testing-and-linting">Testing and Linting</h3>
 
-<p>UserALE provides data provides insight into software tool usage frequency, users’ cognitive/behavioral strategy in using tools to complete tasks, their workflows, as well as their integrative use of software tool features.</p>
+<p>We maintain code quality through linting and our test suite.  To run, or run and watch for changes:</p>
 
-<h3 id="who-is-userale-for">Who is UserALE for?</h3>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  npm <span class="nb">test
+  </span>npm run example:watch
+</code></pre>
+</div>
 
-<p>UserALE is for Software Developers, HCI/UX researchers, and project managers who develop user facing software tools.</p>
+<p>See <code class="highlighter-rouge">package.json</code> for full script options.</p>
 
   </div>
 </div>

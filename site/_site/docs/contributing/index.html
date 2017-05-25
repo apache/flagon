@@ -6,8 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>About UserALE</title>
-  <meta name="description" content="Note: Work on UserALE’s documentation is ongoing. To get involved, see our Contributing guide. To get started with UserALE, try out the full SensSoft system.">
+  <title>Contributing</title>
+  <meta name="description" content="First, thank you for contributing to Apache SensSoft!">
 
   <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -16,7 +16,7 @@
   <script src="/js/main.js"></script>
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://senssoft.incubator.apache.org/docs/userale/">
+  <link rel="canonical" href="http://senssoft.incubator.apache.org/docs/contributing/">
   <link rel="alternate" type="application/rss+xml" title="Apache SensSoft" href="/feed.xml">
 
   
@@ -78,13 +78,13 @@
 </div> -->
 <div id="docs-nav" class="ui inverted accordion">
   
-    <div class="title">
+    <div class="active title">
   
     <i class="dropdown icon"></i>
     Apache SensSoft
   </div>
   
-    <div class="content">
+    <div class="active content">
   
     <div class="ui inverted bulleted list docs-list">
       
@@ -113,13 +113,13 @@
   </div>
 
   
-    <div class="active title">
+    <div class="title">
   
     <i class="dropdown icon"></i>
     UserALE
   </div>
   
-    <div class="active content">
+    <div class="content">
   
     <div class="ui inverted bulleted list docs-list">
       
@@ -237,20 +237,30 @@
 
   </div>
   <div class="docs-content">
-    <h2 class="ui header">About UserALE</h2>
-    <p><em>Note</em>: Work on UserALE’s documentation is ongoing.  To get involved, see our <a href="/docs/contributing">Contributing</a> guide.  To get started with UserALE, <a href="/docs/system">try out the full SensSoft system</a>.</p>
+    <h2 class="ui header">Contributing</h2>
+    <p>First, thank you for contributing to Apache SensSoft!</p>
 
-<h3 id="about-userale">About UserALE</h3>
+<p>There are certain procedures that must be followed for all contributions. These procedures are necessary to allow us to allocate resources for reviewing and testing your contribution, as well as to communicate effectively with you during the review process.</p>
 
-<p>The User Analytic Logging Engine (UserALE) is part of Apache SensSoft. UserALE is for Software Developers, HCI/UX researchers, and project managers who develop user facing software tools—applications that are used for manipulating, analyzing, or visualizing data or other systems.</p>
+<p>See individual product guides for product-specific information on getting started as a contributor, setup and testing, code style, etc.</p>
 
-<p>UserALE provides an API for instrumenting software tools, turning them into a human usability sensors. With every user interaction User ALE will transmit specially structured messages (JSON) from software tools to an activity logging server (<a href="http://elastic.co">Elasticsearch™</a>). These messages not only report user activities and their timing, but provide sufficient context to understand how those activities are related to the functional organization of the software tool. This allows for greater utility in understanding how users are interacting with software tool features, and seeds more rigorous modeling and analytic approaches to understand not just what users do in software tools, but how they perform tasks with them.</p>
+<p>To report a bug or other issue, simply create an issue in JIRA, as described in Step 1 below.</p>
 
-<p>UserALE provides data provides insight into software tool usage frequency, users’ cognitive/behavioral strategy in using tools to complete tasks, their workflows, as well as their integrative use of software tool features.</p>
+<h4 id="1-create-an-issue-in-jira">1. Create an issue in JIRA</h4>
 
-<h3 id="who-is-userale-for">Who is UserALE for?</h3>
+<p>All changes to Apache SensSoft must have a corresponding issue in <a href="https://issues.apache.org/jira/browse/SENSSOFT">JIRA</a> so the change can be properly tracked.  If you do not already have an account on JIRA, you will need to create one before creating your new issue.</p>
 
-<p>UserALE is for Software Developers, HCI/UX researchers, and project managers who develop user facing software tools.</p>
+<h4 id="2-make-and-test-your-changes-locally">2. Make and test your changes locally</h4>
+
+<p>The Apache SensSoft source code is maintained in <a href="https://git-wip-us.apache.org/repos/asf?s=senssoft">several git repositories</a> hosted by Apache.  These repositories are mirrored and more easily available <a href="https://github.com/apache?q=senssoft">on GitHub</a>.  To make your changes, fork the appropriate GitHub repository and make commits to a topic branch in your fork.  Commits should be made in logical units and must reference the JIRA issue number:</p>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>   git commit -m <span class="s2">"#SENSSOFT-123: High-level message describing the changes."</span>
+</code></pre>
+</div>
+<p>Avoid commits which cover multiple, distinct goals that could (and should) be handled separately.  If you do not already have an account on JIRA, you will need to create one to claim an issue, discuss development, or report results.</p>
+
+<h4 id="3-submit-your-changes-via-a-pull-request-on-github">3. Submit your changes via a pull request on GitHub</h4>
+
+<p>Once your changes are ready, submit them by creating a pull request for the corresponding topic branch you created when you began working on your changes.  The core team will then review your changes and, if they pass review, your changes will be merged into the primary Apache-hosted repos.</p>
 
   </div>
 </div>

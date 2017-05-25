@@ -6,8 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>About UserALE</title>
-  <meta name="description" content="Note: Work on UserALE’s documentation is ongoing. To get involved, see our Contributing guide. To get started with UserALE, try out the full SensSoft system.">
+  <title>Getting Started</title>
+  <meta name="description" content="Instrumenting Your Application Globally with Apache UserALE.PyQt5">
 
   <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -16,7 +16,7 @@
   <script src="/js/main.js"></script>
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://senssoft.incubator.apache.org/docs/userale/">
+  <link rel="canonical" href="http://senssoft.incubator.apache.org/docs/useralepy/start.html">
   <link rel="alternate" type="application/rss+xml" title="Apache SensSoft" href="/feed.xml">
 
   
@@ -113,13 +113,13 @@
   </div>
 
   
-    <div class="active title">
+    <div class="title">
   
     <i class="dropdown icon"></i>
     UserALE
   </div>
   
-    <div class="active content">
+    <div class="content">
   
     <div class="ui inverted bulleted list docs-list">
       
@@ -149,13 +149,13 @@
   </div>
 
   
-    <div class="title">
+    <div class="active title">
   
     <i class="dropdown icon"></i>
     UserALE.py
   </div>
   
-    <div class="content">
+    <div class="active content">
   
     <div class="ui inverted bulleted list docs-list">
       
@@ -237,20 +237,60 @@
 
   </div>
   <div class="docs-content">
-    <h2 class="ui header">About UserALE</h2>
-    <p><em>Note</em>: Work on UserALE’s documentation is ongoing.  To get involved, see our <a href="/docs/contributing">Contributing</a> guide.  To get started with UserALE, <a href="/docs/system">try out the full SensSoft system</a>.</p>
+    <h2 class="ui header">Getting Started</h2>
+    <h3 id="instrumenting-your-application-globally-with-apache-useralepyqt5">Instrumenting Your Application Globally with Apache UserALE.PyQt5</h3>
 
-<h3 id="about-userale">About UserALE</h3>
+<p>It’s very simple to instrument a PyQt5 application with Apache UserALE.PyQt5. Simply import the Apache UserALE.PyQt5 library and register it with your application.</p>
 
-<p>The User Analytic Logging Engine (UserALE) is part of Apache SensSoft. UserALE is for Software Developers, HCI/UX researchers, and project managers who develop user facing software tools—applications that are used for manipulating, analyzing, or visualizing data or other systems.</p>
+<p>Below is an example PyQt5 application taken from ZetCode PyQt5 tutorial instrumented with Apache UserALE.PyQt5.</p>
 
-<p>UserALE provides an API for instrumenting software tools, turning them into a human usability sensors. With every user interaction User ALE will transmit specially structured messages (JSON) from software tools to an activity logging server (<a href="http://elastic.co">Elasticsearch™</a>). These messages not only report user activities and their timing, but provide sufficient context to understand how those activities are related to the functional organization of the software tool. This allows for greater utility in understanding how users are interacting with software tool features, and seeds more rigorous modeling and analytic approaches to understand not just what users do in software tools, but how they perform tasks with them.</p>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code>  <span class="kn">import</span> <span class="nn">sys</span>
+  <span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="kn">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QMessageBox</span>
+  <span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="kn">import</span> <span class="n">QCoreApplication</span><span class="p">,</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">QEvent</span>
 
-<p>UserALE provides data provides insight into software tool usage frequency, users’ cognitive/behavioral strategy in using tools to complete tasks, their workflows, as well as their integrative use of software tool features.</p>
+  <span class="kn">from</span> <span class="nn">userale.ale</span> <span class="kn">import</span> <span class="n">Ale</span>
 
-<h3 id="who-is-userale-for">Who is UserALE for?</h3>
+  <span class="k">class</span> <span class="nc">TestApplication</span> <span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
 
-<p>UserALE is for Software Developers, HCI/UX researchers, and project managers who develop user facing software tools.</p>
+      <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+          <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">initUI</span><span class="p">()</span>
+
+      <span class="k">def</span> <span class="nf">initUI</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+          <span class="n">qbtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s">'Quit'</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+          <span class="n">qbtn</span><span class="o">.</span><span class="n">setObjectName</span> <span class="p">(</span><span class="s">"testApplicationButton"</span><span class="p">)</span>
+          <span class="n">qbtn</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">quit</span><span class="p">)</span>
+          <span class="n">qbtn</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">qbtn</span><span class="o">.</span><span class="n">sizeHint</span><span class="p">())</span>
+          <span class="n">qbtn</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+
+          <span class="bp">self</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s">'Quit button'</span><span class="p">)</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+  <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+      <span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+      <span class="n">ex</span> <span class="o">=</span> <span class="n">TestApplication</span><span class="p">()</span>
+      <span class="c"># Initiate Apache UserALE.PyQt5</span>
+      <span class="n">ale</span> <span class="o">=</span> <span class="n">Ale</span> <span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s">"mouse.log"</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s">"testUser"</span><span class="p">,</span> <span class="n">toolversion</span><span class="o">=</span><span class="s">"0.0.1"</span><span class="p">)</span>
+      <span class="c"># install globally</span>
+      <span class="n">app</span><span class="o">.</span><span class="n">installEventFilter</span> <span class="p">(</span><span class="n">ale</span><span class="p">)</span>
+
+      <span class="n">sys</span><span class="o">.</span><span class="nb">exit</span> <span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">())</span>
+</code></pre>
+</div>
+
+<p>Before we enter the mainloop of the application, UserAle needs to register the application to be instrumented. Simply instantiate Apache UserALE.PyQt5 and install it as an event filter in your application.</p>
+
+<div class="language-python highlighter-rouge"><pre class="highlight"><code>  <span class="c"># Initiate UserAle</span>
+  <span class="n">ale</span> <span class="o">=</span> <span class="n">Ale</span> <span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s">"mouse.log"</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s">"testUser"</span><span class="p">,</span> <span class="n">toolversion</span><span class="o">=</span><span class="s">"0.0.1"</span><span class="p">)</span>
+  <span class="c"># install globally</span>
+  <span class="n">app</span><span class="o">.</span><span class="n">installEventFilter</span> <span class="p">(</span><span class="n">ale</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="instrumenting-your-application-manually-with-apache-useralepyqt5">Instrumenting Your Application Manually with Apache UserALE.PyQt5</h3>
+
+<p><em>Todo:</em> Write guidelines for instrumenting specific PyQt5 Widgets with Apache UserALE.PyQt5.</p>
 
   </div>
 </div>

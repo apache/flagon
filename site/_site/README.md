@@ -12,8 +12,5 @@ How to Build Site
     ```
 4. (Optional): To update the site, can copy the files from the container to _site.
     ```
-    # First grab container id
-    docker inspect --format="{{.Id}}" apache-site
-    # Reference container id to grab built contents
-    docker cp <container_id>:/app/_site .
+    docker 
     ```
