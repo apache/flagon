@@ -182,7 +182,7 @@ $ curl -XGET https://localhost:8090/status/xdata_v3
   "status": "open"
 }
 ```
-
+w
 > **Parameters:**
 - app_id – Application name
 

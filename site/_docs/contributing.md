@@ -1,6 +1,7 @@
 ---
 title: Contributing
 component: senssoft
+permalink: /docs/contributing/
 ---
 
 First, thank you for contributing to Apache SensSoft!
@@ -13,13 +14,13 @@ To report a bug or other issue, simply create an issue in JIRA, as described in 
 
 #### 1. Create an issue in JIRA
 
-   All changes to Apache Distill must have a corresponding issue in [JIRA](https://issues.apache.org/jira/browse/SENSSOFT) so the change can be properly tracked.  If you do not already have an account on Apache JIRA, you will need to create one before creating your new issue.
+   All changes to Apache SensSoft must have a corresponding issue in [JIRA](https://issues.apache.org/jira/browse/SENSSOFT) so the change can be properly tracked.  If you do not already have an account on JIRA, you will need to create one before creating your new issue.
 
 #### 2. Make and test your changes locally
 
    The Apache SensSoft source code is maintained in [several git repositories](https://git-wip-us.apache.org/repos/asf?s=senssoft) hosted by Apache.  These repositories are mirrored and more easily available [on GitHub](https://github.com/apache?q=senssoft).  To make your changes, fork the appropriate GitHub repository and make commits to a topic branch in your fork.  Commits should be made in logical units and must reference the JIRA issue number:
    ```shell
-   git commit -m "#SENSSOFT-123: #High-level message describing the changes."
+   git commit -m "#SENSSOFT-123: High-level message describing the changes."
    ```
    Avoid commits which cover multiple, distinct goals that could (and should) be handled separately.  If you do not already have an account on JIRA, you will need to create one to claim an issue, discuss development, or report results.
 

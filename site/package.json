@@ -1,6 +1,6 @@
 {
   "name": "apache-senssoft-website",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Website for Apache SensSoft",
   "main": "",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git://git.apache.org/incubator-senssoft.git"
   },
   "keywords": [
     "Apache",

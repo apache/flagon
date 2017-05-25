@@ -1,6 +1,6 @@
 ---
 title: API Documentation
-component: useralepyqt
+component: useralepy
 priority: 11
 ---
 
