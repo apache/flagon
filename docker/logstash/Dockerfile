@@ -13,14 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM docker.elastic.co/logstash/logstash:5.4.0
+FROM docker.elastic.co/logstash/logstash:5.5.0
 MAINTAINER Michelle Beard <msbeard@apache.org>
-
-# Get GeoIP DB
-RUN set -x \
-       && wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz \
-       && gunzip GeoIP.dat.gz \
-       && mkdir -p /usr/share/logstash/GeoIP \
-       && mv GeoIP.dat /usr/share/logstash/GeoIP/GeoIP.dat
 
 RUN mkdir /usr/share/logstash/templates
