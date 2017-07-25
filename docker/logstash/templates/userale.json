@@ -1,157 +1,163 @@
 {
-  "template" : "userale",
-  "order" : 1,
-  "settings" : {
-    "number_of_shards" : 1,
-    "number_of_replicas" : 0,
-    "index.refresh_interval" : "5s"
-  },
-  "mappings" : {
-    "_default_" : {
-      "_all" : {
-        "enabled" : false
-      },
-      "properties" : {
-        "geoip" : {
-          "properties" : {
-            "ip" : {
-              "type" : "ip"
-            },
-            "country_code2" : {
-              
-              "type" : "keyword"
-            },
-            "country_code3" : {
-              
-              "type" : "keyword"
-            },
-            "country_name" : {
-              
-              "type" : "keyword"
-            },
-            "continent_code" : {
-              
-              "type" : "keyword"
-            },
-            "region_name" : {
-              
-              "type" : "keyword"
-            },
-            "city_name" : {
-              
-              "type" : "keyword"
-            },
-            "postal_code" : {
-              
-              "type" : "keyword"
-            },
-            "latitude" : {
-              "type" : "float"
-            },
-            "longitude" : {
-              "type" : "float"
-            },
-            "dma_code" : {
-              "type" : "integer"
-            },
-            "area_code" : {
-              "type" : "long"
-            },
-            "timezone" : {
-              
-              "type" : "keyword"
-            },
-            "real_region_name" : {
-              
-              "type" : "keyword"
-            },
-            "location" : {
-              "doc_values" : true,
-              "type" : "geo_point"
-            }
-          }
-        }
-      }
+    "template": "userale",
+    "order": 1,
+    "settings":
+    {
+        "number_of_shards": 1,
+        "number_of_replicas": 0,
+        "index.refresh_interval": "5s"
     },
-    "logs" : {
-      "properties" : {
-        "userAction" : {
-          "type" : "boolean"
-        },
-        "type" : {
-          
-          "type" : "keyword"
-        },
-        "clientTime" : {
-          "type" : "date",
-          "format" : "strict_date_optional_time||epoch_millis"
-        },
-        "target" : {
-          
-          "type" : "keyword"
-        },
-        "path" : {
-          
-          "type" : "keyword"
-        },
-        "details" : {
-          "type" : "object", 
-          "properties" : {
-            "source" : {
-              "type" : "keyword"
-            }
-          }
-        },
-        "location" : {
-          "type" : "object",
-          "properties" : {
-            "x" : {
-              "type" : "integer"
+    "mappings":
+    {
+        "_default_":
+        {
+            "_all":
+            {
+                "enabled": false
             },
-            "y" : {
-              "type" : "integer"
+        },
+        "logs":
+        {
+            "properties":
+            {
+                "userAction":
+                {
+                    "type": "boolean"
+                },
+                "type":
+                {
+                    "type": "keyword"
+                },
+                "clientTime":
+                {
+                    "type": "date",
+                    "format": "strict_date_optional_time||epoch_millis"
+                },
+                "target":
+                {
+                    "type": "keyword"
+                },
+                "count":
+                {
+                    "type": "integer"
+                },
+                "logType":
+                {
+                    "type": "keyword"
+                },
+                "targetChange": 
+                {
+                    "type": "boolean"
+                },
+                "typeChange": 
+                {
+                    "type": "boolean"
+                },
+                "path":
+                {
+                    "type": "keyword"
+                },
+                "details":
+                {
+                    "properties":
+                    {
+                        "alt":
+                        {
+                            "type": "boolean"
+                        },
+                        "clicks":
+                        {
+                            "type": "integer"
+                        },
+                        "ctrl": 
+                        {
+                            "type": "boolean"
+                        },
+                        "meta": 
+                        {
+                            "type": "boolean"
+                        },
+                        "shift": 
+                        {
+                            "type": "boolean"
+                        },
+                        "window":
+                        {
+                            "type": "boolean"
+                        },
+                        "x":
+                        {
+                            "type": "integer"
+                        },
+                        "y":
+                        {
+                            "type": "integer"
+                        },
+                        "z":
+                        {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "location":
+                {
+                    "properties":
+                    {
+                        "x":
+                        {
+                            "type": "integer"
+                        },
+                        "y":
+                        {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "userId":
+                {
+                    "type": "keyword"
+                },
+                "session":
+                {
+                    "type": "keyword"
+                },
+                "toolName":
+                {
+                    "type": "keyword"
+                },
+                "toolVersion":
+                {
+                    "type": "keyword"
+                },
+                "useraleVersion":
+                {
+                    "type": "keyword"
+                },
+                "major_ver":
+                {
+                    "type": "integer"
+                },
+                "minor_ver":
+                {
+                    "type": "integer"
+                },
+                "patch_ver":
+                {
+                    "type": "integer"
+                },
+                "tool_major_ver":
+                {
+                    "type": "integer"
+                },
+                "tool_minor_ver":
+                {
+                    "type": "integer"
+                },
+                "tool_patch_ver":
+                {
+                    "type": "integer"
+                }
             }
-          }
-        },
-        "userId" : {
-          
-          "type" : "keyword"
-        },
-        "session" : {
-          
-          "type" : "keyword"
-        },
-        "toolName" : {
-          
-          "type" : "keyword"
-        },
-        "toolVersion" : {
-          
-          "type" : "keyword"
-        },
-        "useraleVersion" : {
-          
-          "type" : "keyword"
-        },
-        "major_ver" : {
-          "type" : "integer"
-        },
-        "minor_ver" : {
-          "type" : "integer"
-        },
-        "patch_ver" : {
-          "type" : "integer"
-        },
-        "tool_major_ver" : {
-          "type" : "integer"
-        },
-        "tool_minor_ver" : {
-          "type" : "integer"
-        },
-        "tool_patch_ver" : {
-          "type" : "integer"
         }
-      }
     }
-  }
-}   
+}
