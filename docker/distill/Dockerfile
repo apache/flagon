@@ -22,29 +22,14 @@ RUN apt-get -yqq update
 RUN mkdir -p /usr/src
 WORKDIR /usr/src
 
-# Install git
-##RUN sudo -E apt-get -yqq install \
-  ##git
-
 # Clone Distill
 RUN git clone https://github.com/apache/incubator-senssoft-distill.git distill
 WORKDIR /usr/src/distill
 RUN git pull
 
-
-# Add code
-##WORKDIR /app
-##ADD setup.py /app
-
-ADD requirements.txt /distill
-
 # Install Distill dependencies
 RUN pip install -r requirements.txt
 
-# Expose Ports
-EXPOSE 8090
-
 # Rest
-ADD . /app
-RUN python setup.py develop
-CMD python distill/server.py
+RUN python setup.py install
+CMD dev

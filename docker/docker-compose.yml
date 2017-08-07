@@ -118,6 +118,18 @@ services:
     networks:
       - esnet
 
+  # Distill
+  distill:
+    build: ./distill
+    container_name: senssoft-distill
+    ports:
+      - 8090:8090
+    depends_on:
+      - "elasticsearch1"
+      - "elasticsearch2"
+    networks:
+      - esnet
+
 volumes:
   esdata1:
     driver: local
@@ -126,17 +138,6 @@ volumes:
 
 networks:
   esnet: 
-
-
-  # distill:
-  #   build: ./distill
-  #   container_name: distill
-  #   ports:
-  #     - 8090:8090
-  #   depends_on:
-  #     - elasticsearch
-  #   links:
-  #     - elasticsearch
 
   # db:
   #   container_name: tap-db
