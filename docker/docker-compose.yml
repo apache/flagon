@@ -130,6 +130,25 @@ services:
     networks:
       - esnet
 
+  # TAP's Database
+  db:
+    container_name: tap-db
+    build: ./db
+    ports:
+      - "5432:5432"
+
+  # TAP
+  tap:
+    container_name: tap-web
+    build: ./tap
+    command: ["bash", "./wait-for-postgres.sh"]
+    ports:
+      - "8010:8010"
+    depends_on:
+      - db
+    links:
+      - db:db
+
 volumes:
   esdata1:
     driver: local
@@ -138,20 +157,3 @@ volumes:
 
 networks:
   esnet: 
-
-  # db:
-  #   container_name: tap-db
-  #   build: ./db
-  #   ports:
-  #     - "5432:5432"
-
-  # tap:
-  #   container_name: tap-web
-  #   build: ./tap
-  #   command: ["bash", "./wait-for-postgres.sh"]
-  #   ports:
-  #     - "8000:8000"
-  #   depends_on:
-  #     - db
-  #   links:
-  #     - db:db

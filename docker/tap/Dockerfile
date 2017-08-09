@@ -40,9 +40,8 @@ RUN sudo -E apt-get -yqq install \
   git
 
 # Clone TAP
-RUN git clone -b master https://github.com/apache/incubator-senssoft-tap.git app
+RUN git clone -b tapdocker https://github.com/apache/incubator-senssoft-tap.git app
 WORKDIR /usr/src/app
-RUN git pull
 
 # Install packages
 RUN npm install 
@@ -51,9 +50,9 @@ RUN npm install
 RUN pip install -r requirements.txt
 
 # Add application files
-ADD secret.py /usr/src/app/tap/settings
-ADD neon_counts.js /usr/src/app/public
-ADD neon_graph.js /usr/src/app/public
+ADD secrets/secret.py /usr/src/app/tap/settings
+ADD secrets/neon_counts.js /usr/src/app/public
+ADD secrets/neon_graph.js /usr/src/app/public
 
 # Add startup script
 ADD wait-for-postgres.sh /usr/src/app
@@ -62,4 +61,4 @@ ADD wait-for-postgres.sh /usr/src/app
 RUN gulp build
 
 # Export port
-EXPOSE 8000
+EXPOSE 8010
