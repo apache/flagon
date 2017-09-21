@@ -22,7 +22,8 @@ RUN apt-get -yqq update && apt-get -yqq install \
 	sudo
 
 # Install NodeJS 4.x
-RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+#RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 
 RUN sudo -E apt-get -yqq install \
 	nodejs \
@@ -50,12 +51,13 @@ RUN npm install
 RUN pip install -r requirements.txt
 
 # Add application files
-#ADD secrets/secret.py /usr/src/app/tap/settings
+ADD secret.py /usr/src/app/tap/settings
 #ADD secrets/neon_counts.js /usr/src/app/public
 #ADD secrets/neon_graph.js /usr/src/app/public
 
 # Add startup script
-ADD wait-for-postgres.sh /usr/src/app
+#ADD wait-for-postgres.sh /usr/src/app
+RUN chmod +x /usr/src/app/wait-for-postgres.sh
 
 # Startup Application
 RUN gulp build

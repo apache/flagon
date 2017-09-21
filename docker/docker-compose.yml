@@ -36,8 +36,8 @@ services:
     depends_on:
       - "userale-forwarder"
     command: python -m SimpleHTTPServer 8080
-    networks:
-      - esnet
+    # networks:
+    #   - esnet
 
   # ELK Stack
 
@@ -61,8 +61,8 @@ services:
       - esdata1:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
-    networks:
-      - esnet
+    # networks:
+    #   - esnet
 
   elasticsearch2:
     image: docker.elastic.co/elasticsearch/elasticsearch:5.5.0
@@ -81,8 +81,8 @@ services:
     mem_limit: 1g
     volumes:
       - esdata2:/usr/share/elasticsearch/data
-    networks:
-      - esnet
+    # networks:
+    #   - esnet
 
   # Kibana
   kibana:
@@ -97,8 +97,8 @@ services:
     environment:
       XPACK_MONITORING_ENABLED: "false"
       ELASTICSEARCH_URL: http://elasticsearch1:9200
-    networks:
-      - esnet
+    # networks:
+    #   - esnet
 
   # Logstash
   userale-forwarder:
@@ -115,8 +115,8 @@ services:
       - "elasticsearch2"
     environment:
       XPACK_MONITORING_ENABLED: "false"
-    networks:
-      - esnet
+    # networks:
+    #   - esnet
 
   # Distill
   distill:
@@ -126,22 +126,22 @@ services:
       - 8090:8090
     depends_on:
       - "elasticsearch1"
-      - "elasticsearch2"
-    networks:
-      - esnet
+    # networks:
+    #   - esnet
 
   # TAP's Database
   db:
-    container_name: tap-db
+    container_name: senssoft-db
     build: ./db
     ports:
       - "5432:5432"
 
   # TAP
   tap:
-    container_name: tap-web
+    container_name: senssoft-tap
     build: ./tap
-    command: ["bash", "./wait-for-postgres.sh"]
+    # command: ["bash", "./wait-for-postgres.sh"]
+    command: bash -c "/usr/src/app/wait-for-postgres.sh"
     ports:
       - "8010:8010"
     depends_on:
@@ -155,5 +155,5 @@ volumes:
   esdata2:
     driver: local
 
-networks:
-  esnet: 
+# networks:
+#   esnet: 

@@ -67,8 +67,7 @@
                 },
                 "path":
                 {
-                    "type": "text",
-                    "analyzer": "my_analyzer"
+                    "type": "keyword"
                 },
                 "details":
                 {
@@ -130,7 +129,7 @@
                 {
                     "type": "keyword"
                 },
-                "session":
+                "sessionID":
                 {
                     "type": "keyword"
                 },
