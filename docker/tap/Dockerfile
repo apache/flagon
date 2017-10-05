@@ -51,7 +51,8 @@ RUN npm install
 RUN pip install -r requirements.txt
 
 # Add application files
-ADD secret.py /usr/src/app/tap/settings
+RUN cp secrets/secret.py tap/settings
+#ADD secret.py /usr/src/app/tap/settings
 #ADD secrets/neon_counts.js /usr/src/app/public
 #ADD secrets/neon_graph.js /usr/src/app/public
 
