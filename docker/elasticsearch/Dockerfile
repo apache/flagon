@@ -13,12 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM docker.elastic.co/logstash/logstash:5.6.3
+FROM docker.elastic.co/elasticsearch/elasticsearch:5.6.3
+
 MAINTAINER Michelle Beard <msbeard@apache.org>
 
-RUN mkdir /usr/share/logstash/templates
+# Override config
+COPY config /usr/share/elasticsearch/config
 
-RUN logstash-plugin remove x-pack
+# Set environment
+ENV CLUSTER_NAME SensSoft
 
-# Known issue: https://github.com/elastic/logstash-docker/issues/45
-RUN sed -i '/xpack/d' /usr/share/logstash/config/logstash.yml
+# Kubernetes requires swap is turned off
+ENV MEMORY_LOCK false

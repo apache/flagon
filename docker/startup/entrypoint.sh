@@ -17,5 +17,4 @@
 
 # Wait for the Elasticsearch container to be ready before starting Kibana.
 echo "Stalling for Elasticsearch"
-dockerize -wait http://elasticsearch1:9200 
-dockerize -wait http://elasticsearch2:9200
+dockerize -wait http://loadbalancer:9200
