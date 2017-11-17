@@ -24,7 +24,7 @@ How to Build SensSoft Docker Containers
 1. Start Elasticsearch cluster:
     
     ```bash
-    $ docker-compose up -d elasticsearch loadbalancer
+    $ docker-compose up -d --scale elasticsearch=3 elasticsearch loadbalancer
     ```
     
     The loadbalancer node exposes port 9200 on localhost and is the only node 
@@ -33,10 +33,6 @@ How to Build SensSoft Docker Containers
     and balances them across the elasticsearch worker nodes. The elasticsearch 
     worker nodes communicate to each other and the loadbalancer via TCP on port 9300. 
 
-1. Once Elasticsearch cluster is fully started, scale out elasticsearch service:
-   ```bash
-   $ docker-compose up --scale elasticsearch=3
-   ```
     
 1. Confirm cluster state:
    ```bash
@@ -66,7 +62,6 @@ How to Build SensSoft Docker Containers
   
    ```bash
    $ docker-compose up -d logstash
-   
    $ curl -XGET http://localhost:8100 
    ok
    ```
