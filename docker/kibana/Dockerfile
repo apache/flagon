@@ -13,12 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM docker.elastic.co/logstash/logstash:5.6.3
+FROM docker.elastic.co/kibana/kibana:5.6.3
+
 MAINTAINER Michelle Beard <msbeard@apache.org>
 
-RUN mkdir /usr/share/logstash/templates
+# Override config
+COPY config /usr/share/kibana/config
 
-RUN logstash-plugin remove x-pack
-
-# Known issue: https://github.com/elastic/logstash-docker/issues/45
-RUN sed -i '/xpack/d' /usr/share/logstash/config/logstash.yml
+RUN kibana-plugin remove x-pack
