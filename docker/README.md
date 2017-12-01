@@ -14,22 +14,28 @@ How to Build Docker Containers
    # For Linux systems
    $ sysctl -w vm.max_map_count=262144
    ```
-4. To build and run all ``Docker`` containers.
+4. Additionally, ensure that your kernel setting for the maximum number of file descriptions is at least 65536.
+   ```
+   # For Linux systems
+   $ sysctl -w fs.file-max=65536
+   ```
+5. To build and run all ``Docker`` containers.
     ```
     $ docker-compose up -d
     ```
-5. To run a specific ``Docker`` container.
+6. To run a specific ``Docker`` container.
     ```
     $ docker-compose up -d site
     # Note: site container is instrumented w/ userale; all userale logs will be sent to the
     # elasticsearch docker container.
     ```
-6. Verify the deployment by navigating to ``Kibana`` in your favorite browser.
+7. Verify the deployment by navigating to ``Kibana`` in your favorite browser.
+   Please note that Kibana can take upwards of several minutes to start, depending on the available system resources.
     ```sh
     http://localhost:5601
     ```
 
-7. Stop all the containers.
+8. Stop all the containers.
     ```sh
     $ docker-compose stop
     ```
