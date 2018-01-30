@@ -25,3 +25,5 @@ ENV CLUSTER_NAME SensSoft
 
 # Kubernetes requires swap is turned off
 ENV MEMORY_LOCK false
+
+EXPOSE 9200
