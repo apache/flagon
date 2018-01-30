@@ -113,6 +113,8 @@ services:
     build: ./logstash
     image: senssoft.incubator.apache.org/logstash:5.6.3
     container_name: senssoft-logstash
+    environment:
+      - "ELASTICSEARCH_URL=loadbalancer:9200"
     command: -f /etc/logstash/conf.d
     ports:
       - 8100:8100
