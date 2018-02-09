@@ -25,3 +25,8 @@ ENV CLUSTER_NAME SensSoft
 
 # Kubernetes requires swap is turned off
 ENV MEMORY_LOCK false
+
+# DELETE XPACK Plugin
+RUN elasticsearch-plugin remove x-pack --silent
+
+EXPOSE 9200
