@@ -1,0 +1,1 @@
+kubectl get svc,deployment,pods -l component=elasticsearch
