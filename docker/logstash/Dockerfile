@@ -22,3 +22,9 @@ RUN logstash-plugin remove x-pack
 
 # Known issue: https://github.com/elastic/logstash-docker/issues/45
 RUN sed -i '/xpack/d' /usr/share/logstash/config/logstash.yml
+
+# Copy Configuration files over
+COPY config/logstash-userale.conf /etc/logstash/conf.d/logstash-userale.conf
+COPY templates/userale.json /usr/share/logstash/templates/userale.json
+
+EXPOSE 8100

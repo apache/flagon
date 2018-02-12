@@ -133,3 +133,5 @@ Todo
 [confirmation]: ./images/confirmation.png "Confirm index pattern conflicts"
 [dashboard]: ./images/dashboard.png "Apache Senssoft Dashboard"
 [management]: ./images/management.png "Kibana management console"
+
+© Copyright 2016 The Charles Stark Draper Laboratory, Inc. All rights reserved.

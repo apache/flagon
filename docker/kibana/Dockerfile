@@ -21,3 +21,5 @@ MAINTAINER Michelle Beard <msbeard@apache.org>
 COPY config /usr/share/kibana/config
 
 RUN kibana-plugin remove x-pack
+
+EXPOSE 5601

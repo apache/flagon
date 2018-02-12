@@ -30,32 +30,31 @@
         },
         "logs":
         {
+        "dynamic_templates": [
+                {
+                  "strings_as_keywords": {
+                    "match_mapping_type": "string",
+                    "mapping": {
+                      "type": "keyword"
+                    }
+                  }
+                }
+            ],
+            "dynamic": "true",
             "properties":
             {
                 "userAction":
                 {
                     "type": "boolean"
                 },
-                "type":
-                {
-                    "type": "keyword"
-                },
                 "clientTime":
                 {
                     "type": "date",
                     "format": "strict_date_optional_time||epoch_millis"
                 },
-                "target":
-                {
-                    "type": "keyword"
-                },
                 "count":
                 {
                     "type": "integer"
-                },
-                "logType":
-                {
-                    "type": "keyword"
                 },
                 "targetChange": 
                 {
@@ -64,10 +63,6 @@
                 "typeChange": 
                 {
                     "type": "boolean"
-                },
-                "path":
-                {
-                    "type": "keyword"
                 },
                 "details":
                 {
@@ -124,26 +119,6 @@
                             "type": "integer"
                         }
                     }
-                },
-                "userId":
-                {
-                    "type": "keyword"
-                },
-                "sessionID":
-                {
-                    "type": "keyword"
-                },
-                "toolName":
-                {
-                    "type": "keyword"
-                },
-                "toolVersion":
-                {
-                    "type": "keyword"
-                },
-                "useraleVersion":
-                {
-                    "type": "keyword"
                 },
                 "major_ver":
                 {

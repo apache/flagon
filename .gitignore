@@ -1,3 +1,5 @@
+release/incubator-*
+release/apache-*
 .sass-cache
 .jekyll-metadata
 secret.py
