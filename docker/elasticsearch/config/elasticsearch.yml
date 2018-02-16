@@ -41,10 +41,11 @@ http:
   compression: true
   cors:
     enabled: ${HTTP_CORS_ENABLE:true}
-    allow-origin: ${HTTP_CORS_ALLOW_ORIGIN:*}
+    allow-origin: ${HTTP_CORS_ALLOW_ORIGIN:"*"}
 
 # Prevent the "split brain" by configuring the majority of nodes (total number of nodes / 2 + 1):
 discovery:
   zen:
     ping.unicast.hosts: ${DISCOVERY_SERVICE:127.0.0.1, [::1]}
+    ping.unicast.hosts.resolve_timeout: ${DISCOVERY_TIMEOUT:5s}
     minimum_master_nodes: ${NUMBER_OF_MASTERS:1}

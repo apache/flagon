@@ -66,7 +66,7 @@ if [[ -z $COMMAND ]] || \
     $COMMAND != "check" && \
     $COMMAND != "shutdown" && \
     $COMMAND != "purge" && \
-    $COMMAND != "start" && \
+    $COMMAND != "provision" && \
     $COMMAND != "stop" && \
     $COMMAND != "delete" ]]; then \
     echo "Error: Specify a command."
@@ -81,9 +81,14 @@ if [[ $COMMAND == "status" ]]; then
 	exit 0
 fi
 
-# Deploy entire Kubernets SensSoft namespace
-if [[ $COMMAND == "status" ]]; then
-    kubectl create -f es-discovery-svc.yaml
+# Deploy entire Kubernetes SensSoft namespace
+if [[ $COMMAND == "deploy" ]]; then
+    elasticsearch
+	exit 0
+fi
+
+function elasticsearch() {
+    kubectl create -f es-master-svc.yaml
     kubectl create -f es-svc.yaml
     kubectl create -f es-master.yaml
     kubectl rollout status -f es-master.yaml
@@ -91,21 +96,19 @@ if [[ $COMMAND == "status" ]]; then
     kubectl rollout status -f es-client.yaml
     kubectl create -f es-data.yaml
     kubectl rollout status -f es-data.yaml
-	exit 0
-fi
+}
 
-# Delete entire Kubernets SensSoft namespace
+# Delete entire Kubernetes SensSoft namespace
 if [[ $COMMAND == "purge" ]]; then
-    kubectl delete -f es-data.yaml
-    kubectl delete -f es-client.yaml
-    kubectl delete -f es-master.yaml
-    kubectl delete -f es-svc.yaml
-    kubectl delete -f es-discovery-svc.yaml
-	exit 0
+	for f in *.yaml
+    do
+        kubectl delete -f $f
+    done
+    exit 0
 fi
 
 # Start minikube w/ hyperkit
-if [[ $COMMAND == "start" ]]; then
+if [[ $COMMAND == "provision" ]]; then
     minikube start --vm-driver=hyperkit
 	exit 0
 fi
