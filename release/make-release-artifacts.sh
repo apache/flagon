@@ -39,9 +39,9 @@ Usage: make-release-artifacts.sh [-v version] [-r rc_number]
 Prepares and builds the source and binary distribution artifacts of a SensSoft
 release.
 
-  -vVERSION                  overrides the name of this version, if detection
+  -v VERSION                 overrides the name of this version, if detection
                              from package.json is not accurate for any reason.
-  -rRC_NUMBER                specifies the release candidate number. The
+  -r RC_NUMBER               specifies the release candidate number. The
                              produced artifact names include the 'rc' suffix,
                              but the contents of the archive artifact do *not*
                              include the suffix. Therefore, turning a release
@@ -105,11 +105,11 @@ release_name=apache-senssoft-useralejs-${current_version}
 if [ -z "$rc_suffix" ]; then
     fail Specifying the RC number is required
 else
-    artifact_name=${release_name}-rc${rc_suffix}
+    artifact_name=${release_name}
 fi
 
 userale_dir=$( pwd )
-working_dir=${TMPDIR:-/tmp}/release-working-dir
+working_dir=${TMPDIR:-/tmp}release-working-dir
 rm -rf ${working_dir}
 staging_dir="${working_dir}/source/"
 src_staging_dir="${working_dir}/source/${release_name}-src"
@@ -219,9 +219,8 @@ which sha256sum >/dev/null || alias sha256sum='shasum -a 256' && shopt -s expand
 
 ( cd ${artifact_dir} &&
     for a in *.tar.gz *.zip; do
-        md5sum ${a} > ${a}.md5 
-        sha1sum -b ${a} > ${a}.sha1
-        sha256sum -b ${a} > ${a}.sha256
+        md5sum ${a} > ${a}.md5
+        gpg2 --print-md SHA512 ${a} > ${a}.sha512
         gpg2 --armor --output ${a}.asc --detach-sig ${a}
     done
 )
