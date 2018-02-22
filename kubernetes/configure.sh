@@ -82,14 +82,14 @@ if [[ $COMMAND == "status" ]]; then
 fi
 
 function elasticsearch() {
-    kubectl create -f es-master-svc.yaml
-    kubectl create -f es-client-svc.yaml
-    kubectl create -f es-master.yaml
-    kubectl rollout status -f es-master.yaml
-    kubectl create -f es-client.yaml
-    kubectl rollout status -f es-client.yaml
-    kubectl create -f es-data.yaml
-    kubectl rollout status -f es-data.yaml
+    kubectl create -f elasticsearch/es-master-svc.yaml
+    kubectl create -f elasticsearch/es-client-svc.yaml
+    kubectl create -f elasticsearch/es-master.yaml
+    kubectl rollout status -f elasticsearch/es-master.yaml
+    kubectl create -f elasticsearch/es-client.yaml
+    kubectl rollout status -f elasticsearch/es-client.yaml
+    kubectl create -f elasticsearch/es-data.yaml
+    kubectl rollout status -f elasticsearch/es-data.yaml
 }
 
 # Deploy entire Kubernetes SensSoft namespace
@@ -100,7 +100,7 @@ fi
 
 # Delete entire Kubernetes SensSoft namespace
 if [[ $COMMAND == "purge" ]]; then
-	for f in *.yaml
+	for f in elasticsearch/*.yaml
     do
         kubectl delete -f $f
     done
