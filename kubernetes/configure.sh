@@ -81,15 +81,9 @@ if [[ $COMMAND == "status" ]]; then
 	exit 0
 fi
 
-# Deploy entire Kubernetes SensSoft namespace
-if [[ $COMMAND == "deploy" ]]; then
-    elasticsearch
-	exit 0
-fi
-
 function elasticsearch() {
     kubectl create -f es-master-svc.yaml
-    kubectl create -f es-svc.yaml
+    kubectl create -f es-client-svc.yaml
     kubectl create -f es-master.yaml
     kubectl rollout status -f es-master.yaml
     kubectl create -f es-client.yaml
@@ -97,6 +91,12 @@ function elasticsearch() {
     kubectl create -f es-data.yaml
     kubectl rollout status -f es-data.yaml
 }
+
+# Deploy entire Kubernetes SensSoft namespace
+if [[ $COMMAND == "deploy" ]]; then
+    elasticsearch
+	exit 0
+fi
 
 # Delete entire Kubernetes SensSoft namespace
 if [[ $COMMAND == "purge" ]]; then
@@ -109,7 +109,8 @@ fi
 
 # Start minikube w/ hyperkit
 if [[ $COMMAND == "provision" ]]; then
-    minikube start --vm-driver=hyperkit
+    minikube start --cpus 2 --memory 4096
+
 	exit 0
 fi
 

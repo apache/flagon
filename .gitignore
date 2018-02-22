@@ -1,3 +1,4 @@
+.idea
 release/incubator-*
 release/apache-*
 .sass-cache

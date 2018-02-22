@@ -36,3 +36,7 @@ spec:
   - name: http
     port: 9200
     protocol: TCP
+  type: NodePort
+# type: Loadbalancer only works with certain providers:
+# AWS, Azure, OpenStack, CloudStack, and Google Compute Engine
+#  type: LoadBalancer

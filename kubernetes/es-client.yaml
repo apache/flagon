@@ -6,7 +6,7 @@ metadata:
     component: elasticsearch
     role: client
 spec:
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -16,6 +16,7 @@ spec:
       initContainers:
       - name: init-sysctl
         image: busybox:1.27.2
+        imagePullPolicy: IfNotPresent
         command:
         - sysctl
         - -w
@@ -25,7 +26,7 @@ spec:
       containers:
       - name: es-client
         image: senssoft/elasticsearch:5.6.3
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
         - name: NAMESPACE
           valueFrom:
@@ -58,12 +59,16 @@ spec:
         livenessProbe:
           tcpSocket:
             port: transport
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          failureThreshold: 5
         readinessProbe:
           httpGet:
             path: /_cluster/health
             port: http
-          initialDelaySeconds: 20
-          timeoutSeconds: 5
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          failureThreshold: 10
         volumeMounts:
         - name: storage
           mountPath: /data
