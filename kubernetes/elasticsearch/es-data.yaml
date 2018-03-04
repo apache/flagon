@@ -3,14 +3,14 @@ kind: Deployment
 metadata:
   name: es-data
   labels:
-    component: elasticsearch
+    component: elk
     role: data
 spec:
   replicas: 2
   template:
     metadata:
       labels:
-        component: elasticsearch
+        component: elk
         role: data
     spec:
       initContainers:
@@ -25,7 +25,7 @@ spec:
           privileged: true
       containers:
       - name: es-data
-        image: senssoft/elasticsearch:5.6.3
+        image: senssoft/elasticsearch:6.2.2
         imagePullPolicy: IfNotPresent
         env:
         - name: NAMESPACE
@@ -44,7 +44,7 @@ spec:
         - name: HTTP_ENABLE
           value: "false"
         - name: DISCOVERY_SERVICE
-          value: "elasticsearch-master-discovery"
+          value: "elasticsearch-discovery"
         - name: ES_JAVA_OPTS
           value: -Xms256m -Xmx256m
         ports:

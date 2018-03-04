@@ -3,11 +3,13 @@ kind: Service
 metadata:
   name: kibana
   labels:
-    component: kibana
+    component: elk
+    role: kibana
 spec:
   selector:
-    component: kibana
+    component: elk
+    role: kibana
   ports:
   - name: http
-    port: 80
-    targetPort: http
+    port: 5601
+  type: NodePort

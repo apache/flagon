@@ -3,30 +3,37 @@ kind: Deployment
 metadata:
   name: kibana
   labels:
-    component: kibana
+    component: elk
+    role: kibana
 spec:
   replicas: 1
   selector:
     matchLabels:
-     component: kibana
+     component: elk
+     role: kibana
   template:
     metadata:
       labels:
-        component: kibana
+        component: elk
+        role: kibana
     spec:
       containers:
       - name: kibana
-        image: docker.elastic.co/kibana/kibana:5.6.3
-        env:
-        - name: CLUSTER_NAME
-          value: SensSoft
-        - name: SERVER_BASEPATH
-          value: /api/v1/proxy/namespaces/default/services/kibana
+        image: senssoft/kibana:6.2.2
+        imagePullPolicy: IfNotPresent
         resources:
+          # need more cpu upon initialization, therefore burstable class
           limits:
             cpu: 1000m
           requests:
             cpu: 100m
+        env:
+        - name: CLUSTER_NAME
+          value: SensSoft
+        - name: ELASTICSEARCH_URL
+          value: "http://elasticsearch-loadbalancer:9200"
+        - name: ES_JAVA_OPTS
+          value: "-Xms512m -Xmx512m"
         ports:
         - containerPort: 5601
           name: http
