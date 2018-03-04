@@ -22,29 +22,32 @@
 help_usage() {
     echo "configure.sh"
     echo "A simple utility to deploy Apache SensSoft Kubernetes build."
+    echo "Not meant to be used in production."
     echo ""
-    echo "Usage: $ configure.sh COMMAND"
+    echo "Usage: $ configure.sh COMMAND [OPT]"
     echo ""
     help_commands
     echo "e.g."
-    echo "$ $0 deploy"
+    echo "$ $0 deploy all"
 }
 
 # Print out commands.
 help_commands() {
     echo "The commands are:"
-    echo "    status            View status of Kubernetes deployment"
-    echo "    deploy            Deploy SensSoft stack into Kubernetes cluster"
-    echo "    elasticsearch     Deploy Elasticsearch Kubernetes stack"
-    echo "    logstash          Deploy Logstash Kubernetes stack"
-    echo "    kibana            Deploy Kibana Kubernetes stack"
-    echo "    elk               Deploy ELK Kubernetes stack"
-    echo "    check             Check environment for release"
-    echo "    shutdown          Shutdown Kubernetes cluster"
-    echo "    purge             Purge all Kubernetes artifacts"
-    echo "    start             Startup minikube"
-    echo "    stop              Stop minikube"
-    echo "    delete            Delete minikube"
+    echo "    status                View status of Kubernetes deployment"
+    echo "    deploy elk            Deploy ELK stack into Kubernetes cluster"
+    echo "    deploy elasticsearch  Deploy Elasticsearch Kubernetes"
+    echo "    deploy logstash       Deploy Logstash Kubernetes"
+    echo "    deploy kibana         Deploy Kibana Kubernetes"
+    echo "    purge elk             Purge all ELK Kubernetes artifacts"
+    echo "    purge elasticsearch   Purge all Elasticsearch Kubernetes artifacts"
+    echo "    purge logstash        Purge all Logstash Kubernetes artifacts"
+    echo "    purge kibana          Purge all Kibana Kubernetes artifacts"
+    echo "    check                 Check environment for release"
+    echo "    shutdown              Shutdown Kubernetes cluster"
+    echo "    start                 Startup minikube"
+    echo "    stop                  Stop minikube"
+    echo "    delete                Delete minikube"
     echo ""
 }
 
@@ -56,13 +59,11 @@ fi
 
 # Check for a command argument.
 COMMAND=$1
+COMMAND_OPT=$2
+
 if [[ -z $COMMAND ]] || \
     [[ $COMMAND != "status" && \
     $COMMAND != "deploy" && \
-    $COMMAND != "elasticsearch" && \
-    $COMMAND != "logstash" && \
-    $COMMAND != "kibana" && \
-    $COMMAND != "elk" && \
     $COMMAND != "check" && \
     $COMMAND != "shutdown" && \
     $COMMAND != "purge" && \
@@ -75,42 +76,17 @@ if [[ -z $COMMAND ]] || \
     exit 1
 fi
 
-# Fetch status of entire Kubernets SensSoft namespace
-if [[ $COMMAND == "status" ]]; then
-    kubectl get svc,deployment,pods -l component=elasticsearch
-	exit 0
-fi
-
-function elasticsearch() {
-    kubectl create -f elasticsearch/es-master-svc.yaml
-    kubectl create -f elasticsearch/es-client-svc.yaml
-    kubectl create -f elasticsearch/es-master.yaml
-    kubectl rollout status -f elasticsearch/es-master.yaml
-    kubectl create -f elasticsearch/es-client.yaml
-    kubectl rollout status -f elasticsearch/es-client.yaml
-    kubectl create -f elasticsearch/es-data.yaml
-    kubectl rollout status -f elasticsearch/es-data.yaml
-}
-
-# Deploy entire Kubernetes SensSoft namespace
-if [[ $COMMAND == "deploy" ]]; then
-    elasticsearch
-	exit 0
-fi
-
-# Delete entire Kubernetes SensSoft namespace
-if [[ $COMMAND == "purge" ]]; then
-	for f in elasticsearch/*.yaml
-    do
-        kubectl delete -f $f
-    done
-    exit 0
-fi
-
 # Start minikube w/ hyperkit
 if [[ $COMMAND == "provision" ]]; then
-    minikube start --cpus 2 --memory 4096
-
+    minikube start --cpus 2 --memory 5120 --vm-driver=virtualbox
+    # this for loop waits until kubectl can access the api server that Minikube has created
+    for i in {1..150}; do # timeout for 5 minutes
+       ./kubectl get po &> /dev/null
+       if [ $? -ne 1 ]; then
+          break
+      fi
+      sleep 2
+    done
 	exit 0
 fi
 
@@ -125,6 +101,109 @@ fi
 if [[ $COMMAND == "delete" ]]; then
     minikube delete
 	exit 0
+fi
+
+# Fetch status of entire Kubernets SensSoft namespace
+if [[ $COMMAND == "status" ]]; then
+    kubectl get svc,deployment,pods -l component=elk
+	exit 0
+fi
+
+function elasticsearch() {
+    echo "Elasticsearch deployment"
+    kubectl create -f elasticsearch/es-master-svc.yaml
+    kubectl create -f elasticsearch/es-client-svc.yaml
+    kubectl create -f elasticsearch/es-master.yaml
+    kubectl rollout status -f elasticsearch/es-master.yaml
+    kubectl create -f elasticsearch/es-client.yaml
+    kubectl rollout status -f elasticsearch/es-client.yaml
+    kubectl create -f elasticsearch/es-data.yaml
+    kubectl rollout status -f elasticsearch/es-data.yaml
+}
+
+function logstash() {
+    echo "Logstash deployment"
+	kubectl create -f logstash/logstash-svc.yaml
+	kubectl create -f logstash/logstash-client.yaml
+	kubectl create -f logstash/logstash.yaml
+	kubectl rollout status -f logstash/logstash.yaml
+}
+
+function kibana() {
+    echo "Kibana deployment"
+	kubectl create -f kibana/kibana-svc.yaml
+	kubectl create -f kibana/kibana.yaml
+	kubectl rollout status -f kibana/kibana.yaml
+}
+
+if [[ $COMMAND == "deploy" && \
+    $COMMAND_OPT == "elasticsearch" ]]; then
+    elasticsearch
+    exit 0
+fi
+
+if [[ $COMMAND == "deploy" && \
+    $COMMAND_OPT == "logstash" ]]; then
+    logstash
+    exit 0
+fi
+
+if [[ $COMMAND == "deploy" && \
+    $COMMAND_OPT == "kibana" ]]; then
+    kibana
+    exit 0
+fi
+
+if [[ $COMMAND == "deploy" && \
+    $COMMAND_OPT == "elk" ]]; then
+    elasticsearch
+    logstash
+    kibana
+    exit 0
+fi
+
+# Delete entire Elasticsearch Kubernetes artifacts
+if [[ $COMMAND == 'purge' && \
+    $COMMAND_OPT == 'elasticsearch' ]]; then
+    for f in elasticsearch/*.yaml
+    do
+        kubectl delete -f $f
+    done
+fi
+
+# Delete entire Logstash Kubernetes artifacts
+if [[ $COMMAND == 'purge' && \
+    $COMMAND_OPT == 'logstash' ]]; then
+    for f in logstash/*.yaml
+    do
+        kubectl delete -f $f
+    done
+fi
+
+# Delete entire Kibana Kubernetes artifacts
+if [[ $COMMAND == 'purge' && \
+    $COMMAND_OPT == 'kibana' ]]; then
+    for f in kibana/*.yaml
+    do
+        kubectl delete -f $f
+    done
+fi
+
+# Delete entire Kubernetes SensSoft namespace
+if [[ $COMMAND == 'purge' && \
+    $COMMAND_OPT == 'elk' ]]; then
+	for f in elasticsearch/*.yaml
+    do
+        kubectl delete -f $f
+    done
+    for f in logstash/*.yaml
+    do
+        kubectl delete -f $f
+    done
+    for f in kibana/*.yaml
+    do
+        kubectl delete -f $f
+    done
 fi
 
 # Prepare for Distill deployment
@@ -144,5 +223,3 @@ if [[ $COMMAND == "check" ]]; then
     echo "Error: Unsupported check build."
     exit 1
 fi
-
-exit 0
