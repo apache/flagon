@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Apache SensSoft Single-Node Build
+# Apache SensSoft Cluster Build
 
 version: "3"
 services:
@@ -38,18 +38,38 @@ services:
       - "logstash"
     command: python -m SimpleHTTPServer 8080
 
+  # Elasticsearch Swarm Workers
+  elasticsearch:
+    build: ./elasticsearch
+    image: senssoft/elasticsearch:6.2.2
+    environment:
+      - NODE_MASTER=true
+      - NUMBER_OF_MASTERS=3
+      - NODE_COORDINATE=true
+      - "DISCOVERY_SERVICE=elasticsearch"
+      - NODE_DATA=true
+      - NODE_INGEST=true
+      - MAX_LOCAL_STORAGE_NODES=1
+      - NETWORK_HOST=0.0.0.0
+      - HTTP_ENABLE=false
+      - HTTP_CORS_ENABLE=false
+      - HTTP_CORS_ALLOW_ORIGIN=*
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    networks:
+      - esnet
+
   # Elasticsearch Loadbalancer/Entry
   loadbalancer:
     build: ./elasticsearch
     image: senssoft/elasticsearch:6.2.2
     container_name: senssoft-loadbalancer
     environment:
-      - NODE_MASTER=true
+      - NODE_MASTER=false
       - NUMBER_OF_MASTERS=1
       - NODE_COORDINATE=true
       - "DISCOVERY_SERVICE=elasticsearch"
-      - NODE_DATA=true
-      - NODE_INGEST=true
+      - NODE_DATA=false
+      - NODE_INGEST=false
       - MAX_LOCAL_STORAGE_NODES=1
       - NETWORK_HOST=0.0.0.0
       - HTTP_ENABLE=true
@@ -94,7 +114,7 @@ services:
     networks:
       - esnet
 
-   # Distill
+  # Distill
   distill:
      build: ./distill
      image: senssoft/distill:0.1.0
@@ -106,7 +126,7 @@ services:
      networks:
        - esnet
 
-   # TAP's Database
+  # TAP's Database
   db:
      build: ./db
      image: senssoft/postgres:latest

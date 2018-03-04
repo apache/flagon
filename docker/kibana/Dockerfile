@@ -13,13 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM docker.elastic.co/kibana/kibana:5.6.3
+FROM docker.elastic.co/kibana/kibana-oss:6.2.2
 
 MAINTAINER Michelle Beard <msbeard@apache.org>
-
-# Override config
-COPY config /usr/share/kibana/config
-
-RUN kibana-plugin remove x-pack
 
 EXPOSE 5601

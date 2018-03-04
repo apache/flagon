@@ -13,20 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM docker.elastic.co/elasticsearch/elasticsearch:5.6.3
+FROM docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.2
 
 MAINTAINER Michelle Beard <msbeard@apache.org>
 
 # Override config
 COPY config /usr/share/elasticsearch/config
+RUN chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/config
 
 # Set environment
 ENV CLUSTER_NAME SensSoft
 
 # Kubernetes requires swap is turned off
 ENV MEMORY_LOCK false
-
-# DELETE XPACK Plugin
-RUN elasticsearch-plugin remove x-pack --silent
 
 EXPOSE 9200

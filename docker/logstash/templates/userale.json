@@ -1,5 +1,5 @@
 {
-    "template": "userale",
+    "index_patterns": "userale",
     "order": 1,
     "settings":
     {
@@ -21,14 +21,7 @@
     },
     "mappings":
     {
-        "_default_":
-        {
-            "_all":
-            {
-                "enabled": false
-            }
-        },
-        "logs":
+        "doc":
         {
         "dynamic_templates": [
                 {
