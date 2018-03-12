@@ -16,6 +16,8 @@ How to Build and Deploy Site
     CID=$(docker create -p 8000:8000 -it senssoft:site python -m SimpleHTTPServer)
     # Reference container id to grab built contents
     docker cp $CID:/app/_site .
+    # Copy the Website source to the deploy directory
+    cp -r _site/* ../content/
     ```
 5. N.B. Make sure that any Website changes which are to be deployed to production are pushed
    to the **asf-site** branch.
