@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Getting Started</title>
-  <meta name="description" content="Usage">
+  <meta name="description" content="Instrumenting Your Application Globally with Apache UserALE.PyQt5">
 
   <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -16,7 +16,7 @@
   <script src="/js/main.js"></script>
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://senssoft.incubator.apache.org/docs/distill/start.html">
+  <link rel="canonical" href="http://senssoft.incubator.apache.org/docs/useralepy/start.html">
   <link rel="alternate" type="application/rss+xml" title="Apache SensSoft" href="/feed.xml">
 
   
@@ -149,13 +149,13 @@
   </div>
 
   
-    <div class="title">
+    <div class="active title">
   
     <i class="dropdown icon"></i>
     UserALE.py
   </div>
   
-    <div class="content">
+    <div class="active content">
   
     <div class="ui inverted bulleted list docs-list">
       
@@ -171,13 +171,13 @@
   </div>
 
   
-    <div class="active title">
+    <div class="title">
   
     <i class="dropdown icon"></i>
     Distill
   </div>
   
-    <div class="active content">
+    <div class="content">
   
     <div class="ui inverted bulleted list docs-list">
       
@@ -238,17 +238,59 @@
   </div>
   <div class="docs-content">
     <h2 class="ui header">Getting Started</h2>
-    <h3 id="usage">Usage</h3>
+    <h3 id="instrumenting-your-application-globally-with-apache-useralepyqt5">Instrumenting Your Application Globally with Apache UserALE.PyQt5</h3>
 
-<p>Using curl:</p>
+<p>It’s very simple to instrument a PyQt5 application with Apache UserALE.PyQt5. Simply import the Apache UserALE.PyQt5 library and register it with your application.</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>curl -XGET <span class="s1">'http://localhost:8090/app/register'</span> -d <span class="s1">'{
-          "application_name" : "my_app",
-          "version" : "0.1",
-          "application_description" : "my test app"
-  }'</span>
+<p>Below is an example PyQt5 application taken from ZetCode PyQt5 tutorial instrumented with Apache UserALE.PyQt5.</p>
+
+<div class="language-python highlighter-rouge"><pre class="highlight"><code>  <span class="kn">import</span> <span class="nn">sys</span>
+  <span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="kn">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QMessageBox</span>
+  <span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="kn">import</span> <span class="n">QCoreApplication</span><span class="p">,</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">QEvent</span>
+
+  <span class="kn">from</span> <span class="nn">userale.ale</span> <span class="kn">import</span> <span class="n">Ale</span>
+
+  <span class="k">class</span> <span class="nc">TestApplication</span> <span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+
+      <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+          <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">initUI</span><span class="p">()</span>
+
+      <span class="k">def</span> <span class="nf">initUI</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+          <span class="n">qbtn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s">'Quit'</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+          <span class="n">qbtn</span><span class="o">.</span><span class="n">setObjectName</span> <span class="p">(</span><span class="s">"testApplicationButton"</span><span class="p">)</span>
+          <span class="n">qbtn</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">quit</span><span class="p">)</span>
+          <span class="n">qbtn</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">qbtn</span><span class="o">.</span><span class="n">sizeHint</span><span class="p">())</span>
+          <span class="n">qbtn</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+
+          <span class="bp">self</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s">'Quit button'</span><span class="p">)</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+  <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+      <span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+      <span class="n">ex</span> <span class="o">=</span> <span class="n">TestApplication</span><span class="p">()</span>
+      <span class="c"># Initiate Apache UserALE.PyQt5</span>
+      <span class="n">ale</span> <span class="o">=</span> <span class="n">Ale</span> <span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s">"mouse.log"</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s">"testUser"</span><span class="p">,</span> <span class="n">toolversion</span><span class="o">=</span><span class="s">"0.0.1"</span><span class="p">)</span>
+      <span class="c"># install globally</span>
+      <span class="n">app</span><span class="o">.</span><span class="n">installEventFilter</span> <span class="p">(</span><span class="n">ale</span><span class="p">)</span>
+
+      <span class="n">sys</span><span class="o">.</span><span class="nb">exit</span> <span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">())</span>
 </code></pre>
 </div>
+
+<p>Before we enter the mainloop of the application, UserAle needs to register the application to be instrumented. Simply instantiate Apache UserALE.PyQt5 and install it as an event filter in your application.</p>
+
+<div class="language-python highlighter-rouge"><pre class="highlight"><code>  <span class="c"># Initiate UserAle</span>
+  <span class="n">ale</span> <span class="o">=</span> <span class="n">Ale</span> <span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s">"mouse.log"</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s">"testUser"</span><span class="p">,</span> <span class="n">toolversion</span><span class="o">=</span><span class="s">"0.0.1"</span><span class="p">)</span>
+  <span class="c"># install globally</span>
+  <span class="n">app</span><span class="o">.</span><span class="n">installEventFilter</span> <span class="p">(</span><span class="n">ale</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h3 id="instrumenting-your-application-manually-with-apache-useralepyqt5">Instrumenting Your Application Manually with Apache UserALE.PyQt5</h3>
+
+<p><em>Todo:</em> Write guidelines for instrumenting specific PyQt5 Widgets with Apache UserALE.PyQt5.</p>
 
   </div>
 </div>
