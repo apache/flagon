@@ -11,10 +11,10 @@ Apache UserALE.js is the UserALE client for DOM and JavaScript-based application
 
 ### Include UserALE.js in your project
 
-To include UserAle.js in your project with default configuration, simply include the script tag below:
+To include UserALE.js in your project with default configuration, simply include the script tag below:
 
   ```html
-  <script src="<yourUseraleSource>"></script>
+  <script src="<userale-0.1.0.js>"></script>
   ```
 
 ### Configure UserALE.js
@@ -22,7 +22,7 @@ To include UserAle.js in your project with default configuration, simply include
 HTML5 Data Parameters are used to configure UserALE.js.  For example, to set the logging URL:
 
   ```html
-  <script src="userale.js" data-url="http://yourLoggingUrl"></script>
+  <script src="userale-0.1.0.js" data-url="http://server:port"></script>
   ```
 
 The complete list of configurable options is:

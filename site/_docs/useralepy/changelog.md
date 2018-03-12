@@ -1,6 +1,6 @@
 ---
 title: Changelog
-component: useralepyqt
+component: useralepy
 priority: 99
 ---
 

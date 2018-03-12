@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-component: useralepyqt
+component: useralepy
 priority: 1
 ---
 

@@ -1,12 +1,12 @@
 ---
-title: Contributing
+title: Build and Test
 component: useralejs
 priority: 11
 ---
 
 ### Building UserALE.js
 
-To modify and build your own version of UserAle.js, first clone the repo, install dependencies, and make any desired changes. Then build and minify into the build/ folder:
+To modify and build your own version of ``UserALE.js``, first clone the repo, install all dependencies, and make any desired changes. Then build and minify into the build/ folder:
 
   ```shell
   git clone https://github.com/apache/incubator-senssoft-useralejs.git
@@ -20,7 +20,7 @@ We maintain code quality through linting and our test suite.  To run, or run and
 
   ```shell
   npm test
-  npm run test:watch
+  npm run example:watch
   ```
 
-See package.json for full script options.
+See ``package.json`` for full script options.

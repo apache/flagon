@@ -1,7 +1,7 @@
 ---
 title: Installation
-component: useralepyqt
-permalink: /docs/useralepyqt/
+component: useralepy
+permalink: /docs/useralepy/
 priority: 0
 ---
 

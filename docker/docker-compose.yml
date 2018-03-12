@@ -1,0 +1,166 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Apache SensSoft Docker Build
+
+version: "3"
+services:
+
+  # Startup
+  startup:
+    build: ./startup
+    image: senssoft.incubator.apache.org/startup:latest
+    container_name: senssoft-start
+    depends_on:
+      - "loadbalancer"
+    command: bash /opt/entrypoint.sh
+
+  # Site
+  site:
+    build: ./site
+    image: senssoft.incubator.apache.org/website:latest
+    container_name: senssoft-app
+    ports:
+      - 8080:8080
+    depends_on:
+      - "logstash"
+    command: python -m SimpleHTTPServer 8080
+
+  # Elasticsearch Workers
+  elasticsearch:
+    build: ./elasticsearch
+    image: senssoft.incubator.apache.org/elasticsearch:5.6.3
+    command:
+      - /bin/sh
+      - -c
+      - |
+          elasticsearch-plugin remove --silent x-pack
+          elasticsearch
+    environment:
+      - NODE_MASTER=true
+      - NUMBER_OF_MASTERS=2
+      - NODE_COORDINATE=true
+      - "DISCOVERY_SERVICE=elasticsearch"
+      - NODE_DATA=true
+      - NODE_INGEST=true
+      - MAX_LOCAL_STORAGE_NODES=1
+      - NETWORK_HOST=0.0.0.0
+      - HTTP_ENABLE=false
+      - HTTP_CORS_ENABLE=false
+      - HTTP_CORS_ALLOW_ORIGIN=*
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    networks:
+      - esnet
+
+  # Elasticsearch Loadbalancer
+  loadbalancer:
+    build: ./elasticsearch
+    image: senssoft.incubator.apache.org/elasticsearch:5.6.3
+    container_name: senssoft-loadbalancer
+    command:
+      - /bin/sh
+      - -c
+      - |
+          elasticsearch-plugin remove --silent x-pack
+          elasticsearch
+    environment:
+      - NODE_MASTER=true
+      - NUMBER_OF_MASTERS=1
+      - NODE_COORDINATE=true
+      - "DISCOVERY_SERVICE=elasticsearch"
+      - NODE_DATA=true
+      - NODE_INGEST=true
+      - MAX_LOCAL_STORAGE_NODES=1
+      - NETWORK_HOST=0.0.0.0
+      - HTTP_ENABLE=true
+      - HTTP_CORS_ENABLE=true
+      - HTTP_CORS_ALLOW_ORIGIN=*
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+      - "9300"
+    networks:
+      - esnet
+
+  # Kibana
+  kibana:
+    build: ./kibana
+    image: senssoft.incubator.apache.org/kibana:5.6.3
+    container_name: senssoft-kibana
+    environment:
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+    ports:
+      - "5601:5601"
+    depends_on:
+      - "loadbalancer"
+    networks:
+      - esnet
+
+  # Logstash
+  logstash:
+    build: ./logstash
+    image: senssoft.incubator.apache.org/logstash:5.6.3
+    container_name: senssoft-logstash
+    environment:
+      - "ELASTICSEARCH_URL=loadbalancer:9200"
+    command: -f /etc/logstash/conf.d
+    ports:
+      - 8100:8100
+    volumes:
+      - ./logstash/config/logstash-userale.conf:/etc/logstash/conf.d/logstash-userale.conf
+      - ./logstash/templates/userale.json:/usr/share/logstash/templates/userale.json
+    depends_on:
+      - "loadbalancer"
+    networks:
+      - esnet
+
+  # Distill
+  distill:
+    build: ./distill
+    image: senssoft.incubator.apache.org/distill:0.1.0
+    container_name: senssoft-distill
+    ports:
+      - 8090:8090
+    depends_on:
+      - "loadbalancer"
+    networks:
+      - esnet
+
+  # TAP's Database
+  db:
+    build: ./db
+    image: senssoft.incubator.apache.org/postgres:latest
+    container_name: senssoft-postgres
+    ports:
+      - "5432:5432"
+
+  # TAP
+  tap:
+    build: ./tap
+    image: senssoft.incubator.apache.org/tap:0.1.0
+    container_name: senssoft-tap
+    # command: ["bash", "./wait-for-postgres.sh"]
+    command: bash -c "/usr/src/app/wait-for-postgres.sh"
+    ports:
+      - "8010:8010"
+    depends_on:
+      - db
+    links:
+      - db:db
+
+networks:
+
+  esnet:
+    driver: bridge

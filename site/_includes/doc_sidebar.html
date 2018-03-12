@@ -2,7 +2,7 @@
 {% assign system = site.docs | where:"component", "system" | sort: "priority" %}
 {% assign userale = site.docs | where:"component", "userale" | sort: "priority" %}
 {% assign useralejs = site.docs | where:"component", "useralejs" | sort: "priority" %}
-{% assign useralepyqt = site.docs | where:"component", "useralepyqt" | sort: "priority" %}
+{% assign useralepy = site.docs | where:"component", "useralepy" | sort: "priority" %}
 {% assign distill = site.docs | where:"component", "distill" | sort: "priority" %}
 {% assign tap = site.docs | where:"component", "tap" | sort: "priority" %}
 {% assign stout = site.docs | where:"component", "stout" | sort: "priority" %}
@@ -92,21 +92,21 @@
     </div>
   </div>
 
-  {% if page.component == 'useralepyqt' %}
+  {% if page.component == 'useralepy' %}
     <div class="active title">
   {% else %}
     <div class="title">
   {% endif %}
     <i class="dropdown icon"></i>
-    UserALE.pyqt
+    UserALE.py
   </div>
-  {% if page.component == 'useralepyqt' %}
+  {% if page.component == 'useralepy' %}
     <div class="active content">
   {% else %}
     <div class="content">
   {% endif %}
     <div class="ui inverted bulleted list docs-list">
-      {% for doc in useralepyqt %}
+      {% for doc in useralepy %}
         <a class="item" href="{{ doc.url }}">{{ doc.title }}</a>
       {% endfor %}
     </div>
