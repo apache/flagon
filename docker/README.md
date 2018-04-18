@@ -1,7 +1,7 @@
 How to Build SensSoft Docker Containers
 ---------------------------------------
 
-1. Install [``Docker``](http://docker.com) on your machine. Require Docker 1.7 and above.
+1. Install [``Docker``](http://docker.com) on your machine. Requires Docker 1.7 and above.
 
 1. Install ``docker-compose`` in an virtual environment. 
    Full instructions can be found [``here``](https://docs.docker.com/compose/install/).
@@ -121,14 +121,9 @@ Having Issues?
    $ docker-compose logs > err.dump 
    ```
 
-TODO
-----
-1. Update Kibana instructions and images. 
-1. Test Kibana visualizations.
-
-[configure_index]: ./images/configure_index.png "Configure Kibana index"
-[confirmation]: ./images/confirmation.png "Confirm index pattern conflicts"
-[dashboard]: ./images/dashboard.png "Apache Senssoft Dashboard"
-[management]: ./images/management.png "Kibana management console"
+[configure_index]: ./docs/images/configure_index.png "Configure Kibana index"
+[confirmation]: ./docs/images/confirmation.png "Confirm index pattern conflicts"
+[dashboard]: ./docs/images/dashboard.png "Apache Senssoft Dashboard"
+[management]: ./docs/images/management.png "Kibana management console"
 
 © Copyright 2016 The Charles Stark Draper Laboratory, Inc. All rights reserved.

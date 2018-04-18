@@ -13,36 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cluster:
-  name: ${CLUSTER_NAME}
+FROM docker.elastic.co/logstash/logstash:5.6.3
+MAINTAINER Michelle Beard <msbeard@apache.org>
 
-node:
-  master: ${NODE_MASTER}
-  data: ${NODE_DATA}
-  ingest: ${NODE_INGEST}
-  max_local_storage_nodes: ${MAX_LOCAL_STORAGE_NODES}
+RUN mkdir /usr/share/logstash/templates
 
-network.host: ${NETWORK_HOST}
+RUN logstash-plugin remove x-pack
 
-search.remote.connect: ${NODE_COORDINATE}
+# Known issue: https://github.com/elastic/logstash-docker/issues/45
+RUN sed -i '/xpack/d' /usr/share/logstash/config/logstash.yml
 
-path:
-  data: /usr/share/elasticsearch/data
-  logs: /usr/share/elasticsearch/log
+# Copy Configuration files over
+COPY config/logstash-userale.conf /etc/logstash/conf.d/logstash-userale.conf
+COPY templates/userale.json /usr/share/logstash/templates/userale.json
 
-bootstrap:
-  memory_lock: ${MEMORY_LOCK}
-
-http:
-  enabled: ${HTTP_ENABLE}
-  compression: true
-  cors:
-    enabled: ${HTTP_CORS_ENABLE}
-    allow-origin: ${HTTP_CORS_ALLOW_ORIGIN}
-
-# Prevent the "split brain" by configuring the majority of nodes (total number of nodes / 2 + 1):
-discovery:
-  zen:
-    ping.unicast.hosts: ${DISCOVERY_SERVICE}
-    minimum_master_nodes: ${NUMBER_OF_MASTERS}
-
+EXPOSE 8100
