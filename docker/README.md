@@ -1,7 +1,7 @@
 How to Build SensSoft Docker Containers
 ---------------------------------------
 
-1. Install [``Docker``](http://docker.com) on your machine.
+1. Install [``Docker``](http://docker.com) on your machine. Requires Docker 1.7 and above.
 
 1. Install ``docker-compose`` in an virtual environment. 
    Full instructions can be found [``here``](https://docs.docker.com/compose/install/).
@@ -21,28 +21,22 @@ How to Build SensSoft Docker Containers
    $ sysctl -w vm.max_map_count=262144
    ```
 
-1. Start Elasticsearch cluster:
-    
-    ```bash
-    $ docker-compose up -d --scale elasticsearch=3 elasticsearch loadbalancer
-    ```
-    
-    The loadbalancer node exposes port 9200 on localhost and is the only node 
-    that has HTTP enabled. Services such as Kibana and Logstash connect to the 
-    loadbalancer node directly. Loadbalancer accepts requests from Kibana and Logstash 
-    and balances them across the elasticsearch worker nodes. The elasticsearch 
-    worker nodes communicate to each other and the loadbalancer via TCP on port 9300. 
+1. Start Elasticsearch. Give Elasticsearch about 2 minutes to start before confirming
+   its state. 
+   
+   ```bash
+   $ docker-compose up -d loadbalancer
+   ```
 
-    
-1. Confirm cluster state:
+1. Confirm state:
    ```bash
    $ curl -XGET http://localhost:9200/_cluster/health?pretty
     {
      "cluster_name" : "SensSoft",
      "status" : "green",
      "timed_out" : false,
-     "number_of_nodes" : 4,
-     "number_of_data_nodes" : 3,
+     "number_of_nodes" : 1,
+     "number_of_data_nodes" : 1,
      "active_primary_shards" : 0,
      "active_shards" : 0,
      "relocating_shards" : 0,
@@ -55,7 +49,6 @@ How to Build SensSoft Docker Containers
      "active_shards_percent_as_number" : 100.0
    }
    ```
-   Confirm that the `number_of_nodes` is 4 and `number_of_data_nodes` is 3.
  
 1. Launch logging server. Give Logstash about 2 minutes to start before confirming 
    its state.
@@ -105,8 +98,13 @@ How to Build SensSoft Docker Containers
 
    ![alt text][dashboard]
 
+1. To Launch Tap and Distill
+   ```bash
+   $ docker-compose up -d distill tap
+   ```
+   
 1. To stop all containers.
-    ```sh
+    ```bash
     $ docker-compose stop
     ```
  
@@ -123,15 +121,9 @@ Having Issues?
    $ docker-compose logs > err.dump 
    ```
 
-Todo
----- 
-- [ ] TAP docker deployment instructions.
-- [ ] Distill docker deployment instructions. 
-- [ ] Apache SensSoft Docker + Kubernetes instructions.
-
-[configure_index]: ./images/configure_index.png "Configure Kibana index"
-[confirmation]: ./images/confirmation.png "Confirm index pattern conflicts"
-[dashboard]: ./images/dashboard.png "Apache Senssoft Dashboard"
-[management]: ./images/management.png "Kibana management console"
+[configure_index]: ./docs/images/configure_index.png "Configure Kibana index"
+[confirmation]: ./docs/images/confirmation.png "Confirm index pattern conflicts"
+[dashboard]: ./docs/images/dashboard.png "Apache Senssoft Dashboard"
+[management]: ./docs/images/management.png "Kibana management console"
 
 © Copyright 2016 The Charles Stark Draper Laboratory, Inc. All rights reserved.
