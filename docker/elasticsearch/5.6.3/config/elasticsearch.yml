@@ -40,6 +40,12 @@ http:
     enabled: ${HTTP_CORS_ENABLE}
     allow-origin: ${HTTP_CORS_ALLOW_ORIGIN}
 
+# Disable X-Pack
+xpack.ml.enabled: false
+xpack.monitoring.enabled: false
+xpack.security.enabled: false
+xpack.watcher.enabled: false
+
 # Prevent the "split brain" by configuring the majority of nodes (total number of nodes / 2 + 1):
 discovery:
   zen:

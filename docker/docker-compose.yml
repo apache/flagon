@@ -27,7 +27,7 @@ services:
       - "loadbalancer"
     command: bash /opt/entrypoint.sh
 
-   # Site
+  # Site
   site:
     build: ./site
     image: senssoft/website:latest
@@ -116,7 +116,7 @@ services:
     networks:
       - esnet
 
-   # Distill
+  # Distill
   distill:
      build: ./distill
      image: senssoft/distill:0.1.0
@@ -128,7 +128,7 @@ services:
      networks:
        - esnet
 
-   # TAP's Database
+  # TAP's Database
   db:
      build: ./db
      image: senssoft/postgres:latest

@@ -20,6 +20,7 @@ MAINTAINER Michelle Beard <msbeard@apache.org>
 # Override config
 COPY config /usr/share/kibana/config
 
+# Remove x-pack
 RUN kibana-plugin remove x-pack
 
 EXPOSE 5601

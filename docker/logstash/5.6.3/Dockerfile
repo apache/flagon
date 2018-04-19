@@ -17,6 +17,7 @@ FROM docker.elastic.co/logstash/logstash:5.6.3
 MAINTAINER Michelle Beard <msbeard@apache.org>
 
 RUN mkdir /usr/share/logstash/templates
+RUN rm -f /usr/share/logstash/pipeline/logstash.conf
 
 RUN logstash-plugin remove x-pack
 
@@ -24,7 +25,7 @@ RUN logstash-plugin remove x-pack
 RUN sed -i '/xpack/d' /usr/share/logstash/config/logstash.yml
 
 # Copy Configuration files over
-COPY config/logstash-userale.conf /etc/logstash/conf.d/logstash-userale.conf
+COPY config/logstash-userale.conf /usr/share/logstash/pipeline/logstash-userale.conf
 COPY templates/userale.json /usr/share/logstash/templates/userale.json
 
 EXPOSE 8100
