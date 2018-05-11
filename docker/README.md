@@ -8,13 +8,25 @@ Prerequisites
 
 1. Install docker-compose. Full instructions can be found [``here``](https://docs.docker.com/compose/install/).
 
+1. Create docker-machine instance
+   ```bash
+   docker-machine create --virtualbox-memory 3072 --virtualbox-cpu-count 2 senssoft
+   ```
+
 1. Before launching the Docker containers, ensure your ``vm_max_map_count``
    kernel setting is set to at least 262144.
    Visit [``Running Elasticsearch in Production mode``](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html#docker-cli-run-prod-mode) for OS specific instructions.
 
    ```bash
    # Example for Linux systems
-   $ sysctl -w vm.max_map_count=262144
+   $ docker-machine ssh senssoft sudo sysctl -w vm.max_map_count=262144
+   ```
+
+1. Create externel docker network to enable system monitoring. Only enable if running 
+   the Elasticsearch 6.2.2 configuration (single and cluster mode)
+   
+   ```bash
+   $ docker network create esnet
    ```
 
 Single Node Deployment
@@ -24,16 +36,16 @@ Single Node Deployment
    its state.
    
    ```bash
-   $ docker-compose -f docker-compose.single-5.6.3.yml up -d loadbalancer
+   $ docker-compose -f docker-compose.single-5.6.3.yml up -d elasticsearch
 
    or
 
-   $ docker-compose up -d loadbalancer
+   $ docker-compose up -d elasticsearch
    ```
 
 1. Confirm state:
    ```bash
-   $ curl -XGET http://localhost:9200/_cluster/health?pretty
+   $ docker-machine ssh senssoft curl -XGET http://localhost:9200/_cluster/health?pretty
     {
       "cluster_name" : "SensSoft",
       "status" : "yellow",
@@ -58,7 +70,7 @@ Single Node Deployment
   
    ```bash
    $ docker-compose up -d logstash
-   $ curl -XGET http://localhost:8100 
+   $ docker-machine ssh senssoft curl -XGET http://localhost:8100 
    ok
    ```
    
@@ -67,6 +79,7 @@ Single Node Deployment
    
    ```bash
    $ docker-compose up -d site
+   $ ssh docker@$(docker-machine ip senssoft) -L 8080:localhost:8080
    ```
 
    Visit `http://localhost:8080` and you will see Apache SensSoft's home page.
@@ -76,6 +89,7 @@ Single Node Deployment
    
    ```bash
    $ docker-compose up -d kibana
+   $ ssh docker@$(docker-machine ip senssoft) -L 5601:localhost:5601
    ```
 
 1. Register an index in Kibana to see the logs:
@@ -118,20 +132,32 @@ Multi-Node Deployment on a Single Machine
 
 1. Install ``docker-compose`` in an virtual environment. Full instructions can be found [``here``](https://docs.docker.com/compose/install/).
 
+1. Create docker-machine instance
+   ```bash
+   docker-machine create --virtualbox-memory 2048 --virtualbox-cpu-count 2 senssoft
+   ```
+
 1. Before launching the Docker containers, ensure your ``vm_max_map_count``
    kernel setting is set to at least 262144.
    Visit [``Running Elasticsearch in Production mode``](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html#docker-cli-run-prod-mode) for OS specific instructions.
 
    ```bash
    # Example for Linux systems
-   $ sysctl -w vm.max_map_count=262144
+   $ docker-machine ssh senssoft sudo sysctl -w vm.max_map_count=262144
+   ```
+
+1. Create externel docker network to enable system monitoring. Only enable if running 
+   the Elasticsearch 6.2.2 configuration (single and cluster mode)
+   
+   ```bash
+   $ docker network create esnet
    ```
 
 1. Start Elasticsearch cluster:
 
     ```bash
-    $ docker-compose -f docker-compose.cluster.yaml up -d --scale elasticsearch=3 elasticsearch
-    $ docker-compose -f docker-compose.cluster.yaml up -d loadbalancer
+    $ docker-compose -f docker-compose.cluster.yml up -d --scale elasticsearch=3 elasticsearch
+    $ docker-compose -f docker-compose.cluster.yml up -d loadbalancer
     ```
 
     The loadbalancer node exposes port 9200 on localhost and is the only node
@@ -148,7 +174,7 @@ Multi-Node Deployment on a Single Machine
 
 1. Confirm cluster state:
    ```bash
-   $ curl -XGET http://localhost:9200/_cluster/health?pretty
+   $ docker-machine ssh senssoft curl -XGET http://localhost:9200/_cluster/health\?pretty
     {
      "cluster_name" : "SensSoft",
      "status" : "green",

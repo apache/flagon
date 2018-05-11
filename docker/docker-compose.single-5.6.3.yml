@@ -21,8 +21,6 @@ services:
   # Startup
   startup:
     build: ./startup
-    image: senssoft/startup:latest
-    container_name: senssoft-start
     depends_on:
       - "loadbalancer"
     command: bash /opt/entrypoint.sh
@@ -30,24 +28,20 @@ services:
   # Site
   site:
     build: ./site
-    image: senssoft/website:latest
-    container_name: senssoft-app
     ports:
       - 8080:8080
     depends_on:
       - "logstash"
     command: python -m SimpleHTTPServer 8080
 
-  # Elasticsearch Loadbalancer/Entry
+  # Elasticsearch
   loadbalancer:
     build: ./elasticsearch/5.6.3
-    image: senssoft/elasticsearch:5.6.3
-    container_name: senssoft-loadbalancers
     environment:
       - NODE_MASTER=true
       - NUMBER_OF_MASTERS=1
       - NODE_COORDINATE=true
-      - "DISCOVERY_SERVICE=elasticsearch"
+      - "DISCOVERY_SERVICE=0.0.0.0"
       - NODE_DATA=true
       - NODE_INGEST=true
       - MAX_LOCAL_STORAGE_NODES=1
@@ -64,37 +58,31 @@ services:
   # Kibana
   kibana:
     build: ./kibana/5.6.3
-#    image: senssoft/kibana:5.6.3
-    container_name: senssoft-kibana
     environment:
       - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
-      - "ELASTICSEARCH_URL=http://loadbalancer:9200"
+      - "ELASTICSEARCH_URL=http://elasticsearch:9200"
     ports:
       - "5601:5601"
     depends_on:
-      - "loadbalancer"
+      - "elasticsearch"
     networks:
       - esnet
 
   # Logstash
   logstash:
     build: ./logstash/5.6.3
-    image: senssoft/logstash:5.6.3
-    container_name: senssoft-logstash
     environment:
-      - "ELASTICSEARCH_URL=loadbalancer:9200"
+      - "ELASTICSEARCH_URL=elasticsearch:9200"
     ports:
       - 8100:8100
     depends_on:
-      - "loadbalancer"
+      - "elasticsearch"
     networks:
       - esnet
 
   # Distill
   distill:
      build: ./distill
-     image: senssoft/distill:0.1.0
-     container_name: senssoft-distill
      ports:
        - 8090:8090
      depends_on:
@@ -106,15 +94,12 @@ services:
   db:
      build: ./db
      image: senssoft/postgres:latest
-     container_name: senssoft-postgres
      ports:
        - "5432:5432"
 
   # TAP
   tap:
      build: ./tap
-     image: senssoft/tap:0.1.0
-     container_name: senssoft-tap
      command: bash -c "/usr/src/app/wait-for-postgres.sh"
      ports:
        - "8010:8010"
@@ -122,6 +107,7 @@ services:
        - db
      links:
        - db:db
+
 
 networks:
   esnet:
