@@ -123,7 +123,7 @@ services:
   # Specific container and configuration to monitor the HOST (filesystem, memory, processes,...)
   metricbeat:
     image: docker.elastic.co/beats/metricbeat:6.2.4
-    restart: unless-stopped
+#    restart: unless-stopped
     user: root
     pid: host
     volumes:
@@ -133,7 +133,7 @@ services:
       - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
       #We mount the host filesystem so we can report on disk usage with the system module
       - /:/hostfs:ro
-      #Mount the metricbeat configuration so users can make edit
+      #Mount the metricbeat configuration so users can make edits
       - ./beats/metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml
       #Mount the modules.d directory into the container. This allows user to 
       #potentially make changes to the modules and they will be dynamically loaded.
@@ -146,10 +146,14 @@ services:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
       - KIBANA_URL=http://kibana:5601
       - LOGSTASH_URL=http://logstash:9600
+      - POSTGRESQL_URL="postgresql://db:5432/tapdb?sslmode=disable"
+      - POSTGRESQL_USERNAME=tapuser
+      - POSTGRESQL_PASSWORD="Dr@p3rUs3r"
     extra_hosts:
       - "elasticsearch:172.17.0.1" # The IP of docker0 interface to access host from container
       - "kibana:172.17.0.1" # The IP of docker0 interface to access host from container
       - "logstash:172.17.0.1"
+      - "db:172.17.0.1"
     command: metricbeat -e -system.hostfs=/hostfs -strict.perms=false
     network_mode: host # Mandatory to monitor HOST filesystem, memory, processes,...
 

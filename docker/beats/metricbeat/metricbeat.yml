@@ -4,7 +4,7 @@ metricbeat.config.modules:
   path: ${path.config}/modules.d/*.yml
 
   # Period on which files under path should be checked for changes
-  reload.period: 10s
+  reload.period: 30s
 
   # Set to true to enable config reloading
   reload.enabled: true
