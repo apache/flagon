@@ -1,68 +1,76 @@
 How to Build SensSoft Docker Containers
----------------------------------------
+=======================================
 
-1. Install [``Docker``](http://docker.com) on your machine.
+Prerequisites
+-------------
 
-1. Install ``docker-compose`` in an virtual environment. 
-   Full instructions can be found [``here``](https://docs.docker.com/compose/install/).
-   
+1. Install [``Docker``](http://docker.com) on your machine. Requires Docker 1.7 and above.
+
+1. Install docker-compose. Full instructions can be found [``here``](https://docs.docker.com/compose/install/).
+
+1. Create docker-machine instance
    ```bash
-   $ python3 -m venv env
-   $ source env/bin/activate
-   $ pip install -r requirements.txt
+   docker-machine create --virtualbox-memory 3072 --virtualbox-cpu-count 2 senssoft
    ```
 
-1. Before launching the Docker containers, ensure your ``vm_max_map_count`` 
+1. Before launching the Docker containers, ensure your ``vm_max_map_count``
    kernel setting is set to at least 262144.
    Visit [``Running Elasticsearch in Production mode``](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html#docker-cli-run-prod-mode) for OS specific instructions.
-   
+
    ```bash
    # Example for Linux systems
-   $ sysctl -w vm.max_map_count=262144
+   $ docker-machine ssh senssoft sudo sysctl -w vm.max_map_count=262144
    ```
 
-1. Start Elasticsearch cluster:
-    
-    ```bash
-    $ docker-compose up -d --scale elasticsearch=3 elasticsearch loadbalancer
-    ```
-    
-    The loadbalancer node exposes port 9200 on localhost and is the only node 
-    that has HTTP enabled. Services such as Kibana and Logstash connect to the 
-    loadbalancer node directly. Loadbalancer accepts requests from Kibana and Logstash 
-    and balances them across the elasticsearch worker nodes. The elasticsearch 
-    worker nodes communicate to each other and the loadbalancer via TCP on port 9300. 
-
-    
-1. Confirm cluster state:
+1. Create externel docker network to enable system monitoring. Only enable if running 
+   the Elasticsearch 6.2.2 configuration (single and cluster mode)
+   
    ```bash
-   $ curl -XGET http://localhost:9200/_cluster/health?pretty
-    {
-     "cluster_name" : "SensSoft",
-     "status" : "green",
-     "timed_out" : false,
-     "number_of_nodes" : 4,
-     "number_of_data_nodes" : 3,
-     "active_primary_shards" : 0,
-     "active_shards" : 0,
-     "relocating_shards" : 0,
-     "initializing_shards" : 0,
-     "unassigned_shards" : 0,
-     "delayed_unassigned_shards" : 0,
-     "number_of_pending_tasks" : 0,
-     "number_of_in_flight_fetch" : 0,
-     "task_max_waiting_in_queue_millis" : 0,
-     "active_shards_percent_as_number" : 100.0
-   }
+   $ docker network create esnet
    ```
-   Confirm that the `number_of_nodes` is 4 and `number_of_data_nodes` is 3.
+
+Single Node Deployment
+----------------------
+
+1. Start Elasticsearch 5.6.3 or 6.2.2. Give Elasticsearch about 1-2 minutes to start before confirming
+   its state.
+   
+   ```bash
+   $ docker-compose -f docker-compose.single-5.6.3.yml up -d elasticsearch
+
+   or
+
+   $ docker-compose up -d elasticsearch
+   ```
+
+1. Confirm state:
+   ```bash
+   $ docker-machine ssh senssoft curl -XGET http://localhost:9200/_cluster/health?pretty
+    {
+      "cluster_name" : "SensSoft",
+      "status" : "yellow",
+      "timed_out" : false,
+      "number_of_nodes" : 1,
+      "number_of_data_nodes" : 1,
+      "active_primary_shards" : 0,
+      "active_shards" : 0,
+      "relocating_shards" : 0,
+      "initializing_shards" : 0,
+      "unassigned_shards" : 0,
+      "delayed_unassigned_shards" : 0,
+      "number_of_pending_tasks" : 0,
+      "number_of_in_flight_fetch" : 0,
+      "task_max_waiting_in_queue_millis" : 0,
+      "active_shards_percent_as_number" : 100.0
+    }
+   ```
  
 1. Launch logging server. Give Logstash about 2 minutes to start before confirming 
    its state.
   
    ```bash
    $ docker-compose up -d logstash
-   $ curl -XGET http://localhost:8100 
+   $ docker-machine ssh senssoft curl -XGET http://localhost:8100 
    ok
    ```
    
@@ -71,6 +79,7 @@ How to Build SensSoft Docker Containers
    
    ```bash
    $ docker-compose up -d site
+   $ ssh docker@$(docker-machine ip senssoft) -L 8080:localhost:8080
    ```
 
    Visit `http://localhost:8080` and you will see Apache SensSoft's home page.
@@ -80,6 +89,7 @@ How to Build SensSoft Docker Containers
    
    ```bash
    $ docker-compose up -d kibana
+   $ ssh docker@$(docker-machine ip senssoft) -L 5601:localhost:5601
    ```
 
 1. Register an index in Kibana to see the logs:
@@ -105,11 +115,88 @@ How to Build SensSoft Docker Containers
 
    ![alt text][dashboard]
 
+1. To Launch Tap and Distill
+   ```bash
+   $ docker-compose up -d distill tap
+   ```
+   
 1. To stop all containers.
-    ```sh
+    ```bash
     $ docker-compose stop
     ```
- 
+
+Multi-Node Deployment on a Single Machine
+-----------------------------------------
+
+1. Install [``Docker``](http://docker.com) on your machine. Require Docker 1.7 and above.
+
+1. Install ``docker-compose`` in an virtual environment. Full instructions can be found [``here``](https://docs.docker.com/compose/install/).
+
+1. Create docker-machine instance
+   ```bash
+   docker-machine create --virtualbox-memory 2048 --virtualbox-cpu-count 2 senssoft
+   ```
+
+1. Before launching the Docker containers, ensure your ``vm_max_map_count``
+   kernel setting is set to at least 262144.
+   Visit [``Running Elasticsearch in Production mode``](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html#docker-cli-run-prod-mode) for OS specific instructions.
+
+   ```bash
+   # Example for Linux systems
+   $ docker-machine ssh senssoft sudo sysctl -w vm.max_map_count=262144
+   ```
+
+1. Create externel docker network to enable system monitoring. Only enable if running 
+   the Elasticsearch 6.2.2 configuration (single and cluster mode)
+   
+   ```bash
+   $ docker network create esnet
+   ```
+
+1. Start Elasticsearch cluster:
+
+    ```bash
+    $ docker-compose -f docker-compose.cluster.yml up -d --scale elasticsearch=3 elasticsearch
+    $ docker-compose -f docker-compose.cluster.yml up -d loadbalancer
+    ```
+
+    The loadbalancer node exposes port 9200 on localhost and is the only node
+    that has HTTP enabled. Services such as Kibana and Logstash connect to the
+    loadbalancer node directly. Loadbalancer accepts requests from Kibana and Logstash
+    and balances them across the elasticsearch worker nodes. The elasticsearch
+    worker nodes communicate to each other and the loadbalancer via TCP on port 9300.
+
+    <aside class="warning">
+    Starting an elasticsearch cluster is not recommended on a single server. This
+    is just for demonstration purposes only. Please refer to our [Kubernetes] guide to
+    deploy an Elasticsearch cluster.
+    </aside>
+
+1. Confirm cluster state:
+   ```bash
+   $ docker-machine ssh senssoft curl -XGET http://localhost:9200/_cluster/health\?pretty
+    {
+     "cluster_name" : "SensSoft",
+     "status" : "green",
+     "timed_out" : false,
+     "number_of_nodes" : 4,
+     "number_of_data_nodes" : 3,
+     "active_primary_shards" : 0,
+     "active_shards" : 0,
+     "relocating_shards" : 0,
+     "initializing_shards" : 0,
+     "unassigned_shards" : 0,
+     "delayed_unassigned_shards" : 0,
+     "number_of_pending_tasks" : 0,
+     "number_of_in_flight_fetch" : 0,
+     "task_max_waiting_in_queue_millis" : 0,
+     "active_shards_percent_as_number" : 100.0
+   }
+   ```
+   Confirm that the `number_of_nodes` is 4 and `number_of_data_nodes` is 3.
+
+1. Follow remaining instructions in [Single Node Deployment] starting at #6.
+
 Having Issues?
 --------------
 1. Check out the docker-compose logs for the service(s) that are having issues.
@@ -123,15 +210,9 @@ Having Issues?
    $ docker-compose logs > err.dump 
    ```
 
-Todo
----- 
-- [ ] TAP docker deployment instructions.
-- [ ] Distill docker deployment instructions. 
-- [ ] Apache SensSoft Docker + Kubernetes instructions.
-
-[configure_index]: ./images/configure_index.png "Configure Kibana index"
-[confirmation]: ./images/confirmation.png "Confirm index pattern conflicts"
-[dashboard]: ./images/dashboard.png "Apache Senssoft Dashboard"
-[management]: ./images/management.png "Kibana management console"
+[configure_index]: ./docs/images/configure_index.png "Configure Kibana index"
+[confirmation]: ./docs/images/confirmation.png "Confirm index pattern conflicts"
+[dashboard]: ./docs/images/dashboard.png "Apache Senssoft Dashboard"
+[management]: ./docs/images/management.png "Kibana management console"
 
 © Copyright 2016 The Charles Stark Draper Laboratory, Inc. All rights reserved.

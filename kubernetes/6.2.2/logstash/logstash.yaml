@@ -1,0 +1,52 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: logstash
+  labels:
+    component: elk
+    role: logstash
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: elk
+        role: logstash
+    spec:
+      containers:
+      - name: logstash
+        image: senssoft/logstash:6.2.2
+        imagePullPolicy: IfNotPresent
+        command:
+        - logstash
+        - -f
+        - /etc/logstash/conf.d
+        env:
+        - name: ELASTICSEARCH_URL
+          value: "elasticsearch-loadbalancer:9200"
+        - name: ES_JAVA_OPTS
+          value: "-Xms1g -Xmx1g"
+        resources:
+          limits:
+            cpu: 1000m
+          requests:
+            cpu: 100m
+        ports:
+        - containerPort: 8100
+          name: http
+        - containerPort: 9600
+          name: transport
+        # Need better readiness check policy than checking if port 9600 is active
+#        livenessProbe:
+#          tcpSocket:
+#            port: transport
+#          initialDelaySeconds: 20
+#          periodSeconds: 10
+#          failureThreshold: 5
+#        readinessProbe:
+#          httpGet:
+#            path: /?pretty=true
+#            port: http
+#          initialDelaySeconds: 30
+#          periodSeconds: 10
+#          failureThreshold: 10
