@@ -1,0 +1,22 @@
+[
+  {
+    "_id": "67105880-06e6-11e9-8c58-f38cfff498f6",
+    "_type": "search",
+    "_source": {
+      "title": "Drill-Down Search",
+      "description": "",
+      "hits": 0,
+      "columns": [
+        "_source"
+      ],
+      "sort": [
+        "clientTime",
+        "desc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"bdce0520-06df-11e9-8c58-f38cfff498f6\",\"highlightAll\":true,\"version\":true,\"query\":{\"language\":\"lucene\",\"query\":\"\"},\"filter\":[{\"meta\":{\"index\":\"bdce0520-06df-11e9-8c58-f38cfff498f6\",\"negate\":false,\"disabled\":false,\"alias\":\"URL Search\",\"type\":\"phrase\",\"key\":\"pageUrl\",\"value\":\"http://senssoft.incubator.apache.org/\",\"params\":{\"query\":\"http://senssoft.incubator.apache.org/\",\"type\":\"phrase\"}},\"query\":{\"match\":{\"pageUrl\":{\"query\":\"http://senssoft.incubator.apache.org/\",\"type\":\"phrase\"}}},\"$state\":{\"store\":\"appState\"}},{\"meta\":{\"index\":\"bdce0520-06df-11e9-8c58-f38cfff498f6\",\"negate\":false,\"disabled\":false,\"alias\":\"UserID Search\",\"type\":\"phrase\",\"key\":\"userId\",\"value\":\"nobody\",\"params\":{\"query\":\"nobody\",\"type\":\"phrase\"}},\"query\":{\"match\":{\"userId\":{\"query\":\"nobody\",\"type\":\"phrase\"}}},\"$state\":{\"store\":\"appState\"}},{\"meta\":{\"index\":\"bdce0520-06df-11e9-8c58-f38cfff498f6\",\"negate\":false,\"disabled\":false,\"alias\":\"Host Search\",\"type\":\"phrase\",\"key\":\"host\",\"value\":\"172.18.0.1\",\"params\":{\"query\":\"172.18.0.1\",\"type\":\"phrase\"}},\"query\":{\"match\":{\"host\":{\"query\":\"172.18.0.1\",\"type\":\"phrase\"}}},\"$state\":{\"store\":\"appState\"}},{\"meta\":{\"index\":\"bdce0520-06df-11e9-8c58-f38cfff498f6\",\"negate\":false,\"disabled\":false,\"alias\":\"Event Type Search\",\"type\":\"phrase\",\"key\":\"type\",\"value\":\"click\",\"params\":{\"query\":\"click\",\"type\":\"phrase\"}},\"query\":{\"match\":{\"type\":{\"query\":\"click\",\"type\":\"phrase\"}}},\"$state\":{\"store\":\"appState\"}}]}"
+      }
+    }
+  }
+]
