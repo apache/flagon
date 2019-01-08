@@ -121,7 +121,7 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
 1. Load example Dashboard and Visualizations under docker/kibana/.
 
    Goto: Management -> Saved Objects and select the `Import` button. Import the
-   `visualizations.json`, `Apache SensSoft Usage Dashboard.json`, and `Drill-Down Search.json` files from the "Saved Objects" folder in the kibana directory.
+   `Apache SensSoft Visualizations.json`, `Apache SensSoft Page Usage Dashboard.json`, `Apache SensSoft User Access Dashboard.json` and `Drill-Down Search.json` files from the "Saved Objects" folder in the kibana directory.
 
    ![alt text][management]
 
