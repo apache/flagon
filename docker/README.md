@@ -130,7 +130,7 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
    ![alt text][confirmation]
    
    Once that is complete, navigate to the `Dashboard` view in Kibana and click the
-   `Apache SensSoft Usage Dashboard` object. 
+   `Apache SensSoft Page Usage Dashboard` object. 
 
    ![alt text][dashboard]
    
