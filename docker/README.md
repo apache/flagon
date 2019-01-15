@@ -277,7 +277,7 @@ Having Issues?
 
 [configure_index]: ./docs/images/configure_index.png "Configure Kibana index"
 [confirmation]: ./docs/images/confirmation.png "Confirm index pattern conflicts"
-[dashboard]: ./docs/images/Apache_SensSoft_Usage_Dashboard.png "Apache Senssoft Usage Dashboard"
+[dashboard]: ./docs/images/dashboard.png "Apache Senssoft Page Usage Dashboard"
 [management]: ./docs/images/management.png "Kibana management console"
 
 Licensing
