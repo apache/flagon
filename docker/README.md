@@ -1,6 +1,6 @@
 How to Build SensSoft Docker Containers
 =======================================
-*Last Tested (on macOS Mojave) 22 DEC 2018*
+*Last Tested (on macOS Mojave) 15 JAN 2019*
 
 Prerequisites
 -------------
@@ -38,16 +38,16 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
    ```
 
 1. Create externel docker network to enable system monitoring. Only enable if running 
-   the Elasticsearch 6.2.2 configuration (single and cluster mode)
+   the Elasticsearch 6.5.4 configuration (single and cluster mode)
    
    ```bash
    $ docker network create esnet
    ```
 
-1. Start Elasticsearch 5.6.3 or 6.2.2. Give Elasticsearch about 1-2 minutes to start before confirming its state.
+1. Start Elasticsearch 6.2.2 (Deprecated) or 6.5.4 (Recommended) Give Elasticsearch about 1-2 minutes to start before confirming its state.
    
    ```bash
-   $ docker-compose -f docker-compose.single-5.6.3.yml up -d elasticsearch
+   $ docker-compose -f docker-compose.single-6.2.2.yml up -d elasticsearch
    
    or
 
@@ -133,6 +133,16 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
    `Apache SensSoft Page Usage Dashboard` object. 
 
    ![alt text][dashboard]
+   
+1. To see container health metrics, launch Metricbeat:
+
+   ```bash
+   $ docker-compose up -d metricbeat
+   ```
+   
+   Once the container is running, metricbeat dashboards will automatically load in Kibana. Navigate to the Container `Dashboard`.
+   
+   ![alt text][metrics]
    
 1. To stop all containers.
     ```bash
@@ -279,6 +289,7 @@ Having Issues?
 [confirmation]: ./docs/images/confirmation.png "Confirm index pattern conflicts"
 [dashboard]: ./docs/images/dashboard.png "Apache Senssoft Page Usage Dashboard"
 [management]: ./docs/images/management.png "Kibana management console"
+[metrics]: ./docs/images/DockerBeats_Dashboard.png "Metricbeat Dashboard"
 
 Licensing
 --------------
