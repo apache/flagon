@@ -140,7 +140,7 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
    $ docker-compose up -d metricbeat
    ```
    
-   Once the container is running, metricbeat dashboards will automatically load in Kibana. Navigate to the Container `Dashboard`.
+   Once the container is running, metricbeat dashboards will automatically load in Kibana. Navigate to the 'Container Dashboard`.
    
    ![alt text][metrics]
    
