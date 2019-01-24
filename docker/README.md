@@ -1,6 +1,6 @@
-How to Build SensSoft Docker Containers
+Building SensSoft Docker Containers
 =======================================
-*Last Tested (on macOS Mojave) 15 JAN 2019*
+*Last Tested (on macOS Mojave) 23 JAN 2019*
 
 Prerequisites
 -------------
@@ -47,10 +47,12 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
 1. Start Elasticsearch 6.2.2 (Deprecated) or 6.5.4 (Recommended) Give Elasticsearch about 1-2 minutes to start before confirming its state.
    
    ```bash
+   #start Elasticsearch v6.2.2 (Deprecated)
    $ docker-compose -f docker-compose.single-6.2.2.yml up -d elasticsearch
    
    or
-
+   
+   #start Elasticsearch v6.5.4 (Recommended)
    $ docker-compose up -d elasticsearch
    ```
 
@@ -91,17 +93,21 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
       ok
    ```
    
-1. Before Kibana can be used, we will need to generate some data. We have already 
-   provided an example instrumented website to assist.
+1. Before Kibana can be used, we will need to generate some data. We provide an example instrumented website to assist. 
    
    ```bash
    $ docker-compose up -d site
    # for remote users, forwards port to localhost
    $ ssh docker@$(docker-machine ip senssoft) -L 8080:localhost:8080
    ```
-
+   
    Visit `http://localhost:8080` and you will see Apache SensSoft's home page.
    
+   Note that the `userale` index uses dynamic mapping configurations for many fields. This means that if no valid data exists for 
+   certain fields in the logs you collect at this step, Kibana won't know to map these fields to data types (e.g., string, text, 
+   boolean, etc.). This can prevent certain dashboards and visualizations from appropriately displaying log aggregations. It is worth 
+   1-2 mins collecting some UserALE.js data in whichever way best emulates your use-case: from the same website, the [``UserALE.js example utilty``](https://github.com/apache/incubator-senssoft-useralejs/tree/SENSSOFT-192/example), or the [``UserALE.js Web Extension``](https://github.com/apache/incubator-senssoft-useralejs/tree/SENSSOFT-192/src/UserALEWebExtension). If you run into issues with data fields or visualizations, see the `Having Issues?` section below.
+
 1. Launch Kibana. Give Kibana about 2-5 minutes to start before accessing
    `http://localhost:5601`. 
    
@@ -121,13 +127,13 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
 1. Load example Dashboard and Visualizations under docker/kibana/.
 
    Goto: Management -> Saved Objects and select the `Import` button. Import the
-   `Apache SensSoft Visualizations.json`, `Apache SensSoft Page Usage Dashboard.json`, `Apache SensSoft User Access Dashboard.json` and `Drill-Down Search.json` files from the "Saved Objects" folder in the kibana directory.
+   `Apache SensSoft Visualizations.json`, `Drill-Down Search.json`, `Apache SensSoft Page Usage Dashboard.json`, and `Apache SensSoft User Access Dashboard.json` files from the "Saved Objects" folder in the kibana directory.
 
    ![alt text][management]
 
-   Confirm index conflicts if message appears. 
+   Set `userale` index if Kibana detects conflicts when you load visualizations and searches. 
    
-   ![alt text][confirmation]
+   ![alt text][viz_import]
    
    Once that is complete, navigate to the `Dashboard` view in Kibana and click the
    `Apache SensSoft Page Usage Dashboard` object. 
@@ -140,7 +146,7 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
    $ docker-compose up -d metricbeat
    ```
    
-   Once the container is running, metricbeat dashboards will automatically load in Kibana. Navigate to the 'Container Dashboard`.
+   Once the container is running, metricbeat dashboards will automatically load in Kibana. Navigate to the `Container Dashboard`.
    
    ![alt text][metrics]
    
@@ -274,6 +280,22 @@ Having Issues?
    This can happen if you've played around with multiple machines and builds of the containers 
    on the same machine. Visit [``this excellent how to guide for removing images, containers, 
    and volumes``](https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes). Remove any duplicate images and rebuild the containers.
+   
+1. If you find that the `logstash` or `site` containers don't respond immediately, give them a few minutes. 
+   In the case of the `site` container, you might try giving it a kick if its taking more than three minutes to load in browser"
+
+   ```bash
+   #after loading container, confirming status is "up", and localhost:8080 still isn't loading, bring the container down
+   $ docker-compose kill site
+   
+   # then bring it back up, and see if it loads
+   $ docker-compose up -d site
+   ```
+   
+1. If you find that Apache SensSoft Kibana Dashboards aren't loading, or Apache UserALE.js log fields in Kibana's `Discover` view
+   appear with a warning icon, it could be that you didn't collect logs with valid data for those fields prior to loading the userale 
+   index in Kibana. Don't worry, your data is fine--just navigate to the Management -> Index Patterns page, and click the "refresh" button in the upper right hand of the page (Disregard the "popularity metrics" warning). This will refresh the index, making those 
+   fields aggregatable, and Dashboards should render properly.
 
 1. Make sure to send us the docker-compose logs to help diagnose your issues please!
 
@@ -290,6 +312,7 @@ Having Issues?
 [dashboard]: ./docs/images/dashboard.png "Apache Senssoft Page Usage Dashboard"
 [management]: ./docs/images/management.png "Kibana management console"
 [metrics]: ./docs/images/DockerBeats_Dashboard.png "Metricbeat Dashboard"
+[viz_import]: ./docs/images/viz_import.png "Visualization Import Configuration"
 
 Licensing
 --------------
