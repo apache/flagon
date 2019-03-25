@@ -1,17 +1,17 @@
 Building SensSoft Docker Containers
-=======================================
-*Last Tested (on macOS Mojave) 23 JAN 2019*
+===================================
+*Last Tested 24 MAR 2019 using Docker Engine v18.09.2, Compose v1.23.2, Machine v0.16.1*
 
 Prerequisites
 -------------
 
-1. Install [``Docker``](http://docker.com) on your machine. Requires Docker 1.7 and above.
+1. Install [``Docker``](http://docker.com) on your machine. Requires Docker Compose 1.7 and above.
 
 1. Install docker-compose. Full instructions can be found [``here``](https://docs.docker.com/compose/install/). 
    If you install Docker through the [``Desktop bundle``](https://www.docker.com/products/docker-desktop), docker-compose is included.
    
-Single Node Deployment
-----------------------
+Single Node Example Container
+-----------------------------
 
 The single node deployment steps below will build a single-node logging server on a single
 machine. This is suitable for demonstrations and very limited data collections. Please 
@@ -44,15 +44,15 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
    $ docker network create esnet
    ```
 
-1. Start Elasticsearch 6.2.2 (Deprecated) or 6.5.4 (Recommended) Give Elasticsearch about 1-2 minutes to start before confirming its state.
+1. Start Elasticsearch 6.5.4 or 6.6.2 (Recommended) Give Elasticsearch about 1-2 minutes to start before confirming its state.
    
    ```bash
-   #start Elasticsearch v6.2.2 (Deprecated)
-   $ docker-compose -f docker-compose.single-6.2.2.yml up -d elasticsearch
+   #start Elasticsearch v6.5.4 (Deprecated)
+   $ docker-compose -f docker-compose-6.5.4.yml up -d elasticsearch
    
    or
    
-   #start Elasticsearch v6.5.4 (Recommended)
+   #start Elasticsearch v6.6.2 (Recommended)
    $ docker-compose up -d elasticsearch
    ```
 
@@ -170,101 +170,7 @@ compose up commands above to restart containers.
     $ docker-machine ls #confirm state
     #output should look like this:
     NAME     ACTIVE   DRIVER       STATE     URL                       SWARM   DOCKER     ERRORS
-    senssoft   -      virtualbox   Running   tcp://192.168.99.100:2376         v18.09.0   
-    ```
-
-Multi-Node Deployment on a Single Machine
------------------------------------------
-
-<aside class="warning">
-    Starting an elasticsearch cluster is not recommended on a single server. This
-    is just for demonstration purposes only. Please refer to our [Kubernetes] guide to
-    deploy an Elasticsearch cluster for an enterprise scale logging capability.
-    </aside>
-
-1. Create docker-machine instance
-   ```bash
-   docker-machine create --virtualbox-memory 2048 --virtualbox-cpu-count 2 senssoft
-   ```
-
-1. Before launching the Docker containers, ensure your ``vm_max_map_count``
-   kernel setting is set to at least 262144.
-   Visit [``Running Elasticsearch in Production mode``](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/docker.html#docker-cli-run-prod-mode) for OS specific instructions.
-
-   ```bash
-   # Example for Linux systems
-   $ docker-machine ssh senssoft sudo sysctl -w vm.max_map_count=262144
-   ```
-
-1. Create externel docker network to enable system monitoring. Only enable if running 
-   the Elasticsearch 6.2.2 configuration (single and cluster mode)
-   
-   ```bash
-   $ docker network create esnet
-   ```
-
-1. Start Elasticsearch cluster:
-
-    ```bash
-    $ docker-compose -f docker-compose.cluster.yml up -d --scale elasticsearch=3 elasticsearch
-    $ docker-compose -f docker-compose.cluster.yml up -d loadbalancer
-    ```
-
-    The loadbalancer node exposes port 9200 on localhost and is the only node
-    that has HTTP enabled. Services such as Kibana and Logstash connect to the
-    loadbalancer node directly. Loadbalancer accepts requests from Kibana and Logstash
-    and balances them across the elasticsearch worker nodes. The elasticsearch
-    worker nodes communicate to each other and the loadbalancer via TCP on port 9300.
-
-1. Confirm cluster state:
-   ```bash
-   $ docker-machine ssh senssoft curl -XGET http://localhost:9200/_cluster/health\?pretty
-   # if senssoft virtual machine is running on your local machine, no need for ssh, instead:
-   $ curl -XGET http://localhost:9200/_cluster/health?pretty
-   #output should look like this:
-    {
-     "cluster_name" : "SensSoft",
-     "status" : "green",
-     "timed_out" : false,
-     "number_of_nodes" : 4,
-     "number_of_data_nodes" : 3,
-     "active_primary_shards" : 0,
-     "active_shards" : 0,
-     "relocating_shards" : 0,
-     "initializing_shards" : 0,
-     "unassigned_shards" : 0,
-     "delayed_unassigned_shards" : 0,
-     "number_of_pending_tasks" : 0,
-     "number_of_in_flight_fetch" : 0,
-     "task_max_waiting_in_queue_millis" : 0,
-     "active_shards_percent_as_number" : 100.0
-   }
-   ```
-   Confirm that the `number_of_nodes` is 4 and `number_of_data_nodes` is 3.
-
-1. Follow remaining instructions in [Single Node Deployment] starting at #6.
-   
-1. To stop all containers.
-    ```bash
-    $ docker-compose stop
-    ```
-    
- 1. To kill the "senssoft" machine.
-    ```bash
-    $ docker-machine rm senssoft
-    ```
-    
-If running on a single machine, on reboot or restart your senssoft machine is available, but 
-in a "stopped" state. You'll need to restart the machine, then you'll need to use docker-
-compose up commands above to restart containers.
-
- 1. Restart the senssoft machine.
-    ```bash
-    $ docker-machine start senssoft
-    $ docker-machine ls #confirm state
-    #output should look like this:
-    NAME     ACTIVE   DRIVER       STATE     URL                       SWARM   DOCKER     ERRORS
-    senssoft   -      virtualbox   Running   tcp://192.168.99.100:2376         v18.09.0   
+    senssoft   -      virtualbox   Running   tcp://192. ...                    v18.09.3   
     ```
 
 Having Issues?
