@@ -120,7 +120,7 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
 1. Register an index in Kibana to see the logs:
 
    Goto: Management -> Index Patterns and enter `userale` in the Index pattern box.
-   Choose `clientTime` in the drop down `Time Filter field name` field.
+   Choose `clientTime` in the drop down `Time Filter field name` field. Alternatively, to explore our "interval" logs, select `@timestamp`.
   
    ![alt text][configure_index]
    
