@@ -1,0 +1,22 @@
+[
+  {
+    "_id": "67105880-06e6-11e9-8c58-f38cfff498f6",
+    "_type": "search",
+    "_source": {
+      "title": "Drill-Down Search",
+      "description": "",
+      "hits": 0,
+      "columns": [
+        "_source"
+      ],
+      "sort": [
+        "clientTime",
+        "desc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"bdce0520-06df-11e9-8c58-f38cfff498f6\",\"highlightAll\":true,\"version\":true,\"query\":{\"language\":\"lucene\",\"query\":\"\"},\"filter\":[{\"$state\":{\"store\":\"appState\"},\"meta\":{\"alias\":\"URL Search\",\"disabled\":false,\"index\":\"bdce0520-06df-11e9-8c58-f38cfff498f6\",\"key\":\"pageUrl\",\"negate\":false,\"params\":{\"query\":\"http://senssoft.incubator.apache.org/\",\"type\":\"phrase\"},\"type\":\"phrase\",\"value\":\"http://senssoft.incubator.apache.org/\"},\"query\":{\"match\":{\"pageUrl\":{\"query\":\"http://senssoft.incubator.apache.org/\",\"type\":\"phrase\"}}}},{\"$state\":{\"store\":\"appState\"},\"meta\":{\"alias\":\"UserID Search\",\"disabled\":false,\"index\":\"bdce0520-06df-11e9-8c58-f38cfff498f6\",\"key\":\"userId\",\"negate\":false,\"params\":{\"query\":\"nobody\",\"type\":\"phrase\"},\"type\":\"phrase\",\"value\":\"nobody\"},\"query\":{\"match\":{\"userId\":{\"query\":\"nobody\",\"type\":\"phrase\"}}}},{\"$state\":{\"store\":\"appState\"},\"meta\":{\"alias\":\"Host Search\",\"disabled\":false,\"index\":\"bdce0520-06df-11e9-8c58-f38cfff498f6\",\"key\":\"host\",\"negate\":false,\"params\":{\"query\":\"172.18.0.1\",\"type\":\"phrase\"},\"type\":\"phrase\",\"value\":\"172.18.0.1\"},\"query\":{\"match\":{\"host\":{\"query\":\"172.18.0.1\",\"type\":\"phrase\"}}}},{\"$state\":{\"store\":\"appState\"},\"meta\":{\"alias\":\"Event Type Search\",\"disabled\":false,\"index\":\"bdce0520-06df-11e9-8c58-f38cfff498f6\",\"key\":\"type\",\"negate\":false,\"params\":{\"query\":\"click\",\"type\":\"phrase\"},\"type\":\"phrase\",\"value\":\"click\"},\"query\":{\"match\":{\"type\":{\"query\":\"click\",\"type\":\"phrase\"}}}},{\"meta\":{\"index\":\"bdce0520-06df-11e9-8c58-f38cfff498f6\",\"negate\":false,\"disabled\":false,\"alias\":\"AppSearch\",\"type\":\"phrase\",\"key\":\"toolName\",\"value\":\"MyApp\",\"params\":{\"query\":\"MyApp\",\"type\":\"phrase\"}},\"query\":{\"match\":{\"toolName\":{\"query\":\"MyApp\",\"type\":\"phrase\"}}},\"$state\":{\"store\":\"appState\"}}]}"
+      }
+    }
+  }
+]

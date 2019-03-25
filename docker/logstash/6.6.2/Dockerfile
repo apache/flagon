@@ -13,19 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ubuntu:latest
+FROM docker.elastic.co/logstash/logstash-oss:6.6.2
 MAINTAINER Joshua Poore <poorejc@apache.org>
 
-RUN apt-get update && apt-get install -y wget curl && apt-get clean
+# Ensure default logstash configuration is removed
+RUN rm -f /usr/share/logstash/pipeline/logstash.conf
 
-ENV DOCKERIZE_VERSION v0.6.1
+# Copy Pipeline files over
+ADD pipeline/ /usr/share/logstash/pipeline/
 
-RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+# Copy templates over
+RUN mkdir /usr/share/logstash/templates
+COPY templates/userale.json /usr/share/logstash/templates/userale.json
 
-RUN tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+EXPOSE 8100
 
-# Copy Files Over
-COPY ./entrypoint.sh /opt/entrypoint.sh
-
-# Make executable
-RUN chmod +x /opt/*.sh
+CMD ["logstash"]

@@ -13,19 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ubuntu:latest
+FROM docker.elastic.co/elasticsearch/elasticsearch-oss:6.6.2
+
 MAINTAINER Joshua Poore <poorejc@apache.org>
 
-RUN apt-get update && apt-get install -y wget curl && apt-get clean
+# Override config
+COPY config /usr/share/elasticsearch/config
+RUN chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/config
 
-ENV DOCKERIZE_VERSION v0.6.1
+# Set environment
+ENV CLUSTER_NAME SensSoft
 
-RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+# Kubernetes requires swap is turned off
+ENV MEMORY_LOCK false
 
-RUN tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-
-# Copy Files Over
-COPY ./entrypoint.sh /opt/entrypoint.sh
-
-# Make executable
-RUN chmod +x /opt/*.sh
+EXPOSE 9200
