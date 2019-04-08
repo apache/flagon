@@ -18,7 +18,7 @@ Apache UserALE.PyQt5 is the UserALE client for PyQt5 applications.  It provides 
 The first step is to install Apache UserALE.PyQt5. First, checkout the latest version of Apache UserALE.PyQt5 from our Git repository.
 
   ```shell
-  $ git clone https://git-wip-us.apache.org/repos/asf/incubator-senssoft-userale-pyqt5.git
+  $ git clone https://gitbox.apache.org/repos/asf/incubator-flagon-userale-pyqt5.git
   ```
 
 Apache UserALE.PyQt5 is a python3 project, so it can be installed like any other python library. Several operating systems (Mac OS X, Major Versions of Linux/BSD) have Python3 pre-installed, so you should just have to run
