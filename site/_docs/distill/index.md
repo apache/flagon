@@ -10,7 +10,7 @@ priority: 0
 The first step is to install Apache Distill. First, checkout the latest version of Apache Distill.
 
   ```shell
-  $ git clone https://git-wip-us.apache.org/repos/asf/incubator-senssoft-distill.git
+  $ git clone https://gitbox.apache.org/repos/asf/incubator-flagon-distill.git
   ```
 
 Apache Distill is a python project, so it can be installed like any other python library. Several operating systems (Mac OS X, Major Versions of Linux/BSD) have Python pre-installed, so you should just have to run
@@ -27,7 +27,7 @@ Apache Distill is a python project, so it can be installed like any other python
 
 Users are strongly recommended to install Apache Distill in a virtualenv. Instructions to setup an virtual environment will be explained below.
 
-> **Note**&
+> **Note**
 When the package is installed via easy_install or pip this function will be bound to the distill executable in the Python installation’s bin directory (on Windows - the Scripts directory).
 
 ### Installing Apache Distill in an Virtual Environment
@@ -111,8 +111,7 @@ Create a directory to store the project.
 Download the project from the GitHub repository and copy the application to the /home/public_html directory.
 
   ```shell
-  $ git clone https://git-wip-us.apache.org/repos/asf
-  /incubator-senssoft-distill.git /home/public_html
+  $ git clone https://gitbox.apache.org/repos/asf/incubator-flagon-distill.git /home/public_html
   ```
 
 Install Apache Distill’s requirements either globally or in a virutal environment:
@@ -141,9 +140,7 @@ Start a new browser instance and navigate to http://localhost.
 
 ### Installing Documentation
 
-To save yourself the trouble, all up to date documentation is available at https://draperlaboratory.github.io/distill/.
-
-However, if you want to manully build the documentation, the instructions are below.
+If you want to manually build the documentation, the instructions are below.
 
 First, install the documentation dependencies:
 
