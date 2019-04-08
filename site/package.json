@@ -1,18 +1,18 @@
 {
-  "name": "apache-senssoft-website",
+  "name": "apache-flagon-website",
   "version": "1.0.1",
-  "description": "Website for Apache SensSoft",
+  "description": "Website for Apache Flagon",
   "main": "",
   "scripts": {
     "test": ""
   },
   "repository": {
     "type": "git",
-    "url": "git://git.apache.org/incubator-senssoft.git"
+    "url": "https://gitbox.apache.org/repos/asf/incubator-flagon.git"
   },
   "keywords": [
     "Apache",
-    "SensSoft"
+    "Flagon"
   ],
   "author": "ASF",
   "license": "Apache-2.0",

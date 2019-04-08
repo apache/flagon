@@ -1,5 +1,5 @@
 FROM starefossen/ruby-node
-MAINTAINER Michelle Beard <msbeard@apache.org>
+MAINTAINER Joshua Poore <poorejc@apache.org>
 
 # Cache bundle
 COPY Gemfile* /tmp/
