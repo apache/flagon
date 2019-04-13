@@ -1,5 +1,5 @@
-{% assign senssoft = site.docs | where:"component", "senssoft" | sort: "priority" %}
-{% assign system = site.docs | where:"component", "system" | sort: "priority" %}
+{% assign flagon = site.docs | where:"component", "flagon" | sort: "priority" %}
+{% assign stack = site.docs | where:"component", "stack" | sort: "priority" %}
 {% assign userale = site.docs | where:"component", "userale" | sort: "priority" %}
 {% assign useralejs = site.docs | where:"component", "useralejs" | sort: "priority" %}
 {% assign useralepy = site.docs | where:"component", "useralepy" | sort: "priority" %}
@@ -11,21 +11,21 @@
   <a class="item" href="{{ '/docs' | prepend: site.baseurl }}">About the Docs</a>
 </div> -->
 <div id="docs-nav" class="ui inverted accordion">
-  {% if page.component == "senssoft" %}
+  {% if page.component == "flagon" %}
     <div class="active title">
   {% else %}
     <div class="title">
   {% endif %}
     <i class="dropdown icon"></i>
-    Apache SensSoft
+    Apache Flagon
   </div>
-  {% if page.component == "senssoft" %}
+  {% if page.component == "flagon" %}
     <div class="active content">
   {% else %}
     <div class="content">
   {% endif %}
     <div class="ui inverted bulleted list docs-list">
-      {% for doc in senssoft %}
+      {% for doc in flagon %}
         <a class="item" href="{{ doc.url }}">{{ doc.title }}</a>
       {% endfor %}
     </div>
