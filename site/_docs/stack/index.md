@@ -7,7 +7,7 @@ priority: 0
 
 The Apache Flagon project provides a streamlined deployment solution for including behavioral logging capabilities in your project and for monitoring and analyzing your log data in a containerized Elastic backend.  Our Docker container includes an Elastic backend, pre-configured, interactive Kibana dashboards. The container also includes prototype applications for exploration, Apache Distill and Apache Tap.  
 
-Before you begin, you'll need [NPM and Node.js](https://nodejs.org/), [Docker](https://www.docker.com/) and  [Docker Compose](https://docs.docker.com/compose/install/) installed before you start.
+Before you begin, you'll need [NPM and Node.js](https://nodejs.org/), [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/) installed before you start.
 
 ### Building and Deploying UserALE.js
 
@@ -35,7 +35,7 @@ The build process produced a minified version of UserALE.js and a Web Extension 
   #include userale in your project via script tag 
   <script src="/path/to/userale-1.0.0.min.js" data-url="http://yourLoggingUrl"></script>
   ```
-Apache UserALE.js allows for configuration via HTML 5 data parameters. For a complete list of options, see the [README](https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md). You can also modify Apache UserALE.js using our API. Find examples in our [repos](https://github.com/apache/incubator-flagon-useralejs/tree/FLAGON-192).
+Apache UserALE.js allows for configuration via HTML 5 data parameters. For a complete list of options, see the [docs]({{ '/docs/useralejs' | prepend: site.baseurl }}) or the [README](https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md). You can also modify Apache UserALE.js using our API. Find examples in our [repos](https://github.com/apache/incubator-flagon-useralejs/tree/FLAGON-192).
 
 **Option 2: Follow the [instructions](https://github.com/apache/incubator-flagon-useralejs/tree/FLAGON-192/src/UserALEWebExtension) to install the Apache UserALE.js web extension into your browser.**
 
