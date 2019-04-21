@@ -13,7 +13,7 @@ Before you begin, you'll need [NPM and Node.js](https://nodejs.org/), [Docker](h
 
 [Apache UserALE.js](https://github.com/apache/incubator-flagon-useralejs) is the Apache Flagon's thin-client behavioral logging solution. Below, you'll find short-hand instructions for getting started with UserALE.js. For complete instructions, see our [README](https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md).
 
-First, download the [release](http://flagon.incubator.apache.org/releases/) or clone our [repository on GitHub](https://github.com/apache/incubator-flagon-useralejs/tree/master). Apache UserALE.js is also available as an [NPM package](https://www.npmjs.com/package/useralejs).
+First, download the [release](http://flagon.incubator.apache.org/releases/) or clone our [repo on GitHub](https://github.com/apache/incubator-flagon-useralejs/tree/master). Apache UserALE.js is also available as an [NPM package](https://www.npmjs.com/package/useralejs).
 
 Next, **install Dependencies**.
   ```shell
@@ -44,7 +44,7 @@ You can now start generating behavioral log data from your page, or through your
 
 [Apache Flagon](https://github.com/apache/incubator-flagon) utilizes an Elastic stack for transforming, indexing, and storing log data. With Elastic, you'll not only have the ability to search and query log dat, but you'll also be able to monitor it and visualize it through Kibana.
 
-To build our single-node Elastic instance, **first clone our [Docker repo](https://github.com/apache/incubator-flagon/tree/master/docker)**.
+To build our single-node Elastic instance, **first clone our [Docker repo](https://github.com/apache/incubator-flagon/tree/master/docker)**. Note that for production-level deployments, you should probably check out our [Kubernetes build](https://github.com/apache/incubator-flagon/tree/master/kubernetes) and our [guide for scaling]({{ '/docs/stack/scaling' | prepend: site.baseurl }})).
 
 Then, **start up a virtual machine**.
   ```shell
@@ -66,7 +66,5 @@ Next, **start Elastic services**.
 Before starting Kibana, **generate some logs**. Move your mouse around, click around, etc. Do this for a couple minutes to populate the index.
 
 Finally, **navigate to localhost:5601 (Kibaba), set an index pattern, and load our visualizations and dashboards** to see your logs. Find simple instructions in our [README](https://github.com/apache/incubator-flagon/tree/master/docker).
-
-Note that single-node container isn't meant for persistent use, but is built to scale. See our [Kubernetes build](https://github.com/apache/incubator-flagon/tree/master/kubernetes), or configure your own cluster using this container to suite your needs.
 
 Subscribe to our [dev list](dev-subscribe@flagon.incubator.apache.org) and join the conversation!
