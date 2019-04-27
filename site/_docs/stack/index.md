@@ -27,7 +27,7 @@ Then, **build UserALE.js**.
   $ npm run build
   ```
 
-The build process produced a minified version of UserALE.js and a Web Extension package, giving you two options depending on your needs. 
+The build process produces a minified version of UserALE.js and a Web Extension package, giving you two options depending on your needs. You can skip the build process if you just want to explore UserALE.js; just use the minified script found in our [repo](https://github.com/apache/incubator-flagon-useralejs/tree/master/build).
 
 **Option 1: Include Apache UserALE.js in your project:**
 

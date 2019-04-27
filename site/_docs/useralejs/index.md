@@ -10,7 +10,7 @@ priority: 0
 *Note:* Work on UserALE.js' documentation is ongoing.  Contributions are welcome. To get involved, see our [Contributing]({{ '/docs/contributing' | prepend: site.baseurl }}) guide.  
 ### Include UserALE.js in your project
 
-To start logging with Apache UserALE.js, you can include our script directly in your project. More details can be found in our [README](https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md).
+To start logging with Apache UserALE.js, you can include our script directly in your project. More details can be found in our [README](https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md). You can use our [build process]({{ '/docs/useralejs/build' | prepend: site.baseurl }}) to create our script, or just use a sample in our [repos](https://github.com/apache/incubator-flagon-useralejs/tree/master/build).
 
 To include UserALE.js in a specific project, you'll need to deploy a version of our minified UserALE.js script in an accessible location (e.g., webserver), and simply include this script tag on the page:
 
