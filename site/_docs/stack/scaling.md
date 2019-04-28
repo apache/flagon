@@ -30,11 +30,42 @@ When thinking about how to scale your Apache Flagon Elastic stack, it's importan
 
 1. Given that documents are the atomic unit of storage in Elastic, *document generation rate* is the most important consideration to scaling. Default [Apache UserALE.js parameters]({{ '/docs/useralejs' | prepend: site.baseurl }}) produce a lot of [data]({{ '/docs/useralejs/dataschema' | prepend: site.baseurl }}), even from single users in Apache UserALE.js. In fact, we used say that "drinking from the fire-hose" didn't quite do our data-rate justice--we used to say that opening up UserALE.js was more like "drinking from the flame-thrower". We strongly suggest that you think about your needs and consider whether you need data from all our event-handlers. If you don't need mouseover events, for example, you can dramatically reduce the rate at which you generate data and the resources you'll need. You can modify source, use the [UserALE.js API]({{ '/docs/useralejs/API' | prepend: site.baseurl }}), and/or use [configurable HTLM5 parameters in our script tag]({{ '/docs/useralejs' | prepend: site.baseurl }}) to modify the frequency with which UserALE.js logs these kinds of user events.
 
-    ![alt text][logBreakdown]
-
-1. Your Elastic resource needs will also grow with *document length*, especially the length of [strings](https://blog.appdynamics.com/product/estimating-costs-of-storing-documents-in-elasticsearch/) within your logs (see also [Elastic's tips on indexing strings](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/tune-for-disk-usage.html#_use_literal_best_compression_literal)). One of the discriminating features of Apache UserALE.js is its precision--its ability to capture both the target of user behaviors and the entire DOM path of that target in searchable ways--and rich meta data. Apache UserALE.js fields like `path` and `pageUrl` can get quite long for certain kinds of web sites and applications. It's worth considering, for example, using our [API]({{ '/docs/useralejs/API' | prepend: site.baseurl }}) to abstract fields like `path` with labels, if you need precision, or if you can get by with only knowing users' `target` elements. Similarly, you might consider relying on `pageTitle` rather than `pageUrl` if they sufficiently differentiate pages and if you're dealing with very deep website trees. Through simple [modifications to UserALE.js source]({{ '/docs/useralejs/modifying' | prepend: site.baseurl }}), you can alias verbose fields in your logs to reduce resource consumption
-
-    ![alt text][verboseLogs]
+1. Your Elastic resource needs will also grow with *document length*, especially the length of [strings](https://blog.appdynamics.com/product/estimating-costs-of-storing-documents-in-elasticsearch/) within your logs (see also [Elastic's tips on indexing strings](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/tune-for-disk-usage.html#_use_literal_best_compression_literal)). One of the discriminating features of Apache UserALE.js is its precision--its ability to capture both the target of user behaviors and the entire DOM path of that target in searchable ways--and rich meta data. Apache UserALE.js fields like `path` and `pageUrl` can get quite long for certain kinds of web sites and applications (see below: a sample `path` for a Kibana element). It's worth considering, for example, using our [API]({{ '/docs/useralejs/API' | prepend: site.baseurl }}) to abstract fields like `path` with labels, if you need precision, or if you can get by with only knowing users' `target` elements. Similarly, you might consider relying on `pageTitle` rather than `pageUrl` if they sufficiently differentiate pages and if you're dealing with very deep website trees. Through simple [modifications to UserALE.js source]({{ '/docs/useralejs/modifying' | prepend: site.baseurl }}), you can alias verbose fields in your logs to reduce resource consumption
+    ```shell
+    ...
+        "pageTitle": "Discover - Kibana",
+        "toolName": "test_app",
+        "userId": "nobody",
+        "type": "click",
+        "target": "a.kuiButton kuiButton--small kuiButton--secondary",
+        "path": [
+          "a.kuiButton kuiButton--small kuiButton--secondary",
+          "div.kbnDocTableDetails__actions",
+          "td",
+          "tr",
+          "tbody",
+          "table.kbn-table table",
+          "div.kbnDocTable__container",
+          "doc-table",
+          "section.dscTable",
+          "div.dscResults",
+          "div.dscWrapper__content",
+          "div.dscWrapper col-md-10",
+          "div.row",
+          "main.container-fluid",
+          "discover-app.app-container",
+          "div.application tab-discover",
+          "div.app-wrapper-panel",
+          "div.app-wrapper",
+          "div.content",
+          "div#kibana-body",
+          "body#kibana-app.coreSystemRootDomElement",
+          "html",
+          "#document",
+          "Window"
+        ...
+    ```
+   
 
 1. Apache Flagon is built to scale as a platform, allowing you to connect additional services to your platform that consume user behavioral data. When considering scale, the *number of services* you connect to your Apache Flagon platform will affect your Elastic stacks' performance. Any production-level deployment will require, at minimum a simple three-node [Elastic cluster](https://dzone.com/articles/elasticsearch-tutorial-creating-an-elasticsearch-c) (with one load-balancing node). As you scale and configure that cluster, be mindful that in addition to performing indexing functions, Elasticsearch is also servicing queries and aggregations of that data. Analytical services connected to Apache Flagon, especially if they both read and write back to index, can consume significant resources and increase indexing and search time. This can be problematic for real-time analytical and monitoring applications (including Kibana). This can also result in data loss if logs are flushed from pipelines prior to being indexed. For hefty analytical services, it may be worth dedicating specific nodes in your cluster to service them. 
 
@@ -240,3 +271,6 @@ Benchmarking and adjusting your data-rate so that you can scale how you want to 
              
 Subscribe to our [dev list](dev-subscribe@flagon.incubator.apache.org) and join the conversation!
 
+[mouseOverBench1]: https://github.com/apache/incubator-flagon/tree/FLAGON-344/site/_site/images/_site/images/mouseOverBench1.png "Proportion of Mouseovers (Benchmark 1)"
+[mouseOverBench2]: https://github.com/apache/incubator-flagon/tree/FLAGON-344/site/_site/images/_site/images/mouseOverBench2.png "Proportion of Mouseovers (Benchmark 2)"
+[metricBeat]: https://github.com/apache/incubator-flagon/tree/FLAGON-344/site/_site/images/_site/images/metricBeat.png "Metricbeat Dashboard"
