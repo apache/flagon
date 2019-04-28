@@ -271,6 +271,6 @@ Benchmarking and adjusting your data-rate so that you can scale how you want to 
              
 Subscribe to our [dev list](dev-subscribe@flagon.incubator.apache.org) and join the conversation!
 
-[mouseOverBench1]: https://github.com/apache/incubator-flagon/tree/FLAGON-344/site/_site/images/_site/images/mouseOverBench1.png "Proportion of Mouseovers (Benchmark 1)"
-[mouseOverBench2]: https://github.com/apache/incubator-flagon/tree/FLAGON-344/site/_site/images/_site/images/mouseOverBench2.png "Proportion of Mouseovers (Benchmark 2)"
-[metricBeat]: https://github.com/apache/incubator-flagon/tree/FLAGON-344/site/_site/images/_site/images/metricBeat.png "Metricbeat Dashboard"
+[mouseOverBench1]: https://github.com/apache/incubator-flagon/tree/FLAGON-344/site/_site/images/mouseOverBench1.png "Proportion of Mouseovers (Benchmark 1)"
+[mouseOverBench2]: https://github.com/apache/incubator-flagon/tree/FLAGON-344/site/_site/images/mouseOverBench2.png "Proportion of Mouseovers (Benchmark 2)"
+[metricBeat]: https://github.com/apache/incubator-flagon/blob/FLAGON-344/site/_site/images/metricBeat.png "Metricbeat Dashboard"
