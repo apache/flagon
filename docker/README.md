@@ -1,4 +1,4 @@
-Building SensSoft Docker Containers
+Building Apache Flagon Docker Containers
 ===================================
 *Last Tested 24 MAR 2019 using Docker Engine v18.09.2, Compose v1.23.2, Machine v0.16.1*
 
@@ -15,9 +15,9 @@ Single Node Example Container
 
 The single node deployment steps below will build a single-node logging server on a single
 machine. This is suitable for demonstrations and very limited data collections. Please 
-refer to our [``Kubernetes``](https://github.com/apache/incubator-senssoft/tree/master/kubernetes) guide for deployments that scale to your needs. In some cases, 
+refer to our [``Kubernetes``](https://github.com/apache/incubator-flagon/tree/master/kubernetes) guide for deployments that scale to your needs. In some cases, 
 you may be able to use single node containers within scaling services (e.g., AWS EBS), but this 
-requires special configuration. Please reach out to us at [our dev list](mailto:dev@senssoft.incubator.apache.org) for recommendations.
+requires special configuration. Please reach out to us at [our dev list](mailto:dev@flagon.incubator.apache.org) for recommendations.
 
 1. Create docker-machine instance. 
    **Note**: If using Docker Desktop bundle, there is a known bug in 
@@ -58,9 +58,9 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
 
 1. Confirm state:
    ```bash
-   # if senssoft vm is remote
+   # if Flagon vm is remote
    $ docker-machine ssh senssoft curl -XGET http://localhost:9200/_cluster/health?pretty
-   # if senssoft virtual machine is running on your local machine, no need for ssh, instead:
+   # if Flagon virtual machine is running on your local machine, no need for ssh, instead:
    $ curl -XGET http://localhost:9200/_cluster/health?pretty
    #output should look like this:
       "cluster_name" : "SensSoft",
@@ -85,9 +85,9 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
   
    ```bash
    $ docker-compose up -d logstash
-   # if senssoft vm is remote
+   # if Flagon vm is remote
    $ docker-machine ssh senssoft curl -XGET http://localhost:8100
-   # if senssoft virtual machine is running on your local machine, no need for ssh, instead:
+   # if Flagon virtual machine is running on your local machine, no need for ssh, instead:
    $ curl -XGET http://localhost:8100
    #ouput should look like this:
       ok
@@ -101,12 +101,12 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
    $ ssh docker@$(docker-machine ip senssoft) -L 8080:localhost:8080
    ```
    
-   Visit `http://localhost:8080` and you will see Apache SensSoft's home page.
+   Visit `http://localhost:8080` and you will see Apache Flagon's home page.
    
    Note that the `userale` index uses dynamic mapping configurations for many fields. This means that if no valid data exists for 
    certain fields in the logs you collect at this step, Kibana won't know to map these fields to data types (e.g., string, text, 
    boolean, etc.). This can prevent certain dashboards and visualizations from appropriately displaying log aggregations. It is worth 
-   1-2 mins collecting some UserALE.js data in whichever way best emulates your use-case: from the same website, the [``UserALE.js example utilty``](https://github.com/apache/incubator-senssoft-useralejs/tree/SENSSOFT-192/example), or the [``UserALE.js Web Extension``](https://github.com/apache/incubator-senssoft-useralejs/tree/SENSSOFT-192/src/UserALEWebExtension). If you run into issues with data fields or visualizations, see the `Having Issues?` section below.
+   1-2 mins collecting some UserALE.js data in whichever way best emulates your use-case: from the same website, the [``UserALE.js example utilty``](https://github.com/apache/incubator-flagon-useralejs/tree/FLAGON-192/example), or the [``UserALE.js Web Extension``](https://github.com/apache/incubator-flagon-useralejs/tree/FLAGON-192/src/UserALEWebExtension). If you run into issues with data fields or visualizations, see the `Having Issues?` section below.
 
 1. Launch Kibana. Give Kibana about 2-5 minutes to start before accessing
    `http://localhost:5601`. 
@@ -155,16 +155,16 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
     $ docker-compose stop
     ```
     
- 1. To kill the senssoft machine.
+ 1. To kill the Flagon machine.
     ```bash
     $ docker-machine rm senssoft
     ```
     
-If running on a single machine, on reboot or restart your senssoft machine is available, but 
+If running on a single machine, on reboot or restart your Flagon machine is available, but 
 in a "stopped" state. You'll need to restart the machine, then you'll need to use docker-
 compose up commands above to restart containers.
 
- 1. Restart the senssoft machine.
+ 1. Restart the Flagon machine.
     ```bash
     $ docker-machine start senssoft
     $ docker-machine ls #confirm state
@@ -198,7 +198,7 @@ Having Issues?
    $ docker-compose up -d site
    ```
    
-1. If you find that Apache SensSoft Kibana Dashboards aren't loading, or Apache UserALE.js log fields in Kibana's `Discover` view
+1. If you find that Apache Flagon Kibana Dashboards aren't loading, or Apache UserALE.js log fields in Kibana's `Discover` view
    appear with a warning icon, it could be that you didn't collect logs with valid data for those fields prior to loading the userale 
    index in Kibana. Don't worry, your data is fine--just navigate to the Management -> Index Patterns page, and click the "refresh" button in the upper right hand of the page (Disregard the "popularity metrics" warning). This will refresh the index, making those 
    fields aggregatable, and Dashboards should render properly.
@@ -209,13 +209,13 @@ Having Issues?
    $ docker-compose logs > err.dump 
    ```
    
-    You can attach logs directly to tickets on our [``Apache Jira board``](https://issues.apache.org/jira/issues/?jql=project+%3D+SENSSOFT+AND+component+%3D+builds)
+    You can attach logs directly to tickets on our [``Apache Jira board``](https://issues.apache.org/jira/issues/?jql=project+%3D+FLAGON+AND+component+%3D+builds)
    
-1. Still having issues? Reach out to us at at [our dev list](mailto:dev@senssoft.incubator.apache.org).
+1. Still having issues? Reach out to us at at [our dev list](mailto:dev@flagon.incubator.apache.org).
 
 [configure_index]: ./docs/images/configure_index.png "Configure Kibana index"
 [confirmation]: ./docs/images/confirmation.png "Confirm index pattern conflicts"
-[dashboard]: ./docs/images/dashboard.png "Apache Senssoft Page Usage Dashboard"
+[dashboard]: ./docs/images/dashboard.png "Apache Flagon Page Usage Dashboard"
 [management]: ./docs/images/management.png "Kibana management console"
 [metrics]: ./docs/images/DockerBeats_Dashboard.png "Metricbeat Dashboard"
 [viz_import]: ./docs/images/viz_import.png "Visualization Import Configuration"
@@ -223,5 +223,5 @@ Having Issues?
 Licensing
 --------------
 
-Apache SensSoft is provided under Apache License version 2.0. See LICENSE (at Master) file for more 
-details. "Software as a Sensor" is Copyright © 2016 The Charles Stark Draper Laboratory, Inc. All rights reserved.
+Apache Flagon is provided under Apache License version 2.0. See LICENSE and NOTICE (at Master) file for more 
+details.
