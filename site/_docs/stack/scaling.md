@@ -142,7 +142,7 @@ To generate log data, we'll be using our [UserALE.js Example](https://github.com
            "store" : {
              "size_in_bytes" : 820978 #new size of the index (.82 MB)
     ```
-    **Some simple math gives +1,998 documents (~2000) and +579,866 bytes (~.58 MB) generated with UserALE.js by one user in 5 mins**. Continuing our ultra-conservative benchmarking, lets assume this data generation rate over an 8 hour period each day, which gives **~56 MB per day**. At 20 working days in an average month, that gives **1.1 GB per month**. 
+    **Some simple math gives +1,998 documents (2000) and +579,866 bytes (.58 MB) generated with UserALE.js by one user in 5 mins**. Continuing our ultra-conservative benchmarking, lets assume this data generation rate over an 8 hour period each day, which gives **~56 MB per day**. At 20 working days in an average month, that gives **1.1 GB per month**. 
     
     Again, **this is ultra-conservative**; no one uses pages or applications this way (even games). That's a lot of data for a single-user, but these are valuable, worst-case-scenario upper-bounds to start with. 
     
