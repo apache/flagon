@@ -87,7 +87,7 @@ To generate log data, we'll be using our [UserALE.js Example](https://github.com
     #Index Stats using Elastic's _stats API
     $ curl localhost:9200/index_name/_stats?pretty=true
   
-    #Tailored for Apache Flagon default configs
+    #Tailored for Apache Flagon default settings
     $ curl localhost:9200/userale/_stats?pretty=true
  
     #Or, view in your browser
@@ -116,7 +116,7 @@ To generate log data, we'll be using our [UserALE.js Example](https://github.com
 
     Drop in a UserALE.js script-tag into your project (see [instructions]({{ '/docs/useralejs' | prepend: site.baseurl }})).
     
-    Here is an example of the script tag we're using in the UserALE.js Example page for this test
+    Here is an example of the script tag (with `settings`) we're using in the UserALE.js Example page for this test:
     ```
     <script
       src="file:/// ... /UserALEtest/userale-1.1.0.min.js"
@@ -154,7 +154,7 @@ To generate log data, we'll be using our [UserALE.js Example](https://github.com
 
 1. **Now, let's take the simplest approach to scaling back UserALE.js and see how this changes your data generation rate**.
     
-    What we're doing is using the UserALE.js `configs` that can be passed through the script tag to effectively "downsample" certain channels (e.g., mouseovers) that generate a lot of documents quickly.
+    What we're doing is using the UserALE.js `settings` that can be passed through the script tag to effectively "downsample" certain channels (e.g., mouseovers) that generate a lot of documents quickly.
     
     Here's what our script tag looks like now: 
     ```
@@ -163,7 +163,7 @@ To generate log data, we'll be using our [UserALE.js Example](https://github.com
       data-url="http://localhost:8100/"
       data-user="example-user"
       data-version="1.1.1"
-      data-resolution=1000 #We've increased the delay between collection of "high-resolution" events (e.g., mouseover, scrolls) by 100%.
+      data-resolution=1000 #We've increased the delay between collection of "high-resolution" events (e.g., mouseover, scrolls) by 100% (default is 500 (ms)).
       data-tool="Apache UserALE.js Example"
     ></script>
     ```
@@ -191,9 +191,9 @@ To generate log data, we'll be using our [UserALE.js Example](https://github.com
     
 1.  **Still too much data? Below are some other things that you can do to curb the growth of your `userale` index** as you continue benchmarking with your page/app.
 
-    * If you don't need all the different types of events UserALE.js gathers by default, you can easily curate the list of events you by modifying [UserALE.js source](https://github.com/apache/incubator-flagon-useralejs/tree/master/src) (`attachHandlers.js`), then building a custom UserALE.js script.
-    * If you don't need both raw logs (specific records of events) and interval logs (aggregates of specific events over a time interval), you can easily drop intervals by modifying UserALE.js [UserALE.js source](https://github.com/apache/incubator-flagon-useralejs/tree/master/src) (`attachHandlers.js` or `packageLogs.js`), then building a custom UserALE.js script.
-    * You can reduce the number of meta-data fields written to each UserALE.js log, by modifying [UserALE.js source](https://github.com/apache/incubator-flagon-useralejs/tree/master/src) (`packageLogs.js`), then building a custom UserALE.js script.
+    * If you don't need all the different types of events UserALE.js gathers by default, you can easily curate the list of events you by modifying [UserALE.js source](https://github.com/apache/incubator-flagon-useralejs/tree/master/src) (`attachHandlers.js`), then build a custom UserALE.js script.
+    * If you don't need both raw logs (specific records of events) and interval logs (aggregates of specific events over a time interval), you can easily drop intervals by modifying UserALE.js [UserALE.js source](https://github.com/apache/incubator-flagon-useralejs/tree/master/src) (`attachHandlers.js` or `packageLogs.js`), then build a custom UserALE.js script.
+    * You can reduce the number of meta-data fields written to each UserALE.js log, by modifying [UserALE.js source](https://github.com/apache/incubator-flagon-useralejs/tree/master/src) (`packageLogs.js`), then build a custom UserALE.js script.
     * If you want different levels of logging granularity (more or less data) for different pages within your site/app, you can build different versions of UserALE.js to service different pages. Just name each version differently and point to the one you want with script-tags, page-by-page.
     * You can use our [API]({{ '/docs/useralejs/API' | prepend: site.baseurl }}) for surgical precision in how specific elements (targets) on your page generate data.
     
@@ -264,7 +264,7 @@ To generate log data, we'll be using our [UserALE.js Example](https://github.com
     
 ### Wonky Things that Can and Will Happen as You Benchmark
 
-1. You just finished a benchmarking session after modifying UserALE.js to produce less data. What you find is that your new store size is either dramatically bigger than your last benchmark or smaller (which should be impossible). What happened is a thing called [merging](https://www.elastic.co/guide/en/elasticsearch/guide/current/merge-process.html). It is a good thing, but it can be a confusing thing while you're benchmarking against your store size. Essentially, each Elastic shard is an index. As data is collected it's gathered into segments within an index. Each segment is an element of your index and takes up storage, so as your collect data, especially if its collected at a high rate, the number of segments grows quickly consuming a lot of storage. Elastic (Lucene) indexes, merge these segments into larger and larger segments, thus reducing the overall number of segments to reduce storage needs and resource consumption. This process does involve duplicating and deleting old segments. This means that depending on when you make a call to Elastic's `STATS` API, you might be looking at the store size at different stages in the merging process. If your store size looks smaller than your last benchmark. You should re-run it then wait. If your store size looks way to big, then just wait. After a minute or two, call the `STATS` API again, and you'll probably see a store size that makes much more sense once Elastic has finished its latest merge operation. 
+1. You just finished a benchmarking session after modifying UserALE.js to produce less data. What you find is that your new store size is either dramatically bigger than your last benchmark or smaller (which should be impossible). What happened is a thing called [merging](https://www.elastic.co/guide/en/elasticsearch/guide/current/merge-process.html). It is a good thing, but it can be a confusing thing while you're benchmarking against your store size. Essentially, each Elastic shard is an index. As data is collected it's gathered into segments within an index. Each segment is an element of your index and takes up storage, so as your collect data, especially if its collected at a high rate, the number of segments grows quickly consuming a lot of storage. As Elastic (Lucene) indexes, it merges these segments into larger and larger segments, thus reducing the overall number of segments to reduce storage needs and resource consumption. This process does involve duplicating and deleting old segments. This means that depending on when you make a call to Elastic's `STATS` API, you might be looking at the store size at different stages in the merging process. If your store size looks smaller than your last benchmark. You should re-run it then wait. If your store size looks way to big, then just wait. After a minute or two, call the `STATS` API again, and you'll probably see a store size that makes much more sense once Elastic has finished its latest merge operation. 
 
 ### Summary 
 Benchmarking and adjusting your data-rate so that you can scale how you want to is made very easy in Apache Flagon. We combine easily deployed and modified capabilities with the power of Elastic's APIs and visualization capabilities. Again, our single-node container is not a scaling solution. It's an ingredient, a potent one, that not only serves as the building block for your cluster, but also a benchmarking tool so that your Apache Flagon cluster meets your needs for capability, scale and cost.
