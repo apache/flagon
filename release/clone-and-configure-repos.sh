@@ -24,7 +24,7 @@
 # Print out usage documentation.
 help_usage() {
     echo "clone-and-configure-repos."
-    echo "A simple utility to configure SENSSOFT repostories and prepare them for release."
+    echo "A simple utility to configure Apache Flagon repostories and prepare them for release."
     echo ""
     echo "Usage: $ clone-and-configure-repos.sh COMMAND"
     echo ""
@@ -44,14 +44,14 @@ help_commands() {
 }
 
 # Do the basics
-# git clone -o apache-git https://git-wip-us.apache.org/repos/asf/incubator-senssoft-useralejs
-# cd incubator-senssoft-useralejs
+# git clone -o apache-git https://gitbox.apache.org/repos/asf/incubator-flagon-useralejs.git
+# cd incubator-flagon-useralejs
 
 # git submodule init
 # git submodule update --remote --merge --recursive
 
 # .gitmodules sets the submodules up from GitHub. Replace the origin with Apache canonical
-# git submodule foreach 'git remote add apache-git https://git-wip-us.apache.org/repos/asf/${name}'
+# git submodule foreach 'git remote add apache-git https://gitbox.apache.org/repos/asf/${name}'
 # git submodule foreach 'git fetch apache-git'
 # git submodule foreach 'git checkout master'
 # git submodule foreach 'git branch --set-upstream-to apache-git/master master'
@@ -84,13 +84,13 @@ fi
 # Prepare for UserALE deployment
 if [[ $COMMAND == "useralejs" ]]; then
     # Do the basics
-	git clone -o apache-git https://git-wip-us.apache.org/repos/asf/incubator-senssoft-$COMMAND
-	cd incubator-senssoft-$COMMAND
+	git clone -o apache-git https://gitbox.apache.org/repos/asf/incubator-flagon-$COMMAND
+	cd incubator-flagon-$COMMAND
 
 	# And also the location for publishing RC artifacts
-	svn --non-interactive co --depth=immediates https://dist.apache.org/repos/dist/release/incubator/senssoft ~/tmp/apache-dist-release-incubator-senssoft-$COMMAND
-	svn --non-interactive co --depth=immediates https://dist.apache.org/repos/dist/dev/incubator/senssoft ~/tmp/apache-dist-dev-incubator-senssoft-$COMMAND
-	echo "export APACHE_DIST_SVN_DIR=$HOME/tmp/apache-dist-dev-incubator-senssoft-$COMMAND" >> ~/.bash_profile
+	svn --non-interactive co --depth=immediates https://dist.apache.org/repos/dist/release/incubator/flagon ~/tmp/apache-dist-release-incubator-flagon-$COMMAND
+	svn --non-interactive co --depth=immediates https://dist.apache.org/repos/dist/dev/incubator/flagon ~/tmp/apache-dist-dev-incubator-flagon-$COMMAND
+	echo "export APACHE_DIST_SVN_DIR=$HOME/tmp/apache-dist-dev-incubator-flagon-$COMMAND" >> ~/.bash_profile
 	exit 0
 fi
 

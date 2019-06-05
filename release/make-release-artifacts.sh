@@ -36,7 +36,7 @@ release_script_dir=$( cd $( dirname $0 ) && pwd )
 show_help() {
     cat >&2 <<END
 Usage: make-release-artifacts.sh [-v version] [-r rc_number]
-Prepares and builds the source and binary distribution artifacts of a SensSoft
+Prepares and builds the source and binary distribution artifacts of an Apache Flagon
 release.
 
   -v VERSION                 overrides the name of this version, if detection
@@ -101,7 +101,7 @@ detect_version
 ###############################################################################
 # Determine all filenames and paths, and confirm
 
-release_name=apache-senssoft-useralejs-${current_version}
+release_name=apache-flagon-useralejs-incubating-${current_version}
 if [ -z "$rc_suffix" ]; then
     fail Specifying the RC number is required
 else
@@ -245,5 +245,5 @@ echo "The release is done - here is what has been created:"
 ls ${artifact_dir}
 echo "You can find these files in: ${artifact_dir}"
 echo "The git commit IDs for the voting emails are:"
-echo -n "incubator-senssoft-userale: " && git rev-parse HEAD
+echo -n "incubator-flagon-userale: " && git rev-parse HEAD
 git submodule --quiet foreach 'echo -n "${name}: " && git rev-parse HEAD'
