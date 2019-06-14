@@ -5,19 +5,51 @@ permalink: /docs/useralejs/API
 priority: 11
 ---
 
-### The UserALE.js API
+# Modifying UserALE.js Behavior via API
 
-For some applications, it may be desirable to filter logs based on some runtime parameters or to enhance the logs with information available to the app. To support this use-case, [Apache UserALE.js](https://github.com/apache/incubator-flagon-useralejs) is equipped with an API exposed against the global UserALE.js object.
+[Apache UserALE.js](https://github.com/apache/incubator-flagon-useralejs) features a robust API that allows you customize official Apache Flagon UserALE.js [builds](https://github.com/apache/incubator-flagon-useralejs/tree/master/build) page-by-page to suite your needs.
 
-The two functions exposed are the `setLogFilter` and `setLogMapper` functions. These allow dynamic modifications to the logs at runtime, but before they are shipped to the server.
+The API exposes two functions: `setLogFilter` & `setLogMapper`. With these two powerful functions, you have a lot of lattitude in customizing and curating your logs.
 
-`setLogFilter` helps you sculpt your log stream, removing data you don't want.
-`setLogMapper` helps you modify the content of your log stream, such as by adding fields to logs, or modifying what is written to existing fields.
+#API Usage
 
-**Sample Uses**
+To invoke the API, simply add additional javascript code blocks under your UserALE.js script tag.
 
-Here is an example of a filter that only keeps every second log (odd-even):
+`setLogFilter` allows you to eliminate log data you don't need or want from your log stream:
+
 ```html
+<head>
+  <title>UserAleJS - Example Page</title>
+ <!--
+ Add the UserALE.js script tag to the top of your doc
+ -->
+   <script src="/path/to/userale-1.0.0.min.js" data-url="http://yourLoggingUrl"></script>
+<!--
+Add additional code blocks to set the filters you want
+This simple array filter pulls mouseover data out of your log stream
+-->
+  <script type="text/javascript">
+    window.userale.filter(function (log) {
+      return (log.type != 'mouseover');
+    });
+  </script>
+<!-- 
+One filter to rule them all! 
+Modify the array page-by-page to curate your log stream:
+by adding unwanted event 'types' in type_array;
+by adding unwanted log classes to eliminate 'raw' or 'interval' logs from your stream.
+-->
+  <script type="text/javascript">
+    var type_array = ['mouseup', 'mouseover', 'dblclick', 'blur', 'focus']
+    var logType_array = ['interval']
+    window.userale.filter(function (log) {
+      return !type_array.includes(log.type) && !logType_array.includes(log.logType);
+    });
+  </script>
+```
+You can use the `setLogFilter` function to do other cool stuff. Below is an example for how to further modify the rate at which UserALE.js collects data, but dropping every other log (odd-even) in the logging queue. 
+
+```javascript
 <html>
   <head>
     <script src="/path/to/userale-1.0.0.min.js" data-url="http://yourLoggingUrl"></script>
@@ -29,18 +61,16 @@ Here is an example of a filter that only keeps every second log (odd-even):
       });
     </script>
   </head>
-  <body>
-    <div id="app">
-      <!-- application goes here -->
-    </div>
-  </body>
-</html>
 ```
 
-Here is an example of a mapping function that adds runtime information about the current "score":
+`setLogMapper` allows you to modify or add new fields to UserALE.js logs: 
+
 ```html
 <html>
   <head>
+   <!--
+   Add the UserALE.js script tag to the top of your doc
+   -->
     <script src="/path/to/userale-1.0.0.min.js" data-url="http://yourLoggingUrl"></script>
   </head>
   <body>
@@ -49,7 +79,9 @@ Here is an example of a mapping function that adds runtime information about the
       <button id="decrement">-</button>
       <div id="scoreboard"></div>
     </div>
-
+<!--
+This cool mapping function adds a progressive count on a given element ("app") and writes to a new log field called "score"
+-->
     <script type="text/javascript">
       var score = 0;
       var scoreBoard = document.getElementById('scoreboard');
@@ -76,6 +108,17 @@ Here is an example of a mapping function that adds runtime information about the
     </script>
   </body>
 </html>
+
 ```
 
-Even with this small API, it is possible to compose very powerful logging capabilities and progressively append additionally app-specific logic to your logs.
+Test these examples out in our UserALE.js [example page](https://github.com/apache/incubator-flagon-useralejs/blob/master/example/index.html) test utility!
+
+### Benefits of the UserALE.js API
+ * No need to dig into our source code
+ * Version control is easy and no need to sweat merges--just download the latest [release]({{ '/releases' | prepend: site.baseurl }}), or update via [npm](https://www.npmjs.com/package/useralejs).
+ * Manage logs page-by-page, ideal for large or complex sites
+ * Use basic or best-practice JS styles and methods to build your own filters, no need to learn weird custom syntax.
+
+## Contributing
+
+Contributions are welcome!  Simply [submit an issue report](https://issues.apache.org/jira/browse/FLAGON) for problems you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to incorporate it into UserALE.js.
