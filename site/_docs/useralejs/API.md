@@ -15,8 +15,7 @@ The API exposes two functions: `setLogFilter` & `setLogMapper`. With these two p
 
 To invoke the API, simply add additional javascript code blocks under your UserALE.js script tag.
 
-`setLogFilter` allows you to eliminate log data you don't need or want from your log stream:
-
+Don't forget to add the UserALE.js script tag:
 ```html
 <head>
   <title>UserAleJS - Example Page</title>
@@ -24,6 +23,13 @@ To invoke the API, simply add additional javascript code blocks under your UserA
  Add the UserALE.js script tag to the top of your doc
  -->
    <script src="/path/to/userale-1.0.0.min.js" data-url="http://yourLoggingUrl"></script>
+```
+
+##`setLogFilter` Examples
+
+`setLogFilter` allows you to eliminate log data you don't need or want from your log stream:
+
+```html
 <!--
 Add additional code blocks to set the filters you want
 This simple array filter pulls mouseover data out of your log stream
@@ -33,8 +39,11 @@ This simple array filter pulls mouseover data out of your log stream
       return (log.type != 'mouseover');
     });
   </script>
+```
+ 
+Here is one UserALE.js filter to rule them all!
+```html
 <!-- 
-One filter to rule them all! 
 Modify the array page-by-page to curate your log stream:
 by adding unwanted event 'types' in type_array;
 by adding unwanted log classes to eliminate 'raw' or 'interval' logs from your stream.
@@ -47,31 +56,42 @@ by adding unwanted log classes to eliminate 'raw' or 'interval' logs from your s
     });
   </script>
 ```
-You can use the `setLogFilter` function to do other cool stuff. Below is an example for how to further modify the rate at which UserALE.js collects data, but dropping every other log (odd-even) in the logging queue. 
+You can also use the `setLogFilter` function to do other cool stuff. Below is an example for how to further modify the rate at which UserALE.js collects data, but dropping every other log (odd-even) in the logging queue. 
 
 ```javascript
-<html>
-  <head>
-    <script src="/path/to/userale-1.0.0.min.js" data-url="http://yourLoggingUrl"></script>
-
     <script type="text/javascript">
       var logCounter = 0;
       window.userale.filter(function (log) {
         return (logCounter++ % 2);
       });
     </script>
-  </head>
 ```
 
-`setLogMapper` allows you to modify or add new fields to UserALE.js logs: 
+## `setLogMapper` Examples
+
+`setLogMapper` allows you to modify or add new fields to UserALE.js logs.
+
+This simple mapping function adds a new log field for custom labels you want to attach to certain elements: 
 
 ```html
-<html>
-  <head>
-   <!--
-   Add the UserALE.js script tag to the top of your doc
-   -->
-    <script src="/path/to/userale-1.0.0.min.js" data-url="http://yourLoggingUrl"></script>
+<!--
+This will add your label to all event logs that reference a particular DOM target.
+-->
+    <script type="text/javascript">
+      window.userale.map(function (log) {
+        var targetsForLabels = ["button#test_button"];
+        if (targetsForLabels.includes(log.target)) {
+            return Object.assign({}, log, { CustomLabel: "Click me!" });
+        } else {
+            return log;  
+        } 
+      });
+    </script>
+```
+
+This cool mapping function adds a progressive count on a given element ("app") and writes to a new log field called "score"
+
+```html
   </head>
   <body>
     <div id="app">
@@ -79,9 +99,8 @@ You can use the `setLogFilter` function to do other cool stuff. Below is an exam
       <button id="decrement">-</button>
       <div id="scoreboard"></div>
     </div>
-<!--
-This cool mapping function adds a progressive count on a given element ("app") and writes to a new log field called "score"
--->
+  </script> 
+
     <script type="text/javascript">
       var score = 0;
       var scoreBoard = document.getElementById('scoreboard');
