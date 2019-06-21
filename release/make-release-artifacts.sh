@@ -195,10 +195,10 @@ set +x
 echo "Make artifacts"
 set -x
 
-# copy js and min version of userale.js
+# copy js, min version of userale.js, and webExt files
 mkdir ${bin_staging_dir}/${release_name}-bin
 
-cp ${src_staging_dir}/build/userale-*.js ${bin_staging_dir}/${release_name}-bin
+cp -R ${src_staging_dir}/build/* ${bin_staging_dir}/${release_name}-bin
 
 # copy in the LICENSE, README and NOTICE
 cp ${src_staging_dir}/README.md ${bin_staging_dir}/${release_name}-bin
