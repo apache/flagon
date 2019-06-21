@@ -211,15 +211,13 @@ cp ${src_staging_dir}/NOTICE ${bin_staging_dir}/${release_name}-bin
 ###############################################################################
 # Signatures and checksums
 
-# OSX doesn't have md5sum, sha1sum, and sha256sum, even if MacPorts md5sha1sum package is installed.
+# OSX doesn't have sha1sum, and sha256sum, even if MacPorts md5sha1sum package is installed.
 # Easy to fake it though.
-which md5sum >/dev/null || alias md5sum='md5 -r' && shopt -s expand_aliases
 which sha1sum >/dev/null || alias sha1sum='shasum -a 1' && shopt -s expand_aliases
 which sha256sum >/dev/null || alias sha256sum='shasum -a 256' && shopt -s expand_aliases
 
 ( cd ${artifact_dir} &&
     for a in *.tar.gz *.zip; do
-        md5sum ${a} > ${a}.md5
         gpg2 --print-md SHA512 ${a} > ${a}.sha512
         gpg2 --armor --output ${a}.asc --detach-sig ${a}
     done
