@@ -16,8 +16,8 @@
   <script src="/js/main.js"></script>
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://senssoft.incubator.apache.org/docs/useralejs/">
-  <link rel="alternate" type="application/rss+xml" title="Apache SensSoft" href="/feed.xml">
+  <link rel="canonical" href="http://flagon.incubator.apache.org/docs/useralejs/">
+  <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
 
   
 </head>
@@ -28,14 +28,14 @@
     <div class="site-header">
   <div id="main-menu" class="ui inverted padded fixed top borderless menu">
     <a class="site-title" href="/">
-      <h3 class="ui inverted header item">Apache SensSoft</h3>
+      <h3 class="ui inverted header item">Apache Flagon</h3>
     </a>
 
     <div class="right menu">
       <div class="ui dropdown item">
         Components
         <div class="menu">
-          <a class="item" href="/system">System</a>
+          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
           <a class="item" href="/tap">Tap</a>
@@ -45,7 +45,7 @@
       <div class="ui dropdown item">
         <a href="/docs">Docs</a>
         <div class="menu">
-          <a class="item" href="/docs/system">System</a>
+          <a class="item" href="/docs/stack">Stack</a>
           <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserALE.js</a>
           <a class="item" href="/docs/useralepy">UserALE.py</a>
@@ -81,7 +81,7 @@
     <div class="title">
   
     <i class="dropdown icon"></i>
-    Apache SensSoft
+    Apache Flagon
   </div>
   
     <div class="content">
@@ -100,14 +100,16 @@
     <div class="title">
   
     <i class="dropdown icon"></i>
-    System
+    Stack
   </div>
   
     <div class="content">
   
     <div class="ui inverted bulleted list docs-list">
       
-        <a class="item" href="/docs/system/">Getting Started</a>
+        <a class="item" href="/docs/stack/">Getting Started</a>
+      
+        <a class="item" href="/docs/stack/scaling/">Scaling Considerations</a>
       
     </div>
   </div>
@@ -141,9 +143,15 @@
       
         <a class="item" href="/docs/useralejs/">Getting Started</a>
       
-        <a class="item" href="/docs/useralejs/troubleshooting.html">Troubleshooting</a>
+        <a class="item" href="/docs/useralejs/build.html">UserALE.js Build and Test</a>
       
-        <a class="item" href="/docs/useralejs/testing.html">Build and Test</a>
+        <a class="item" href="/docs/useralejs/API.html">UserALE.js API</a>
+      
+        <a class="item" href="/docs/useralejs/modifying.html">Modifying UserALE.js</a>
+      
+        <a class="item" href="/docs/useralejs/dataschema.html">UserALE.js Data Schema</a>
+      
+        <a class="item" href="/docs/useralejs/troubleshooting.html">Troubleshooting</a>
       
     </div>
   </div>
@@ -238,23 +246,26 @@
   </div>
   <div class="docs-content">
     <h2 class="ui header">Getting Started</h2>
-    <p>Apache UserALE.js is the UserALE client for DOM and JavaScript-based applications.  It automatically attaches event handlers, is configurable through HTML5 data parameters or a JS API, and logs every user interaction on a web page, including rich JS single-page apps.</p>
+    <p><a href="https://github.com/apache/incubator-flagon-useralejs">Apache UserALE.js</a> is the UserALE client for DOM and JavaScript-based applications.  It automatically attaches event handlers, is configurable through HTML5 data parameters or a JS API, and logs every user interaction on a web page, including rich JS single-page apps. You can choose to include UserALE.js directly in your project to track how users engage with it, or if you’re interested in generating logs from any webpage, you can try out our web extension that injects UserALE.js into every webpage.</p>
 
-<p><em>Note:</em> Work on UserALE.js’ documentation is ongoing.  The most notable undocumented feature is the JS API.  To get involved, see our <a href="/docs/contributing">Contributing</a> guide.</p>
-
+<p><em>Note:</em> Work on UserALE.js’ documentation is ongoing.  Contributions are welcome. To get involved, see our <a href="/docs/contributing">Contributing</a> guide.</p>
 <h3 id="include-useralejs-in-your-project">Include UserALE.js in your project</h3>
 
-<p>To include UserALE.js in your project with default configuration, simply include the script tag below:</p>
+<p>To start logging with Apache UserALE.js, you can include our script directly in your project. More details can be found in our <a href="https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md">README</a>. You can use our <a href="/docs/useralejs/build">build process</a> to create our script, or just use a sample in our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/build">repos</a>.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>  <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"&lt;userale-0.1.0.js&gt;"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<p>To include UserALE.js in a specific project, you’ll need to deploy a version of our minified UserALE.js script in an accessible location (e.g., webserver), and simply include this script tag on the page:</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/path/to/userale-2.0.0.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
 </code></pre>
 </div>
 
-<h3 id="configure-useralejs">Configure UserALE.js</h3>
+<p>This tag will execute the UserALE.js script in your, with no other modifications to your project needed!</p>
 
-<p>HTML5 Data Parameters are used to configure UserALE.js.  For example, to set the logging URL:</p>
+<p><strong>Configure UserALE.js through the Script Tag</strong></p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>  <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"userale-0.1.0.js"</span> <span class="na">data-url=</span><span class="s">"http://server:port"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<p>UserALE.js is designed to be easily configured to fit your use case. We use HTML data parameters to pass configuration options to the library. For example, one thing you’ll need to do is set the URL (location) of your minified UserALE.js script:</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/path/to/userale-2.0.0.min.js"</span> <span class="na">data-url=</span><span class="s">"http://yourLoggingUrl"</span><span class="nt">&gt;&lt;/script&gt;</span>
 </code></pre>
 </div>
 
@@ -263,64 +274,108 @@
 <table>
   <thead>
     <tr>
-      <th style="text-align: left">Param</th>
-      <th style="text-align: left">Description</th>
-      <th style="text-align: left">Default</th>
+      <th>Param</th>
+      <th>Description</th>
+      <th>Default</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left">data-url</td>
-      <td style="text-align: left">Logging URL</td>
-      <td style="text-align: left">http://localhost:8000</td>
+      <td>data-url</td>
+      <td>Logging URL</td>
+      <td>http://localhost:8000</td>
     </tr>
     <tr>
-      <td style="text-align: left">data-autostart</td>
-      <td style="text-align: left">Should Userale.js start on page load</td>
-      <td style="text-align: left">true</td>
+      <td>data-autostart</td>
+      <td>Should UserALE.js start on page load</td>
+      <td>true</td>
     </tr>
     <tr>
-      <td style="text-align: left">data-interval</td>
-      <td style="text-align: left">Delay between transmit checks</td>
-      <td style="text-align: left">5000 (ms)</td>
+      <td>data-interval</td>
+      <td>Delay between transmit checks</td>
+      <td>5000 (ms)</td>
     </tr>
     <tr>
-      <td style="text-align: left">data-threshold</td>
-      <td style="text-align: left">Minimum number of logs to send</td>
-      <td style="text-align: left">5</td>
+      <td>data-threshold</td>
+      <td>Minimum number of logs to send</td>
+      <td>5</td>
     </tr>
     <tr>
-      <td style="text-align: left">data-user</td>
-      <td style="text-align: left">User identifier</td>
-      <td style="text-align: left">null</td>
+      <td>data-user</td>
+      <td>User identifier</td>
+      <td>null</td>
     </tr>
     <tr>
-      <td style="text-align: left">data-version</td>
-      <td style="text-align: left">Application version identifier</td>
-      <td style="text-align: left">null</td>
+      <td>data-version</td>
+      <td>Application version identifier</td>
+      <td>null</td>
     </tr>
     <tr>
-      <td style="text-align: left">data-log-details</td>
-      <td style="text-align: left">Toggle detailed logs (keys pressed and input/change values)</td>
-      <td style="text-align: left">false</td>
+      <td>data-log-details</td>
+      <td>Toggle detailed logs (keys pressed and input/change values)</td>
+      <td>false</td>
     </tr>
     <tr>
-      <td style="text-align: left">data-resolution</td>
-      <td style="text-align: left">Delay between instances of high frequency logs (mouseover, scroll, etc.)</td>
-      <td style="text-align: left">500 (ms)</td>
+      <td>data-resolution</td>
+      <td>Delay between instances of high frequency logs (mouseover, scroll, etc.)</td>
+      <td>500 (ms)</td>
     </tr>
     <tr>
-      <td style="text-align: left">data-user-from-params</td>
-      <td style="text-align: left">Query param in the page URL to fetch userId from</td>
-      <td style="text-align: left">null</td>
+      <td>data-user-from-params</td>
+      <td>Query param in the page URL to fetch userId from</td>
+      <td>null</td>
     </tr>
     <tr>
-      <td style="text-align: left">data-tool</td>
-      <td style="text-align: left">Name of tool being logged</td>
-      <td style="text-align: left">null</td>
+      <td>data-tool</td>
+      <td>Name of tool being logged</td>
+      <td>null</td>
     </tr>
   </tbody>
 </table>
+
+<p>See our page on <a href="/docs/useralejs/build">Build and Test</a> for UserALE.js to learn how to build your own minified version of the UserALE.js script, or you check-out a pre-built script with default parameters in our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/build">repo</a>.</p>
+
+<p>User our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/example">example test utility</a> to experiment with script tag parameters.</p>
+<h3 id="deploying-the-useralejs-webextension">Deploying the UserALE.js WebExtension</h3>
+
+<p>If you’re interested in using our Web Extension to log user activity across all pages they visit, try our web extension, which injects UserALE.js into any web page your client(s) navigate to. This option is perfect for testing and research. The web extension builds through the same <a href="/docs/useralejs/build">build pipeline</a> as UserALE.js. You can also use pre-built extension files in our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/FLAGON-336/build">repo</a>.</p>
+
+<p>When you’re ready to deploy the UserALE.js web extension, follow the instructions below:</p>
+
+<ol>
+  <li>Load the web extension into your browser.
+    <ol>
+      <li>Firefox
+        <ol>
+          <li>Open Firefox</li>
+          <li>Enter about:debugging into the URL bar and press enter</li>
+          <li>Check the box to ‘Enable add-on debugging’</li>
+          <li>Press the ‘Load Temporary Add-on’ button</li>
+          <li>Navigate to the root of the web extension directory (e.g. ‘build/UserAleWebExtension’)</li>
+          <li>Press Open, and confirm that ‘User ALE Extension’ appears in the list</li>
+          <li>You may now navigate to a web page to inject the User ALE script!</li>
+        </ol>
+      </li>
+      <li>Chrome
+        <ol>
+          <li>Open Chrome</li>
+          <li>Enter chrome://extensions into the URL bar and press enter</li>
+          <li>Check the ‘Developer mode’ box</li>
+          <li>Press the ‘Load unpacked extension’ button</li>
+          <li>Navigate to the root of the build directory (e.g. ‘build/UserAleWebExtension’)</li>
+          <li>Press Ok, and confirm that ‘UserALE Extension’ appears in the list</li>
+          <li>You may now navigate to a web page to inject the User ALE script!</li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<p>You can also find more instructions in our <a href="https://github.com/apache/incubator-flagon-useralejs/blob/FLAGON-336/src/UserALEWebExtension/README.md">README</a>.</p>
+
+<h2 id="options">Options</h2>
+
+<p>You can set options for the web extension in your browser by opening the extensions page, finding the extension, and choosing either “Preferences” for Firefox, or “Options” for Chrome.</p>
 
   </div>
 </div>
@@ -333,7 +388,7 @@
       <div class="column">
         <h4 class="ui inverted header">About</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/system">System</a>
+          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
           <a class="item" href="/tap">Tap</a>
@@ -343,7 +398,7 @@
       <div class="column">
         <h4 class="ui inverted header">Docs</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/docs/system">System</a>
+          <a class="item" href="/docs/stack">Stack</a>
           <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserAle.js</a>
           <a class="item" href="/docs/useralepy">UserAle.py</a>
@@ -355,11 +410,11 @@
       <div class="column">
         <h4 class="ui inverted header">Community</h4>
         <div class="ui inverted link list">
-          <a class="item" href="https://github.com/apache?q=senssoft">GitHub</a>
-          <a class="item" href="http://stackoverflow.com/questions/tagged/apache-senssoft">StackOverflow</a>
-          <a class="item" href="https://issues.apache.org/jira/browse/SENSSOFT">Jira Issue Tracker</a>
-          <a class="item" href="https://cwiki.apache.org/confluence/display/SENSSOFT">Project Wiki</a>
-          <a class="item" href="https://twitter.com/apachesenssoft">Twitter</a>
+          <a class="item" href="https://github.com/apache?q=flagon">GitHub</a>
+          <a class="item" href="http://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
+          <a class="item" href="https://issues.apache.org/jira/browse/FLAGON">Jira Issue Tracker</a>
+          <a class="item" href="https://cwiki.apache.org/confluence/display/FLAGON">Project Wiki</a>
+          <a class="item" href="https://twitter.com/ApacheFlagon">Twitter</a>
         </div>
       </div>
       <div class="column">
@@ -377,12 +432,11 @@
   <div class="ui inverted vertical segment">
     <div class="ui two column middle aligned grid">
       <div class="column">
-        Apache SensSoft is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
+        Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        Copyright &copy; 2018 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
-        Apache SensSoft, SensSoft, Apache, the Apache feather logo, the Apache SensSoft logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
-        Software as a Sensor is a trademark of the Charles Stark Draper Laboratory, Inc.
+        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>
   </div>

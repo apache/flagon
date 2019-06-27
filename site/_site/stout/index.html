@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Stout</title>
-  <meta name="description" content="The homepage for Apache SensSoft">
+  <meta name="description" content="The homepage for Apache Flagon">
 
   <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -16,8 +16,8 @@
   <script src="/js/main.js"></script>
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://senssoft.incubator.apache.org/stout/">
-  <link rel="alternate" type="application/rss+xml" title="Apache SensSoft" href="/feed.xml">
+  <link rel="canonical" href="http://flagon.incubator.apache.org/stout/">
+  <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
 
   
 </head>
@@ -28,14 +28,14 @@
     <div class="site-header">
   <div id="main-menu" class="ui inverted padded fixed top borderless menu">
     <a class="site-title" href="/">
-      <h3 class="ui inverted header item">Apache SensSoft</h3>
+      <h3 class="ui inverted header item">Apache Flagon</h3>
     </a>
 
     <div class="right menu">
       <div class="ui dropdown item">
         Components
         <div class="menu">
-          <a class="item" href="/system">System</a>
+          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
           <a class="item" href="/tap">Tap</a>
@@ -45,7 +45,7 @@
       <div class="ui dropdown item">
         <a href="/docs">Docs</a>
         <div class="menu">
-          <a class="item" href="/docs/system">System</a>
+          <a class="item" href="/docs/stack">Stack</a>
           <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserALE.js</a>
           <a class="item" href="/docs/useralepy">UserALE.py</a>
@@ -71,7 +71,7 @@
 <div class="ui very padded vertical segment">
   <div class="ui center aligned text container">
     <p>
-      Apache STOUT (Subject Tracking and Online User Testing) is for UI/UX (and behavioral) researchers that want to perform formal user-testing studies and experiments with web applications. In STOUT, you'll be able to track participants through a series of URLs in a sequence that matches your experimental design–both between and within-subject designs. STOUT makes sure that your participants are sent to the right URLs in the right sequence. You can also set timing parameters so that each task at different URLs are uniformly timed. Participants can also be given directed tasks paired with different URLs. Currently STOUT works well with SurveyMonkey, meaning you can design questionnaires for delivery before, during and after their experience at a given URL. STOUT tracks users with anonymous identifiers (hashes) that are passed to the URLs you send your participants to. These are generated during a registration step, which can also configured for human-subjects testing compliant workflows. This hash is appended with a task ID and then passed to UserALE so that every log generated through web applications during your experiment is traceable to specific users and tasks. STOUT also has features for extracting data from SurveyMonkey and organizing all the data you collect through SurveyMonkey and STOUT throughout experiments, providing you with a simple and easy-to-use .csv file for analysis. Other scripts can be configured to run with STOUT and SurveyMongo for automated post-processing, scale-computation, and truthing. Additionally, STOUT will generate completion codes so that it is easy to use with Amazon Mechanical Turk, and features both an acheivement and email system so that you can communicate with and engage your participants. STOUT is built in Django so its easy to customize STOUT for your specific needs.
+      Apache STOUT (Subject Tracking and Online User Testing) is an experimental platform for UI/UX (and behavioral) researchers that want to perform formal user-testing studies and experiments with web applications. In STOUT, you'll be able to track participants through a series of URLs in a sequence that matches your experimental design–both between and within-subject designs. STOUT makes sure that your participants are sent to the right URLs in the right sequence. You can also set timing parameters so that each task at different URLs are uniformly timed. Participants can also be given directed tasks paired with different URLs. Currently STOUT works well with SurveyMonkey, meaning you can design questionnaires for delivery before, during and after their experience at a given URL. STOUT tracks users with anonymous identifiers (hashes) that are passed to the URLs you send your participants to. These are generated during a registration step, which can also configured for human-subjects testing compliant workflows. This hash is appended with a task ID and then passed to UserALE so that every log generated through web applications during your experiment is traceable to specific users and tasks. STOUT also has features for extracting data from SurveyMonkey and organizing all the data you collect through SurveyMonkey and STOUT throughout experiments, providing you with a simple and easy-to-use .csv file for analysis. Other scripts can be configured to run with STOUT and SurveyMongo for automated post-processing, scale-computation, and truthing. Additionally, STOUT will generate completion codes so that it is easy to use with Amazon Mechanical Turk, and features both an acheivement and email system so that you can communicate with and engage your participants. STOUT is built in Django so its easy to customize STOUT for your specific needs.
     </p>
   </div>
 </div>
@@ -178,7 +178,7 @@
       <div class="column">
         <h4 class="ui inverted header">About</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/system">System</a>
+          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
           <a class="item" href="/tap">Tap</a>
@@ -188,7 +188,7 @@
       <div class="column">
         <h4 class="ui inverted header">Docs</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/docs/system">System</a>
+          <a class="item" href="/docs/stack">Stack</a>
           <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserAle.js</a>
           <a class="item" href="/docs/useralepy">UserAle.py</a>
@@ -200,11 +200,11 @@
       <div class="column">
         <h4 class="ui inverted header">Community</h4>
         <div class="ui inverted link list">
-          <a class="item" href="https://github.com/apache?q=senssoft">GitHub</a>
-          <a class="item" href="http://stackoverflow.com/questions/tagged/apache-senssoft">StackOverflow</a>
-          <a class="item" href="https://issues.apache.org/jira/browse/SENSSOFT">Jira Issue Tracker</a>
-          <a class="item" href="https://cwiki.apache.org/confluence/display/SENSSOFT">Project Wiki</a>
-          <a class="item" href="https://twitter.com/apachesenssoft">Twitter</a>
+          <a class="item" href="https://github.com/apache?q=flagon">GitHub</a>
+          <a class="item" href="http://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
+          <a class="item" href="https://issues.apache.org/jira/browse/FLAGON">Jira Issue Tracker</a>
+          <a class="item" href="https://cwiki.apache.org/confluence/display/FLAGON">Project Wiki</a>
+          <a class="item" href="https://twitter.com/ApacheFlagon">Twitter</a>
         </div>
       </div>
       <div class="column">
@@ -222,12 +222,11 @@
   <div class="ui inverted vertical segment">
     <div class="ui two column middle aligned grid">
       <div class="column">
-        Apache SensSoft is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
+        Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        Copyright &copy; 2018 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
-        Apache SensSoft, SensSoft, Apache, the Apache feather logo, the Apache SensSoft logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
-        Software as a Sensor is a trademark of the Charles Stark Draper Laboratory, Inc.
+        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>
   </div>

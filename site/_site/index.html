@@ -6,8 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Apache SensSoft</title>
-  <meta name="description" content="The homepage for Apache SensSoft">
+  <title>Apache Flagon</title>
+  <meta name="description" content="The homepage for Apache Flagon">
 
   <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -16,8 +16,8 @@
   <script src="/js/main.js"></script>
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://senssoft.incubator.apache.org/">
-  <link rel="alternate" type="application/rss+xml" title="Apache SensSoft" href="/feed.xml">
+  <link rel="canonical" href="http://flagon.incubator.apache.org/">
+  <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
 
   
 </head>
@@ -28,14 +28,14 @@
     <div class="site-header">
   <div id="main-menu" class="ui inverted padded fixed top borderless menu">
     <a class="site-title" href="/">
-      <h3 class="ui inverted header item">Apache SensSoft</h3>
+      <h3 class="ui inverted header item">Apache Flagon</h3>
     </a>
 
     <div class="right menu">
       <div class="ui dropdown item">
         Components
         <div class="menu">
-          <a class="item" href="/system">System</a>
+          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
           <a class="item" href="/tap">Tap</a>
@@ -45,7 +45,7 @@
       <div class="ui dropdown item">
         <a href="/docs">Docs</a>
         <div class="menu">
-          <a class="item" href="/docs/system">System</a>
+          <a class="item" href="/docs/stack">Stack</a>
           <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserALE.js</a>
           <a class="item" href="/docs/useralepy">UserALE.py</a>
@@ -64,7 +64,7 @@
     <div class="main-wrapper">
       <div id="main-masthead" class="ui masthead padded center aligned inverted vertical segment">
 
-  <h1 class="ui header">Apache SensSoft</h1>
+  <h1 class="ui header">Apache Flagon</h1>
   <h2 class="ui header">Instrument Software. &nbsp; Understand Humans.</h2>
 
 </div>
@@ -72,19 +72,19 @@
 <div class="ui very padded vertical segment">
   <div class="ui center aligned text container">
     <p>
-      Apache Software as a Sensor™ (SensSoft) incorporates a number of components that work together to provide user-experience researchers, project managers and software developers insights about how web applications are used. Each of the components of Apache SensSoft is made available through its own repository, allowing its distinctive capabilities to grow organically. A simplified system architecture ensures that the components will continue to share data and work together efficiently throughout their evolution.
+      Apache Flagon is an open-soure, thin-client behavioral logging capability useful for business analytics, usage analytics, usability and user testing. It's also for science into how information technology is used. Flagon supports a range of streamlined deployment schemas ranging from single webpage analysis to enterprise level monitoring, making it easy to collect data without heavy modification of your own code. Using Elastic products, Flagon makes it easy to scale, integrate other services, access your data and get the insights you need out of it. In the spirit of customization, the Apache Flagon project collects a number of modular products and capabilities to help you build the stack that suites your needs.
     </p>
 
     <br>
 
-    <a class="ui big red button" href="/system">
-      Learn More
+    <a class="ui big red button" href="/docs/stack/">
+      Get Started
     </a>
     <a class="ui big blue button" href="/releases">
-      Download SensSoft
+      Download Flagon
     </a>
-    <a class="ui big yellow button" href="mailto:user-subscribe@senssoft.incubator.apache.org">
-      Sign Up For News
+    <a class="ui big yellow button" href="mailto:dev-subscribe@flagon.incubator.apache.org">
+      Join our Dev List
     </a>
   </div>
 </div>
@@ -93,7 +93,7 @@
   <div class="ui text container">
     <div class="ui two column middle aligned grid">
       <div class="column">
-        With a single line of code, capture all of your users’ behavior on your web page with enough resolution and granularity for advanced behavioral modeling. Apache UserALE is a free, open-source application for standard user event tracking, but is specially tailored for capturing behavior in web applications build for productivity—data analysis, logistics, system monitoring, and service provisioning.
+        With a single line of code capture all of your users' behavior on your web page with enough resolution and granularity for advanced behavioral modeling. Apache UserALE is Flagon's free, open-source application for thin-client behavioral logging. It's perfect for business analytics and enterprise application monitoring, but powerful enough for UI/UX research and user-testing. Check out our slick demo!
       </div>
       <div class="center aligned column">
         <a href="/userale">
@@ -166,7 +166,7 @@
 
               <div class="field">
                 <div id="demo-dropdown" class="ui fluid selection dropdown">
-                  <input type="hidden" name="senssoft-component">
+                  <input type="hidden" name="flagon-component">
                   <i class="dropdown icon"></i>
                   <div class="default text">Select Component</div>
                   <div class="menu">
@@ -249,7 +249,7 @@
         </a>
       </div>
       <div class="column">
-        Process and control your own user event data. Apache Distill is a scalable, customizable analytics stack built in Python that allows you to segment your user data and generate both simple usage statistics on different features of your application and complex graph models of user workflow. Distill provides an easy access point into databases storing your user event data and packages data for discovery through visual analytics.
+        Process and control your own user event data. Apache Distill is Flagon's experimental, customizable analytics stack built in Python that interfaces directly with Elastic. It gives data scientists and developers the power to segment and model user data in Python or push modeling output to visual analytic applications. From simple aggregations to complex graph models of user workflow, Distill provides access to user data and the python libraries you love in a streamlined analytical pipeline.
       </div>
     </div>
   </div>
@@ -259,7 +259,7 @@
   <div class="ui text container">
     <div class="ui two column middle aligned grid">
       <div class="column">
-        Explore your users’ behavior and discover trends through visual analytics. Apache TAP is a customizable visual analytics application that allows you to see trends in usage across users of different types, usage trends across different versions of your application, and rich visualizations of users’ workflow. Tailor visual analytics to your needs customizing TAP with your favorite D3 visualizations.
+        Apache TAP is Flagon's experimental collection of specially modified D3 visual analytic libraries for exploring Apache UserALE.js data. You can explore them in our sandbox environment, or embed them in your own applications. With TAP, Gain insight from advanced sequential and graph models and reveal trends in usage across users of different types and experience, and trends across different versions of your application. Try out our Bowie plot demo below!
       </div>
       <div class="center aligned column">
         <a href="/tap">
@@ -384,7 +384,7 @@
   <div class="ui text container">
     <h2 class="ui inverted header">About the Project</h2>
     <p>
-      Apache SensSoft is a user activity logging and analytics system that enables developers to instrument and extract design and user insights from their applications.  It was originally developed at <a href="draper.com">Draper</a> for DARPA's XDATA program as a means of evaluating and improving tools for big data analysis and exploration.  Commercially available as Draper's Software as a Sensor™, Apache SensSoft aims to provide a more complete and customizable user analytics platform.
+      Apache Flagon is a free and open-source, thin-client behavioral logging solution for business analytics, usage analytics, usability testing and scientific research. Formerly named Apache SensSoft, Flagon had its start at Draper for DARPA's XDATA program and represents the hard-work and innovations of an interdisciplinary team of data scientists, psychologists, developers and system architects. Apache Flagon is maintained by the people that love it under the mentorship and guidance of the Apache Incubator. Join the conversation and the community!
     </p>
   </div>
 </div>
@@ -397,7 +397,7 @@
       <div class="column">
         <h4 class="ui inverted header">About</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/system">System</a>
+          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
           <a class="item" href="/tap">Tap</a>
@@ -407,7 +407,7 @@
       <div class="column">
         <h4 class="ui inverted header">Docs</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/docs/system">System</a>
+          <a class="item" href="/docs/stack">Stack</a>
           <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserAle.js</a>
           <a class="item" href="/docs/useralepy">UserAle.py</a>
@@ -419,11 +419,11 @@
       <div class="column">
         <h4 class="ui inverted header">Community</h4>
         <div class="ui inverted link list">
-          <a class="item" href="https://github.com/apache?q=senssoft">GitHub</a>
-          <a class="item" href="http://stackoverflow.com/questions/tagged/apache-senssoft">StackOverflow</a>
-          <a class="item" href="https://issues.apache.org/jira/browse/SENSSOFT">Jira Issue Tracker</a>
-          <a class="item" href="https://cwiki.apache.org/confluence/display/SENSSOFT">Project Wiki</a>
-          <a class="item" href="https://twitter.com/apachesenssoft">Twitter</a>
+          <a class="item" href="https://github.com/apache?q=flagon">GitHub</a>
+          <a class="item" href="http://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
+          <a class="item" href="https://issues.apache.org/jira/browse/FLAGON">Jira Issue Tracker</a>
+          <a class="item" href="https://cwiki.apache.org/confluence/display/FLAGON">Project Wiki</a>
+          <a class="item" href="https://twitter.com/ApacheFlagon">Twitter</a>
         </div>
       </div>
       <div class="column">
@@ -441,12 +441,11 @@
   <div class="ui inverted vertical segment">
     <div class="ui two column middle aligned grid">
       <div class="column">
-        Apache SensSoft is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
+        Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        Copyright &copy; 2018 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
-        Apache SensSoft, SensSoft, Apache, the Apache feather logo, the Apache SensSoft logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
-        Software as a Sensor is a trademark of the Charles Stark Draper Laboratory, Inc.
+        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>
   </div>
