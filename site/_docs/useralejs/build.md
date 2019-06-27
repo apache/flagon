@@ -1,8 +1,7 @@
 ---
-title: Build and Test
+title: UserALE.js Build and Test
 component: useralejs
-permalink: /docs/useralejs/build
-priority: 11
+priority: 1
 ---
 
 ### Building UserALE.js

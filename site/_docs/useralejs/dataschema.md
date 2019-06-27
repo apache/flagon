@@ -1,8 +1,7 @@
 ---
-title: Data Schema
+title: UserALE.js Data Schema
 component: useralejs
-permalink: /docs/useralejs/dataschema
-priority: 11
+priority: 4
 ---
 
 #The UserALE.js Dataschema

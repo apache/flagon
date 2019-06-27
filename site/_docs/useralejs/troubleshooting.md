@@ -1,7 +1,7 @@
 ---
 title: Troubleshooting
 component: useralejs
-permalink: /docs/useralejs/troubleshooting
+priority: 5
 ---
 
 ### Enable Cross-Origin Resource Sharing (CORS)

@@ -1,7 +1,7 @@
 ---
 title: Scaling Considerations
 component: stack
-permalink: /docs/stack/scaling
+permalink: /docs/stack/scaling/
 priority: 0
 ---
 

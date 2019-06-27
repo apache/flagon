@@ -1,8 +1,7 @@
 ---
-title: API
+title: UserALE.js API
 component: useralejs
-permalink: /docs/useralejs/API
-priority: 11
+priority: 2
 ---
 
 # Modifying UserALE.js Behavior via API

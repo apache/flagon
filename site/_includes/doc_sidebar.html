@@ -32,21 +32,21 @@
   </div>
 
 
-  {% if page.component == 'system' %}
+  {% if page.component == 'stack' %}
     <div class="active title">
   {% else %}
     <div class="title">
   {% endif %}
     <i class="dropdown icon"></i>
-    System
+    Stack
   </div>
-  {% if page.component == 'system' %}
+  {% if page.component == 'stack' %}
     <div class="active content">
   {% else %}
     <div class="content">
   {% endif %}
     <div class="ui inverted bulleted list docs-list">
-      {% for doc in system %}
+      {% for doc in stack %}
         <a class="item" href="{{ doc.url }}">{{ doc.title }}</a>
       {% endfor %}
     </div>

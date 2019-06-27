@@ -1,8 +1,7 @@
 ---
 title: Modifying UserALE.js
 component: useralejs
-permalink: /docs/useralejs/modifying
-priority: 11
+priority: 3
 ---
 
 # Customizing UserALE.js Logs through Source Code Modifications

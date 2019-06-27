@@ -15,7 +15,7 @@ To start logging with Apache UserALE.js, you can include our script directly in 
 To include UserALE.js in a specific project, you'll need to deploy a version of our minified UserALE.js script in an accessible location (e.g., webserver), and simply include this script tag on the page:
 
 ```html
-<script src="/path/to/userale-1.0.0.min.js"></script>
+<script src="/path/to/userale-2.0.0.min.js"></script>
 ```
 
 This tag will execute the UserALE.js script in your, with no other modifications to your project needed!
@@ -25,7 +25,7 @@ This tag will execute the UserALE.js script in your, with no other modifications
 UserALE.js is designed to be easily configured to fit your use case. We use HTML data parameters to pass configuration options to the library. For example, one thing you'll need to do is set the URL (location) of your minified UserALE.js script:
 
 ```html
-<script src="/path/to/userale-1.0.0.min.js" data-url="http://yourLoggingUrl"></script>
+<script src="/path/to/userale-2.0.0.min.js" data-url="http://yourLoggingUrl"></script>
 ```
 
 The complete list of configurable options is:
@@ -44,6 +44,8 @@ The complete list of configurable options is:
 | data-tool | Name of tool being logged | null |
 
 See our page on [Build and Test]({{ '/docs/useralejs/build' | prepend: site.baseurl }}) for UserALE.js to learn how to build your own minified version of the UserALE.js script, or you check-out a pre-built script with default parameters in our [repo](https://github.com/apache/incubator-flagon-useralejs/tree/master/build).
+
+User our [example test utility](https://github.com/apache/incubator-flagon-useralejs/tree/master/example) to experiment with script tag parameters.
 ### Deploying the UserALE.js WebExtension
 
 If you're interested in using our Web Extension to log user activity across all pages they visit, try our web extension, which injects UserALE.js into any web page your client(s) navigate to. This option is perfect for testing and research. The web extension builds through the same [build pipeline]({{ '/docs/useralejs/build' | prepend: site.baseurl }}) as UserALE.js. You can also use pre-built extension files in our [repo](https://github.com/apache/incubator-flagon-useralejs/tree/FLAGON-336/build). 
