@@ -10,7 +10,7 @@ priority: 0
 *Note:* Work on UserALE.js' documentation is ongoing.  Contributions are welcome. To get involved, see our [Contributing]({{ '/docs/contributing' | prepend: site.baseurl }}) guide.  
 ### Include UserALE.js in your project
 
-To start logging with Apache UserALE.js, you can include our script directly in your project. More details can be found in our [README](https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md). You can use our [build process]({{ '/docs/useralejs/build' | prepend: site.baseurl }}) to create our script, or just use a sample in our [repos](https://github.com/apache/incubator-flagon-useralejs/tree/master/build).
+To start logging with Apache UserALE.js, you can include our script directly in your project. More details can be found in our [README](https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md). You can use our [build process]({{ '/docs/useralejs/build' | prepend: site.baseurl }}) to create our script, use a sample in our [repos](https://github.com/apache/incubator-flagon-useralejs/tree/master/build), or pull our scripts from [npm](https://www.npmjs.com/package/flagon-userale).
 
 To include UserALE.js in a specific project, you'll need to deploy a version of our minified UserALE.js script in an accessible location (e.g., webserver), and simply include this script tag on the page:
 
@@ -48,7 +48,7 @@ See our page on [Build and Test]({{ '/docs/useralejs/build' | prepend: site.base
 User our [example test utility](https://github.com/apache/incubator-flagon-useralejs/tree/master/example) to experiment with script tag parameters.
 ### Deploying the UserALE.js WebExtension
 
-If you're interested in using our Web Extension to log user activity across all pages they visit, try our web extension, which injects UserALE.js into any web page your client(s) navigate to. This option is perfect for testing and research. The web extension builds through the same [build pipeline]({{ '/docs/useralejs/build' | prepend: site.baseurl }}) as UserALE.js. You can also use pre-built extension files in our [repo](https://github.com/apache/incubator-flagon-useralejs/tree/FLAGON-336/build). 
+If you're interested in using our Web Extension to log user activity across all pages they visit, try our web extension, which injects UserALE.js into any web page your client(s) navigate to. This option is perfect for testing and research. The web extension builds through the same [build pipeline]({{ '/docs/useralejs/build' | prepend: site.baseurl }}) as UserALE.js. You can also use pre-built extension files in our [repo](https://github.com/apache/incubator-flagon-useralejs/tree/master/build). 
 
 When you're ready to deploy the UserALE.js web extension, follow the instructions below:
 
