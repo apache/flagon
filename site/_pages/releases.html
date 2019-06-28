@@ -11,7 +11,7 @@ title: Releases
 </p>
 
 <p>
-  Please Note all Apache Flagon artifacts are released as source code and binary artifacts and additional packages can be found on packaging platforms such as UserALE.js which we make available through <a href="https://www.npmjs.com/package/useralejs">the NPM useralejs package</a>.
+  Please Note all Apache Flagon artifacts are released as source code and binary artifacts and additional packages can be found on packaging platforms such as UserALE.js which we make available through <a href="https://www.npmjs.com/package/flagon-userale">the NPM useralejs package</a>.
 
   The CHANGELOG file shipped with each artifact can be consulted for more information on the list of updates in each release. 
 
@@ -20,7 +20,7 @@ title: Releases
 
 <h1>Flagon UserALE.js</h1>
 
-Please note, that for convenience, we make UserALE.js available through <a href="https://www.npmjs.com/package/useralejs">the NPM useralejs package</a>.
+Please note, that for convenience, we make UserALE.js available through <a href="https://www.npmjs.com/package/flagon-userale">the NPM useralejs package</a>.
 
 <h2>Downloads</h2>
 The link in the 'Download Artifact' column below should display a default mirror selection based on your inferred location. If (when you browse to it) you do not see that page, try a different browser. The SHA512 checksum and ASCII armoured detached signatures are links to the originals on the main distribution server.
@@ -84,7 +84,7 @@ The link in the 'Download Artifact' column below should display a default mirror
 </p>
 <p>
 	<code>
-		$ gpg --verify apache-flagon-useralejs-1.0.0-src.zip.asc
+		$ gpg --verify apache-flagon-{product}-{version}-src.zip.asc
 	</code>
 </p>
 
@@ -97,8 +97,8 @@ The link in the 'Download Artifact' column below should display a default mirror
 	Alternatively, you can verify the SHA512 signatures on the files. A unix program called md5 or md5sum is included in many unix distributions. Use the following example
 </p>
 <p>
-	<code>$ sha512sum apache-flagon-useralejs-1.0.0-src.zip</code>
+	<code>$ sha512sum apache-flagon-{product}-{version}-src.zip</code>
 </p>
 <p>
-	... output should match the string in apache-flagon-useralejs-1.0.0-src.zip.sha512
+	... output should match the string in apache-flagon-{product}-{version}-src.zip.sha512
 </p>
