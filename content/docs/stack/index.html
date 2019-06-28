@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Getting Started</title>
-  <meta name="description" content="Tap is an experimental sandbox for Apache Flagon, highlighting customer visual analytics to highlight insights derived from Apache UserAle.js. It consists of...">
+  <meta name="description" content="The Apache Flagon project provides a streamlined deployment solution for including behavioral logging capabilities in your project and for monitoring and ana...">
 
   <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -16,7 +16,7 @@
   <script src="/js/main.js"></script>
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://flagon.incubator.apache.org/docs/tap/">
+  <link rel="canonical" href="http://flagon.incubator.apache.org/docs/stack/">
   <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
 
   
@@ -97,13 +97,13 @@
 
 
   
-    <div class="title">
+    <div class="active title">
   
     <i class="dropdown icon"></i>
     Stack
   </div>
   
-    <div class="content">
+    <div class="active content">
   
     <div class="ui inverted bulleted list docs-list">
       
@@ -209,13 +209,13 @@
   </div>
 
   
-    <div class="active title">
+    <div class="title">
   
     <i class="dropdown icon"></i>
     Tap
   </div>
   
-    <div class="active content">
+    <div class="content">
   
     <div class="ui inverted bulleted list docs-list">
       
@@ -246,9 +246,69 @@
   </div>
   <div class="docs-content">
     <h2 class="ui header">Getting Started</h2>
-    <p>Tap is an experimental sandbox for Apache Flagon, highlighting customer visual analytics to highlight insights derived from Apache UserAle.js.  It consists of a React-Django web app that allows you to access your applications’ usage data via data visualizations built in D3.</p>
+    <p>The Apache Flagon project provides a streamlined deployment solution for including behavioral logging capabilities in your project and for monitoring and analyzing your log data in a containerized Elastic backend.  Our Docker container includes an Elastic backend, pre-configured, interactive Kibana dashboards. The container also includes prototype applications for exploration, Apache Distill and Apache Tap.</p>
 
-<p>Work on Tap’s documentation is ongoing.  To get involved, see our <a href="/docs/contributing">Contributing</a> guide.  To get started with Tap, <a href="/docs/stack">try out the full Flagon system</a>.</p>
+<p>Before you begin, you’ll need <a href="https://nodejs.org/">NPM and Node.js</a>, <a href="https://www.docker.com/">Docker</a> and <a href="https://docs.docker.com/compose/install/">Docker Compose</a> installed before you start.</p>
+
+<h3 id="building-and-deploying-useralejs">Building and Deploying UserALE.js</h3>
+
+<p><a href="https://github.com/apache/incubator-flagon-useralejs">Apache UserALE.js</a> is the Apache Flagon’s thin-client behavioral logging solution. Below, you’ll find short-hand instructions for getting started with UserALE.js. For complete instructions, see our <a href="https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md">README</a>.</p>
+
+<p>First, download the <a href="http://flagon.incubator.apache.org/releases/">release</a> or clone our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master">repo on GitHub</a>. Apache UserALE.js is also available as an <a href="https://www.npmjs.com/package/useralejs">NPM package</a>.</p>
+
+<p>Next, <strong>install Dependencies</strong>.</p>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="c">#intall NPM packages into build directory</span>
+  <span class="nv">$ </span>npm install
+</code></pre>
+</div>
+
+<p>Then, <strong>build UserALE.js</strong>.</p>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="c">#produce UserALE.js build artifacts</span>
+  <span class="nv">$ </span>npm run build
+</code></pre>
+</div>
+
+<p>The build process produces a minified version of UserALE.js and a Web Extension package, giving you two options depending on your needs. You can skip the build process if you just want to explore UserALE.js; just use the minified script found in our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/build">repo</a>.</p>
+
+<p><strong>Option 1: Include Apache UserALE.js in your project:</strong></p>
+
+<div class="language-markdown highlighter-rouge"><pre class="highlight"><code>  #include userale in your project via script tag 
+  <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/path/to/userale-1.0.0.min.js"</span> <span class="na">data-url=</span><span class="s">"http://yourLoggingUrl"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre>
+</div>
+<p>Apache UserALE.js allows for configuration via HTML 5 data parameters. For a complete list of options, see the <a href="/docs/useralejs">docs</a> or the <a href="https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md">README</a>. You can also modify Apache UserALE.js using our API. Find examples in our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/FLAGON-192">repos</a>.</p>
+
+<p><strong>Option 2: Follow the <a href="https://github.com/apache/incubator-flagon-useralejs/tree/FLAGON-192/src/UserALEWebExtension">instructions</a> to install the Apache UserALE.js web extension into your browser.</strong></p>
+
+<p>You can now start generating behavioral log data from your page, or through your browser. To view these logs, you can either utilize our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/example">example logging server</a> and log to file, or you can log directly to our Elastic backend. For complete instructions, see the <a href="https://github.com/apache/incubator-flagon/tree/master/docker">README</a></p>
+<h3 id="building-and-using-the-elastic-backend">Building and Using the Elastic Backend</h3>
+
+<p><a href="https://github.com/apache/incubator-flagon">Apache Flagon</a> utilizes an Elastic stack for transforming, indexing, and storing log data. With Elastic, you’ll not only have the ability to search and query log dat, but you’ll also be able to monitor it and visualize it through Kibana.</p>
+
+<p>To build our single-node Elastic instance, <strong>first clone our <a href="https://github.com/apache/incubator-flagon/tree/master/docker">Docker repo</a></strong>. Note that for production-level deployments, you should probably check out our <a href="https://github.com/apache/incubator-flagon/tree/master/kubernetes">Kubernetes build</a> and our <a href="/docs/stack/scaling">guide for scaling</a>).</p>
+
+<p>Then, <strong>start up a virtual machine</strong>.</p>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># start virtual machine and requisite network </span>
+<span class="gp">$ </span>docker-machine create --virtualbox-memory 3072 --virtualbox-cpu-count 2 senssoft
+<span class="gp">$ </span>docker-machine ssh senssoft sudo sysctl -w vm.max_map_count<span class="o">=</span>262144
+<span class="gp">$ </span>docker network create esnet
+</code></pre>
+</div>
+<p>Next, <strong>start Elastic services</strong>.</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code> <span class="c">#start Elastic services</span>
+ <span class="nv">$ </span>docker-compose up -d elasticsearch
+ <span class="nv">$ </span>docker-compuse up -d logstash
+ <span class="nv">$ </span>docker-compose up -d kibana
+</code></pre>
+</div>
+<p><strong>Configure UserALE.js</strong> to send logs to localhost:8100. This is easy: either modify the script tag for port 8100 or open up the “options” tab of the web extension and enter localhost:8100 as your logging end-point.</p>
+
+<p>Before starting Kibana, <strong>generate some logs</strong>. Move your mouse around, click around, etc. Do this for a couple minutes to populate the index.</p>
+
+<p>Finally, <strong>navigate to localhost:5601 (Kibaba), set an index pattern, and load our visualizations and dashboards</strong> to see your logs. Find simple instructions in our <a href="https://github.com/apache/incubator-flagon/tree/master/docker">README</a>.</p>
+
+<p>Subscribe to our <a href="dev-subscribe@flagon.incubator.apache.org">dev list</a> and join the conversation!</p>
 
   </div>
 </div>

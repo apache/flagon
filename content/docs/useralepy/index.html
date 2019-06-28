@@ -6,8 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Getting Started</title>
-  <meta name="description" content="Tap is an experimental sandbox for Apache Flagon, highlighting customer visual analytics to highlight insights derived from Apache UserAle.js. It consists of...">
+  <title>Installation</title>
+  <meta name="description" content="Apache UserALE.PyQt5 is the UserALE client for PyQt5 applications. It provides an easy way to generate highly detailed log streams from any PyQt5 application.">
 
   <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -16,7 +16,7 @@
   <script src="/js/main.js"></script>
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://flagon.incubator.apache.org/docs/tap/">
+  <link rel="canonical" href="http://flagon.incubator.apache.org/docs/useralepy/">
   <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
 
   
@@ -157,13 +157,13 @@
   </div>
 
   
-    <div class="title">
+    <div class="active title">
   
     <i class="dropdown icon"></i>
     UserALE.py
   </div>
   
-    <div class="content">
+    <div class="active content">
   
     <div class="ui inverted bulleted list docs-list">
       
@@ -209,13 +209,13 @@
   </div>
 
   
-    <div class="active title">
+    <div class="title">
   
     <i class="dropdown icon"></i>
     Tap
   </div>
   
-    <div class="active content">
+    <div class="content">
   
     <div class="ui inverted bulleted list docs-list">
       
@@ -245,10 +245,119 @@
 
   </div>
   <div class="docs-content">
-    <h2 class="ui header">Getting Started</h2>
-    <p>Tap is an experimental sandbox for Apache Flagon, highlighting customer visual analytics to highlight insights derived from Apache UserAle.js.  It consists of a React-Django web app that allows you to access your applications’ usage data via data visualizations built in D3.</p>
+    <h2 class="ui header">Installation</h2>
+    <p>Apache UserALE.PyQt5 is the UserALE client for PyQt5 applications.  It provides an easy way to generate highly detailed log streams from any PyQt5 application.</p>
 
-<p>Work on Tap’s documentation is ongoing.  To get involved, see our <a href="/docs/contributing">Contributing</a> guide.  To get started with Tap, <a href="/docs/stack">try out the full Flagon system</a>.</p>
+<h3 id="requirements">Requirements</h3>
+
+<ul>
+  <li>Python 3.5 or above</li>
+  <li>PyQt5, version 5.3 or above</li>
+  <li>pip3, see requirements.txt</li>
+</ul>
+
+<h3 id="installing-useralepyqt5">Installing UserALE.PyQt5</h3>
+
+<p>The first step is to install Apache UserALE.PyQt5. First, checkout the latest version of Apache UserALE.PyQt5 from our Git repository.</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>git clone https://gitbox.apache.org/repos/asf/incubator-flagon-userale-pyqt5.git
+</code></pre>
+</div>
+
+<p>Apache UserALE.PyQt5 is a python3 project, so it can be installed like any other python library. Several operating systems (Mac OS X, Major Versions of Linux/BSD) have Python3 pre-installed, so you should just have to run</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>easy_install3 userale
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  or
+</code></pre>
+</div>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>pip3 install userale
+</code></pre>
+</div>
+
+<p>Users are strongly recommended to install Apache UserALE.PyQt5 in a virtualenv. Instructions to setup an virtual environment will be explained below.</p>
+
+<blockquote>
+  <p><strong>Note</strong>
+Apache UserALE.PyQt5 requires that PyQt5 and the Qt5 bindings has been installed. Instructions to install PyQt5 and Qt5 in a virtual environment will be left to the user.</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Note</strong>
+When the package is installed via easy_install3 or pip3 this function will be bound to the userale executable in the Python installation’s bin directory (on Windows - the Scripts directory).</p>
+</blockquote>
+
+<h3 id="installing-apache-useralepyqt5-in-an-virtual-environment">Installing Apache UserALE.PyQt5 in an Virtual Environment</h3>
+
+<p>There are multiple ways to create virtual environments for a Python3 application. virtualenv is a one of those tools to create isolated Python environments. virtualenv creates a folder which contains all the necessary executables to use the packages that the UserAle project would need.</p>
+
+<p>Start by changing directory into the root of Apache UserALE.PyQt5’s project directory, and then use the virtualenv command-line tool to create a new environment:</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>virtualenv --python<span class="o">=</span>/usr/bin/python3 env
+</code></pre>
+</div>
+
+<p>Optionally, Python3 has built in support for virtual environments.</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>mkdir env
+  <span class="nv">$ </span>python3 -m venv env
+</code></pre>
+</div>
+
+<p>Activate environment:</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span><span class="nb">source </span>env/bin/activate
+</code></pre>
+</div>
+
+<p>Install UserAle requirements:</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>env/bin/pip3 install -r requirements.txt
+</code></pre>
+</div>
+
+<p>To build the source code and run all unit tests.</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>env/bin/python3 setup.py develop <span class="nb">test</span>
+</code></pre>
+</div>
+
+<p>Deactivate environment</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>deactivate
+</code></pre>
+</div>
+
+<h3 id="installing-documentation">Installing Documentation</h3>
+
+<p>First, install the documentation dependencies:</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>env/bin/pip3 install -r doc_requirements.txt
+</code></pre>
+</div>
+
+<p>To build Apache UserALE.PyQt5’s documentation, create a directory at the root level of /userale.pyqt5 called userale.pyqt5-docs.</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>mkdir userale.pyqt5-docs &amp; <span class="nb">cd </span>userale.pyqt5-docs
+</code></pre>
+</div>
+
+<p>Execute build command from inside the top-level doc/ directory:</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>make html
+</code></pre>
+</div>
+
+<p>This should build the documentation in your shell, and output HTML. At then end, it should say something about documents being ready in userale.pyqt5-docs/html.</p>
+
+<p>You can now open them in your browser by typing</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>open userale.pyqt5-docs/html/index.html
+</code></pre>
+</div>
 
   </div>
 </div>

@@ -13,11 +13,11 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Apache SensSoft
-description: The homepage for Apache SensSoft
+title: Apache Flagon
+description: The homepage for Apache Flagon
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://senssoft.incubator.apache.org" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: apachesenssoft
+url: "http://flagon.incubator.apache.org" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username: ApacheFlagon
 github_username:  apache
 
 collections:

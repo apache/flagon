@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Distill</title>
-  <meta name="description" content="The homepage for Apache SensSoft">
+  <meta name="description" content="The homepage for Apache Flagon">
 
   <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -16,8 +16,8 @@
   <script src="/js/main.js"></script>
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://localhost:4000/distill/">
-  <link rel="alternate" type="application/rss+xml" title="Apache SensSoft" href="/feed.xml">
+  <link rel="canonical" href="http://flagon.incubator.apache.org/distill/">
+  <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
 
   
 </head>
@@ -28,14 +28,14 @@
     <div class="site-header">
   <div id="main-menu" class="ui inverted padded fixed top borderless menu">
     <a class="site-title" href="/">
-      <h3 class="ui inverted header item">Apache SensSoft</h3>
+      <h3 class="ui inverted header item">Apache Flagon</h3>
     </a>
 
     <div class="right menu">
       <div class="ui dropdown item">
         Components
         <div class="menu">
-          <a class="item" href="/system">System</a>
+          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
           <a class="item" href="/tap">Tap</a>
@@ -45,10 +45,10 @@
       <div class="ui dropdown item">
         <a href="/docs">Docs</a>
         <div class="menu">
-          <a class="item" href="/docs/system">System</a>
+          <a class="item" href="/docs/stack">Stack</a>
           <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserALE.js</a>
-          <a class="item" href="/docs/useralepyqt">UserALE.pyqt</a>
+          <a class="item" href="/docs/useralepy">UserALE.py</a>
           <a class="item" href="/docs/distill">Distill</a>
           <a class="item" href="/docs/tap">Tap</a>
           <a class="item" href="/docs/stout">Stout</a>
@@ -164,7 +164,7 @@
       <div class="column">
         <h4 class="ui inverted header">About</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/system">System</a>
+          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
           <a class="item" href="/tap">Tap</a>
@@ -174,10 +174,10 @@
       <div class="column">
         <h4 class="ui inverted header">Docs</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/docs/system">System</a>
+          <a class="item" href="/docs/stack">Stack</a>
           <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserAle.js</a>
-          <a class="item" href="/docs/useralepyqt">UserAle.pyqt</a>
+          <a class="item" href="/docs/useralepy">UserAle.py</a>
           <a class="item" href="/docs/distill">Distill</a>
           <a class="item" href="/docs/tap">Tap</a>
           <a class="item" href="/docs/stout">Stout</a>
@@ -186,21 +186,21 @@
       <div class="column">
         <h4 class="ui inverted header">Community</h4>
         <div class="ui inverted link list">
-          <a class="item" href="https://github.com/apache?q=senssoft">GitHub</a>
-          <a class="item" href="http://stackoverflow.com/questions/tagged/apache-senssoft">StackOverflow</a>
-          <a class="item" href="https://issues.apache.org/jira/browse/SENSSOFT">Jira Issue Tracker</a>
-          <a class="item" href="https://cwiki.apache.org/confluence/display/SENSSOFT">Project Wiki</a>
-          <a class="item" href="https://twitter.com/apachesenssoft">Twitter</a>
+          <a class="item" href="https://github.com/apache?q=flagon">GitHub</a>
+          <a class="item" href="http://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
+          <a class="item" href="https://issues.apache.org/jira/browse/FLAGON">Jira Issue Tracker</a>
+          <a class="item" href="https://cwiki.apache.org/confluence/display/FLAGON">Project Wiki</a>
+          <a class="item" href="https://twitter.com/ApacheFlagon">Twitter</a>
         </div>
       </div>
       <div class="column">
         <h4 class="ui inverted header">Apache</h4>
         <div class="ui inverted link list">
-          <a class="item" href="http://www.apache.org/licenses/LICENSE-2.0.html">License</a>
           <a class="item" href="http://www.apache.org/">Apache Software Foundation</a>
-          <a class="item" href="http://incubator.apache.org/">Apache Incubator</a>
-          <a class="item" href="http://www.apache.org/foundation/sponsorship.html">Sponsor Apache</a>
-          <a class="item" href="http://www.apache.org/foundation/thanks.html">Thank you</a>
+          <a class="item" href="http://www.apache.org/licenses/">License</a>
+          <a class="item" href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+          <a class="item" href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+          <a class="item" href="http://www.apache.org/security/">Security</a>
         </div>
       </div>
     </div>
@@ -208,12 +208,23 @@
   <div class="ui inverted vertical segment">
     <div class="ui two column middle aligned grid">
       <div class="column">
-        Apache SensSoft is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
+        Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        <img class="component-image" src="/images/incubator-logo-white.png">
-        <br>
-        Copyright © 2017 The Apache Software Foundation, Licensed under the Apache License, Version 2.0.  Apache, the Apache feather logo, and the Apache Incubator logo are trademarks of The Apache Software Foundation.  Software as a Sensor is a trademark of the Charles Stark Draper Laboratory, Inc.
+        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui one column middle aligned grid">
+      <div class="center aligned column">
+        <a href="http://incubator.apache.org/">
+          <img src="/images/incubator-logo-white.jpg">
+        </a>&nbsp;
+        <a href="https://www.apache.org/events/current-event.html">
+          <img src="https://www.apache.org/events/current-event-234x60.png" alt="ASF Current Event">
+        </a>
       </div>
     </div>
   </div>

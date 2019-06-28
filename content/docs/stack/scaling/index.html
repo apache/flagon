@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Scaling Considerations</title>
+  <meta name="description" content="Scaling Apache Flagon: An Introduction and First Principles">
+
+  <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="/semantic/dist/semantic.min.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="/js/main.js"></script>
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://flagon.incubator.apache.org/docs/stack/scaling/">
+  <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
+
+  
+</head>
+
+
+  <body>
+
+    <div class="site-header">
+  <div id="main-menu" class="ui inverted padded fixed top borderless menu">
+    <a class="site-title" href="/">
+      <h3 class="ui inverted header item">Apache Flagon</h3>
+    </a>
+
+    <div class="right menu">
+      <div class="ui dropdown item">
+        Components
+        <div class="menu">
+          <a class="item" href="/stack">Stack</a>
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+          <a class="item" href="/tap">Tap</a>
+          <a class="item" href="/stout">Stout</a>
+        </div>
+      </div>
+      <div class="ui dropdown item">
+        <a href="/docs">Docs</a>
+        <div class="menu">
+          <a class="item" href="/docs/stack">Stack</a>
+          <a class="item" href="/docs/userale">UserALE</a>
+          <a class="item" href="/docs/useralejs">UserALE.js</a>
+          <a class="item" href="/docs/useralepy">UserALE.py</a>
+          <a class="item" href="/docs/distill">Distill</a>
+          <a class="item" href="/docs/tap">Tap</a>
+          <a class="item" href="/docs/stout">Stout</a>
+        </div>
+      </div>
+      <a class="item" href="/releases">Releases</a>
+      <a class="item" href="/community">Community</a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="main-wrapper">
+      <div class="docs-wrapper">
+  <div class="docs-sidebar">
+    
+
+
+
+
+
+
+
+
+<!-- <div class="ui inverted list">
+  <a class="item" href="/docs">About the Docs</a>
+</div> -->
+<div id="docs-nav" class="ui inverted accordion">
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Apache Flagon
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/">About the Docs</a>
+      
+        <a class="item" href="/docs/contributing/">Contributing</a>
+      
+    </div>
+  </div>
+
+
+  
+    <div class="active title">
+  
+    <i class="dropdown icon"></i>
+    Stack
+  </div>
+  
+    <div class="active content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/stack/">Getting Started</a>
+      
+        <a class="item" href="/docs/stack/scaling/">Scaling Considerations</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/userale/">About UserALE</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE.js
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/useralejs/">Getting Started</a>
+      
+        <a class="item" href="/docs/useralejs/build.html">UserALE.js Build and Test</a>
+      
+        <a class="item" href="/docs/useralejs/API.html">UserALE.js API</a>
+      
+        <a class="item" href="/docs/useralejs/modifying.html">Modifying UserALE.js</a>
+      
+        <a class="item" href="/docs/useralejs/dataschema.html">UserALE.js Data Schema</a>
+      
+        <a class="item" href="/docs/useralejs/troubleshooting.html">Troubleshooting</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE.py
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/useralepy/">Installation</a>
+      
+        <a class="item" href="/docs/useralepy/start.html">Getting Started</a>
+      
+        <a class="item" href="/docs/useralepy/api.html">API Documentation</a>
+      
+        <a class="item" href="/docs/useralepy/changelog.html">Changelog</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Distill
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/distill/">Installation</a>
+      
+        <a class="item" href="/docs/distill/start.html">Getting Started</a>
+      
+        <a class="item" href="/docs/distill/api.html">API Documentation</a>
+      
+        <a class="item" href="/docs/distill/analytics.html">Apache Distill Analytics</a>
+      
+        <a class="item" href="/docs/distill/http.html">Apache Distill HTTP Client</a>
+      
+        <a class="item" href="/docs/distill/models.html">Apache Distill Models</a>
+      
+        <a class="item" href="/docs/distill/utilities.html">Apache Distill Utilities</a>
+      
+        <a class="item" href="/docs/distill/changelog.html">Changelog</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Tap
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/tap/">Getting Started</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Stout
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/stout/">About Stout</a>
+      
+        <a class="item" href="/docs/stout/start.html">Getting Started</a>
+      
+    </div>
+  </div>
+</div>
+
+  </div>
+  <div class="docs-content">
+    <h2 class="ui header">Scaling Considerations</h2>
+    <h3 id="scaling-apache-flagon-an-introduction-and-first-principles">Scaling Apache Flagon: An Introduction and First Principles</h3>
+
+<p>This guide touches on some basic principles to keep in mind as you’re planning for scale with <a href="https://github.com/apache/incubator-flagon">Apache Flagon</a>. We provide some high-level guidance and considerations for working with an Elastic stack to scale Flagon that are unique to <a href="/docs/useralejs">Apache UserALE.js</a> data. We also walk through some of our benchmarking tools and methodologies, so that you walk into discussions about scale with some accurate assumptions based on your use-case and your needs for data.</p>
+
+<p><strong>“It Depends…“</strong></p>
+
+<p>The best way to scale Apache Flagon depends entirely on your use-case: how you’ll use your Apache UserALE.js data and which <a href="/docs/useralejs/dataschema">UserALE.js data streams</a> you’ll use. This page provides a few Apache Flagon-specific considerations to think about as you decide how best to scale, and some useful methods for benchmarking to help you make that determination.</p>
+
+<p><strong>The Apache Flagon Single-Node Elastic Container is an Ingredient, Not a Whole Solution</strong></p>
+
+<p>The single-node Elastic (ELK) stack in the Docker container distributed by <a href="/docs/stack">Apache Flagon</a> is not alone suitable for most production-level use-cases. It may be suitable on its own, for “grab-and-go” user-testing use cases, for example. This would entail just a few days of data collection from a specific application, from just a few users. But, alone it will fail quickly for most persistent data collection uses and enterprise-scale use-cases. Rather, this container is meant to be a building block for larger solutions:</p>
+
+<ol>
+  <li>Our ELK .yml config files for our Docker container can be used as the building-blocks for your very own <a href="https://dzone.com/articles/elasticsearch-tutorial-creating-an-elasticsearch-c">multi-node cluster</a> with load-balancing capabilities.</li>
+  <li>You can use our <a href="https://github.com/apache/incubator-flagon/tree/master/kubernetes">Kubernetes build</a>, which relies on our Docker assets, to scale your Apache Flagon stack to meet your needs.</li>
+  <li>You can use our single-node container to scale out in <a href="https://aws.amazon.com/elasticbeanstalk/">AWS Elastic Beanstalk (EBS)</a>.</li>
+</ol>
+
+<p><strong>Apache Flagon Data Also Scales</strong></p>
+
+<p>It’s important to note that the burden of scale isn’t placed wholly on your Apache Flagon stack. Flagon’s behavioral logging capability, <a href="/docs/useralejs">Apache UserALE.js</a> also scales. This means that one of the most cost-efficient ways to manage the resources behind your Apache Flagon stack, is to <a href="/docs/useralejs/API">configure</a> or <a href="/docs/useralejs/modifying">modify</a> UserALE.js to meet your use-case.</p>
+<h3 id="sizing-up-an-elastic-stack">Sizing Up an Elastic Stack</h3>
+
+<p>When thinking about how to scale your Apache Flagon Elastic stack, it’s important to note that Elasticsearch isn’t a database, its a datastore, which stores documents. Elastic is built on top of <a href="http://lucene.apache.org/">Lucene</a>. That means that Apache Flagon “logs” aren’t logs once they’re indexed in Elastic, they become searchable documents. That’s a huge strength (and why we chose Elastic), but it also means that assumptions about resource consumptions based purely on records and fields is misleading in Elastic. Elastic has many useful <a href="(https://www.elastic.co/blog/found-sizing-elasticsearch)">guides</a> on sizing and scaling. Below, we’re adding a few of our own thoughts based on Apache Flagon’s own eccentricities.</p>
+
+<ol>
+  <li>
+    <p>Given that documents are the atomic unit of storage in Elastic, <em>document generation rate</em> is the most important consideration to scaling. Default <a href="/docs/useralejs">Apache UserALE.js parameters</a> produce a lot of <a href="/docs/useralejs/dataschema">data</a>, even from single users in Apache UserALE.js. In fact, we used say that “drinking from the fire-hose” didn’t quite do our data-rate justice–we used to say that opening up UserALE.js was more like “drinking from the flame-thrower”. We strongly suggest that you think about your needs and consider whether you need data from all our event-handlers. If you don’t need mouseover events, for example, you can dramatically reduce the rate at which you generate data and the resources you’ll need. You can modify source, use the <a href="/docs/useralejs/API">UserALE.js API</a>, and/or use <a href="/docs/useralejs">configurable HTLM5 parameters in our script tag</a> to modify the frequency with which UserALE.js logs these kinds of user events.</p>
+  </li>
+  <li>Your Elastic resource needs will also grow with <em>document length</em>, especially the length of <a href="https://blog.appdynamics.com/product/estimating-costs-of-storing-documents-in-elasticsearch/">strings</a> within your logs (see also <a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.5/tune-for-disk-usage.html#_use_literal_best_compression_literal">Elastic’s tips on indexing strings</a>). One of the discriminating features of Apache UserALE.js is its precision–its ability to capture both the target of user behaviors and the entire DOM path of that target in searchable ways–and rich meta data. Apache UserALE.js fields like <code class="highlighter-rouge">path</code> and <code class="highlighter-rouge">pageUrl</code> can get quite long for certain kinds of web sites and applications (see below: a sample <code class="highlighter-rouge">path</code> for a Kibana element). It’s worth considering, for example, using our <a href="/docs/useralejs/API">API</a> to abstract fields like <code class="highlighter-rouge">path</code> with labels, if you need precision, or if you can get by with only knowing users’ <code class="highlighter-rouge">target</code> elements. Similarly, you might consider relying on <code class="highlighter-rouge">pageTitle</code> rather than <code class="highlighter-rouge">pageUrl</code> if they sufficiently differentiate pages and if you’re dealing with very deep website trees. Through simple <a href="/docs/useralejs/modifying">modifications to UserALE.js source</a>, you can alias verbose fields in your logs to reduce resource consumption
+    <div class="language-shell highlighter-rouge"><pre class="highlight"><code> ...
+     <span class="s2">"pageTitle"</span>: <span class="s2">"Discover - Kibana"</span>,
+     <span class="s2">"toolName"</span>: <span class="s2">"test_app"</span>,
+     <span class="s2">"userId"</span>: <span class="s2">"nobody"</span>,
+     <span class="s2">"type"</span>: <span class="s2">"click"</span>,
+     <span class="s2">"target"</span>: <span class="s2">"a.kuiButton kuiButton--small kuiButton--secondary"</span>,
+     <span class="s2">"path"</span>: <span class="o">[</span>
+       <span class="s2">"a.kuiButton kuiButton--small kuiButton--secondary"</span>,
+       <span class="s2">"div.kbnDocTableDetails__actions"</span>,
+       <span class="s2">"td"</span>,
+       <span class="s2">"tr"</span>,
+       <span class="s2">"tbody"</span>,
+       <span class="s2">"table.kbn-table table"</span>,
+       <span class="s2">"div.kbnDocTable__container"</span>,
+       <span class="s2">"doc-table"</span>,
+       <span class="s2">"section.dscTable"</span>,
+       <span class="s2">"div.dscResults"</span>,
+       <span class="s2">"div.dscWrapper__content"</span>,
+       <span class="s2">"div.dscWrapper col-md-10"</span>,
+       <span class="s2">"div.row"</span>,
+       <span class="s2">"main.container-fluid"</span>,
+       <span class="s2">"discover-app.app-container"</span>,
+       <span class="s2">"div.application tab-discover"</span>,
+       <span class="s2">"div.app-wrapper-panel"</span>,
+       <span class="s2">"div.app-wrapper"</span>,
+       <span class="s2">"div.content"</span>,
+       <span class="s2">"div#kibana-body"</span>,
+       <span class="s2">"body#kibana-app.coreSystemRootDomElement"</span>,
+       <span class="s2">"html"</span>,
+       <span class="s2">"#document"</span>,
+       <span class="s2">"Window"</span>
+     ...
+</code></pre>
+    </div>
+  </li>
+  <li>Apache Flagon is built to scale as a platform, allowing you to connect additional services to your platform that consume user behavioral data. When considering scale, the <em>number of services</em> you connect to your Apache Flagon platform will affect your Elastic stacks’ performance. Any production-level deployment will require, at minimum a simple three-node <a href="https://dzone.com/articles/elasticsearch-tutorial-creating-an-elasticsearch-c">Elastic cluster</a> (with one load-balancing node). As you scale and configure that cluster, be mindful that in addition to performing indexing functions, Elasticsearch is also servicing queries and aggregations of that data. Analytical services connected to Apache Flagon, especially if they both read and write back to index, can consume significant resources and increase indexing and search time. This can be problematic for real-time analytical and monitoring applications (including Kibana). This can also result in data loss if logs are flushed from pipelines prior to being indexed. For hefty analytical services, it may be worth dedicating specific nodes in your cluster to service them.</li>
+</ol>
+
+<p>For the reasons above, its really critical to do some benchmarking for your use-case prior to deciding on a scaling strategy. Below, you’ll find some guidance for how to do this with Apache Flagon and Elastic tools. We also provide some simple benchmarks and underlying assumptions. However, each webpage or application is a bit different, so it’s important create some of your own benchmarks for comparison with ours.</p>
+<h3 id="benchmarking-tools-and-methods-for-sizing-your-apache-flagon-stack">Benchmarking Tools and Methods for Sizing your Apache Flagon Stack</h3>
+
+<p>Benchmarking with Elastic isn’t as straight forward as figuring out an average log size in bytes and then calculating how many logs per second. The size of Apache UserALE.js logs is too variable (see above) within pages and across log types. Additionally, a single log may actually be indexed as separate, nested documents in Elastic. Moreover, Elastic doesn’t really ‘think’ at the document-level, they think about <em>indexes</em>.</p>
+
+<p>This guide outlines a set of tools and steps for running your own benchmarking study using Flagon’s <a href="/docs/stack">single-node container</a></p>
+
+<p>To generate log data, we’ll be using our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/example">UserALE.js Example</a> test kit. This is a useful test utility that makes it easy to <a href="/docs/useralejs/modifying">modify</a> UserALE.js HTML5 and API parameters on the fly. Again, for your own purposes, you’ll want to experiment with your own page/application for more accurate benchmarks.</p>
+
+<ol>
+  <li>
+    <p><strong>Start up the Apache Flagon Elastic Stack (detailed instructions <a href="https://github.com/apache/incubator-flagon/tree/master/docker">here</a>).</strong></p>
+
+    <p>Important: as noted in the instructions, you’ll need to have collected some log data to establish the index.</p>
+  </li>
+  <li><strong>Once you’ve started up Elasticsearch, Logstash, Kibana, and metricbead, and confirm that you can see logs in Kibana, take a look at the <code class="highlighter-rouge">userale</code> index stats.</strong>
+    <div class="language-shell highlighter-rouge"><pre class="highlight"><code> <span class="c">#Index Stats using Elastic's _stats API</span>
+ <span class="nv">$ </span>curl localhost:9200/index_name/_stats?pretty<span class="o">=</span><span class="nb">true</span>
+  
+ <span class="c">#Tailored for Apache Flagon default settings</span>
+ <span class="nv">$ </span>curl localhost:9200/userale/_stats?pretty<span class="o">=</span><span class="nb">true</span>
+ 
+ <span class="c">#Or, view in your browser</span>
+ http://localhost:9200/userale/_stats?pretty<span class="o">=</span><span class="nb">true</span>
+</code></pre>
+    </div>
+    <p>Find the <code class="highlighter-rouge">indices</code> portion of the output. It looks like this (#note annotations):</p>
+    <div class="language-shell highlighter-rouge"><pre class="highlight"><code> ...
+ <span class="s2">"indices"</span> : <span class="o">{</span>
+     <span class="s2">"userale"</span> : <span class="o">{</span> <span class="c">#this is the index UserALE.js logs write to</span>
+       <span class="s2">"uuid"</span> : <span class="s2">"0h0Wxe2cSwqMALs4QCJ8Tw"</span>,
+       <span class="s2">"primaries"</span> : <span class="o">{</span>
+         <span class="s2">"docs"</span> : <span class="o">{</span>
+           <span class="s2">"count"</span> : 1284, <span class="c">#this is the total # of documents in the userale index</span>
+           <span class="s2">"deleted"</span> : 0
+         <span class="o">}</span>,
+         <span class="s2">"store"</span> : <span class="o">{</span>
+           <span class="s2">"size_in_bytes"</span> : 241212 <span class="c">#this is size of the index in bytes (.24 MB).</span>
+ ...
+</code></pre>
+    </div>
+    <p>Let’s call this value a baseline for your benchmarking.</p>
+
+    <p>As you continue your benchmarking, the <code class="highlighter-rouge">userale</code> index “size_in_bytes” will be one of your key metrics.</p>
+  </li>
+  <li>
+    <p><strong>Next, let’s see how much data UserALE.js produces with parameters set to default on your page or app.</strong> We’ll call this: “drinking from the flame-thrower”.</p>
+
+    <p>Drop in a UserALE.js script-tag into your project (see <a href="/docs/useralejs">instructions</a>).</p>
+
+    <p>Here is an example of the script tag (with <code class="highlighter-rouge">settings</code>) we’re using in the UserALE.js Example page for this test:</p>
+    <div class="highlighter-rouge"><pre class="highlight"><code> &lt;script
+   src="file:/// ... /UserALEtest/userale-1.1.0.min.js"
+   data-url="http://localhost:8100/"
+   data-user="example-user"
+   data-version="1.1.1"
+   data-tool="Apache UserALE.js Example"
+ &gt;&lt;/script&gt;
+</code></pre>
+    </div>
+    <p>To get a conservative upper-bound, generate as many behaviors in your page/app as you can (go nuts with mouse-overs, clicks and scrolls).</p>
+
+    <p>We did just that for 5 minutes solid. Here’s what our <code class="highlighter-rouge">userale</code> index looks now (#note annotations):</p>
+
+    <div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="s2">"indices"</span> : <span class="o">{</span>
+    <span class="s2">"userale"</span> : <span class="o">{</span>
+      <span class="s2">"uuid"</span> : <span class="s2">"0h0Wxe2cSwqMALs4QCJ8Tw"</span>,
+      <span class="s2">"primaries"</span> : <span class="o">{</span>
+        <span class="s2">"docs"</span> : <span class="o">{</span>
+          <span class="s2">"count"</span> : 3282, <span class="c">#new userale document count</span>
+          <span class="s2">"deleted"</span> : 0
+        <span class="o">}</span>,
+        <span class="s2">"store"</span> : <span class="o">{</span>
+          <span class="s2">"size_in_bytes"</span> : 820978 <span class="c">#new size of the index (.82 MB)</span>
+</code></pre>
+    </div>
+    <p><strong>Some simple math gives +1,998 documents (2000) and +579,866 bytes (.58 MB) generated with UserALE.js by one user in 5 mins</strong>. Continuing our ultra-conservative benchmarking, lets assume this data generation rate over an 8 hour period each day, which gives <strong>~56 MB per day</strong>. At 20 working days in an average month, that gives <strong>1.1 GB per month</strong>.</p>
+
+    <p>Again, <strong>this is ultra-conservative</strong>; no one uses pages or applications this way (even games). That’s a lot of data for a single-user, but these are valuable, worst-case-scenario upper-bounds to start with.</p>
+
+    <p>If you’re a scientist or researcher, these figures might be fine, especially if you want to pour over this data. If you’re just interested in how people are moving through your content, this is probably overkill. The biggest culprit: take a look at our <code class="highlighter-rouge">Apache Flagon Page Usage Dashboard</code> to see.</p>
+
+    <p><img src="https://github.com/apache/incubator-flagon/blob/FLAGON-344/site/_site/images/mouseOverBench1.png" alt="alt text" title="Proportion of Mouseovers (Benchmark 1)" /></p>
+
+    <p>Mouseovers accounted for a lot of the data we just produced. Raw mouseover data is written to log very frequently and generates a lot of documents in Elastic.</p>
+  </li>
+  <li>
+    <p><strong>Now, let’s take the simplest approach to scaling back UserALE.js and see how this changes your data generation rate</strong>.</p>
+
+    <p>What we’re doing is using the UserALE.js <code class="highlighter-rouge">settings</code> that can be passed through the script tag to effectively “downsample” certain channels (e.g., mouseovers) that generate a lot of documents quickly.</p>
+
+    <p>Here’s what our script tag looks like now:</p>
+    <div class="highlighter-rouge"><pre class="highlight"><code> &lt;script
+   src="file:/// ... /UserALEtest/userale-1.1.0.min.js"
+   data-url="http://localhost:8100/"
+   data-user="example-user"
+   data-version="1.1.1"
+   data-resolution=1000 #We've increased the delay between collection of "high-resolution" events (e.g., mouseover, scrolls) by 100% (default is 500 (ms)).
+   data-tool="Apache UserALE.js Example"
+ &gt;&lt;/script&gt;
+</code></pre>
+    </div>
+    <p>Next, replicate your benchmarking, behaving in a similar way for the same amount of time.</p>
+
+    <p>Here’s what our <code class="highlighter-rouge">userale</code> index looks like now after another 5 minutes of vigorous behavior.</p>
+
+    <div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="s2">"indices"</span> : <span class="o">{</span>
+    <span class="s2">"userale"</span> : <span class="o">{</span>
+      <span class="s2">"uuid"</span> : <span class="s2">"0h0Wxe2cSwqMALs4QCJ8Tw"</span>,
+      <span class="s2">"primaries"</span> : <span class="o">{</span>
+        <span class="s2">"docs"</span> : <span class="o">{</span>
+          <span class="s2">"count"</span> : 4800, <span class="c">#new userale document count</span>
+          <span class="s2">"deleted"</span> : 0
+        <span class="o">}</span>,
+        <span class="s2">"store"</span> : <span class="o">{</span>
+          <span class="s2">"size_in_bytes"</span> : 115978 <span class="c">#new size of the index (1.1 MB)  </span>
+</code></pre>
+    </div>
+    <p><strong>Maths give us +1518 documents (500 fewer than our first benchmark) and +295,000 bytes (.30 MB; ~40% less growth in the store size than previous) generated by one user in 5 minutes.</strong> That would be <strong>28.8 MB per day</strong> or <strong>~576 MB per working month</strong>, per user. We’ve cut down our data generation considerably by modifying one parameter in our script tag.</p>
+
+    <p>Why? look at the new proportion of mouseover events… we shaved those down by ~50%. As that event stream has the highest data generation, net-net we generated about 25% fewer documents with the same amount and duration of behavior:</p>
+
+    <p><img src="https://github.com/apache/incubator-flagon/blob/FLAGON-344/site/_site/images/mouseOverBench2.png" alt="alt text" title="Proportion of Mouseovers (Benchmark 2)" /></p>
+  </li>
+  <li>
+    <p><strong>Still too much data? Below are some other things that you can do to curb the growth of your <code class="highlighter-rouge">userale</code> index</strong> as you continue benchmarking with your page/app.</p>
+
+    <ul>
+      <li>If you don’t need all the different types of events UserALE.js gathers by default, you can easily curate the list of events you by modifying <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/src">UserALE.js source</a> (<code class="highlighter-rouge">attachHandlers.js</code>), then build a custom UserALE.js script.</li>
+      <li>If you don’t need both raw logs (specific records of events) and interval logs (aggregates of specific events over a time interval), you can easily drop intervals by modifying UserALE.js <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/src">UserALE.js source</a> (<code class="highlighter-rouge">attachHandlers.js</code> or <code class="highlighter-rouge">packageLogs.js</code>), then build a custom UserALE.js script.</li>
+      <li>You can reduce the number of meta-data fields written to each UserALE.js log, by modifying <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/src">UserALE.js source</a> (<code class="highlighter-rouge">packageLogs.js</code>), then build a custom UserALE.js script.</li>
+      <li>If you want different levels of logging granularity (more or less data) for different pages within your site/app, you can build different versions of UserALE.js to service different pages. Just name each version differently and point to the one you want with script-tags, page-by-page.</li>
+      <li>You can use our <a href="/docs/useralejs/API">API</a> for surgical precision in how specific elements (targets) on your page generate data.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="other-tools-to-support-benchmarking-for-scaling">Other Tools to Support Benchmarking for Scaling</h3>
+
+<ol>
+  <li>
+    <p>In our benchmarking guide, we primarily used <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-stats.html">Elastic’s <code class="highlighter-rouge">Stats</code> API</a>. This provides very verbose output, which is pretty useful for understanding all of your indexes, indexing behavior, and how data is being distributed across nodes. You can use other <a href="https://www.datadoghq.com/blog/collect-elasticsearch-metrics/#index-stats-api">Elastic APIs</a> for different views of what’s going on inside your Apache Flagon stack. For more streamlined views into your indices, try the <code class="highlighter-rouge">CAT</code> API. Try this call in your browser:</p>
+
+    <p>http://localhost:9200/_cat/indices?format=json&amp;bytes=b&amp;pretty</p>
+
+    <p>Output is very simple and index sizes stack on top of one another</p>
+    <div class="language-shell highlighter-rouge"><pre class="highlight"><code> <span class="o">[</span>
+   <span class="o">{</span>
+     <span class="s2">"health"</span> : <span class="s2">"green"</span>,
+     <span class="s2">"status"</span> : <span class="s2">"open"</span>,
+     <span class="s2">"index"</span> : <span class="s2">".kibana_1"</span>,
+     <span class="s2">"uuid"</span> : <span class="s2">"FnI_6AQYQEWp2mIxSlM8HQ"</span>,
+     <span class="s2">"pri"</span> : <span class="s2">"1"</span>,
+     <span class="s2">"rep"</span> : <span class="s2">"0"</span>,
+     <span class="s2">"docs.count"</span> : <span class="s2">"184"</span>,
+     <span class="s2">"docs.deleted"</span> : <span class="s2">"13"</span>,
+     <span class="s2">"store.size"</span> : <span class="s2">"366457"</span>,
+     <span class="s2">"pri.store.size"</span> : <span class="s2">"366457"</span>
+   <span class="o">}</span>,
+   <span class="o">{</span>
+     <span class="s2">"health"</span> : <span class="s2">"yellow"</span>,
+     <span class="s2">"status"</span> : <span class="s2">"open"</span>,
+     <span class="s2">"index"</span> : <span class="s2">"metricbeat-6.6.2-2019.04.22"</span>,
+     <span class="s2">"uuid"</span> : <span class="s2">"pDYNmzsxTFu9Z0Tc1_GdLw"</span>,
+     <span class="s2">"pri"</span> : <span class="s2">"5"</span>,
+     <span class="s2">"rep"</span> : <span class="s2">"1"</span>,
+     <span class="s2">"docs.count"</span> : <span class="s2">"4687"</span>,
+     <span class="s2">"docs.deleted"</span> : <span class="s2">"0"</span>,
+     <span class="s2">"store.size"</span> : <span class="s2">"6309920"</span>,
+     <span class="s2">"pri.store.size"</span> : <span class="s2">"6309920"</span>
+   <span class="o">}</span>,
+   <span class="o">{</span>
+     <span class="s2">"health"</span> : <span class="s2">"green"</span>,
+     <span class="s2">"status"</span> : <span class="s2">"open"</span>,
+     <span class="s2">"index"</span> : <span class="s2">"userale"</span>,
+     <span class="s2">"uuid"</span> : <span class="s2">"0h0Wxe2cSwqMALs4QCJ8Tw"</span>,
+     <span class="s2">"pri"</span> : <span class="s2">"1"</span>,
+     <span class="s2">"rep"</span> : <span class="s2">"0"</span>,
+     <span class="s2">"docs.count"</span> : <span class="s2">"14018"</span>,
+     <span class="s2">"docs.deleted"</span> : <span class="s2">"0"</span>,
+     <span class="s2">"store.size"</span> : <span class="s2">"2235963"</span>,
+     <span class="s2">"pri.store.size"</span> : <span class="s2">"2235963"</span>
+   <span class="o">}</span>,
+   <span class="o">{</span>
+     <span class="s2">"health"</span> : <span class="s2">"yellow"</span>,
+     <span class="s2">"status"</span> : <span class="s2">"open"</span>,
+     <span class="s2">"index"</span> : <span class="s2">"metricbeat-6.6.2-2019.04.27"</span>,
+     <span class="s2">"uuid"</span> : <span class="s2">"wTyUBXvNRMOwpR4lDF9BNA"</span>,
+     <span class="s2">"pri"</span> : <span class="s2">"5"</span>,
+     <span class="s2">"rep"</span> : <span class="s2">"1"</span>,
+     <span class="s2">"docs.count"</span> : <span class="s2">"107124"</span>,
+     <span class="s2">"docs.deleted"</span> : <span class="s2">"0"</span>,
+     <span class="s2">"store.size"</span> : <span class="s2">"63263644"</span>,
+     <span class="s2">"pri.store.size"</span> : <span class="s2">"63263644"</span>
+   <span class="o">}</span>
+ <span class="o">]</span>
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>There are a lot of other things going on inside your Apache Flagon Elastic stack. Note above that depending on what you deploy (e.g., metricbeat) you may have additional indices that need monitoring. For one, Metricbeat indices grow fast and you’ll want to benchmark that too. The Kibana index will grow as well, but not as much; it depends on how how many additional objects you build (e.g., visualizations, indicies, dashboards). Both the <code class="highlighter-rouge">STATS</code> and <code class="highlighter-rouge">CAT</code> APIs are very useful for seeing their growth.</p>
+  </li>
+  <li>
+    <p>There are also a lot of things going on inside your server or Docker containers, depending on how you deploy your Apache Flagon Elastic Stack. This is why we’ve configured a metricbeat service to run with Flagon. In the same way that you can benchmark your data generation rate while you generate behavioral logs in your page/app, you can also look at how your Apache Flagon stack is utilizing disk and compute resources. When you spin up our single-node Apache Flagon container, make sure to start up metricbeat. In Kibana you can time-filter to specify the date/time of your benchmarking data collections, and look at aggregate metrics and statistics of system, host, and container performance. These are really useful for benchmarking the kind of compute resources you’ll be consuming, and how quickly. See a sample below:</p>
+
+    <p><img src="https://github.com/apache/incubator-flagon/blob/FLAGON-344/site/_site/images/metricBeat.png" alt="alt text" title="Metricbeat Dashboard" /></p>
+  </li>
+</ol>
+
+<h3 id="wonky-things-that-can-and-will-happen-as-you-benchmark">Wonky Things that Can and Will Happen as You Benchmark</h3>
+
+<ol>
+  <li>You just finished a benchmarking session after modifying UserALE.js to produce less data. What you find is that your new store size is either dramatically bigger than your last benchmark or smaller (which should be impossible). What happened is a thing called <a href="https://www.elastic.co/guide/en/elasticsearch/guide/current/merge-process.html">merging</a>. It is a good thing, but it can be a confusing thing while you’re benchmarking against your store size. Essentially, each Elastic shard is an index. As data is collected it’s gathered into segments within an index. Each segment is an element of your index and takes up storage, so as your collect data, especially if its collected at a high rate, the number of segments grows quickly consuming a lot of storage. As Elastic (Lucene) indexes, it merges these segments into larger and larger segments, thus reducing the overall number of segments to reduce storage needs and resource consumption. This process does involve duplicating and deleting old segments. This means that depending on when you make a call to Elastic’s <code class="highlighter-rouge">STATS</code> API, you might be looking at the store size at different stages in the merging process. If your store size looks smaller than your last benchmark. You should re-run it then wait. If your store size looks way to big, then just wait. After a minute or two, call the <code class="highlighter-rouge">STATS</code> API again, and you’ll probably see a store size that makes much more sense once Elastic has finished its latest merge operation.</li>
+</ol>
+
+<h3 id="summary">Summary</h3>
+<p>Benchmarking and adjusting your data-rate so that you can scale how you want to is made very easy in Apache Flagon. We combine easily deployed and modified capabilities with the power of Elastic’s APIs and visualization capabilities. Again, our single-node container is not a scaling solution. It’s an ingredient, a potent one, that not only serves as the building block for your cluster, but also a benchmarking tool so that your Apache Flagon cluster meets your needs for capability, scale and cost.</p>
+
+<p>Subscribe to our <a href="dev-subscribe@flagon.incubator.apache.org">dev list</a> and join the conversation!</p>
+
+
+  </div>
+</div>
+
+    </div>
+
+    <div class="footer ui inverted very padded vertical segment">
+  <div class="ui vertical segment">
+    <div class="ui four column grid">
+      <div class="column">
+        <h4 class="ui inverted header">About</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/stack">Stack</a>
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+          <a class="item" href="/tap">Tap</a>
+          <a class="item" href="/stout">Stout</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Docs</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/docs/stack">Stack</a>
+          <a class="item" href="/docs/userale">UserALE</a>
+          <a class="item" href="/docs/useralejs">UserAle.js</a>
+          <a class="item" href="/docs/useralepy">UserAle.py</a>
+          <a class="item" href="/docs/distill">Distill</a>
+          <a class="item" href="/docs/tap">Tap</a>
+          <a class="item" href="/docs/stout">Stout</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Community</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="https://github.com/apache?q=flagon">GitHub</a>
+          <a class="item" href="http://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
+          <a class="item" href="https://issues.apache.org/jira/browse/FLAGON">Jira Issue Tracker</a>
+          <a class="item" href="https://cwiki.apache.org/confluence/display/FLAGON">Project Wiki</a>
+          <a class="item" href="https://twitter.com/ApacheFlagon">Twitter</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Apache</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="http://www.apache.org/">Apache Software Foundation</a>
+          <a class="item" href="http://www.apache.org/licenses/">License</a>
+          <a class="item" href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+          <a class="item" href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+          <a class="item" href="http://www.apache.org/security/">Security</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui two column middle aligned grid">
+      <div class="column">
+        Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
+      </div>
+      <div class="center aligned column">
+        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui one column middle aligned grid">
+      <div class="center aligned column">
+        <a href="http://incubator.apache.org/">
+          <img src="/images/incubator-logo-white.jpg">
+        </a>&nbsp;
+        <a href="https://www.apache.org/events/current-event.html">
+          <img src="https://www.apache.org/events/current-event-234x60.png" alt="ASF Current Event">
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </body>
+
+</html>
