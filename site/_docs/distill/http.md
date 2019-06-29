@@ -74,7 +74,7 @@ $ curl -XGET https://localhost:8090
 ```javascript
 {
         "author" : "Michelle Beard",
-        "email" : "mbeard@draper.com",
+        "email" : "msbeard@apache.org",
         "name": "Distill",
         "status" : true,
         "version" : "1.0",

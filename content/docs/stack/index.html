@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Getting Started</title>
+  <meta name="description" content="The Apache Flagon project provides a streamlined deployment solution for including behavioral logging capabilities in your project and for monitoring and ana...">
+
+  <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="/semantic/dist/semantic.min.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="/js/main.js"></script>
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://flagon.incubator.apache.org/docs/stack/">
+  <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
+
+  
+</head>
+
+
+  <body>
+
+    <div class="site-header">
+  <div id="main-menu" class="ui inverted padded fixed top borderless menu">
+    <a class="site-title" href="/">
+      <h3 class="ui inverted header item">Apache Flagon</h3>
+    </a>
+
+    <div class="right menu">
+      <div class="ui dropdown item">
+        Components
+        <div class="menu">
+          <a class="item" href="/stack">Stack</a>
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+          <a class="item" href="/tap">Tap</a>
+          <a class="item" href="/stout">Stout</a>
+        </div>
+      </div>
+      <div class="ui dropdown item">
+        <a href="/docs">Docs</a>
+        <div class="menu">
+          <a class="item" href="/docs/stack">Stack</a>
+          <a class="item" href="/docs/userale">UserALE</a>
+          <a class="item" href="/docs/useralejs">UserALE.js</a>
+          <a class="item" href="/docs/useralepy">UserALE.py</a>
+          <a class="item" href="/docs/distill">Distill</a>
+          <a class="item" href="/docs/tap">Tap</a>
+          <a class="item" href="/docs/stout">Stout</a>
+        </div>
+      </div>
+      <a class="item" href="/releases">Releases</a>
+      <a class="item" href="/community">Community</a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="main-wrapper">
+      <div class="docs-wrapper">
+  <div class="docs-sidebar">
+    
+
+
+
+
+
+
+
+
+<!-- <div class="ui inverted list">
+  <a class="item" href="/docs">About the Docs</a>
+</div> -->
+<div id="docs-nav" class="ui inverted accordion">
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Apache Flagon
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/">About the Docs</a>
+      
+        <a class="item" href="/docs/contributing/">Contributing</a>
+      
+    </div>
+  </div>
+
+
+  
+    <div class="active title">
+  
+    <i class="dropdown icon"></i>
+    Stack
+  </div>
+  
+    <div class="active content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/stack/">Getting Started</a>
+      
+        <a class="item" href="/docs/stack/scaling/">Scaling Considerations</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/userale/">About UserALE</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE.js
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/useralejs/">Getting Started</a>
+      
+        <a class="item" href="/docs/useralejs/build.html">UserALE.js Build and Test</a>
+      
+        <a class="item" href="/docs/useralejs/API.html">UserALE.js API</a>
+      
+        <a class="item" href="/docs/useralejs/modifying.html">Modifying UserALE.js</a>
+      
+        <a class="item" href="/docs/useralejs/dataschema.html">UserALE.js Data Schema</a>
+      
+        <a class="item" href="/docs/useralejs/troubleshooting.html">Troubleshooting</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE.py
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/useralepy/">Installation</a>
+      
+        <a class="item" href="/docs/useralepy/start.html">Getting Started</a>
+      
+        <a class="item" href="/docs/useralepy/api.html">API Documentation</a>
+      
+        <a class="item" href="/docs/useralepy/changelog.html">Changelog</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Distill
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/distill/">Installation</a>
+      
+        <a class="item" href="/docs/distill/start.html">Getting Started</a>
+      
+        <a class="item" href="/docs/distill/api.html">API Documentation</a>
+      
+        <a class="item" href="/docs/distill/analytics.html">Apache Distill Analytics</a>
+      
+        <a class="item" href="/docs/distill/http.html">Apache Distill HTTP Client</a>
+      
+        <a class="item" href="/docs/distill/models.html">Apache Distill Models</a>
+      
+        <a class="item" href="/docs/distill/utilities.html">Apache Distill Utilities</a>
+      
+        <a class="item" href="/docs/distill/changelog.html">Changelog</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Tap
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/tap/">Getting Started</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Stout
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/stout/">About Stout</a>
+      
+        <a class="item" href="/docs/stout/start.html">Getting Started</a>
+      
+    </div>
+  </div>
+</div>
+
+  </div>
+  <div class="docs-content">
+    <h2 class="ui header">Getting Started</h2>
+    <p>The Apache Flagon project provides a streamlined deployment solution for including behavioral logging capabilities in your project and for monitoring and analyzing your log data in a containerized Elastic backend.  Our Docker container includes an Elastic backend, pre-configured, interactive Kibana dashboards. The container also includes prototype applications for exploration, Apache Distill and Apache Tap.</p>
+
+<p>Before you begin, you’ll need <a href="https://nodejs.org/">NPM and Node.js</a>, <a href="https://www.docker.com/">Docker</a> and <a href="https://docs.docker.com/compose/install/">Docker Compose</a> installed before you start.</p>
+
+<h3 id="building-and-deploying-useralejs">Building and Deploying UserALE.js</h3>
+
+<p><a href="https://github.com/apache/incubator-flagon-useralejs">Apache UserALE.js</a> is the Apache Flagon’s thin-client behavioral logging solution. Below, you’ll find short-hand instructions for getting started with UserALE.js. For complete instructions, see our <a href="https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md">README</a>.</p>
+
+<p>First, download the <a href="http://flagon.incubator.apache.org/releases/">release</a> or clone our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master">repo on GitHub</a>. Apache UserALE.js is also available as an <a href="https://www.npmjs.com/package/useralejs">NPM package</a>.</p>
+
+<p>Next, <strong>install Dependencies</strong>.</p>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="c">#intall NPM packages into build directory</span>
+  <span class="nv">$ </span>npm install
+</code></pre>
+</div>
+
+<p>Then, <strong>build UserALE.js</strong>.</p>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="c">#produce UserALE.js build artifacts</span>
+  <span class="nv">$ </span>npm run build
+</code></pre>
+</div>
+
+<p>The build process produces a minified version of UserALE.js and a Web Extension package, giving you two options depending on your needs. You can skip the build process if you just want to explore UserALE.js; just use the minified script found in our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/build">repo</a>.</p>
+
+<p><strong>Option 1: Include Apache UserALE.js in your project:</strong></p>
+
+<div class="language-markdown highlighter-rouge"><pre class="highlight"><code>  #include userale in your project via script tag 
+  <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/path/to/userale-1.0.0.min.js"</span> <span class="na">data-url=</span><span class="s">"http://yourLoggingUrl"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre>
+</div>
+<p>Apache UserALE.js allows for configuration via HTML 5 data parameters. For a complete list of options, see the <a href="/docs/useralejs">docs</a> or the <a href="https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md">README</a>. You can also modify Apache UserALE.js using our API. Find examples in our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/FLAGON-192">repos</a>.</p>
+
+<p><strong>Option 2: Follow the <a href="https://github.com/apache/incubator-flagon-useralejs/tree/FLAGON-192/src/UserALEWebExtension">instructions</a> to install the Apache UserALE.js web extension into your browser.</strong></p>
+
+<p>You can now start generating behavioral log data from your page, or through your browser. To view these logs, you can either utilize our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/example">example logging server</a> and log to file, or you can log directly to our Elastic backend. For complete instructions, see the <a href="https://github.com/apache/incubator-flagon/tree/master/docker">README</a></p>
+<h3 id="building-and-using-the-elastic-backend">Building and Using the Elastic Backend</h3>
+
+<p><a href="https://github.com/apache/incubator-flagon">Apache Flagon</a> utilizes an Elastic stack for transforming, indexing, and storing log data. With Elastic, you’ll not only have the ability to search and query log dat, but you’ll also be able to monitor it and visualize it through Kibana.</p>
+
+<p>To build our single-node Elastic instance, <strong>first clone our <a href="https://github.com/apache/incubator-flagon/tree/master/docker">Docker repo</a></strong>. Note that for production-level deployments, you should probably check out our <a href="https://github.com/apache/incubator-flagon/tree/master/kubernetes">Kubernetes build</a> and our <a href="/docs/stack/scaling">guide for scaling</a>).</p>
+
+<p>Then, <strong>start up a virtual machine</strong>.</p>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># start virtual machine and requisite network </span>
+<span class="gp">$ </span>docker-machine create --virtualbox-memory 3072 --virtualbox-cpu-count 2 senssoft
+<span class="gp">$ </span>docker-machine ssh senssoft sudo sysctl -w vm.max_map_count<span class="o">=</span>262144
+<span class="gp">$ </span>docker network create esnet
+</code></pre>
+</div>
+<p>Next, <strong>start Elastic services</strong>.</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code> <span class="c">#start Elastic services</span>
+ <span class="nv">$ </span>docker-compose up -d elasticsearch
+ <span class="nv">$ </span>docker-compuse up -d logstash
+ <span class="nv">$ </span>docker-compose up -d kibana
+</code></pre>
+</div>
+<p><strong>Configure UserALE.js</strong> to send logs to localhost:8100. This is easy: either modify the script tag for port 8100 or open up the “options” tab of the web extension and enter localhost:8100 as your logging end-point.</p>
+
+<p>Before starting Kibana, <strong>generate some logs</strong>. Move your mouse around, click around, etc. Do this for a couple minutes to populate the index.</p>
+
+<p>Finally, <strong>navigate to localhost:5601 (Kibaba), set an index pattern, and load our visualizations and dashboards</strong> to see your logs. Find simple instructions in our <a href="https://github.com/apache/incubator-flagon/tree/master/docker">README</a>.</p>
+
+<p>Subscribe to our <a href="dev-subscribe@flagon.incubator.apache.org">dev list</a> and join the conversation!</p>
+
+  </div>
+</div>
+
+    </div>
+
+    <div class="footer ui inverted very padded vertical segment">
+  <div class="ui vertical segment">
+    <div class="ui four column grid">
+      <div class="column">
+        <h4 class="ui inverted header">About</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/stack">Stack</a>
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+          <a class="item" href="/tap">Tap</a>
+          <a class="item" href="/stout">Stout</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Docs</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/docs/stack">Stack</a>
+          <a class="item" href="/docs/userale">UserALE</a>
+          <a class="item" href="/docs/useralejs">UserAle.js</a>
+          <a class="item" href="/docs/useralepy">UserAle.py</a>
+          <a class="item" href="/docs/distill">Distill</a>
+          <a class="item" href="/docs/tap">Tap</a>
+          <a class="item" href="/docs/stout">Stout</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Community</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="https://github.com/apache?q=flagon">GitHub</a>
+          <a class="item" href="http://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
+          <a class="item" href="https://issues.apache.org/jira/browse/FLAGON">Jira Issue Tracker</a>
+          <a class="item" href="https://cwiki.apache.org/confluence/display/FLAGON">Project Wiki</a>
+          <a class="item" href="https://twitter.com/ApacheFlagon">Twitter</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Apache</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="http://www.apache.org/">Apache Software Foundation</a>
+          <a class="item" href="http://www.apache.org/licenses/">License</a>
+          <a class="item" href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+          <a class="item" href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+          <a class="item" href="http://www.apache.org/security/">Security</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui two column middle aligned grid">
+      <div class="column">
+        Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
+      </div>
+      <div class="center aligned column">
+        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui one column middle aligned grid">
+      <div class="center aligned column">
+        <a href="http://incubator.apache.org/">
+          <img src="/images/incubator-logo-white.jpg">
+        </a>&nbsp;
+        <a href="https://www.apache.org/events/current-event.html">
+          <img src="https://www.apache.org/events/current-event-234x60.png" alt="ASF Current Event">
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </body>
+
+</html>
