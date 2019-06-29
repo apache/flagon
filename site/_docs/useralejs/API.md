@@ -1,10 +1,9 @@
 ---
-title: UserALE.js API
+title: The UserALE.js API
 component: useralejs
+permalink: /docs/useralejs/API/
 priority: 2
 ---
-
-# Modifying UserALE.js Behavior via API
 
 [Apache UserALE.js](https://github.com/apache/incubator-flagon-useralejs) features a robust API that allows you 
 customize official Apache Flagon UserALE.js [builds](https://github.com/apache/incubator-flagon-useralejs/tree/master/build) page-by-page to suite your needs.
@@ -12,11 +11,13 @@ customize official Apache Flagon UserALE.js [builds](https://github.com/apache/i
 The API exposes two functions: `setLogFilter` & `setLogMapper`. With these two powerful functions, you have a lot of 
 latitude in customizing and curating your logs.
 
-#API Usage
+# API Usage
 
 To invoke the API, simply add additional javascript code blocks under your UserALE.js script tag.
 
 Don't forget to add the UserALE.js script tag:
+
+
 ```html
 <head>
   <title>UserAleJS - Example Page</title>
@@ -26,9 +27,11 @@ Don't forget to add the UserALE.js script tag:
    <script src="/path/to/userale-1.0.0.min.js" data-url="http://yourLoggingUrl"></script>
 ```
 
-##`setLogFilter` Examples
+
+## `setLogFilter` Examples
 
 `setLogFilter` allows you to eliminate log data you don't need or want from your log stream:
+
 
 ```html
 <!--
@@ -41,7 +44,8 @@ This simple array filter pulls mouseover data out of your log stream
     });
   </script>
 ```
- 
+
+
 Here is one UserALE.js filter to rule them all!
 
 
@@ -59,8 +63,11 @@ by adding unwanted log classes to eliminate 'raw' or 'interval' logs from your s
     });
   </script>
 ```
+
+
 You can also use the `setLogFilter` function to do other cool stuff. Below is an example for how to further modify the 
 rate at which UserALE.js collects data, but dropping every other log (odd-even) in the logging queue. 
+
 
 ```html
     <script type="text/javascript">
@@ -71,11 +78,13 @@ rate at which UserALE.js collects data, but dropping every other log (odd-even) 
     </script>
 ```
 
+
 ## `setLogMapper` Examples
 
 `setLogMapper` allows you to modify or add new fields to UserALE.js logs.
 
 This simple mapping function adds a new log field for custom labels you want to attach to certain elements: 
+
 
 ```html
 <!--
@@ -93,8 +102,10 @@ This will add your label to all event logs that reference a particular DOM targe
     </script>
 ```
 
+
 This cool mapping function adds a progressive count on a given element ("app") and writes to a new log field 
 called "score"
+
 
 ```html
   </head>
@@ -134,6 +145,7 @@ called "score"
 </html>
 
 ```
+
 
 Test these examples out in our UserALE.js [example page](https://github.com/apache/incubator-flagon-useralejs/blob/master/example/index.html) test utility!
 

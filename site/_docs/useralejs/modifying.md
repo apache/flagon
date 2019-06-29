@@ -1,15 +1,14 @@
 ---
-title: Modifying
+title: Modifying UserALE.js Source Code
 component: useralejs
+permalink: /docs/useralejs/modifying/
 priority: 3
 ---
 
-# Customizing UserALE.js Logs through Source Code Modifications
-
 [Apache UserALE.js](https://github.com/apache/incubator-flagon-useralejs) makes it easy for you to capture *every* user 
-behavior on your webpage or application. But, you might not need all that data and you might not care to worry about 
-scaling your logging data store. Fortunately, UserALE.js also makes it easy for your to manage, and curate your 
-logging scheme. 
+behavior on your webpage or application. But, you might not need all that data. 
+
+UserALE.js also makes it easy for your to manage, and curate your logging scheme. 
 
 This guide walks you through how to modify UserALE.js log data and behavior through source code modification.
 
@@ -26,13 +25,13 @@ UserALE.js src is intuitively abstracted into few different files"
  * [packageLogs](https://github.com/apache/incubator-flagon-useralejs/blob/master/src/packageLogs.js): modify to configure how user behaviors are added to data schema, and meta data added from the page.
  * [sendLogs](https://github.com/apache/incubator-flagon-useralejs/blob/master/src/sendLogs.js): modify how logs are sent to logging server, etc. (be careful here, too).
 
-###Usage
+### Usage
  
 Most modifications can be accomplished through `attachHandlers` and `packageLogs`.
 
 Once you modify source, you'll need to rebuild UserALE.js scripts and webextension (and should probably run unit tests).
 
-###Modifying Event Handlers: Examples
+### Modifying Event Handlers: Examples
 
 `attachHandlers` controls which behaviors and what kinds of logs are captured
 
@@ -40,7 +39,6 @@ You can modify some of the events UserALE.js by editing vars in `attacheHandlers
 
 
 ```javascript
-you can modify the events UserALE.js by editing vars in `attacheHandlers`
 var events;
 var bufferBools;
 var bufferedEvents;
@@ -50,7 +48,9 @@ var intervalEvents = ['click', 'focus', 'blur', 'input', 'change', 'mouseover', 
 var windowEvents = ['load', 'blur', 'focus'];
 ```
 
+
 You can modify which events UserALE.js captures in it's 'raw' log stream, by modifying the var `events`:
+
 
  
 ```javascript
@@ -72,11 +72,11 @@ export function defineDetails(config) {
     'dragend' : null,
     'drag' : null,
     'drop' : null,
-    'keydown' : config.logDetails ? function(e) { return { 'key' : e.keyCode, 'ctrl' : e.ctrlKey, 'alt' : e.altKey, 
-        'shift' : e.shiftKey, 'meta' : e.metaKey }; } : null,
-    /*'mouseover' : null,*/ #Aliasing out events from the "events" list removes that class from your event stream.
+    'keydown' : config.logDetails ? function(e) { return ...,
+    /*'mouseover' : null,*/ #Aliasing the "events" list removes that class from your event stream.
     'submit' : null
 ```
+
 
 You can eliminate the `interval` log stream altogether by modifying the `attachHandlers` configs:
 
@@ -97,7 +97,8 @@ export function attachHandlers(config) {
     }, true);
   });
 ```
-###Modifying Meta Data Packaged in Logs: Examples
+
+### Modifying Meta Data Packaged in Logs: Examples
 
 `packageLogs` pulls parameters from the script tag, API, and from window or document and adds them to event logs.
 
@@ -105,7 +106,7 @@ The easiest way to make these changes is by modifying the var `log`:
 
 
 ```javascript
-  /* Comment or add fields to be included in your logs, pulling in other data from configs, window, or documents */
+  /* Comment or add fields to be included in your logs*/
   var log = {
     'target' : getSelector(e.target),
     'path' : buildPath(e),

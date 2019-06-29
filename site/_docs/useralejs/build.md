@@ -1,10 +1,9 @@
 ---
 title: UserALE.js Build and Test
 component: useralejs
+permalink: /docs/useralejs/build/
 priority: 1
 ---
-
-### Building UserALE.js
 
 To build [Apache UserALE.js](https://github.com/apache/incubator-flagon-useralejs/tree/master), you will need to clone our repo and install [NPM and Node.js](https://nodejs.org/).
 
