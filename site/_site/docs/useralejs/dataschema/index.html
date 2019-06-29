@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>UserALE.js&#39; Data Schema</title>
+  <meta name="description" content="This guide describes the structure of content of Apache UserALE.js logs, including: which behaviors UserALE.js listens to; which meta data UserALE.js attache...">
+
+  <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="/semantic/dist/semantic.min.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="/js/main.js"></script>
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://flagon.incubator.apache.org/docs/useralejs/dataschema/">
+  <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
+
+  
+</head>
+
+
+  <body>
+
+    <div class="site-header">
+  <div id="main-menu" class="ui inverted padded fixed top borderless menu">
+    <a class="site-title" href="/">
+      <h3 class="ui inverted header item">Apache Flagon</h3>
+    </a>
+
+    <div class="right menu">
+      <div class="ui dropdown item">
+        Products
+        <div class="menu">
+          <a class="item" href="/stack">Stack</a>
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+          <a class="item" href="/tap">Tap</a>
+          <a class="item" href="/stout">Stout</a>
+        </div>
+      </div>
+      <div class="ui dropdown item">
+        <a href="/docs">Docs</a>
+        <div class="menu">
+          <a class="item" href="/docs/stack">Stack</a>
+          <a class="item" href="/docs/userale">UserALE</a>
+          <a class="item" href="/docs/useralejs">UserALE.js</a>
+          <a class="item" href="/docs/useralepy">UserALE.py</a>
+          <a class="item" href="/docs/distill">Distill</a>
+          <a class="item" href="/docs/tap">Tap</a>
+          <a class="item" href="/docs/stout">Stout</a>
+        </div>
+      </div>
+      <a class="item" href="/releases">Releases</a>
+      <a class="item" href="/community">Community</a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="main-wrapper">
+      <div class="docs-wrapper">
+  <div class="docs-sidebar">
+    
+
+
+
+
+
+
+
+
+<!-- <div class="ui inverted list">
+  <a class="item" href="/docs">About the Docs</a>
+</div> -->
+<div id="docs-nav" class="ui inverted accordion">
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Apache Flagon
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/">About the Docs</a>
+      
+        <a class="item" href="/docs/contributing/">Contributing</a>
+      
+    </div>
+  </div>
+
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Stack
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/stack/">Getting Started</a>
+      
+        <a class="item" href="/docs/stack/scaling/">Scaling Considerations</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/userale/">About UserALE</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="active title">
+  
+    <i class="dropdown icon"></i>
+    UserALE.js
+  </div>
+  
+    <div class="active content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/useralejs/">Getting Started</a>
+      
+        <a class="item" href="/docs/useralejs/build/">UserALE.js Build and Test</a>
+      
+        <a class="item" href="/docs/useralejs/API/">The UserALE.js API</a>
+      
+        <a class="item" href="/docs/useralejs/modifying/">Modifying UserALE.js Source Code</a>
+      
+        <a class="item" href="/docs/useralejs/dataschema/">UserALE.js' Data Schema</a>
+      
+        <a class="item" href="/docs/useralejs/troubleshooting/">Troubleshooting</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE.py
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/useralepy/">Installation</a>
+      
+        <a class="item" href="/docs/useralepy/start.html">Getting Started</a>
+      
+        <a class="item" href="/docs/useralepy/api.html">API Documentation</a>
+      
+        <a class="item" href="/docs/useralepy/changelog.html">Changelog</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Distill
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/distill/">Installation</a>
+      
+        <a class="item" href="/docs/distill/start.html">Getting Started</a>
+      
+        <a class="item" href="/docs/distill/api.html">API Documentation</a>
+      
+        <a class="item" href="/docs/distill/analytics.html">Apache Distill Analytics</a>
+      
+        <a class="item" href="/docs/distill/http.html">Apache Distill HTTP Client</a>
+      
+        <a class="item" href="/docs/distill/models.html">Apache Distill Models</a>
+      
+        <a class="item" href="/docs/distill/utilities.html">Apache Distill Utilities</a>
+      
+        <a class="item" href="/docs/distill/changelog.html">Changelog</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Tap
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/tap/">Getting Started</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Stout
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/stout/">About Stout</a>
+      
+        <a class="item" href="/docs/stout/start.html">Getting Started</a>
+      
+    </div>
+  </div>
+</div>
+
+  </div>
+  <div class="docs-content">
+    <h2 class="ui header">UserALE.js' Data Schema</h2>
+    <p>This guide describes the structure of content of <a href="https://github.com/apache/incubator-flagon-useralejs">Apache UserALE.js</a> 
+logs, including:</p>
+<ul>
+  <li>which behaviors UserALE.js listens to;</li>
+  <li>which meta data UserALE.js attaches to logs, for context:</li>
+  <li>different types of UserALE.js logs, and their usage.</li>
+</ul>
+
+<h2 id="useralejs-logs">UserALE.js Logs</h2>
+
+<p>UserALE.js logs, by default, contain a lot more data than other business analytics products because it is powerful enough for <em>workflow analysis</em>.</p>
+
+<p>Workflow analysis is about understanding the complex interdependency between elements and behaviors within and across 
+pages. Workflow analysis at this level is really crucial for understanding:</p>
+<ul>
+  <li>how people think about the information on your site or app</li>
+  <li>understanding efficiency in information discovery</li>
+  <li>and for gauging how novices explore pages compared to experts or superusers.</li>
+</ul>
+
+<p>In order to do workflow analysis, UserALE.js generates granular data about interactions with page elements.</p>
+
+<p>This is a standard UserALE.js log from our <a href="https://github.com/apache/incubator-flagon-useralejs/blob/master/example/index.html">example test utility</a>:</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "microTime": 0.185,
+    "minor_ver": "0",
+    "@timestamp": "2019-06-28T16:00:20.790Z",
+    "type": "click",
+    "target": "button#test_button",
+    "details": {
+      "clicks": 13,
+      "shift": false,
+      "meta": false,
+      "alt": false,
+      "ctrl": false
+    },
+    "major_ver": "2",
+    "toolVersion": "2.0.0",
+    "pageReferrer": "",
+    "clientTime": 1561737620520,
+    "userAction": true,
+    "location": {
+      "x": 40,
+      "y": 19
+    },
+    "host": "172.18.0.1",
+    "path": [
+      "button#test_button",
+      "div.container",
+      "body",
+      "html",
+      "#document",
+      "Window"
+    ],
+    "sessionID": "session_1561737570573",
+    "toolName": "Apache UserALE.js Example",
+    "pageTitle": "UserAleJS - Example Page",
+    "logType": "raw",
+    "pageUrl": "file:///Users/jpoore/Documents/Apache_Flagon/test/incubator-flagon-useralejs/example/index.html",
+    "userId": "example-user",
+    "useraleVersion": "2.0.0",
+    "patch_ver": "0"
+    ]
+
+</code></pre>
+</div>
+
+<p>It’s a lot, but it makes sense in context.</p>
+
+<h3 id="useralejs-event-tracking">UserALE.js Event Tracking</h3>
+
+<p>The fields dentify what users do and what they interact with. UserALE.js gets this information from anywhere on a page/app without using a ton of hooks.</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "type": "click", [this field documents the kind of user behavior observed]
+    "target": "button#test_button", [this field documents the site/app element a user interacted with]
+    "path": [  {this is the DOM path to the "target" element, which is critical for disambiguation between elements}
+      "button#test_button",
+      "div.container",
+      "body",
+      "html",
+      "#document",
+      "Window"]
+
+</code></pre>
+</div>
+
+<p>You may want to specially label some of these fields and important elements that. See our guide on <a href="/docs/useralejs/API">the UserALE.js API</a>.</p>
+
+<p>For more information about the kinds of behaviors (event classes) we collect, check out our guide for 
+[modifying UserALE.js source code]((/docs/useralejs/modifying).</p>
+
+<h3 id="temporal-handling-in-useralejs">Temporal Handling in UserALE.js</h3>
+
+<p>Time is a very important concept in UserALE.js. Below are the fields related to temporal data capture:</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "clientTime": 1561737620520,    [UserALE.js collects time from the client when a log is generated]
+    "microTime": 0.185,             [When a log is wrtten, we write microtime too, not every database parses it]
+    "@timestamp": "2019-06-28T16:00:20.790Z", [If you use our Elastic backend, you will see indexing time too]
+</code></pre>
+</div>
+
+<h3 id="useralejs-meta-data">UserALE.js Meta-Data</h3>
+
+<p>You want context? We have all of the things for all of your events:</p>
+
+<h4 id="event-context">Event Context</h4>
+
+<p>Every event has a little nuance, UserALE.js gets it all.</p>
+
+<p>UserALE.js will add to details the number of rapid, consecutive clicks on a single element.</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "details": {
+      "clicks": 13,
+      "shift": false,
+      "meta": false,
+      "alt": false,
+      "ctrl": false
+    },
+</code></pre>
+</div>
+
+<p>You’ll get location of the cursor two for mouseover and click data, too!</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "location": {
+      "x": 40,
+      "y": 19
+    },
+</code></pre>
+</div>
+
+<p><a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/build">UserALE.js’ WebExtension</a> is deployed directly 
+into your browser, as a result you’ll get browser events.</p>
+
+<p>Examples are below,you’ll see our details field has some pretty useful data from the browser.</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "details": {
+      "audible": false, [audio media on the page?]
+      "title": "Discover - Kibana",
+      "selected": true, 
+      "tabId": 64, [uniquely tracks each tab] 
+      "windowId": 73, [uniquely tracks each window]
+      "muted": false,
+      "index": 0,
+      "incognito": false, [private browsing?]
+      "url": "http://localhost:5601/app/kibana#/discover?_g=(refreshInterval:(pause:!t)",
+      "active": true, []tab is active?[]
+      "pinned": false
+    },
+</code></pre>
+</div>
+
+<h4 id="pageapp-context">Page/App Context</h4>
+
+<p>If a user clicks on a thing and you know nothing about that thing, you’re toast!</p>
+
+<p>UserALE.js gives a lot context about your page or app. Some are automatically grabbed from the page, some are 
+configurable through our <a href="/docs/useralejs">script tag</a></p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "toolVersion": "2.0.0", [you can give a semantic versioning of your page or tool]
+    "pageReferrer": "", [grabbed from the page, from which page did your users find your page/app]
+    "toolName": "Apache UserALE.js Example", [give your tool an alis through our script tag]
+    "pageTitle": "UserAleJS - Example Page", [page title grabbed from page]
+    "pageUrl": "file:///Users/jpoore/Documents/Apache_Flagon/test/incubator-flagon-useralejs/example/index.html" 
+</code></pre>
+</div>
+
+<p>To find out more and how to change the context attached to event logs, check out our 
+<a href="/docs/useralejs/modifying">modifying UserALE.js source code</a> guide.</p>
+
+<h4 id="user-context">User Context</h4>
+
+<p>UserALE.js has its own methods for gathering user context, and it can integrate with other methods you might have 
+(e.g., cookies)</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "sessionID": "session_1561737570573", [This session ID is unique to a specific page visit]
+    "userId": "example-user", [You can also pass a unique userId]
+    "host": "172.18.0.1", [IP address]
+</code></pre>
+</div>
+
+<p>To see how to pass in a userId from a url, check out our <a href="/docs/useralejs">script tag docs</a>.</p>
+
+<p>Other things you might want to do (e.g., cookies) can also be passed to userId via <a href="/docs/useralejs/API">the UserALE.js API</a> 
+<code class="highlighter-rouge">mapping</code> function.</p>
+
+<h2 id="useralejs-log-types">UserALE.js Log Types</h2>
+
+<p>For the most part, UserALE.js logs are uniform. However, there are some variations based on the type of log.</p>
+
+<h3 id="webextension-logs">WebExtension Logs</h3>
+
+<p>WebExtension logs from page-level events will look identical to the logs from our script tag method.</p>
+
+<p>Our WebExtension logs from browser-level events, including focus, activation, and zoom events:</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>"host": "172.18.0.1",
+    "path": null,
+    "microTime": 0.835,
+    "@timestamp": "2019-06-28T18:05:03.681Z",
+    "sessionID": "session_1561741679119",
+    "type": "browser.tabs.onZoomChange",
+    "target": null,
+    "details": {
+      "audible": false,
+      "oldZoomFactor": 1,
+      "selected": true,
+      "tabId": 64,
+      "title": "Discover - Kibana",
+      "windowId": 73,
+      "newZoomFactor": 1,
+      "muted": false,
+      "index": 0,
+      "incognito": false,
+      "url": "http://localhost:5601/app/kibana#/discover?_g=(refreshInterval:(pause:!t),
+      "active": true,
+      "pinned": false
+    },
+    "toolName": null,
+    "toolVersion": null,
+    "clientTime": 1561745100028,
+    "userAction": true,
+    "logType": "raw",
+    "tags": [
+      "_grokparsefailure"
+    ],
+    "location": null,
+    "userId": "nobody",
+    "useraleVersion": null
+  },
+
+</code></pre>
+</div>
+
+<h3 id="interval-logs">Interval Logs</h3>
+
+<p>Interval logs are a experimental feature, that write long sequences of the same event to windows. They capture high resolution data like ‘mouseovers’ in time-boxed summary windows.</p>
+
+<p>Interval logs have a start- and end-time instead of a single, discrete time-stamp.</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "endTime": 1561739434516, [end interval]
+    "minor_ver": "0",
+    "@timestamp": "2019-06-28T16:30:35.734Z",
+    "type": "mouseover",
+    "target": "html", [where were mouseovers observed within the interval]
+    "targetChange": true,
+    "major_ver": "2",
+    "count": 10, [count of disrcete events within the interval] 
+    "pageReferrer": "",
+    "toolVersion": "2.0.0",
+    "userAction": false,
+    "duration": 396, [duration of interval in ms]
+    "host": "172.18.0.1",
+    "path": [
+      "html",
+      "#document",
+      "Window"
+    ],
+    "sessionID": "session_1561737570573",
+    "toolName": "Apache UserALE.js Example",
+    "startTime": 1561739434120, [begin interval]
+    "typeChange": true, [were there any other events during the interval?]
+    "pageTitle": "UserAleJS - Example Page",
+    "logType": "interval", [as compared to "raw"]
+    "pageUrl": "fApache_Flagon/test/incubator-flagon-useralejs/example/index.html",
+    "userId": "example-user",
+    "useraleVersion": "2.0.0",
+    "patch_ver": "0"
+</code></pre>
+</div>
+<h2 id="contributing">Contributing</h2>
+
+<p>Contributions are welcome!  Simply <a href="https://issues.apache.org/jira/browse/FLAGON">submit an issue report</a> for problems 
+you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
+incorporate it into UserALE.js.</p>
+
+  </div>
+</div>
+
+    </div>
+
+    <div class="footer ui inverted very padded vertical segment">
+  <div class="ui vertical segment">
+    <div class="ui four column grid">
+      <div class="column">
+        <h4 class="ui inverted header">About</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/stack">Stack</a>
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+          <a class="item" href="/tap">Tap</a>
+          <a class="item" href="/stout">Stout</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Docs</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/docs/stack">Stack</a>
+          <a class="item" href="/docs/userale">UserALE</a>
+          <a class="item" href="/docs/useralejs">UserAle.js</a>
+          <a class="item" href="/docs/useralepy">UserAle.py</a>
+          <a class="item" href="/docs/distill">Distill</a>
+          <a class="item" href="/docs/tap">Tap</a>
+          <a class="item" href="/docs/stout">Stout</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Community</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="https://github.com/apache?q=flagon">GitHub</a>
+          <a class="item" href="http://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
+          <a class="item" href="https://issues.apache.org/jira/browse/FLAGON">Jira Issue Tracker</a>
+          <a class="item" href="https://cwiki.apache.org/confluence/display/FLAGON">Project Wiki</a>
+          <a class="item" href="https://twitter.com/ApacheFlagon">Twitter</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Apache</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="http://www.apache.org/">Apache Software Foundation</a>
+          <a class="item" href="http://www.apache.org/licenses/">License</a>
+          <a class="item" href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+          <a class="item" href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+          <a class="item" href="http://www.apache.org/security/">Security</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui two column middle aligned grid">
+      <div class="column">
+        Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
+      </div>
+      <div class="center aligned column">
+        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui one column middle aligned grid">
+      <div class="center aligned column">
+        <a href="http://incubator.apache.org/">
+          <img src="/images/incubator-logo-white.jpg">
+        </a>&nbsp;
+        <a href="https://www.apache.org/events/current-event.html">
+          <img src="https://www.apache.org/events/current-event-234x60.png" alt="ASF Current Event">
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </body>
+
+</html>
