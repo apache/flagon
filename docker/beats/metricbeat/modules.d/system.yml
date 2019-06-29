@@ -1,0 +1,24 @@
+#------------------------------- System Module -------------------------------
+- module: system
+  metricsets:
+    - core
+    - cpu
+    - diskio
+    - filesystem
+    - fsstat
+    - load
+    - memory
+    - network
+    - process
+    - process_summary
+    - socket
+    - uptime
+  enabled: true
+  period: 10s
+  processes: ['.*']
+  process.include_top_n:
+    by_cpu: 5    # include top 5 processes by CPU
+    by_memory: 5 # incude top 5 processes by memory
+  core.metrics: [percentages, ticks]
+  cpu.metrics: [percentages, normalized_percentages, ticks]
+  process.cgroups.enabled: true

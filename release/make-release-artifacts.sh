@@ -36,12 +36,12 @@ release_script_dir=$( cd $( dirname $0 ) && pwd )
 show_help() {
     cat >&2 <<END
 Usage: make-release-artifacts.sh [-v version] [-r rc_number]
-Prepares and builds the source and binary distribution artifacts of a SensSoft
+Prepares and builds the source and binary distribution artifacts of an Apache Flagon
 release.
 
-  -vVERSION                  overrides the name of this version, if detection
+  -v VERSION                 overrides the name of this version, if detection
                              from package.json is not accurate for any reason.
-  -rRC_NUMBER                specifies the release candidate number. The
+  -r RC_NUMBER               specifies the release candidate number. The
                              produced artifact names include the 'rc' suffix,
                              but the contents of the archive artifact do *not*
                              include the suffix. Therefore, turning a release
@@ -101,15 +101,15 @@ detect_version
 ###############################################################################
 # Determine all filenames and paths, and confirm
 
-release_name=apache-senssoft-useralejs-${current_version}
+release_name=apache-flagon-useralejs-incubating-${current_version}
 if [ -z "$rc_suffix" ]; then
     fail Specifying the RC number is required
 else
-    artifact_name=${release_name}-rc${rc_suffix}
+    artifact_name=${release_name}
 fi
 
 userale_dir=$( pwd )
-working_dir=${TMPDIR:-/tmp}/release-working-dir
+working_dir=${TMPDIR:-/tmp}release-working-dir
 rm -rf ${working_dir}
 staging_dir="${working_dir}/source/"
 src_staging_dir="${working_dir}/source/${release_name}-src"
@@ -195,10 +195,10 @@ set +x
 echo "Make artifacts"
 set -x
 
-# copy js and min version of userale.js
+# copy js, min version of userale.js, and webExt files
 mkdir ${bin_staging_dir}/${release_name}-bin
 
-cp ${src_staging_dir}/build/userale-*.js ${bin_staging_dir}/${release_name}-bin
+cp -R ${src_staging_dir}/build/* ${bin_staging_dir}/${release_name}-bin
 
 # copy in the LICENSE, README and NOTICE
 cp ${src_staging_dir}/README.md ${bin_staging_dir}/${release_name}-bin
@@ -211,17 +211,14 @@ cp ${src_staging_dir}/NOTICE ${bin_staging_dir}/${release_name}-bin
 ###############################################################################
 # Signatures and checksums
 
-# OSX doesn't have md5sum, sha1sum, and sha256sum, even if MacPorts md5sha1sum package is installed.
+# OSX doesn't have sha1sum, and sha256sum, even if MacPorts md5sha1sum package is installed.
 # Easy to fake it though.
-which md5sum >/dev/null || alias md5sum='md5 -r' && shopt -s expand_aliases
 which sha1sum >/dev/null || alias sha1sum='shasum -a 1' && shopt -s expand_aliases
 which sha256sum >/dev/null || alias sha256sum='shasum -a 256' && shopt -s expand_aliases
 
 ( cd ${artifact_dir} &&
     for a in *.tar.gz *.zip; do
-        md5sum ${a} > ${a}.md5 
-        sha1sum -b ${a} > ${a}.sha1
-        sha256sum -b ${a} > ${a}.sha256
+        gpg2 --print-md SHA512 ${a} > ${a}.sha512
         gpg2 --armor --output ${a}.asc --detach-sig ${a}
     done
 )
@@ -246,5 +243,5 @@ echo "The release is done - here is what has been created:"
 ls ${artifact_dir}
 echo "You can find these files in: ${artifact_dir}"
 echo "The git commit IDs for the voting emails are:"
-echo -n "incubator-senssoft-userale: " && git rev-parse HEAD
+echo -n "incubator-flagon-userale: " && git rev-parse HEAD
 git submodule --quiet foreach 'echo -n "${name}: " && git rev-parse HEAD'

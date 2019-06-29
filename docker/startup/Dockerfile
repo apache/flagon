@@ -14,13 +14,15 @@
 # limitations under the License.
 
 FROM ubuntu:latest
-MAINTAINER Michelle Beard <msbeard@apache.org>
+MAINTAINER Joshua Poore <poorejc@apache.org>
 
 RUN apt-get update && apt-get install -y wget curl && apt-get clean
 
-RUN wget https://github.com/jwilder/dockerize/releases/download/v0.1.0/dockerize-linux-amd64-v0.1.0.tar.gz
+ENV DOCKERIZE_VERSION v0.6.1
 
-RUN tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.1.0.tar.gz
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
+RUN tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 # Copy Files Over
 COPY ./entrypoint.sh /opt/entrypoint.sh

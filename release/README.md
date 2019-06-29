@@ -1,7 +1,7 @@
 Release Scripts and Helpers
 ===========================
 
-This folder contains a number of items that will assist in the production of SensSoft releases.
+This folder contains a number of items that will assist in the production of Apache Flagon releases.
 
 Release scripts - make-release-artifacts.sh
 -------------------------------------------
@@ -9,7 +9,7 @@ Release scripts - make-release-artifacts.sh
 this script rather than "rolling your own" or using a manual process, as this script codifies several Apache
 requirements about the release artifacts.
 
-These scripts are fully documented in **[Release Process](https://cwiki.apache.org/confluence/display/SENSSOFT/UserALE.js+Release+Management+Procedure)** page on Confluence.
+These scripts are fully documented in **[Release Process](https://cwiki.apache.org/confluence/display/FLAGON/UserALE.js+Release+Management+Procedure)** page on Confluence.
 
 Quickstart
 ----------
@@ -19,9 +19,10 @@ Quickstart
    ```
    Ensure $APACHE_DIST_SVN_DIR is set in your environment.
 
-1. Change working directory to incubator-senssoft-useralejs.
+1. Change working directory to incubator-flagon-useralejs.
    ```bash
-   cd incubator-senssoft-userale.js
+   cd incubator-flagon-useralejs
+   # git checkout "Branch_Name"
    ```
    
 1. Release.

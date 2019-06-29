@@ -1,0 +1,143 @@
+{
+    "index_patterns": "userale",
+    "order": 1,
+    "settings":
+    {
+        "number_of_shards": 1,
+        "number_of_replicas": 0,
+        "index.refresh_interval": "5s",
+        "analysis": {
+            "analyzer": {
+                "my_analyzer": {
+                    "tokenizer": "my_tokenizer"
+                }
+            },
+            "tokenizer": {
+                "my_tokenizer": {
+                    "type": "path_hierarchy"
+                }
+            }
+        }
+    },
+    "mappings":
+    {
+        "doc":
+        {
+        "dynamic_templates": [
+                {
+                  "strings_as_keywords": {
+                    "match_mapping_type": "string",
+                    "mapping": {
+                      "type": "keyword"
+                    }
+                  }
+                }
+            ],
+            "dynamic": "true",
+            "properties":
+            {
+                "userAction":
+                {
+                    "type": "boolean"
+                },
+                "clientTime":
+                {
+                    "type": "date",
+                    "format": "strict_date_optional_time||epoch_millis"
+                },
+                "count":
+                {
+                    "type": "integer"
+                },
+                "targetChange": 
+                {
+                    "type": "boolean"
+                },
+                "typeChange": 
+                {
+                    "type": "boolean"
+                },
+                "details":
+                {
+                    "properties":
+                    {
+                        "alt":
+                        {
+                            "type": "boolean"
+                        },
+                        "clicks":
+                        {
+                            "type": "integer"
+                        },
+                        "ctrl": 
+                        {
+                            "type": "boolean"
+                        },
+                        "meta": 
+                        {
+                            "type": "boolean"
+                        },
+                        "shift": 
+                        {
+                            "type": "boolean"
+                        },
+                        "window":
+                        {
+                            "type": "boolean"
+                        },
+                        "x":
+                        {
+                            "type": "integer"
+                        },
+                        "y":
+                        {
+                            "type": "integer"
+                        },
+                        "z":
+                        {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "location":
+                {
+                    "properties":
+                    {
+                        "x":
+                        {
+                            "type": "integer"
+                        },
+                        "y":
+                        {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "major_ver":
+                {
+                    "type": "integer"
+                },
+                "minor_ver":
+                {
+                    "type": "integer"
+                },
+                "patch_ver":
+                {
+                    "type": "integer"
+                },
+                "tool_major_ver":
+                {
+                    "type": "integer"
+                },
+                "tool_minor_ver":
+                {
+                    "type": "integer"
+                },
+                "tool_patch_ver":
+                {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

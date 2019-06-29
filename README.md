@@ -1,5 +1,5 @@
 SensSoft Docker Containers and Website
 --------------------------------------
 
-Specific build instructions located in docker and site folders.
+Specific build instructions located in docker, kubernetes, release and site folders.
 

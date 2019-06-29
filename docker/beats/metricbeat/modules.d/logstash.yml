@@ -1,0 +1,6 @@
+#------------------------------ Logstash Module ------------------------------
+- module: logstash
+  metricsets: ["node", "node_stats"]
+  enabled: true
+  period: 10s
+  hosts: ["${LOGSTASH_URL}"]
