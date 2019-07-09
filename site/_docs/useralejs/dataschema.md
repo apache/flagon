@@ -94,7 +94,7 @@ The fields dentify what users do and what they interact with. UserALE.js gets th
 You may want to specially label some of these fields and important elements that. See our guide on [the UserALE.js API]({{ '/docs/useralejs/API' | prepend: site.baseurl }}).
 
 For more information about the kinds of behaviors (event classes) we collect, check out our guide for 
-[modifying UserALE.js source code](({{ '/docs/useralejs/modifying' | prepend: site.baseurl }}).
+[modifying UserALE.js source code]({{ '/docs/useralejs/modifying' | prepend: site.baseurl }}).
 
 ### Temporal Handling in UserALE.js
 
