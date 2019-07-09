@@ -23,11 +23,11 @@ The best way to scale Apache Flagon depends entirely on your use-case:
 
 **The Apache Flagon Single-Node Elastic Container is an Ingredient, Not a Whole Solution**
 
-The single-node Elastic (ELK) distributed by [Apache Flagon]({{ '/docs/stack' | prepend: site.baseurl }}) is not alone suitable for most production-level use-cases. 
+The single-node Elastic (ELK) build distributed by [Apache Flagon]({{ '/docs/stack' | prepend: site.baseurl }}) is not alone suitable for most production-level use-cases. 
 
-It may be suitable on its own for "grab-and-go" user-testing use cases; just a few days of data collection from a specific application, from just a few users. 
+This build may be suitable for limited user-testing; just a few days of data collection from a specific application, from just a few users. 
 
-Alone it will fail quickly for any enterprise-scale use-cases. 
+However, a single-node Elastic build will fail quickly for any enterprise-scale use-cases. 
 
 Instead, this container is meant to be a building block for larger solutions: 
 
@@ -48,16 +48,23 @@ Elastic has many useful [guides]((https://www.elastic.co/blog/found-sizing-elast
 
 Default [Apache UserALE.js parameters]({{ '/docs/useralejs' | prepend: site.baseurl }}) produce loads of [data]({{ '/docs/useralejs/dataschema' | prepend: site.baseurl }}), even from a single users. 
 
-We strongly suggest that you think about your needs and consider whether you need data from all our event-handlers. If you don't need mouseover events, for example, you can dramatically reduce the rate at which you generate data and the resources you'll need. 
+We strongly suggest that you consider whether you need data from all our event-handlers. 
 
-You can [modify source]({{ '/docs/useralejs/modifying' | prepend: site.baseurl }}) or use the [UserALE.js API]({{ '/docs/useralejs/API' | prepend: site.baseurl }}), and/or use [configurable HTLM5 parameters in our script tag]({{ '/docs/useralejs' | prepend: site.baseurl }}) to manage data generation rate.
+If you don't need mouseover events, for example, you can dramatically reduce the rate at which you generate data and the resources you'll need. 
 
-####Resource needs will also grow with *document length*
+Instead, you can [modify source]({{ '/docs/useralejs/modifying' | prepend: site.baseurl }}) or use the [UserALE.js API]({{ '/docs/useralejs/API' | prepend: site.baseurl }}), and/or use [configurable HTLM5 parameters in our script tag]({{ '/docs/useralejs' | prepend: site.baseurl }}) to manage data generation rate.
+
+####Resource needs will also grow with document length
+
 [Strings](https://blog.appdynamics.com/product/estimating-costs-of-storing-documents-in-elasticsearch/) within UserALE.js logs (see also [Elastic's tips on indexing strings](https://www.elastic.co/guide/en/elasticsearch/reference/5.5/tune-for-disk-usage.html#_use_literal_best_compression_literal)) can add to scaling needs. 
 
-One of the discriminating features of Apache UserALE.js is its precision--it captures target DOM elements, the DOM path elements are nested in, and loads of metadata. 
+One of the discriminating features of Apache UserALE.js is its precision:
 
-UserALE.js fields like `path` and `pageUrl` can grow for certain pages. Its worth considering if you need this level of precision. 
+* it captures target DOM elements;
+* it captures the DOM path that elements are nested in;
+* it captures loads of metadata (URI, page title, page url, referrer, etc.). 
+
+UserALE.js fields like `path` and `pageUrl` can be lengthy for certain pages, increasing string length per document. 
 
 Instead, you might consider relying on `pageTitle` rather than `pageUrl`, or just `target` instead of `path`
 
@@ -98,7 +105,7 @@ Below is a sample `path` for a Kibana element:
         ...
     ```
    
-Through simple [modifications to UserALE.js source]({{ '/docs/useralejs/modifying' | prepend: site.baseurl }}) or by using the UserALE.js [API]({{ '/docs/useralejs/API' | prepend: site.baseurl }}) you can alias verbose fields in your logs to reduce resource consumption.
+Through simple [modifications to UserALE.js source]({{ '/docs/useralejs/modifying' | prepend: site.baseurl }}) or with the UserALE.js [API]({{ '/docs/useralejs/API' | prepend: site.baseurl }}) you can alias verbose fields in your logs to reduce resource consumption.
 
 ####Additional services attached to your stack can increase resource consumption
 
@@ -112,7 +119,7 @@ As you configure that cluster, be mindful that Elasticsearch is indexing and ser
  
 Analytical services connected to the stack can consume significant resources and increase indexing and search time. 
 
-This can be problematic for real-time analytical and monitoring applications (including Kibana), and result in data loss if logs flush prior to being indexed. 
+This can be problematic for real-time analytical and monitoring applications (including Kibana). 
 
 For hefty analytical services, it may be worth dedicating specific nodes in your cluster to service them. 
 
@@ -133,7 +140,7 @@ However, you'll want to experiment with your own page/application for more accur
     
     Important: as noted in the instructions, you'll need to have collected some log data to establish the index.
 
-1. **Once you've started up Elasticsearch, Logstash, Kibana, and metricbead, and confirm that you can see logs in Kibana, take a look at the `userale` index stats.**  
+1. **Once Elasticsearch, Logstash, Kibana, and metricbeat are up, look at the `userale` index stats.**  
     ```shell
     #Index Stats using Elastic's _stats API
     $ curl localhost:9200/index_name/_stats?pretty=true
@@ -219,7 +226,7 @@ However, you'll want to experiment with your own page/application for more accur
       data-url="http://localhost:8100/"
       data-user="example-user"
       data-version="1.1.1"
-      data-resolution=1000 #increased the delay between collection of "high-resolution" events (e.g., mouseovers).
+      data-resolution=1000 #increased the delay between collection of frequent events (e.g., mouseovers).
       data-tool="Apache UserALE.js Example"
     ></script>
     ```
@@ -337,24 +344,24 @@ What you find is that your new store size is either dramatically bigger than you
  
 What happened is a thing called [merging](https://www.elastic.co/guide/en/elasticsearch/guide/current/merge-process.html). 
 
-As data is collected it's gathered into segments within an index. 
+As data is collected it's gathered into segments within an index. Each segment is an element of your index and takes up storage.
 
-Each segment is an element of your index and takes up storage, so as your collect data the number of segments grows quickly consuming a lot of storage. 
+As Elastic (Lucene) indexes, it merges these segments into larger segments to reduce the overall number of segments to minimize storage. 
 
-As Elastic (Lucene) indexes, it merges these segments into larger and larger segments, thus reducing the overall number of segments to reduce storage and resource needs. 
-
-This means that depending on when you make a call to Elastic's `STATS` API, you might be looking at the store size at different stages in the merging process. 
+This means that a call to Elastic's `STATS` API can result in a view into the store size at different stages in the merging process. 
 
 If your store size looks smaller than your last benchmark. You should re-run it then wait. 
 
-If your store size looks way to big, then just wait. After a minute or two, call the `STATS` API again, and you'll probably see a store size that makes much more sense.
+If your store size looks way to big, then wait. After a minute, call the `STATS` API again, and you'll likely see a more sensible store size.
  
 ### Summary 
 Benchmarking and adjusting your data-rate so that you can scale how you want to is made very easy in Apache Flagon. 
 
 We combine easily deployed and modified capabilities with the power of Elastic's APIs and visualization capabilities. 
 
-Again, our single-node container is not a scaling solution. It's a building block benchmarking tool to help you build and manage scale and cost.
+Again, Flagon's single-node container is not a scaling solution. 
+
+It's a building block benchmarking tool to help you build and manage scale and cost.
              
 Subscribe to our [dev list](dev-subscribe@flagon.incubator.apache.org) and join the conversation!
 
