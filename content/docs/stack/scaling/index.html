@@ -266,11 +266,11 @@
 
 <p><strong>The Apache Flagon Single-Node Elastic Container is an Ingredient, Not a Whole Solution</strong></p>
 
-<p>The single-node Elastic (ELK) distributed by <a href="/docs/stack">Apache Flagon</a> is not alone suitable for most production-level use-cases.</p>
+<p>The single-node Elastic (ELK) build distributed by <a href="/docs/stack">Apache Flagon</a> is not alone suitable for most production-level use-cases.</p>
 
-<p>It may be suitable on its own for “grab-and-go” user-testing use cases; just a few days of data collection from a specific application, from just a few users.</p>
+<p>This build may be suitable for limited user-testing; just a few days of data collection from a specific application, from just a few users.</p>
 
-<p>Alone it will fail quickly for any enterprise-scale use-cases.</p>
+<p>However, a single-node Elastic build will fail quickly for any enterprise-scale use-cases.</p>
 
 <p>Instead, this container is meant to be a building block for larger solutions:</p>
 
@@ -293,16 +293,25 @@
 
 <p>Default <a href="/docs/useralejs">Apache UserALE.js parameters</a> produce loads of <a href="/docs/useralejs/dataschema">data</a>, even from a single users.</p>
 
-<p>We strongly suggest that you think about your needs and consider whether you need data from all our event-handlers. If you don’t need mouseover events, for example, you can dramatically reduce the rate at which you generate data and the resources you’ll need.</p>
+<p>We strongly suggest that you consider whether you need data from all our event-handlers.</p>
 
-<p>You can <a href="/docs/useralejs/modifying">modify source</a> or use the <a href="/docs/useralejs/API">UserALE.js API</a>, and/or use <a href="/docs/useralejs">configurable HTLM5 parameters in our script tag</a> to manage data generation rate.</p>
+<p>If you don’t need mouseover events, for example, you can dramatically reduce the rate at which you generate data and the resources you’ll need.</p>
 
-<p>####Resource needs will also grow with <em>document length</em>
-<a href="https://blog.appdynamics.com/product/estimating-costs-of-storing-documents-in-elasticsearch/">Strings</a> within UserALE.js logs (see also <a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.5/tune-for-disk-usage.html#_use_literal_best_compression_literal">Elastic’s tips on indexing strings</a>) can add to scaling needs.</p>
+<p>Instead, you can <a href="/docs/useralejs/modifying">modify source</a> or use the <a href="/docs/useralejs/API">UserALE.js API</a>, and/or use <a href="/docs/useralejs">configurable HTLM5 parameters in our script tag</a> to manage data generation rate.</p>
 
-<p>One of the discriminating features of Apache UserALE.js is its precision–it captures target DOM elements, the DOM path elements are nested in, and loads of metadata.</p>
+<p>####Resource needs will also grow with document length</p>
 
-<p>UserALE.js fields like <code class="highlighter-rouge">path</code> and <code class="highlighter-rouge">pageUrl</code> can grow for certain pages. Its worth considering if you need this level of precision.</p>
+<p><a href="https://blog.appdynamics.com/product/estimating-costs-of-storing-documents-in-elasticsearch/">Strings</a> within UserALE.js logs (see also <a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.5/tune-for-disk-usage.html#_use_literal_best_compression_literal">Elastic’s tips on indexing strings</a>) can add to scaling needs.</p>
+
+<p>One of the discriminating features of Apache UserALE.js is its precision:</p>
+
+<ul>
+  <li>it captures target DOM elements;</li>
+  <li>it captures the DOM path that elements are nested in;</li>
+  <li>it captures loads of metadata (URI, page title, page url, referrer, etc.).</li>
+</ul>
+
+<p>UserALE.js fields like <code class="highlighter-rouge">path</code> and <code class="highlighter-rouge">pageUrl</code> can be lengthy for certain pages, increasing string length per document.</p>
 
 <p>Instead, you might consider relying on <code class="highlighter-rouge">pageTitle</code> rather than <code class="highlighter-rouge">pageUrl</code>, or just <code class="highlighter-rouge">target</code> instead of <code class="highlighter-rouge">path</code></p>
 
@@ -345,7 +354,7 @@
 </code></pre>
 </div>
 
-<p>Through simple <a href="/docs/useralejs/modifying">modifications to UserALE.js source</a> or by using the UserALE.js <a href="/docs/useralejs/API">API</a> you can alias verbose fields in your logs to reduce resource consumption.</p>
+<p>Through simple <a href="/docs/useralejs/modifying">modifications to UserALE.js source</a> or with the UserALE.js <a href="/docs/useralejs/API">API</a> you can alias verbose fields in your logs to reduce resource consumption.</p>
 
 <p>####Additional services attached to your stack can increase resource consumption</p>
 
@@ -359,7 +368,7 @@
 
 <p>Analytical services connected to the stack can consume significant resources and increase indexing and search time.</p>
 
-<p>This can be problematic for real-time analytical and monitoring applications (including Kibana), and result in data loss if logs flush prior to being indexed.</p>
+<p>This can be problematic for real-time analytical and monitoring applications (including Kibana).</p>
 
 <p>For hefty analytical services, it may be worth dedicating specific nodes in your cluster to service them.</p>
 
@@ -381,7 +390,7 @@
 
     <p>Important: as noted in the instructions, you’ll need to have collected some log data to establish the index.</p>
   </li>
-  <li><strong>Once you’ve started up Elasticsearch, Logstash, Kibana, and metricbead, and confirm that you can see logs in Kibana, take a look at the <code class="highlighter-rouge">userale</code> index stats.</strong>
+  <li><strong>Once Elasticsearch, Logstash, Kibana, and metricbeat are up, look at the <code class="highlighter-rouge">userale</code> index stats.</strong>
     <div class="language-shell highlighter-rouge"><pre class="highlight"><code> <span class="c">#Index Stats using Elastic's _stats API</span>
  <span class="nv">$ </span>curl localhost:9200/index_name/_stats?pretty<span class="o">=</span><span class="nb">true</span>
   
@@ -467,7 +476,7 @@
    data-url="http://localhost:8100/"
    data-user="example-user"
    data-version="1.1.1"
-   data-resolution=1000 #increased the delay between collection of "high-resolution" events (e.g., mouseovers).
+   data-resolution=1000 #increased the delay between collection of frequent events (e.g., mouseovers).
    data-tool="Apache UserALE.js Example"
  &gt;&lt;/script&gt;
 </code></pre>
@@ -593,24 +602,24 @@ Output is very simple and index sizes stack on top of one another
 
 <p>What happened is a thing called <a href="https://www.elastic.co/guide/en/elasticsearch/guide/current/merge-process.html">merging</a>.</p>
 
-<p>As data is collected it’s gathered into segments within an index.</p>
+<p>As data is collected it’s gathered into segments within an index. Each segment is an element of your index and takes up storage.</p>
 
-<p>Each segment is an element of your index and takes up storage, so as your collect data the number of segments grows quickly consuming a lot of storage.</p>
+<p>As Elastic (Lucene) indexes, it merges these segments into larger segments to reduce the overall number of segments to minimize storage.</p>
 
-<p>As Elastic (Lucene) indexes, it merges these segments into larger and larger segments, thus reducing the overall number of segments to reduce storage and resource needs.</p>
-
-<p>This means that depending on when you make a call to Elastic’s <code class="highlighter-rouge">STATS</code> API, you might be looking at the store size at different stages in the merging process.</p>
+<p>This means that a call to Elastic’s <code class="highlighter-rouge">STATS</code> API can result in a view into the store size at different stages in the merging process.</p>
 
 <p>If your store size looks smaller than your last benchmark. You should re-run it then wait.</p>
 
-<p>If your store size looks way to big, then just wait. After a minute or two, call the <code class="highlighter-rouge">STATS</code> API again, and you’ll probably see a store size that makes much more sense.</p>
+<p>If your store size looks way to big, then wait. After a minute, call the <code class="highlighter-rouge">STATS</code> API again, and you’ll likely see a more sensible store size.</p>
 
 <h3 id="summary">Summary</h3>
 <p>Benchmarking and adjusting your data-rate so that you can scale how you want to is made very easy in Apache Flagon.</p>
 
 <p>We combine easily deployed and modified capabilities with the power of Elastic’s APIs and visualization capabilities.</p>
 
-<p>Again, our single-node container is not a scaling solution. It’s a building block benchmarking tool to help you build and manage scale and cost.</p>
+<p>Again, Flagon’s single-node container is not a scaling solution.</p>
+
+<p>It’s a building block benchmarking tool to help you build and manage scale and cost.</p>
 
 <p>Subscribe to our <a href="dev-subscribe@flagon.incubator.apache.org">dev list</a> and join the conversation!</p>
 
