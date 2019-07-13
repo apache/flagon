@@ -29,7 +29,7 @@ WORKDIR /usr/src
 RUN sudo -E apt-get -yqq install \
   git
 
-# Clone Apache SensSoft Site
+# Clone Apache Flagon Site
 RUN git clone -b master https://github.com/apache/incubator-flagon.git
 WORKDIR /usr/src/incubator-flagon/site/_site
 
