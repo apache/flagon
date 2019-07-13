@@ -1,6 +1,6 @@
 Building Apache Flagon Docker Containers
 ===================================
-*Last Tested 24 MAR 2019 using Docker Engine v18.09.2, Compose v1.23.2, Machine v0.16.1*
+*Last Integration Test: 12 JUL 2019 using Docker Engine v18.09.2, Compose v1.23.2, Machine v0.16.1*
 
 Prerequisites
 -------------
@@ -25,7 +25,7 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
    Before installation, check that virtualbox version is at least 5.2. [``Reinstall virtualbox``](https://www.virtualbox.org/wiki/Downloads), if needed.
    
    ```bash
-   $ docker-machine create --virtualbox-memory 3072 --virtualbox-cpu-count 2 senssoft
+   $ docker-machine create --virtualbox-memory 3072 --virtualbox-cpu-count 2 flagon
    ```
     
 1. Before launching the Docker containers, ensure your ``vm_max_map_count``
@@ -34,7 +34,7 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
 
    ```bash
    # Example for Linux systems
-   $ docker-machine ssh senssoft sudo sysctl -w vm.max_map_count=262144
+   $ docker-machine ssh flagon sudo sysctl -w vm.max_map_count=262144
    ```
 
 1. Create externel docker network to enable system monitoring. Only enable if running 
@@ -59,12 +59,12 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
 1. Confirm state:
    ```bash
    # if Flagon vm is remote
-   $ docker-machine ssh senssoft curl -XGET http://localhost:9200/_cluster/health?pretty
+   $ docker-machine ssh flagon curl -XGET http://localhost:9200/_cluster/health?pretty
    # if Flagon virtual machine is running on your local machine, no need for ssh, instead:
    $ curl -XGET http://localhost:9200/_cluster/health?pretty
    #output should look like this:
-      "cluster_name" : "SensSoft",
-      "status" : "yellow",
+      "cluster_name" : "Flagon",
+      "status" : "green",
       "timed_out" : false,
       "number_of_nodes" : 1,
       "number_of_data_nodes" : 1,
@@ -86,7 +86,7 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
    ```bash
    $ docker-compose up -d logstash
    # if Flagon vm is remote
-   $ docker-machine ssh senssoft curl -XGET http://localhost:8100
+   $ docker-machine ssh flagon curl -XGET http://localhost:8100
    # if Flagon virtual machine is running on your local machine, no need for ssh, instead:
    $ curl -XGET http://localhost:8100
    #ouput should look like this:
@@ -98,7 +98,7 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
    ```bash
    $ docker-compose up -d site
    # for remote users, forwards port to localhost
-   $ ssh docker@$(docker-machine ip senssoft) -L 8080:localhost:8080
+   $ ssh docker@$(docker-machine ip flagon) -L 8080:localhost:8080
    ```
    
    Visit `http://localhost:8080` and you will see Apache Flagon's home page.
@@ -114,7 +114,7 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
    ```bash
    $ docker-compose up -d kibana
    # for remote users, forwards port to localhost
-   $ ssh docker@$(docker-machine ip senssoft) -L 5601:localhost:5601
+   $ ssh docker@$(docker-machine ip flagon) -L 5601:localhost:5601
    ```
 
 1. Register an index in Kibana to see the logs:
@@ -127,7 +127,7 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
 1. Load example Dashboard and Visualizations under docker/kibana/.
 
    Goto: Management -> Saved Objects and select the `Import` button. Import the
-   `Apache SensSoft Visualizations.json`, `Drill-Down Search.json`, `Apache SensSoft Page Usage Dashboard.json`, and `Apache SensSoft User Access Dashboard.json` files from the "Saved Objects" folder in the kibana directory.
+   `Apache Flagon Visualizations.json`, `Drill-Down Search.json`, `Apache Flagon Page Usage Dashboard.json`, and `Apache Flagon User Access Dashboard.json` files from the "Saved Objects" folder in the kibana directory.
 
    ![alt text][management]
 
@@ -136,7 +136,7 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
    ![alt text][viz_import]
    
    Once that is complete, navigate to the `Dashboard` view in Kibana and click the
-   `Apache SensSoft Page Usage Dashboard` object. 
+   `Apache Flagon Page Usage Dashboard` object. 
 
    ![alt text][dashboard]
    
@@ -157,7 +157,12 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
     
  1. To kill the Flagon machine.
     ```bash
-    $ docker-machine rm senssoft
+    $ docker-machine stop flagon
+    ```
+    
+ 1. To remove the Flagon machine.
+    ```bash
+    $ docker-machine rm flagon
     ```
     
 If running on a single machine, on reboot or restart your Flagon machine is available, but 
@@ -166,11 +171,11 @@ compose up commands above to restart containers.
 
  1. Restart the Flagon machine.
     ```bash
-    $ docker-machine start senssoft
+    $ docker-machine start flagon
     $ docker-machine ls #confirm state
     #output should look like this:
     NAME     ACTIVE   DRIVER       STATE     URL                       SWARM   DOCKER     ERRORS
-    senssoft   -      virtualbox   Running   tcp://192. ...                    v18.09.3   
+    flagon   -      virtualbox   Running   tcp://192. ...                    v18.09.3   
     ```
 
 Having Issues?

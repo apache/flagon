@@ -30,8 +30,8 @@ RUN sudo -E apt-get -yqq install \
   git
 
 # Clone Apache SensSoft Site
-RUN git clone -b master https://github.com/apache/incubator-senssoft.git
-WORKDIR /usr/src/incubator-senssoft/site/_site
+RUN git clone -b master https://github.com/apache/incubator-flagon.git
+WORKDIR /usr/src/incubator-flagon/site/_site
 
 # Update data-url to send to logstash
 RUN sed -i 's/data-url=\"\"/data-url="http:\/\/localhost:8100"/' index.html

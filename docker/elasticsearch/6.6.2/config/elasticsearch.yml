@@ -16,7 +16,7 @@
 # Custom config borrowed from Pires: https://github.com/pires/docker-elasticsearch-kubernetes
 
 cluster:
-  name: ${CLUSTER_NAME:SensSoft}
+  name: ${CLUSTER_NAME:FLAGON}
 
 node:
   master: ${NODE_MASTER:true}
