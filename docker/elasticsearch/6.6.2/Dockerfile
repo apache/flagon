@@ -22,7 +22,7 @@ COPY config /usr/share/elasticsearch/config
 RUN chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/config
 
 # Set environment
-ENV CLUSTER_NAME SensSoft
+ENV CLUSTER_NAME Flagon
 
 # Kubernetes requires swap is turned off
 ENV MEMORY_LOCK false

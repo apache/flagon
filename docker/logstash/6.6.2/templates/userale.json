@@ -45,6 +45,16 @@
                     "type": "date",
                     "format": "strict_date_optional_time||epoch_millis"
                 },
+                "startTime":
+                {
+                    "type": "date",
+                    "format": "strict_date_optional_time||epoch_millis"
+                },
+                "endTime":
+                {
+                    "type": "date",
+                    "format": "strict_date_optional_time||epoch_millis"
+                },
                 "count":
                 {
                     "type": "integer"
