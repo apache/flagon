@@ -33,7 +33,7 @@ The build process produces a minified version of UserALE.js and a Web Extension 
 
   ```markdown
   #include userale in your project via script tag 
-  <script src="/path/to/userale-1.0.0.min.js" data-url="http://yourLoggingUrl"></script>
+  <script src="/path/to/userale-2.0.2.min.js" data-url="http://yourLoggingUrl"></script>
   ```
 Apache UserALE.js allows for configuration via HTML 5 data parameters. For a complete list of options, see the [docs]({{ '/docs/useralejs' | prepend: site.baseurl }}) or the [README](https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md). You can also modify Apache UserALE.js using our API. Find examples in our [repos](https://github.com/apache/incubator-flagon-useralejs/tree/FLAGON-192).
 
@@ -49,8 +49,8 @@ To build our single-node Elastic instance, **first clone our [Docker repo](https
 Then, **start up a virtual machine**.
   ```shell
 # start virtual machine and requisite network 
-$ docker-machine create --virtualbox-memory 3072 --virtualbox-cpu-count 2 senssoft
-$ docker-machine ssh senssoft sudo sysctl -w vm.max_map_count=262144
+$ docker-machine create --virtualbox-memory 3072 --virtualbox-cpu-count 2 flagon
+$ docker-machine ssh flagon sudo sysctl -w vm.max_map_count=262144
 $ docker network create esnet
   ```
 Next, **start Elastic services**.
@@ -67,4 +67,4 @@ Before starting Kibana, **generate some logs**. Move your mouse around, click ar
 
 Finally, **navigate to localhost:5601 (Kibaba), set an index pattern, and load our visualizations and dashboards** to see your logs. Find simple instructions in our [README](https://github.com/apache/incubator-flagon/tree/master/docker).
 
-Subscribe to our [dev list](dev-subscribe@flagon.incubator.apache.org) and join the conversation!
+Subscribe to our [dev list](mailto:dev-subscribe@flagon.incubator.apache.org) and join the conversation!
