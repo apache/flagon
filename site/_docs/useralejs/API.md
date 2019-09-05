@@ -33,7 +33,7 @@ Don't forget to add the UserALE.js script tag! For an in depth example, see our 
 
 ```html
 <!--
-Try out the options API to pass dynamic page data into your UserALE params page by page.
+Try out the options API to pass dynamic page data into your UserALE.js params page by page.
 -->
 <script type="text/javascript">
     const changeMe = "me";

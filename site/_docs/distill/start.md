@@ -4,6 +4,8 @@ component: distill
 priority: 1
 ---
 
+#### This project is not currently maintained and will be refactored. If you are interested in Distill, join the discussion on our [dev list](mailto:dev-subscribe@flagon.incubator.apache.org).
+
 ### Usage
 
 Using curl:

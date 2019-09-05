@@ -3,6 +3,7 @@ title: Getting Started
 component: stout
 priority: 1
 ---
+#### This project is not currently maintained and will be refactored. If you are interested in STOUT, join the discussion on our [dev list](mailto:dev-subscribe@flagon.incubator.apache.org).
 
 ### Getting Going...
 If you already have your own system and just want to work with the source code, then skip to the next section.  Otherwise read on...
