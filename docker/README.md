@@ -1,11 +1,11 @@
 Building Apache Flagon Docker Containers
 ===================================
-*Last Integration Test: 12 JUL 2019 using Docker Engine v18.09.2, Compose v1.23.2, Machine v0.16.1*
+*Last Integration Test: 29 AUG 2019 using Docker Engine v19.03.1, Compose v1.24.1, Machine v0.16.1*
 
 Prerequisites
 -------------
 
-1. Install [``Docker``](http://docker.com) on your machine. Requires Docker Compose 1.7 and above.
+1. Install [``Docker``](http://docker.com) on your machine. Requires Docker Compose 1.23 and above.
 
 1. Install docker-compose. Full instructions can be found [``here``](https://docs.docker.com/compose/install/). 
    If you install Docker through the [``Desktop bundle``](https://www.docker.com/products/docker-desktop), docker-compose is included.
@@ -38,21 +38,21 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
    ```
 
 1. Create externel docker network to enable system monitoring. Only enable if running 
-   the Elasticsearch 6.5.4 configuration (single and cluster mode)
+   Elasticsearch >6.5.4 configuration (single and cluster mode)
    
    ```bash
    $ docker network create esnet
    ```
 
-1. Start Elasticsearch 6.5.4 or 6.6.2 (Recommended) Give Elasticsearch about 1-2 minutes to start before confirming its state.
+1. Start Elasticsearch 6.6.2 or 6.8.2 (Recommended) Give Elasticsearch about 1-2 minutes to start before confirming its state.
    
    ```bash
-   #start Elasticsearch v6.5.4 (Deprecated)
-   $ docker-compose -f docker-compose-6.5.4.yml up -d elasticsearch
+   #start Elasticsearch v6.6.2 (Deprecated)
+   $ docker-compose -f docker-compose-6.6.2.yml up -d elasticsearch
    
    or
    
-   #start Elasticsearch v6.6.2 (Recommended)
+   #start Elasticsearch v6.8.2 (Recommended)
    $ docker-compose up -d elasticsearch
    ```
 
@@ -175,7 +175,7 @@ compose up commands above to restart containers.
     $ docker-machine ls #confirm state
     #output should look like this:
     NAME     ACTIVE   DRIVER       STATE     URL                       SWARM   DOCKER     ERRORS
-    flagon   -      virtualbox   Running   tcp://192. ...                    v18.09.3   
+    flagon   -      virtualbox   Running   tcp://192. ...                    v19.03.1   
     ```
 
 Having Issues?

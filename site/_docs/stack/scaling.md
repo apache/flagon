@@ -363,5 +363,5 @@ Again, Flagon's single-node container is not a scaling solution.
 
 It's a building block benchmarking tool to help you build and manage scale and cost.
              
-Subscribe to our [dev list](dev-subscribe@flagon.incubator.apache.org) and join the conversation!
+Subscribe to our [dev list](mailto:dev-subscribe@flagon.incubator.apache.org) and join the conversation!
 

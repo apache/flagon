@@ -7,6 +7,8 @@ priority: 0
 
 ### Installing Apache Distill
 
+#### This project is not currently maintained and will be refactored. If you are interested in Distill, join the discussion on our [dev list](mailto:dev-subscribe@flagon.incubator.apache.org).
+
 The first step is to install Apache Distill. First, checkout the latest version of Apache Distill.
 
   ```shell

@@ -5,6 +5,9 @@ permalink: /docs/stout/
 priority: 0
 ---
 
+#### This project is not currently maintained and will be refactored. If you are interested in STOUT, join the discussion on our [dev list](mailto:dev-subscribe@flagon.incubator.apache.org).
+
+
 The Subject Tracker for Online User Testing (STOUT) is a content management system for formal human performance experimentation. STOUT presents tools and operational tasks to each participant. In doing so, it collects:
 
 - an intake questionnaire to assess the user’s background and experience as an analyst

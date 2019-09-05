@@ -204,6 +204,8 @@ cp -R ${src_staging_dir}/build/* ${bin_staging_dir}/${release_name}-bin
 cp ${src_staging_dir}/README.md ${bin_staging_dir}/${release_name}-bin
 cp ${src_staging_dir}/LICENSE ${bin_staging_dir}/${release_name}-bin
 cp ${src_staging_dir}/NOTICE ${bin_staging_dir}/${release_name}-bin
+cp ${src_staging_dir}/DISCLAIMER ${bin_staging_dir}/${release_name}-bin
+
 
 ( cd ${bin_staging_dir} && tar czf ${artifact_dir}/${artifact_name}-bin.tar.gz ${release_name}-bin )
 ( cd ${bin_staging_dir} && zip -qr ${artifact_dir}/${artifact_name}-bin.zip ${release_name}-bin )

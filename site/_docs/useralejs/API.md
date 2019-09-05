@@ -8,14 +8,14 @@ priority: 2
 [Apache UserALE.js](https://github.com/apache/incubator-flagon-useralejs) features a robust API that allows you 
 customize official Apache Flagon UserALE.js [builds](https://github.com/apache/incubator-flagon-useralejs/tree/master/build) page-by-page to suite your needs.
 
-The API exposes two functions: `setLogFilter` & `setLogMapper`. With these two powerful functions, you have a lot of 
+The API exposes a number of functions, including: `options`, `setLogFilter`, & `setLogMapper`. With these two powerful functions, you have a lot of 
 latitude in customizing and curating your logs.
 
 # API Usage
 
 To invoke the API, simply add additional javascript code blocks under your UserALE.js script tag.
 
-Don't forget to add the UserALE.js script tag:
+Don't forget to add the UserALE.js script tag! For an in depth example, see our [Getting Started Guide]({{ '/docs/useralejs' | prepend: site.baseurl }})) and our [example test utility](https://github.com/apache/incubator-flagon-useralejs/tree/master/example).
 
 
 ```html
@@ -24,9 +24,26 @@ Don't forget to add the UserALE.js script tag:
  <!--
  Add the UserALE.js script tag to the top of your doc
  -->
-   <script src="/path/to/userale-1.0.0.min.js" data-url="http://yourLoggingUrl"></script>
+   <script src="/path/to/userale-2.0.0.min.js" data-url="http://yourLoggingUrl"></script>
 ```
 
+## `options` Examples
+
+`options` allows you to modify UserALE.js script tag parameters. This can be particularly useful if need to pass additional data about users from your page into the logging parameters, like username and sessionID. You can build variables constructors that pass data from form data or browser storage to UserALE's paramters. 
+
+```html
+<!--
+Try out the options API to pass dynamic page data into your UserALE.js params page by page.
+-->
+<script type="text/javascript">
+    const changeMe = "me";
+    window.userale.options({
+      "userId": changeMe,
+      "version": "4.0.2",
+      "sessionID": "4"
+    })
+</script>
+```
 
 ## `setLogFilter` Examples
 
