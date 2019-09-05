@@ -273,7 +273,7 @@
 <p><strong>Option 1: Include Apache UserALE.js in your project:</strong></p>
 
 <div class="language-markdown highlighter-rouge"><pre class="highlight"><code>  #include userale in your project via script tag 
-  <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/path/to/userale-1.0.0.min.js"</span> <span class="na">data-url=</span><span class="s">"http://yourLoggingUrl"</span><span class="nt">&gt;&lt;/script&gt;</span>
+  <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/path/to/userale-2.0.2.min.js"</span> <span class="na">data-url=</span><span class="s">"http://yourLoggingUrl"</span><span class="nt">&gt;&lt;/script&gt;</span>
 </code></pre>
 </div>
 <p>Apache UserALE.js allows for configuration via HTML 5 data parameters. For a complete list of options, see the <a href="/docs/useralejs">docs</a> or the <a href="https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md">README</a>. You can also modify Apache UserALE.js using our API. Find examples in our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/FLAGON-192">repos</a>.</p>
@@ -289,8 +289,8 @@
 
 <p>Then, <strong>start up a virtual machine</strong>.</p>
 <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># start virtual machine and requisite network </span>
-<span class="gp">$ </span>docker-machine create --virtualbox-memory 3072 --virtualbox-cpu-count 2 senssoft
-<span class="gp">$ </span>docker-machine ssh senssoft sudo sysctl -w vm.max_map_count<span class="o">=</span>262144
+<span class="gp">$ </span>docker-machine create --virtualbox-memory 3072 --virtualbox-cpu-count 2 flagon
+<span class="gp">$ </span>docker-machine ssh flagon sudo sysctl -w vm.max_map_count<span class="o">=</span>262144
 <span class="gp">$ </span>docker network create esnet
 </code></pre>
 </div>
@@ -308,7 +308,7 @@
 
 <p>Finally, <strong>navigate to localhost:5601 (Kibaba), set an index pattern, and load our visualizations and dashboards</strong> to see your logs. Find simple instructions in our <a href="https://github.com/apache/incubator-flagon/tree/master/docker">README</a>.</p>
 
-<p>Subscribe to our <a href="dev-subscribe@flagon.incubator.apache.org">dev list</a> and join the conversation!</p>
+<p>Subscribe to our <a href="mailto:dev-subscribe@flagon.incubator.apache.org">dev list</a> and join the conversation!</p>
 
   </div>
 </div>
