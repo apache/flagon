@@ -20,12 +20,14 @@ you may be able to use single node containers within scaling services (e.g., AWS
 requires special configuration. Please reach out to us at [our dev list](mailto:dev@flagon.incubator.apache.org) for recommendations.
 
 1. Create docker-machine instance. 
-   **Note**: If using Docker Desktop bundle, there is a known bug in 
+   **Note**: If using Docker Desktop bundle for OSX, there is a known bug in 
    the bundled version of virtualbox that will prevent a successful docker-machine creation.
    Before installation, check that virtualbox version is at least 5.2. [``Reinstall virtualbox``](https://www.virtualbox.org/wiki/Downloads), if needed.
-   
+   **Note**: If using Docker Desktop bundle for Windows 10, you will need to use ``Hyper-V`` instead of virtual box. Refer to [Docker's guide](https://docs.docker.com/machine/drivers/hyper-v/) on creating vms with Hyper-V.
    ```bash
    $ docker-machine create --virtualbox-memory 3072 --virtualbox-cpu-count 2 flagon
+   # Windows 10 users will need to use Hyper-V: 
+   > docker-machine create -d hyperv --hyperv-virtual-switch "Primary Virtual Switch" --hyperv-memory 3072 --hyperv-cpu-count 2 flagon
    ```
     
 1. Before launching the Docker containers, ensure your ``vm_max_map_count``
