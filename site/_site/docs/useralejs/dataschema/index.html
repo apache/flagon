@@ -270,7 +270,7 @@ pages. Workflow analysis at this level is really crucial for understanding:</p>
 
 <p>This is a standard UserALE.js log from our <a href="https://github.com/apache/incubator-flagon-useralejs/blob/master/example/index.html">example test utility</a>:</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "microTime": 0.185,
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    "microTime": 0.185,
     "minor_ver": "0",
     "@timestamp": "2019-06-28T16:00:20.790Z",
     "type": "click",
@@ -310,8 +310,7 @@ pages. Workflow analysis at this level is really crucial for understanding:</p>
     "patch_ver": "0"
     ]
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>It’s a lot, but it makes sense in context.</p>
 
@@ -319,7 +318,7 @@ pages. Workflow analysis at this level is really crucial for understanding:</p>
 
 <p>The fields dentify what users do and what they interact with. UserALE.js gets this information from anywhere on a page/app without using a ton of hooks.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "type": "click", [this field documents the kind of user behavior observed]
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    "type": "click", [this field documents the kind of user behavior observed]
     "target": "button#test_button", [this field documents the site/app element a user interacted with]
     "path": [  {this is the DOM path to the "target" element, which is critical for disambiguation between elements}
       "button#test_button",
@@ -329,8 +328,7 @@ pages. Workflow analysis at this level is really crucial for understanding:</p>
       "#document",
       "Window"]
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You may want to specially label some of these fields and important elements that. See our guide on <a href="/docs/useralejs/API">the UserALE.js API</a>.</p>
 
@@ -341,11 +339,10 @@ pages. Workflow analysis at this level is really crucial for understanding:</p>
 
 <p>Time is a very important concept in UserALE.js. Below are the fields related to temporal data capture:</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "clientTime": 1561737620520,    [UserALE.js collects time from the client when a log is generated]
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    "clientTime": 1561737620520,    [UserALE.js collects time from the client when a log is generated]
     "microTime": 0.185,             [When a log is wrtten, we write microtime too, not every database parses it]
     "@timestamp": "2019-06-28T16:00:20.790Z", [If you use our Elastic backend, you will see indexing time too]
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="useralejs-meta-data">UserALE.js Meta-Data</h3>
 
@@ -357,31 +354,29 @@ pages. Workflow analysis at this level is really crucial for understanding:</p>
 
 <p>UserALE.js will add to details the number of rapid, consecutive clicks on a single element.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "details": {
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    "details": {
       "clicks": 13,
       "shift": false,
       "meta": false,
       "alt": false,
       "ctrl": false
     },
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You’ll get location of the cursor two for mouseover and click data, too!</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "location": {
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    "location": {
       "x": 40,
       "y": 19
     },
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/build">UserALE.js’ WebExtension</a> is deployed directly 
 into your browser, as a result you’ll get browser events.</p>
 
 <p>Examples are below,you’ll see our details field has some pretty useful data from the browser.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "details": {
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    "details": {
       "audible": false, [audio media on the page?]
       "title": "Discover - Kibana",
       "selected": true, 
@@ -394,8 +389,7 @@ into your browser, as a result you’ll get browser events.</p>
       "active": true, []tab is active?[]
       "pinned": false
     },
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h4 id="pageapp-context">Page/App Context</h4>
 
@@ -404,13 +398,12 @@ into your browser, as a result you’ll get browser events.</p>
 <p>UserALE.js gives a lot context about your page or app. Some are automatically grabbed from the page, some are 
 configurable through our <a href="/docs/useralejs">script tag</a></p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "toolVersion": "2.0.0", [you can give a semantic versioning of your page or tool]
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    "toolVersion": "2.0.0", [you can give a semantic versioning of your page or tool]
     "pageReferrer": "", [grabbed from the page, from which page did your users find your page/app]
     "toolName": "Apache UserALE.js Example", [give your tool an alis through our script tag]
     "pageTitle": "UserAleJS - Example Page", [page title grabbed from page]
     "pageUrl": "file:///Users/jpoore/Documents/Apache_Flagon/test/incubator-flagon-useralejs/example/index.html" 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>To find out more and how to change the context attached to event logs, check out our 
 <a href="/docs/useralejs/modifying">modifying UserALE.js source code</a> guide.</p>
@@ -420,11 +413,10 @@ configurable through our <a href="/docs/useralejs">script tag</a></p>
 <p>UserALE.js has its own methods for gathering user context, and it can integrate with other methods you might have 
 (e.g., cookies)</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "sessionID": "session_1561737570573", [This session ID is unique to a specific page visit]
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    "sessionID": "session_1561737570573", [This session ID is unique to a specific page visit]
     "userId": "example-user", [You can also pass a unique userId]
     "host": "172.18.0.1", [IP address]
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>To see how to pass in a userId from a url, check out our <a href="/docs/useralejs">script tag docs</a>.</p>
 
@@ -441,7 +433,7 @@ configurable through our <a href="/docs/useralejs">script tag</a></p>
 
 <p>Our WebExtension logs from browser-level events, including focus, activation, and zoom events:</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>"host": "172.18.0.1",
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"host": "172.18.0.1",
     "path": null,
     "microTime": 0.835,
     "@timestamp": "2019-06-28T18:05:03.681Z",
@@ -476,8 +468,7 @@ configurable through our <a href="/docs/useralejs">script tag</a></p>
     "useraleVersion": null
   },
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="interval-logs">Interval Logs</h3>
 
@@ -485,7 +476,7 @@ configurable through our <a href="/docs/useralejs">script tag</a></p>
 
 <p>Interval logs have a start- and end-time instead of a single, discrete time-stamp.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>    "endTime": 1561739434516, [end interval]
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    "endTime": 1561739434516, [end interval]
     "minor_ver": "0",
     "@timestamp": "2019-06-28T16:30:35.734Z",
     "type": "mouseover",
@@ -513,8 +504,7 @@ configurable through our <a href="/docs/useralejs">script tag</a></p>
     "userId": "example-user",
     "useraleVersion": "2.0.0",
     "patch_ver": "0"
-</code></pre>
-</div>
+</code></pre></div></div>
 <h2 id="contributing">Contributing</h2>
 
 <p>Contributions are welcome!  Simply <a href="https://issues.apache.org/jira/browse/FLAGON">submit an issue report</a> for problems 
@@ -579,7 +569,7 @@ incorporate it into UserALE.js.</p>
         Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2020 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>

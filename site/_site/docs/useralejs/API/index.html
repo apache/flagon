@@ -258,38 +258,36 @@ latitude in customizing and curating your logs.</p>
 
 <p>Don’t forget to add the UserALE.js script tag! For an in depth example, see our <a href="/docs/useralejs">Getting Started Guide</a>) and our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/example">example test utility</a>.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;head&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;head&gt;</span>
   <span class="nt">&lt;title&gt;</span>UserAleJS - Example Page<span class="nt">&lt;/title&gt;</span>
  <span class="c">&lt;!--
  Add the UserALE.js script tag to the top of your doc
  --&gt;</span>
    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/path/to/userale-2.0.0.min.js"</span> <span class="na">data-url=</span><span class="s">"http://yourLoggingUrl"</span><span class="nt">&gt;&lt;/script&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="options-examples"><code class="highlighter-rouge">options</code> Examples</h2>
 
 <p><code class="highlighter-rouge">options</code> allows you to modify UserALE.js script tag parameters. This can be particularly useful if need to pass additional data about users from your page into the logging parameters, like username and sessionID. You can build variables constructors that pass data from form data or browser storage to UserALE’s paramters.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!--
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!--
 Try out the options API to pass dynamic page data into your UserALE.js params page by page.
 --&gt;</span>
 <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
-    <span class="kr">const</span> <span class="nx">changeMe</span> <span class="o">=</span> <span class="s2">"me"</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">changeMe</span> <span class="o">=</span> <span class="s2">"me"</span><span class="p">;</span>
     <span class="nb">window</span><span class="p">.</span><span class="nx">userale</span><span class="p">.</span><span class="nx">options</span><span class="p">({</span>
       <span class="s2">"userId"</span><span class="p">:</span> <span class="nx">changeMe</span><span class="p">,</span>
       <span class="s2">"version"</span><span class="p">:</span> <span class="s2">"4.0.2"</span><span class="p">,</span>
       <span class="s2">"sessionID"</span><span class="p">:</span> <span class="s2">"4"</span>
     <span class="p">})</span>
 <span class="nt">&lt;/script&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="setlogfilter-examples"><code class="highlighter-rouge">setLogFilter</code> Examples</h2>
 
 <p><code class="highlighter-rouge">setLogFilter</code> allows you to eliminate log data you don’t need or want from your log stream:</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!--
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!--
 Add additional code blocks to set the filters you want
 This simple array filter pulls mouseover data out of your log stream
 --&gt;</span>
@@ -298,12 +296,11 @@ This simple array filter pulls mouseover data out of your log stream
       <span class="k">return</span> <span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nx">type</span> <span class="o">!=</span> <span class="s1">'mouseover'</span><span class="p">);</span>
     <span class="p">});</span>
   <span class="nt">&lt;/script&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Here is one UserALE.js filter to rule them all!</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- 
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- 
 Modify the array page-by-page to curate your log stream:
 by adding unwanted event 'types' in type_array;
 by adding unwanted log classes to eliminate 'raw' or 'interval' logs from your stream.
@@ -315,20 +312,18 @@ by adding unwanted log classes to eliminate 'raw' or 'interval' logs from your s
       <span class="k">return</span> <span class="o">!</span><span class="nx">type_array</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nx">type</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">logType_array</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nx">logType</span><span class="p">);</span>
     <span class="p">});</span>
   <span class="nt">&lt;/script&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You can also use the <code class="highlighter-rouge">setLogFilter</code> function to do other cool stuff. Below is an example for how to further modify the 
 rate at which UserALE.js collects data, but dropping every other log (odd-even) in the logging queue.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
       <span class="kd">var</span> <span class="nx">logCounter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
       <span class="nb">window</span><span class="p">.</span><span class="nx">userale</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">log</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">return</span> <span class="p">(</span><span class="nx">logCounter</span><span class="o">++</span> <span class="o">%</span> <span class="mi">2</span><span class="p">);</span>
       <span class="p">});</span>
     <span class="nt">&lt;/script&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="setlogmapper-examples"><code class="highlighter-rouge">setLogMapper</code> Examples</h2>
 
@@ -336,7 +331,7 @@ rate at which UserALE.js collects data, but dropping every other log (odd-even) 
 
 <p>This simple mapping function adds a new log field for custom labels you want to attach to certain elements:</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!--
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!--
 This will add your label to all event logs that reference a particular DOM target.
 --&gt;</span>
     <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
@@ -349,13 +344,12 @@ This will add your label to all event logs that reference a particular DOM targe
         <span class="p">}</span> 
       <span class="p">});</span>
     <span class="nt">&lt;/script&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This cool mapping function adds a progressive count on a given element (“app”) and writes to a new log field 
 called “score”</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>  <span class="nt">&lt;/head&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nt">&lt;/head&gt;</span>
   <span class="nt">&lt;body&gt;</span>
     <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"app"</span><span class="nt">&gt;</span>
       <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"increment"</span><span class="nt">&gt;</span>+<span class="nt">&lt;/button&gt;</span>
@@ -391,8 +385,7 @@ called “score”</p>
   <span class="nt">&lt;/body&gt;</span>
 <span class="nt">&lt;/html&gt;</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Test these examples out in our UserALE.js <a href="https://github.com/apache/incubator-flagon-useralejs/blob/master/example/index.html">example page</a> test utility!</p>
 
@@ -469,7 +462,7 @@ incorporate it into UserALE.js.</p>
         Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2020 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>

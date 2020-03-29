@@ -280,20 +280,19 @@ behavior on your webpage or application. But, you might not need all that data.<
 
 <p>You can modify some of the events UserALE.js by editing vars in <code class="highlighter-rouge">attacheHandlers</code>.</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">events</span><span class="p">;</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">events</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">bufferBools</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">bufferedEvents</span><span class="p">;</span>
 <span class="cm">/* modify which events are abstracted into interval logs by editing the array below*/</span>
 <span class="kd">var</span> <span class="nx">intervalEvents</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'click'</span><span class="p">,</span> <span class="s1">'focus'</span><span class="p">,</span> <span class="s1">'blur'</span><span class="p">,</span> <span class="s1">'input'</span><span class="p">,</span> <span class="s1">'change'</span><span class="p">,</span> <span class="s1">'mouseover'</span><span class="p">,</span> <span class="s1">'submit'</span><span class="p">];</span>
 <span class="cm">/* modify which events are pulled from window*/</span>
 <span class="kd">var</span> <span class="nx">windowEvents</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'load'</span><span class="p">,</span> <span class="s1">'blur'</span><span class="p">,</span> <span class="s1">'focus'</span><span class="p">];</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You can modify which events UserALE.js captures in it’s ‘raw’ log stream, by modifying the var <code class="highlighter-rouge">events</code>:</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="cm">/* Comment out event types in the `events` var for granular modification of UserALE.js behavior */</span>
-<span class="kr">export</span> <span class="kd">function</span> <span class="nx">defineDetails</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* Comment out event types in the `events` var for granular modification of UserALE.js behavior */</span>
+<span class="k">export</span> <span class="kd">function</span> <span class="nx">defineDetails</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// Events list</span>
   <span class="c1">// Keys are event types</span>
   <span class="c1">// Values are functions that return details object if applicable</span>
@@ -311,14 +310,13 @@ behavior on your webpage or application. But, you might not need all that data.<
     <span class="s1">'drag'</span> <span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
     <span class="s1">'drop'</span> <span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
     <span class="s1">'keydown'</span> <span class="p">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">logDetails</span> <span class="p">?</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">...,</span>
-    <span class="cm">/*'mouseover' : null,*/</span> <span class="err">#</span><span class="nx">Aliasing</span> <span class="nx">the</span> <span class="s2">"events"</span> <span class="nx">list</span> <span class="nx">removes</span> <span class="nx">that</span> <span class="kr">class</span> <span class="nx">from</span> <span class="nx">your</span> <span class="nx">event</span> <span class="nx">stream</span><span class="p">.</span>
+    <span class="cm">/*'mouseover' : null,*/</span> <span class="err">#</span><span class="nx">Aliasing</span> <span class="nx">the</span> <span class="s2">"events"</span> <span class="nx">list</span> <span class="nx">removes</span> <span class="nx">that</span> <span class="kd">class</span> <span class="k">from</span> <span class="nx">your</span> <span class="nx">event</span> <span class="nx">stream</span><span class="p">.</span>
     <span class="s1">'submit'</span> <span class="p">:</span> <span class="kc">null</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You can eliminate the <code class="highlighter-rouge">interval</code> log stream altogether by modifying the <code class="highlighter-rouge">attachHandlers</code> configs:</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">export</span> <span class="kd">function</span> <span class="nx">attachHandlers</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">function</span> <span class="nx">attachHandlers</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">defineDetails</span><span class="p">(</span><span class="nx">config</span><span class="p">);</span>
 
   <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">events</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">ev</span><span class="p">)</span> <span class="p">{</span>
@@ -332,8 +330,7 @@ behavior on your webpage or application. But, you might not need all that data.<
         <span class="nx">packageIntervalLog</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
     <span class="p">},</span> <span class="kc">true</span><span class="p">);</span>
   <span class="p">});</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="modifying-meta-data-packaged-in-logs-examples">Modifying Meta Data Packaged in Logs: Examples</h3>
 
@@ -341,7 +338,7 @@ behavior on your webpage or application. But, you might not need all that data.<
 
 <p>The easiest way to make these changes is by modifying the var <code class="highlighter-rouge">log</code>:</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code>  <span class="cm">/* Comment or add fields to be included in your logs*/</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="cm">/* Comment or add fields to be included in your logs*/</span>
   <span class="kd">var</span> <span class="nx">log</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">'target'</span> <span class="p">:</span> <span class="nx">getSelector</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">),</span>
     <span class="s1">'path'</span> <span class="p">:</span> <span class="nx">buildPath</span><span class="p">(</span><span class="nx">e</span><span class="p">),</span>
@@ -361,8 +358,7 @@ behavior on your webpage or application. But, you might not need all that data.<
     <span class="s1">'useraleVersion'</span><span class="p">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">useraleVersion</span><span class="p">,</span>
     <span class="s1">'sessionID'</span><span class="p">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">sessionID</span>
   <span class="p">};</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="benefits-modifying-useralejs-logs-via-src">Benefits Modifying UserALE.js Logs via src:</h3>
 <ul>
@@ -438,7 +434,7 @@ incorporate it into UserALE.js.</p>
         Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2020 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>
