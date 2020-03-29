@@ -257,16 +257,14 @@
 
 <p>Get a base centos box (this may take awhile)</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>  vagrant box add centos_6.5 https://github.com/2creatives/vagrant-centos/
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  vagrant box add centos_6.5 https://github.com/2creatives/vagrant-centos/
   releases/download/v6.5.3/centos65-x86_64-20140116.box
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Start it</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>  vagrant up virtualbox
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  vagrant up virtualbox
+</code></pre></div></div>
 
 <h4 id="getting-this-working-on-vagrant-openstack">Getting this working on Vagrant (OpenStack)</h4>
 
@@ -285,36 +283,32 @@
 
 <p>Adjust the Vagrantfile to use the appropriate <code class="highlighter-rouge">.pem</code> file and the appropriate KeyPair name associated with that pem file.  Once that is complete you can run:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>  vagrant up openstack --provider<span class="o">=</span>openstack
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  vagrant up openstack <span class="nt">--provider</span><span class="o">=</span>openstack
+</code></pre></div></div>
 
 <hr />
 <h3 id="if-you-already-have-your-own-system">If you already have your own system…</h3>
 
 <p>Once this package is cloned, create the database</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>  python manage.py syncdb
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  python manage.py syncdb
+</code></pre></div></div>
 
 <p>This will also create a superuser.</p>
 
 <h4 id="during-development-if-you-want-to-drop-to-the-database-and-start-over-run-the-following">During development, if you want to drop to the database and start over run the following:</h4>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>  python manage.py sqlclear op_tasks | python manage.py dbshell
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  python manage.py sqlclear op_tasks | python manage.py dbshell
   python manage.py syncdb
   python manage.py populate_db
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This will keep your super user and drop just the app database which is a lot nicer than deleting the whole database and starting over</p>
 
 <p>This process is also under the <code class="highlighter-rouge">reset_optask</code> command</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>  python manage.py reset_optask
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  python manage.py reset_optask
+</code></pre></div></div>
 
 <hr />
 <h3 id="now-that-stout-is-running">Now that STOUT is running…</h3>
@@ -326,16 +320,14 @@
 <h4 id="access-admin-page">Access admin page</h4>
 <p>The Admin page allows direct access to the STOUT database.  From this page you can manage users, tasks, and products directly. Before you can access the admin page, you need to create a superuser.  If you’re using Vagrant you can ssh into that system using</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>  vagrant ssh virtualbox
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  vagrant ssh virtualbox
+</code></pre></div></div>
 
 <p>Navigate to the source directory and add a superuser</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>  <span class="nb">cd</span> /var/www/op_tasks/db/
-  sudo python manage.py createsuperuser
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nb">cd</span> /var/www/op_tasks/db/
+  <span class="nb">sudo </span>python manage.py createsuperuser
+</code></pre></div></div>
 
 <p>Now point your browser to the admin page at <a href="http://localhost:8080/admin">localhost:8080/admin</a> to begin browsing the STOUT database.</p>
 
@@ -408,7 +400,7 @@
         Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2020 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>

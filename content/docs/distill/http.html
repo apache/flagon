@@ -249,9 +249,8 @@
     <h3 id="restful-endpoints">RESTful Endpoints</h3>
 <blockquote>
 
-  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">app_id</span><span class="p">)</span>
-</code></pre>
-  </div>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">app_id</span><span class="p">)</span>
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -260,9 +259,8 @@
 
 <blockquote>
 
-  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XPOST https://localhost:8090/xdata_v3
-</code></pre>
-  </div>
+  <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-XPOST</span> https://localhost:8090/xdata_v3
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -281,9 +279,8 @@
 
 <blockquote>
 
-  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">app_id</span><span class="p">)</span>
-</code></pre>
-  </div>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">app_id</span><span class="p">)</span>
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -292,9 +289,8 @@
 
 <blockquote>
 
-  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XDELETE https://localhost:8090/xdata_v3
-</code></pre>
-  </div>
+  <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-XDELETE</span> https://localhost:8090/xdata_v3
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -313,9 +309,8 @@
 
 <blockquote>
 
-  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">denoise</span><span class="p">(</span><span class="n">app_id</span><span class="p">)</span>
-</code></pre>
-  </div>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">denoise</span><span class="p">(</span><span class="n">app_id</span><span class="p">)</span>
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -324,9 +319,8 @@
 
 <blockquote>
 
-  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XGET https://localhost:8090/denoise/xdata_v3?save<span class="o">=</span><span class="nb">true</span>&amp;type<span class="o">=</span>parsed
-</code></pre>
-  </div>
+  <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-XGET</span> https://localhost:8090/denoise/xdata_v3?save<span class="o">=</span><span class="nb">true</span>&amp;type<span class="o">=</span>parsed
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -345,9 +339,8 @@
 
 <blockquote>
 
-  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">index</span><span class="p">()</span>
-</code></pre>
-  </div>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">index</span><span class="p">()</span>
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -356,32 +349,30 @@
 
 <blockquote>
 
-  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XGET https://localhost:8090
-</code></pre>
-  </div>
+  <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-XGET</span> https://localhost:8090
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
 
-  <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="p">{</span>
-        <span class="s2">"author"</span> <span class="err">:</span> <span class="s2">"Michelle Beard"</span><span class="p">,</span>
-        <span class="s2">"email"</span> <span class="err">:</span> <span class="s2">"msbeard@apache.org"</span><span class="p">,</span>
-        <span class="s2">"name"</span><span class="err">:</span> <span class="s2">"Distill"</span><span class="p">,</span>
-        <span class="s2">"status"</span> <span class="err">:</span> <span class="kc">true</span><span class="p">,</span>
-        <span class="s2">"version"</span> <span class="err">:</span> <span class="s2">"1.0"</span><span class="p">,</span>
-        <span class="s2">"applications"</span> <span class="err">:</span> <span class="p">{</span>
-                <span class="s2">"xdata_v3"</span> <span class="err">:</span> <span class="p">{</span>
+  <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+        <span class="s2">"author"</span> <span class="p">:</span> <span class="s2">"Michelle Beard"</span><span class="p">,</span>
+        <span class="s2">"email"</span> <span class="p">:</span> <span class="s2">"msbeard@apache.org"</span><span class="p">,</span>
+        <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Distill"</span><span class="p">,</span>
+        <span class="s2">"status"</span> <span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="s2">"version"</span> <span class="p">:</span> <span class="s2">"1.0"</span><span class="p">,</span>
+        <span class="s2">"applications"</span> <span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"xdata_v3"</span> <span class="p">:</span> <span class="p">{</span>
                         <span class="nl">testing</span><span class="p">:</span> <span class="mi">205</span><span class="p">,</span>
-                        <span class="nx">parsed</span><span class="err">:</span> <span class="mi">500</span><span class="p">,</span>
+                        <span class="nx">parsed</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span>
                 <span class="p">},</span>
-                <span class="s2">"test_app"</span> <span class="err">:</span> <span class="p">{</span>
+                <span class="s2">"test_app"</span> <span class="p">:</span> <span class="p">{</span>
                         <span class="nl">logs</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span>
-                        <span class="nx">parsed</span><span class="err">:</span> <span class="mi">100</span><span class="p">,</span>
+                        <span class="nx">parsed</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
                 <span class="p">}</span>
         <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-  </div>
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -393,9 +384,8 @@
 
 <blockquote>
 
-  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">merge_stout</span><span class="p">()</span>
-</code></pre>
-  </div>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">merge_stout</span><span class="p">()</span>
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -404,9 +394,8 @@
 
 <blockquote>
 
-  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XGET https://locahost:8090/stout/xdata_v3
-</code></pre>
-  </div>
+  <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-XGET</span> https://locahost:8090/stout/xdata_v3
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -418,9 +407,8 @@
 
 <blockquote>
 
-  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">page_not_found</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
-</code></pre>
-  </div>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">page_not_found</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -429,9 +417,8 @@
 
 <blockquote>
 
-  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">segment</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="n">app_type</span><span class="p">)</span>
-</code></pre>
-  </div>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">segment</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="n">app_type</span><span class="p">)</span>
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -440,11 +427,10 @@
 
 <blockquote>
 
-  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XGET https://[hostname]:[port]/search/
+  <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-XGET</span> https://[hostname]:[port]/search/
 xdata_v3?q<span class="o">=</span>session_id:A1234&amp;size<span class="o">=</span>100
 &amp;scroll<span class="o">=</span><span class="nb">false</span>&amp;fl<span class="o">=</span>param1,param2
-</code></pre>
-  </div>
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -468,9 +454,8 @@ xdata_v3?q<span class="o">=</span>session_id:A1234&amp;size<span class="o">=</sp
 
 <blockquote>
 
-  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="n">app_type</span><span class="p">)</span>
-</code></pre>
-  </div>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="n">app_type</span><span class="p">)</span>
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -479,10 +464,9 @@ xdata_v3?q<span class="o">=</span>session_id:A1234&amp;size<span class="o">=</sp
 
 <blockquote>
 
-  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XGET https://localhost:8090/stat/xdata_v3/
+  <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-XGET</span> https://localhost:8090/stat/xdata_v3/
 testing/?stat<span class="o">=</span>terms&amp;elem<span class="o">=</span>signup&amp;event<span class="o">=</span>click
-</code></pre>
-  </div>
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -502,9 +486,8 @@ testing/?stat<span class="o">=</span>terms&amp;elem<span class="o">=</span>signu
 
 <blockquote>
 
-  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="n">app_type</span><span class="p">)</span>
-</code></pre>
-  </div>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="n">app_type</span><span class="p">)</span>
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -513,21 +496,19 @@ testing/?stat<span class="o">=</span>terms&amp;elem<span class="o">=</span>signu
 
 <blockquote>
 
-  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XGET https://localhost:8090/status/xdata_v3
-</code></pre>
-  </div>
+  <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-XGET</span> https://localhost:8090/status/xdata_v3
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
 
-  <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="p">{</span>
-  <span class="s2">"application"</span><span class="err">:</span> <span class="s2">"xdata_v3"</span><span class="p">,</span>
-  <span class="s2">"health"</span><span class="err">:</span> <span class="s2">"green"</span><span class="p">,</span>
-  <span class="s2">"num_docs"</span><span class="err">:</span> <span class="s2">"433"</span><span class="p">,</span>
-  <span class="s2">"status"</span><span class="err">:</span> <span class="s2">"open"</span>
+  <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+  <span class="s2">"application"</span><span class="p">:</span> <span class="s2">"xdata_v3"</span><span class="p">,</span>
+  <span class="s2">"health"</span><span class="p">:</span> <span class="s2">"green"</span><span class="p">,</span>
+  <span class="s2">"num_docs"</span><span class="p">:</span> <span class="s2">"433"</span><span class="p">,</span>
+  <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"open"</span>
 <span class="p">}</span>
-</code></pre>
-  </div>
+</code></pre></div>  </div>
   <p>w
 <strong>Parameters:</strong></p>
   <ul>
@@ -544,9 +525,8 @@ testing/?stat<span class="o">=</span>terms&amp;elem<span class="o">=</span>signu
 
 <blockquote>
 
-  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">app_id</span><span class="p">)</span>
-</code></pre>
-  </div>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">distill</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">app_id</span><span class="p">)</span>
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -555,9 +535,8 @@ testing/?stat<span class="o">=</span>terms&amp;elem<span class="o">=</span>signu
 
 <blockquote>
 
-  <div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>curl -XPOST https://localhost:8090/update/xdata_v3?name<span class="o">=</span><span class="s2">"xdata_v4"</span>
-</code></pre>
-  </div>
+  <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-XPOST</span> https://localhost:8090/update/xdata_v3?name<span class="o">=</span><span class="s2">"xdata_v4"</span>
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -632,7 +611,7 @@ testing/?stat<span class="o">=</span>terms&amp;elem<span class="o">=</span>signu
         Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2020 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>
