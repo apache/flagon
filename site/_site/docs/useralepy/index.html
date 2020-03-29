@@ -260,23 +260,19 @@
 
 <p>The first step is to install Apache UserALE.PyQt5. First, checkout the latest version of Apache UserALE.PyQt5 from our Git repository.</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>git clone https://gitbox.apache.org/repos/asf/incubator-flagon-userale-pyqt5.git
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>git clone https://gitbox.apache.org/repos/asf/incubator-flagon-userale-pyqt5.git
+</code></pre></div></div>
 
 <p>Apache UserALE.PyQt5 is a python3 project, so it can be installed like any other python library. Several operating systems (Mac OS X, Major Versions of Linux/BSD) have Python3 pre-installed, so you should just have to run</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>easy_install3 userale
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>easy_install3 userale
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>  or
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  or
+</code></pre></div></div>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>pip3 install userale
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>pip3 install userale
+</code></pre></div></div>
 
 <p>Users are strongly recommended to install Apache UserALE.PyQt5 in a virtualenv. Instructions to setup an virtual environment will be explained below.</p>
 
@@ -296,68 +292,58 @@ When the package is installed via easy_install3 or pip3 this function will be bo
 
 <p>Start by changing directory into the root of Apache UserALE.PyQt5’s project directory, and then use the virtualenv command-line tool to create a new environment:</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>virtualenv --python<span class="o">=</span>/usr/bin/python3 env
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>virtualenv <span class="nt">--python</span><span class="o">=</span>/usr/bin/python3 env
+</code></pre></div></div>
 
 <p>Optionally, Python3 has built in support for virtual environments.</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>mkdir env
-  <span class="nv">$ </span>python3 -m venv env
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>mkdir env
+  <span class="nv">$ </span>python3 <span class="nt">-m</span> venv env
+</code></pre></div></div>
 
 <p>Activate environment:</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span><span class="nb">source </span>env/bin/activate
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span><span class="nb">source </span>env/bin/activate
+</code></pre></div></div>
 
 <p>Install UserAle requirements:</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>env/bin/pip3 install -r requirements.txt
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>env/bin/pip3 install <span class="nt">-r</span> requirements.txt
+</code></pre></div></div>
 
 <p>To build the source code and run all unit tests.</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>env/bin/python3 setup.py develop <span class="nb">test</span>
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>env/bin/python3 setup.py develop <span class="nb">test</span>
+</code></pre></div></div>
 
 <p>Deactivate environment</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>deactivate
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>deactivate
+</code></pre></div></div>
 
 <h3 id="installing-documentation">Installing Documentation</h3>
 
 <p>First, install the documentation dependencies:</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>env/bin/pip3 install -r doc_requirements.txt
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>env/bin/pip3 install <span class="nt">-r</span> doc_requirements.txt
+</code></pre></div></div>
 
 <p>To build Apache UserALE.PyQt5’s documentation, create a directory at the root level of /userale.pyqt5 called userale.pyqt5-docs.</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>mkdir userale.pyqt5-docs &amp; <span class="nb">cd </span>userale.pyqt5-docs
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>mkdir userale.pyqt5-docs &amp; <span class="nb">cd </span>userale.pyqt5-docs
+</code></pre></div></div>
 
 <p>Execute build command from inside the top-level doc/ directory:</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>make html
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>make html
+</code></pre></div></div>
 
 <p>This should build the documentation in your shell, and output HTML. At then end, it should say something about documents being ready in userale.pyqt5-docs/html.</p>
 
 <p>You can now open them in your browser by typing</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="nv">$ </span>open userale.pyqt5-docs/html/index.html
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>open userale.pyqt5-docs/html/index.html
+</code></pre></div></div>
 
   </div>
 </div>
@@ -417,7 +403,7 @@ When the package is installed via easy_install3 or pip3 this function will be bo
         Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2020 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>

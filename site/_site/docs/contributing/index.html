@@ -261,9 +261,8 @@
 <h4 id="2-make-and-test-your-changes-locally">2. Make and test your changes locally</h4>
 
 <p>The Apache Flagon source code is maintained in <a href="https://gitbox.apache.org/repos/asf?s=flagon">several git repositories</a> hosted by Apache.  These repositories are mirrored and more easily available <a href="https://github.com/apache?q=flagon">on GitHub</a>.  To make your changes, fork the appropriate GitHub repository and make commits to a topic branch in your fork.  Commits should be made in logical units and must reference the JIRA issue number:</p>
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>   git commit -S -m <span class="s2">"[FLAGON-123] High-level message describing the changes."</span>
-</code></pre>
-</div>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   git commit <span class="nt">-S</span> <span class="nt">-m</span> <span class="s2">"[FLAGON-123] High-level message describing the changes."</span>
+</code></pre></div></div>
 <p>Note that your commits should be verifiable; each commit should be verified with a PGP certificate. The easiest way to do this is to create a PGP signature with <a href="https://www.gnupg.org/">GnuPG</a>, register it with you GitHub account and <a href="https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work">configure git</a> to use this signature when committing.</p>
 
 <p>Avoid commits which cover multiple, distinct goals that could (and should) be handled separately.  If you do not already have an account on JIRA, you will need to create one to claim an issue, discuss development, or report results.</p>
@@ -330,7 +329,7 @@
         Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2020 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>

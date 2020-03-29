@@ -317,7 +317,7 @@
 
 <p>Below is a sample <code class="highlighter-rouge">path</code> for a Kibana element:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>```shell
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>```shell
 ...
     "pageTitle": "Discover - Kibana",
     "toolName": "test_app",
@@ -351,8 +351,7 @@
       "Window"
     ...
 ```
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Through simple <a href="/docs/useralejs/modifying">modifications to UserALE.js source</a> or with the UserALE.js <a href="/docs/useralejs/API">API</a> you can alias verbose fields in your logs to reduce resource consumption.</p>
 
@@ -391,7 +390,7 @@
     <p>Important: as noted in the instructions, you’ll need to have collected some log data to establish the index.</p>
   </li>
   <li><strong>Once Elasticsearch, Logstash, Kibana, and metricbeat are up, look at the <code class="highlighter-rouge">userale</code> index stats.</strong>
-    <div class="language-shell highlighter-rouge"><pre class="highlight"><code> <span class="c">#Index Stats using Elastic's _stats API</span>
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c">#Index Stats using Elastic's _stats API</span>
  <span class="nv">$ </span>curl localhost:9200/index_name/_stats?pretty<span class="o">=</span><span class="nb">true</span>
   
  <span class="c">#Tailored for Apache Flagon default settings</span>
@@ -399,10 +398,9 @@
  
  <span class="c">#Or, view in your browser</span>
  http://localhost:9200/userale/_stats?pretty<span class="o">=</span><span class="nb">true</span>
-</code></pre>
-    </div>
+</code></pre></div>    </div>
     <p>Find the <code class="highlighter-rouge">indices</code> portion of the output. It looks like this (#note annotations):</p>
-    <div class="language-shell highlighter-rouge"><pre class="highlight"><code> ...
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ...
  <span class="s2">"indices"</span> : <span class="o">{</span>
      <span class="s2">"userale"</span> : <span class="o">{</span> <span class="c">#this is the index UserALE.js logs write to</span>
        <span class="s2">"uuid"</span> : <span class="s2">"0h0Wxe2cSwqMALs4QCJ8Tw"</span>,
@@ -414,8 +412,7 @@
          <span class="s2">"store"</span> : <span class="o">{</span>
            <span class="s2">"size_in_bytes"</span> : 241212 <span class="c">#this is size of the index in bytes (.24 MB).</span>
  ...
-</code></pre>
-    </div>
+</code></pre></div>    </div>
     <p>Let’s call this value a simple benchmark.</p>
 
     <p>As you continue benchmarking, the <code class="highlighter-rouge">userale</code> index “size_in_bytes” will be one of your key metrics.</p>
@@ -426,20 +423,19 @@
     <p>Drop in a UserALE.js script-tag into your project (see <a href="/docs/useralejs">instructions</a>).</p>
 
     <p>Here is an example of the script tag (with <code class="highlighter-rouge">settings</code>) we’re using in the UserALE.js Example page for this test:</p>
-    <div class="highlighter-rouge"><pre class="highlight"><code> &lt;script
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;script
    src="file:/// ... /UserALEtest/userale-1.1.0.min.js"
    data-url="http://localhost:8100/"
    data-user="example-user"
    data-version="1.1.1"
    data-tool="Apache UserALE.js Example"
  &gt;&lt;/script&gt;
-</code></pre>
-    </div>
+</code></pre></div>    </div>
     <p>To get a conservative upper-bound, generate as many mouseover and scroll behaviors in your page/app as you can.</p>
 
     <p>Doing that for 5 minutes solid, our <code class="highlighter-rouge">userale</code> index looks like this (#note annotations):</p>
 
-    <div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="s2">"indices"</span> : <span class="o">{</span>
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="s2">"indices"</span> : <span class="o">{</span>
     <span class="s2">"userale"</span> : <span class="o">{</span>
       <span class="s2">"uuid"</span> : <span class="s2">"0h0Wxe2cSwqMALs4QCJ8Tw"</span>,
       <span class="s2">"primaries"</span> : <span class="o">{</span>
@@ -449,8 +445,7 @@
         <span class="o">}</span>,
         <span class="s2">"store"</span> : <span class="o">{</span>
           <span class="s2">"size_in_bytes"</span> : 820978 <span class="c">#new size of the index (.82 MB)</span>
-</code></pre>
-    </div>
+</code></pre></div>    </div>
     <p><strong>That’s +1,998 documents (2000) and +579,866 bytes (.58 MB) generated with UserALE.js by one user in 5 mins</strong>.</p>
 
     <p>Assuming this rate over an 8 hour period each day for 20 working days: that’s <strong>1.1 GB per month</strong>.</p>
@@ -471,7 +466,7 @@
     <p>Using the UserALE.js HTML5 <code class="highlighter-rouge">settings</code> in our script tag, you can “downsample” certain event handler that generate a lot of documents.</p>
 
     <p>Here’s what our script tag looks like now:</p>
-    <div class="highlighter-rouge"><pre class="highlight"><code> &lt;script
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;script
    src="file:/// ... /UserALEtest/userale-1.1.0.min.js"
    data-url="http://localhost:8100/"
    data-user="example-user"
@@ -479,13 +474,12 @@
    data-resolution=1000 #increased the delay between collection of frequent events (e.g., mouseovers).
    data-tool="Apache UserALE.js Example"
  &gt;&lt;/script&gt;
-</code></pre>
-    </div>
+</code></pre></div>    </div>
     <p>Next, replicate your benchmarking, behaving in a similar way for the same amount of time.</p>
 
     <p>Here’s what our <code class="highlighter-rouge">userale</code> index looks like now after another 5 minutes of vigorous behavior.</p>
 
-    <div class="language-shell highlighter-rouge"><pre class="highlight"><code>  <span class="s2">"indices"</span> : <span class="o">{</span>
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="s2">"indices"</span> : <span class="o">{</span>
     <span class="s2">"userale"</span> : <span class="o">{</span>
       <span class="s2">"uuid"</span> : <span class="s2">"0h0Wxe2cSwqMALs4QCJ8Tw"</span>,
       <span class="s2">"primaries"</span> : <span class="o">{</span>
@@ -495,8 +489,7 @@
         <span class="o">}</span>,
         <span class="s2">"store"</span> : <span class="o">{</span>
           <span class="s2">"size_in_bytes"</span> : 115978 <span class="c">#new size of the index (1.1 MB)  </span>
-</code></pre>
-    </div>
+</code></pre></div>    </div>
     <p><strong>That is +1518 documents and +295K bytes (.30 MB)</strong></p>
 
     <p>But, it’s 500 fewer than our first benchmark and ~40% less growth in the store.</p>
@@ -528,7 +521,7 @@
 
 <p>For more streamlined views into your indices, try the <code class="highlighter-rouge">CAT</code> API. Try this call in your browser:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>http://localhost:9200/_cat/indices?format=json&amp;bytes=b&amp;pretty
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost:9200/_cat/indices?format=json&amp;bytes=b&amp;pretty
 
 Output is very simple and index sizes stack on top of one another
 ```shell
@@ -583,8 +576,7 @@ Output is very simple and index sizes stack on top of one another
   }
 ]
 ```
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><strong>Use Flagon’s pre-configured metricbeat service</strong> to run with Flagon.</p>
 
@@ -682,7 +674,7 @@ Output is very simple and index sizes stack on top of one another
         Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2020 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>
