@@ -249,34 +249,31 @@
     <p>To build <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master">Apache UserALE.js</a>, you will need to clone our repo and install <a href="https://nodejs.org/">NPM and Node.js</a>.</p>
 
 <p>UserALE.js utilizes NPM for package and dependency management. Execute the following to install dependencies.</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>#install required packages
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#install required packages
 npm install
 
 #review major dependencies
 npm ls --depth=0
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="build">Build</h2>
 
 <p>UserALE.js uses Gulp to manage build tasking. These tasks are executed through our build script; use the following to execute:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>#Build UserALE.js
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#Build UserALE.js
 npm run build
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="test">Test</h2>
 
 <p>UserALE.js uses JSDOM and Mocha to execute unit tests, which are integrated into our build pipeline. See <code class="highlighter-rouge">package.json</code> for full script options.</p>
 
 <p>To run tests:</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>#Run UserALE.js unit tests
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#Run UserALE.js unit tests
 npm run test
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>… you’ll see something like:</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>...
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
     attachHandlers
     ✓ attaches all the event handlers without duplicates
     ✓ debounces bufferedEvents (505ms)
@@ -350,8 +347,7 @@ npm run test
 
   45 passing (954ms)
   1 pending
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>Any failing tests will also be logged in the terminal. If there are failing tests, please consider <a href="https://issues.apache.org/jira/projects/FLAGON">logging an issue in JIRA</a>.</p>
 
 <p>Further instructions can be found in our <a href="https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md">README</a></p>
@@ -414,7 +410,7 @@ npm run test
         Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2020 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>

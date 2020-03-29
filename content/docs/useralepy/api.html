@@ -252,11 +252,10 @@
 
 <blockquote>
 
-  <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">userale</span><span class="o">.</span><span class="n">ale</span><span class="o">.</span><span class="n">Ale</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s">'userale.log'</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+  <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">userale</span><span class="o">.</span><span class="n">ale</span><span class="o">.</span><span class="n">Ale</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s">'userale.log'</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
 <span class="n">session</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">toolname</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">toolversion</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
 <span class="n">keylog</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">interval</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">shutoff</span><span class="o">=</span><span class="p">[])</span>
-</code></pre>
-  </div>
+</code></pre></div>  </div>
 </blockquote>
 
 <blockquote>
@@ -280,22 +279,21 @@
 
 <p>An example log will appear like this:</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code>  <span class="p">{</span>
-      <span class="s1">'target'</span><span class="err">:</span> <span class="s1">'testLineEdit'</span><span class="p">,</span>
-      <span class="s1">'path'</span><span class="err">:</span> <span class="p">[</span><span class="s1">'Example'</span><span class="p">,</span> <span class="s1">'testLineEdit'</span><span class="p">],</span>
-      <span class="s1">'clientTime'</span><span class="err">:</span> <span class="s1">'2016-08-03 16:12:03.460573'</span><span class="p">,</span>
-      <span class="s1">'location'</span><span class="err">:</span> <span class="p">{</span><span class="s1">'x'</span><span class="err">:</span> <span class="mi">82</span><span class="p">,</span> <span class="s1">'y'</span><span class="err">:</span> <span class="mi">0</span><span class="p">},</span>
-      <span class="s1">'type'</span><span class="err">:</span> <span class="s1">'mousemove'</span><span class="p">,</span>
-      <span class="s1">'userAction'</span><span class="err">:</span> <span class="s1">'true'</span><span class="p">,</span>
-      <span class="s1">'details'</span> <span class="err">:</span> <span class="p">{},</span>
-      <span class="s1">'userId'</span><span class="err">:</span> <span class="s1">'userABC1234'</span><span class="p">,</span>
-      <span class="s1">'session'</span><span class="err">:</span> <span class="s1">'5ee42ccc-852c-44d9-a937-28d7901e4ead'</span><span class="p">,</span>
-      <span class="s1">'toolName'</span><span class="err">:</span> <span class="s1">'myApplication'</span><span class="p">,</span>
-      <span class="s1">'toolVersion'</span><span class="err">:</span> <span class="s1">'3.5.0'</span><span class="p">,</span>
-      <span class="s1">'useraleVersion'</span><span class="err">:</span> <span class="s1">'0.1.0'</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="p">{</span>
+      <span class="s1">'target'</span><span class="p">:</span> <span class="s1">'testLineEdit'</span><span class="p">,</span>
+      <span class="s1">'path'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'Example'</span><span class="p">,</span> <span class="s1">'testLineEdit'</span><span class="p">],</span>
+      <span class="s1">'clientTime'</span><span class="p">:</span> <span class="s1">'2016-08-03 16:12:03.460573'</span><span class="p">,</span>
+      <span class="s1">'location'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'x'</span><span class="p">:</span> <span class="mi">82</span><span class="p">,</span> <span class="s1">'y'</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+      <span class="s1">'type'</span><span class="p">:</span> <span class="s1">'mousemove'</span><span class="p">,</span>
+      <span class="s1">'userAction'</span><span class="p">:</span> <span class="s1">'true'</span><span class="p">,</span>
+      <span class="s1">'details'</span> <span class="p">:</span> <span class="p">{},</span>
+      <span class="s1">'userId'</span><span class="p">:</span> <span class="s1">'userABC1234'</span><span class="p">,</span>
+      <span class="s1">'session'</span><span class="p">:</span> <span class="s1">'5ee42ccc-852c-44d9-a937-28d7901e4ead'</span><span class="p">,</span>
+      <span class="s1">'toolName'</span><span class="p">:</span> <span class="s1">'myApplication'</span><span class="p">,</span>
+      <span class="s1">'toolVersion'</span><span class="p">:</span> <span class="s1">'3.5.0'</span><span class="p">,</span>
+      <span class="s1">'useraleVersion'</span><span class="p">:</span> <span class="s1">'0.1.0'</span>
   <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h4 id="aggregate">aggregate()</h4>
 <p>Sample high frequency logs at self.resolution. High frequency logs are consolidated down to a single log event to be emitted later</p>
@@ -586,7 +584,7 @@
         Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2020 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>

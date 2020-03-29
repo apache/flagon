@@ -252,7 +252,7 @@
 
 <p>Below is an example PyQt5 application taken from ZetCode PyQt5 tutorial instrumented with Apache UserALE.PyQt5.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code>  <span class="kn">import</span> <span class="nn">sys</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kn">import</span> <span class="nn">sys</span>
   <span class="kn">from</span> <span class="nn">PyQt5.QtWidgets</span> <span class="kn">import</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QMessageBox</span>
   <span class="kn">from</span> <span class="nn">PyQt5.QtCore</span> <span class="kn">import</span> <span class="n">QCoreApplication</span><span class="p">,</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">QEvent</span>
 
@@ -284,17 +284,15 @@
       <span class="n">app</span><span class="o">.</span><span class="n">installEventFilter</span> <span class="p">(</span><span class="n">ale</span><span class="p">)</span>
 
       <span class="n">sys</span><span class="o">.</span><span class="nb">exit</span> <span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">())</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Before we enter the mainloop of the application, UserAle needs to register the application to be instrumented. Simply instantiate Apache UserALE.PyQt5 and install it as an event filter in your application.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code>  <span class="c"># Initiate UserAle</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c"># Initiate UserAle</span>
   <span class="n">ale</span> <span class="o">=</span> <span class="n">Ale</span> <span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="s">"mouse.log"</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s">"testUser"</span><span class="p">,</span> <span class="n">toolversion</span><span class="o">=</span><span class="s">"0.0.1"</span><span class="p">)</span>
   <span class="c"># install globally</span>
   <span class="n">app</span><span class="o">.</span><span class="n">installEventFilter</span> <span class="p">(</span><span class="n">ale</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="instrumenting-your-application-manually-with-apache-useralepyqt5">Instrumenting Your Application Manually with Apache UserALE.PyQt5</h3>
 
@@ -358,7 +356,7 @@
         Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        Copyright &copy; 2019 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2020 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>
