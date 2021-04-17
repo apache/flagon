@@ -24,7 +24,7 @@ Don't forget to add the UserALE.js script tag! For an in depth example, see our 
  <!--
  Add the UserALE.js script tag to the top of your doc
  -->
-   <script src="/path/to/userale-2.0.0.min.js" data-url="http://yourLoggingUrl"></script>
+   <script src="/path/to/userale-2.1.1.min.js" data-url="http://yourLoggingUrl"></script>
 ```
 
 ## `options` Examples
@@ -39,7 +39,7 @@ Try out the options API to pass dynamic page data into your UserALE.js params pa
     const changeMe = "me";
     window.userale.options({
       "userId": changeMe,
-      "version": "4.0.2",
+      "version": "2.1.1",
       "sessionID": "4"
     })
 </script>
