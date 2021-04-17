@@ -40,7 +40,7 @@ This is a standard UserALE.js log from our [example test utility](https://github
       "ctrl": false
     },
     "major_ver": "2",
-    "toolVersion": "2.0.0",
+    "toolVersion": "2.1.1",
     "pageReferrer": "",
     "clientTime": 1561737620520,
     "userAction": true,
@@ -63,7 +63,7 @@ This is a standard UserALE.js log from our [example test utility](https://github
     "logType": "raw",
     "pageUrl": "file:///Users/jpoore/Documents/Apache_Flagon/test/incubator-flagon-useralejs/example/index.html",
     "userId": "example-user",
-    "useraleVersion": "2.0.0",
+    "useraleVersion": "2.1.1",
     "patch_ver": "0"
     ]
 
@@ -173,7 +173,7 @@ configurable through our [script tag]({{ '/docs/useralejs' | prepend: site.baseu
 
 
 ```html
-    "toolVersion": "2.0.0", [you can give a semantic versioning of your page or tool]
+    "toolVersion": "2.1.1", [you can give a semantic versioning of your page or tool]
     "pageReferrer": "", [grabbed from the page, from which page did your users find your page/app]
     "toolName": "Apache UserALE.js Example", [give your tool an alis through our script tag]
     "pageTitle": "UserAleJS - Example Page", [page title grabbed from page]
@@ -267,7 +267,7 @@ Interval logs have a start- and end-time instead of a single, discrete time-stam
     "major_ver": "2",
     "count": 10, [count of disrcete events within the interval] 
     "pageReferrer": "",
-    "toolVersion": "2.0.0",
+    "toolVersion": "2.1.1",
     "userAction": false,
     "duration": 396, [duration of interval in ms]
     "host": "172.18.0.1",
@@ -284,7 +284,7 @@ Interval logs have a start- and end-time instead of a single, discrete time-stam
     "logType": "interval", [as compared to "raw"]
     "pageUrl": "fApache_Flagon/test/incubator-flagon-useralejs/example/index.html",
     "userId": "example-user",
-    "useraleVersion": "2.0.0",
+    "useraleVersion": "2.1.1",
     "patch_ver": "0"
 ```
 ## Contributing

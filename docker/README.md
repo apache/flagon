@@ -1,23 +1,30 @@
 Building Apache Flagon Docker Containers
 ===================================
-*Last Integration Test: 29 AUG 2019 using Docker Engine v19.03.1, Compose v1.24.1, Machine v0.16.1*
+*Last Tested: 04 MAR 2021 using Docker Engine v20.10.2, Compose v1.27.4, Machine v0.16.1*
+
+## This single-node deployment is meant for demonstrations and very limited data collections with [Apache Flagon UserALE.js](https://github.com/apache/incubator-flagon-useralejs).
+
+Configurations in this repository can be used in complimentary version of appropriately scaled Elastic clusters. 
+Other [projects](https://github.com/deviantony/docker-elk) or service providers (e.g., AWS) provide excellent guidance for deploying production clusters.
 
 Prerequisites
 -------------
 
-1. Install [``Docker``](http://docker.com) on your machine. Requires Docker Compose 1.23 and above.
+1. ``Docker`` can be found [here](http://docker.com). 
+   Alternatively, you can build this deployment in [Docker Desktop](https://www.docker.com/products/docker-desktop) on either OSX or Windows OS.
 
-1. Install docker-compose. Full instructions can be found [``here``](https://docs.docker.com/compose/install/). 
-   If you install Docker through the [``Desktop bundle``](https://www.docker.com/products/docker-desktop), docker-compose is included.
+1. ``docker-compose`` can be found [here](https://docs.docker.com/compose/install/). Requires Docker Compose 1.23 and above.
+   If you install Docker through [Docker Desktop](https://www.docker.com/products/docker-desktop), docker-compose is included.
+   
+1. ``docker-machine`` can be found [here](https://github.com/docker/machine/releases/). 
+   Note that ``docker-machine`` was removed from [Docker Desktop](https://www.docker.com/products/docker-desktop) in ver 2.1.4. If you are running later versions you will need to install [Docker/Machine](https://github.com/docker/machine/releases/) manually.
+   Alternatively, you can use ``virtualbox`` or other methods of provisioning vms to run docker containers in. The instructions assume you are running ``docker-machine``. 
    
 Single Node Example Container
 -----------------------------
 
-The single node deployment steps below will build a single-node logging server on a single
-machine. This is suitable for demonstrations and very limited data collections. Please 
-refer to our [``Kubernetes``](https://github.com/apache/incubator-flagon/tree/master/kubernetes) guide for deployments that scale to your needs. In some cases, 
-you may be able to use single node containers within scaling services (e.g., AWS EBS), but this 
-requires special configuration. Please reach out to us at [our dev list](mailto:dev@flagon.incubator.apache.org) for recommendations.
+The single-node deployment steps below will build a single-node logging server on a single
+machine. This is suitable for demonstrations and very limited data collections.
 
 1. Create docker-machine instance. 
    **Note**: If using Docker Desktop bundle for OSX, there is a known bug in 
@@ -142,7 +149,7 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
 
    ![alt text][dashboard]
    
-1. To see container health metrics, launch Metricbeat:
+1. To see container performance metrics, launch Metricbeat:
 
    ```bash
    $ docker-compose up -d metricbeat
@@ -151,6 +158,8 @@ requires special configuration. Please reach out to us at [our dev list](mailto:
    Once the container is running, metricbeat dashboards will automatically load in Kibana. Navigate to the `Container Dashboard`.
    
    ![alt text][metrics]
+   
+   Note that metricbeat and logging with UserALE.js will strain the single-node container. We recommend that metricbeat be started only for demonstration purposes.
    
 1. To stop all containers.
     ```bash
