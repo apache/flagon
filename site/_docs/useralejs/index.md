@@ -15,7 +15,13 @@ To start logging with Apache UserALE.js, you can include our script directly in 
 To include UserALE.js in a specific project, you'll need to deploy a version of our minified UserALE.js script in an accessible location (e.g., webserver), and simply include this script tag on the page:
 
 ```html
-<script src="/path/to/userale-2.1.1.min.js"></script>
+<script src="/path/to/userale-2.2.0.min.js"></script>
+```
+
+Alternatively if you want to use a CDN, you can add the script as follows
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/flagon-userale@2.1.1/build/userale-2.2.0.min.js"></script>
 ```
 
 This tag will execute the UserALE.js script in your, with no other modifications to your project needed!
@@ -25,7 +31,7 @@ This tag will execute the UserALE.js script in your, with no other modifications
 UserALE.js is designed to be easily configured to fit your use case. We use HTML data parameters to pass configuration options to the library. For example, one thing you'll need to do is set the URL (location) of your minified UserALE.js script:
 
 ```html
-<script src="/path/to/userale-2.1.1.min.js" data-url="http://yourLoggingUrl"></script>
+<script src="/path/to/userale-2.2.0.min.js" data-url="http://yourLoggingUrl"></script>
 ```
 
 The complete list of configurable options is:
