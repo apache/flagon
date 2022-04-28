@@ -42,7 +42,7 @@ Apache UserALE.js allows for configuration via HTML 5 data parameters. For a com
 You can now start generating behavioral log data from your page, or through your browser. To view these logs, you can either utilize our [example logging server](https://github.com/apache/incubator-flagon-useralejs/tree/master/example) and log to file, or you can log directly to our Elastic backend. For complete instructions, see the [README](https://github.com/apache/incubator-flagon/tree/master/docker)
 ### Building and Using the Elastic Backend
 
-[Apache Flagon](https://github.com/apache/incubator-flagon) utilizes an Elastic stack for transforming, indexing, and storing log data. With Elastic, you'll not only have the ability to search and query log dat, but you'll also be able to monitor it and visualize it through Kibana.
+[Apache Flagon](https://github.com/apache/incubator-flagon) utilizes an Elastic stack for transforming, indexing, and storing log data. With Elastic, you'll not only have the ability to search and query log data, but you'll also be able to monitor it and visualize it through Kibana.
 
 To build our single-node Elastic instance, **first clone our [Docker repo](https://github.com/apache/incubator-flagon/tree/master/docker)**. Note that for production-level deployments, you should probably check out our [Kubernetes build](https://github.com/apache/incubator-flagon/tree/master/kubernetes) and our [guide for scaling]({{ '/docs/stack/scaling' | prepend: site.baseurl }})).
 
@@ -65,6 +65,6 @@ Next, **start Elastic services**.
 
 Before starting Kibana, **generate some logs**. Move your mouse around, click around, etc. Do this for a couple minutes to populate the index.
 
-Finally, **navigate to localhost:5601 (Kibaba), set an index pattern, and load our visualizations and dashboards** to see your logs. Find simple instructions in our [README](https://github.com/apache/incubator-flagon/tree/master/docker).
+Finally, **navigate to localhost:5601 (Kibana), set an index pattern, and load our visualizations and dashboards** to see your logs. Find simple instructions in our [README](https://github.com/apache/incubator-flagon/tree/master/docker).
 
 Subscribe to our [dev list](mailto:dev-subscribe@flagon.incubator.apache.org) and join the conversation!
