@@ -16,7 +16,7 @@ This guide walks you through how to modify UserALE.js log data and behavior thro
 
 We're starting with this method because it will give context to others methods, like our script tag and API (below).
 
-UserALE.js src is intuitively abstracted into few different files"
+UserALE.js src is intuitively abstracted into few different files:
 
  * [attachHandlers](https://github.com/apache/incubator-flagon-useralejs/blob/master/src/attachHandlers.js): configure which user behaviors UserALE.js listens for and event handlers here.
  * [configure](https://github.com/apache/incubator-flagon-useralejs/blob/master/src/configure.js): set special custom parameters, like passing a unqiue userID into UserALE.js logs.
@@ -138,6 +138,6 @@ The easiest way to make these changes is by modifying the var `log`:
 
 ## Contributing
 
-Contributions are welcome!  Simply [submit an issue report](https://issues.apache.org/jira/browse/FLAGON) for problems 
+Contributions are welcome!  Simply [submit an issue](https://github.com/apache/incubator-flagon-useralejs/issues) for problems 
 you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
-incorporate it into UserALE.js.
+incorporate it into UserALE.js. We also love Pull Requests!

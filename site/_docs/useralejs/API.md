@@ -15,8 +15,13 @@ latitude in customizing and curating your logs.
 
 To invoke the API, simply add additional javascript code blocks under your UserALE.js script tag.
 
-Don't forget to add the UserALE.js script tag! For an in depth example, see our [Getting Started Guide]({{ '/docs/useralejs' | prepend: site.baseurl }})) and our [example test utility](https://github.com/apache/incubator-flagon-useralejs/tree/master/example).
+Don't forget to add UserALE.js to your project!
+ 
+It can be deployed as either script-tag, NPM module, or via CDN! For in-depth example, see our [Getting Started Guide]({{ '/docs/useralejs' | prepend: site.baseurl }})) or source [README.md](https://github.com/apache/incubator-flagon-useralejs#usage).
 
+Also, check out our[example test utility](https://github.com/apache/incubator-flagon-useralejs/tree/master/example) so that you can experiment with logs in your terminal!
+
+The following API examples use script-tag deployment methods for illustration:
 
 ```html
 <head>
@@ -24,7 +29,7 @@ Don't forget to add the UserALE.js script tag! For an in depth example, see our 
  <!--
  Add the UserALE.js script tag to the top of your doc
  -->
-   <script src="/path/to/userale-2.1.1.min.js" data-url="http://yourLoggingUrl"></script>
+   <script src="/path/to/userale-2.3.0.min.js" data-url="http://yourLoggingUrl"></script>
 ```
 
 ## `options` Examples
@@ -39,7 +44,7 @@ Try out the options API to pass dynamic page data into your UserALE.js params pa
     const changeMe = "me";
     window.userale.options({
       "userId": changeMe,
-      "version": "2.1.1",
+      "version": "2.3.0",
       "sessionID": "4"
     })
 </script>
@@ -163,8 +168,9 @@ called "score"
 
 ```
 
-
 Test these examples out in our UserALE.js [example page](https://github.com/apache/incubator-flagon-useralejs/blob/master/example/index.html) test utility!
+
+See more [UserALE.js API Examples]()
 
 ### Benefits of the UserALE.js API
  * No need to dig into our source code
@@ -175,6 +181,6 @@ Test these examples out in our UserALE.js [example page](https://github.com/apac
 
 ## Contributing
 
-Contributions are welcome!  Simply [submit an issue report](https://issues.apache.org/jira/browse/FLAGON) for problems 
+Contributions are welcome!  Simply [submit an issue](https://github.com/apache/incubator-flagon-useralejs/issues) for problems 
 you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
-incorporate it into UserALE.js.
+incorporate it into UserALE.js. We also love Pull Requests!

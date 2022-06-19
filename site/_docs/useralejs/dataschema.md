@@ -289,6 +289,6 @@ Interval logs have a start- and end-time instead of a single, discrete time-stam
 ```
 ## Contributing
 
-Contributions are welcome!  Simply [submit an issue report](https://issues.apache.org/jira/browse/FLAGON) for problems 
+Contributions are welcome!  Simply [submit an issue](https://github.com/apache/incubator-flagon-useralejs/issues) for problems 
 you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
-incorporate it into UserALE.js.
+incorporate it into UserALE.js. We also love Pull Requests!
