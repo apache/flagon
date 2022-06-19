@@ -14,28 +14,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-github:
-  description: "Apache Flagon is a suite of comprehensive, thin-client behavioral logging tools"
-  homepage: https://flagon.incubator.apache.org/
-  labels:
-    - flagon
-    - apache
-    - behavioral-analytics
-    - business-analytics
-    - usability
-    - usage
-    - user-monitoring
-    - docker
-    - kubernetes
-    - elasticsearch
-    - elk
-    - kibana
-    - behavioral-sciences
-  features:
-    # Enable issues management
-    issues: true
-    # Enable projects for project management boards
-    projects: true
 publish:
   whoami: asf-site
