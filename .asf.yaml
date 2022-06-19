@@ -37,3 +37,5 @@ github:
     issues: true
     # Enable projects for project management boards
     projects: true
+publish:
+  whoami: asf-site
