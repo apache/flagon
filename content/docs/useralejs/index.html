@@ -249,22 +249,54 @@
     <p><a href="https://github.com/apache/incubator-flagon-useralejs">Apache UserALE.js</a> is the UserALE client for DOM and JavaScript-based applications.  It automatically attaches event handlers, is configurable through HTML5 data parameters or a JS API, and logs every user interaction on a web page, including rich JS single-page apps. You can choose to include UserALE.js directly in your project to track how users engage with it, or if you’re interested in generating logs from any webpage, you can try out our web extension that injects UserALE.js into every webpage.</p>
 
 <p><em>Note:</em> Work on UserALE.js’ documentation is ongoing.  Contributions are welcome. To get involved, see our <a href="/docs/contributing">Contributing</a> guide.</p>
-<h3 id="include-useralejs-in-your-project">Include UserALE.js in your project</h3>
+<h2 id="include-useralejs-in-your-project">Include UserALE.js in your project</h2>
 
 <p>To start logging with Apache UserALE.js, you can include our script directly in your project. More details can be found in our <a href="https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md">README</a>. You can use our <a href="/docs/useralejs/build">build process</a> to create our script, use a sample in our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/build">repos</a>, or pull our scripts from <a href="https://www.npmjs.com/package/flagon-userale">npm</a>.</p>
 
-<p>To include UserALE.js in a specific project, you’ll need to deploy a version of our minified UserALE.js script in an accessible location (e.g., webserver), and simply include this script tag on the page:</p>
+<p>To include UserALE.js in a specific project, you’ll need to deploy a version of our minified UserALE.js script in an accessible location into your project:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/path/to/userale-2.1.1.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install flagon-userale
 </code></pre></div></div>
 
-<p>This tag will execute the UserALE.js script in your, with no other modifications to your project needed!</p>
+<h3 id="include-useralejs-as-a-module">Include UserALE.js as a <code class="highlighter-rouge">module</code>:</h3>
 
-<p><strong>Configure UserALE.js through the Script Tag</strong></p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import * as userale from 'flagon-userale';
 
-<p>UserALE.js is designed to be easily configured to fit your use case. We use HTML data parameters to pass configuration options to the library. For example, one thing you’ll need to do is set the URL (location) of your minified UserALE.js script:</p>
+or
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/path/to/userale-2.1.1.min.js"</span> <span class="na">data-url=</span><span class="s">"http://yourLoggingUrl"</span><span class="nt">&gt;&lt;/script&gt;</span>
+const userale = require('flagon-userale');
+</code></pre></div></div>
+
+<p>Our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/example/webpackUserAleExample">webpack example</a> illustrates this use-case.</p>
+
+<h3 id="include-useralejs-as-a-script-tag">Include UserALE.js as a <code class="highlighter-rouge">script-tag</code>:</h3>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"./node_modules/flagon-userale/build/userale-2.3.0.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>Our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/example">script tag example</a> illustrates this use-case</p>
+
+<p>If you include UserALE.js as a <code class="highlighter-rouge">script-tag</code>, consider installing via npm as a development dependency:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install --save-dev flagon-userale
+</code></pre></div></div>
+
+<h3 id="include-useralejs-via-a-cdn">Include UserALE.js via a CDN:</h3>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://cdn.jsdelivr.net/npm/flagon-userale@2.1.1/build/userale-2.3.0.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>We also support a <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/src/UserALEWebExtension">WebExtension</a> that can be added to your browser in developer mode. Follow the link for instructions.</p>
+
+<p>Once UserALE.js is installed in your project, your application will start generating logs automatically.</p>
+
+<h2 id="configure-useralejs">Configure UserALE.js</h2>
+
+<p>UserALE.js is designed to be easily configured to fit your use case. In <code class="highlighter-rouge">script-tag</code> deployment, use HTML data parameters to pass configuration options to the library.</p>
+
+<p>For example, one thing you’ll need to do is set the URL (location) of your minified UserALE.js script:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/path/to/userale-2.3.0.min.js"</span> <span class="na">data-url=</span><span class="s">"http://yourLoggingUrl"</span><span class="nt">&gt;&lt;/script&gt;</span>
 </code></pre></div></div>
 
 <p>The complete list of configurable options is:</p>
@@ -331,10 +363,13 @@
   </tbody>
 </table>
 
+<p><strong>NOTE</strong> These options are also available through our <a href="/docs/useralejs/API">API</a>, which support deploying UserALE.js as an NPM <code class="highlighter-rouge">module.</code></p>
+
 <p>See our page on <a href="/docs/useralejs/build">Build and Test</a> for UserALE.js to learn how to build your own minified version of the UserALE.js script, or you check-out a pre-built script with default parameters in our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/build">repo</a>.</p>
 
-<p>User our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/example">example test utility</a> to experiment with script tag parameters.</p>
-<h3 id="deploying-the-useralejs-webextension">Deploying the UserALE.js WebExtension</h3>
+<p>Use our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/example">example test utility</a> to experiment with script tag parameters.</p>
+
+<h2 id="deploying-the-useralejs-webextension">Deploying the UserALE.js WebExtension</h2>
 
 <p>If you’re interested in using our Web Extension to log user activity across all pages they visit, try our web extension, which injects UserALE.js into any web page your client(s) navigate to. This option is perfect for testing and research. The web extension builds through the same <a href="/docs/useralejs/build">build pipeline</a> as UserALE.js. You can also use pre-built extension files in our <a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/build">repo</a>.</p>
 
@@ -369,11 +404,15 @@
   </li>
 </ol>
 
+<p>You can set options for the web extension in your browser by opening the extensions page, finding the extension, and choosing either “Preferences” for Firefox, or “Options” for Chrome.</p>
+
 <p>You can also find more instructions in our <a href="https://github.com/apache/incubator-flagon-useralejs/blob/FLAGON-336/src/UserALEWebExtension/README.md">README</a>.</p>
 
-<h2 id="options">Options</h2>
+<h2 id="contributing">Contributing</h2>
 
-<p>You can set options for the web extension in your browser by opening the extensions page, finding the extension, and choosing either “Preferences” for Firefox, or “Options” for Chrome.</p>
+<p>Contributions are welcome!  Simply <a href="https://github.com/apache/incubator-flagon-useralejs/issues">submit an issue</a> for problems 
+you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
+incorporate it into UserALE.js. We also love Pull Requests!</p>
 
   </div>
 </div>
@@ -433,7 +472,7 @@
         Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2022 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>
