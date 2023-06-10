@@ -5,8 +5,8 @@ permalink: /docs/useralejs/API/
 priority: 2
 ---
 
-[Apache UserALE.js](https://github.com/apache/incubator-flagon-useralejs) features a robust API that allows you 
-customize official Apache Flagon UserALE.js [builds](https://github.com/apache/incubator-flagon-useralejs/tree/master/build) page-by-page to suite your needs.
+[Apache UserALE.js](https://github.com/apache/flagon-useralejs) features a robust API that allows you 
+customize official Apache Flagon UserALE.js [builds](https://github.com/apache/flagon-useralejs/tree/master/build) page-by-page to suite your needs.
 
 The API exposes a number of functions, including: `options`, `setLogFilter`, & `setLogMapper`. With these two powerful functions, you have a lot of 
 latitude in customizing and curating your logs.
@@ -17,9 +17,9 @@ To invoke the API, simply add additional javascript code blocks under your UserA
 
 Don't forget to add UserALE.js to your project!
  
-It can be deployed as either script-tag, NPM module, or via CDN! For in-depth example, see our [Getting Started Guide]({{ '/docs/useralejs' | prepend: site.baseurl }})) or source [README.md](https://github.com/apache/incubator-flagon-useralejs#usage).
+It can be deployed as either script-tag, NPM module, or via CDN! For in-depth example, see our [Getting Started Guide]({{ '/docs/useralejs' | prepend: site.baseurl }})) or source [README.md](https://github.com/apache/flagon-useralejs#usage).
 
-Also, check out our[example test utility](https://github.com/apache/incubator-flagon-useralejs/tree/master/example) so that you can experiment with logs in your terminal!
+Also, check out our[example test utility](https://github.com/apache/flagon-useralejs/tree/master/example) so that you can experiment with logs in your terminal!
 
 The following API examples use script-tag deployment methods for illustration:
 
@@ -168,7 +168,7 @@ called "score"
 
 ```
 
-Test these examples out in our UserALE.js [example page](https://github.com/apache/incubator-flagon-useralejs/blob/master/example/index.html) test utility!
+Test these examples out in our UserALE.js [example page](https://github.com/apache/flagon-useralejs/blob/master/example/index.html) test utility!
 
 See more [UserALE.js API Examples]()
 
@@ -181,6 +181,6 @@ See more [UserALE.js API Examples]()
 
 ## Contributing
 
-Contributions are welcome!  Simply [submit an issue](https://github.com/apache/incubator-flagon-useralejs/issues) for problems 
+Contributions are welcome!  Simply [submit an issue](https://github.com/apache/flagon-useralejs/issues) for problems 
 you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
 incorporate it into UserALE.js. We also love Pull Requests!

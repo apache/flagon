@@ -16,7 +16,7 @@
 #
 github:
   description: "Apache Flagon is a suite of comprehensive, thin-client behavioral logging tools"
-  homepage: https://flagon.incubator.apache.org/
+  homepage: https://flagon.apache.org/
   labels:
     - flagon
     - apache

@@ -5,7 +5,7 @@ permalink: /docs/useralejs/modifying/
 priority: 3
 ---
 
-[Apache UserALE.js](https://github.com/apache/incubator-flagon-useralejs) makes it easy for you to capture *every* user 
+[Apache UserALE.js](https://github.com/apache/flagon-useralejs) makes it easy for you to capture *every* user 
 behavior on your webpage or application. But, you might not need all that data. 
 
 UserALE.js also makes it easy for your to manage, and curate your logging scheme. 
@@ -18,12 +18,12 @@ We're starting with this method because it will give context to others methods, 
 
 UserALE.js src is intuitively abstracted into few different files:
 
- * [attachHandlers](https://github.com/apache/incubator-flagon-useralejs/blob/master/src/attachHandlers.js): configure which user behaviors UserALE.js listens for and event handlers here.
- * [configure](https://github.com/apache/incubator-flagon-useralejs/blob/master/src/configure.js): set special custom parameters, like passing a unqiue userID into UserALE.js logs.
- * [getInitialSettings](https://github.com/apache/incubator-flagon-useralejs/blob/master/src/getInitialSettings.js): modify HTML5 parameters passed through the script tag.
- * [main](https://github.com/apache/incubator-flagon-useralejs/blob/master/src/main.js): attaches event handlers and adds logs to queue (probably want to leave alone).
- * [packageLogs](https://github.com/apache/incubator-flagon-useralejs/blob/master/src/packageLogs.js): modify to configure how user behaviors are added to data schema, and meta data added from the page.
- * [sendLogs](https://github.com/apache/incubator-flagon-useralejs/blob/master/src/sendLogs.js): modify how logs are sent to logging server, etc. (be careful here, too).
+ * [attachHandlers](https://github.com/apache/flagon-useralejs/blob/master/src/attachHandlers.js): configure which user behaviors UserALE.js listens for and event handlers here.
+ * [configure](https://github.com/apache/flagon-useralejs/blob/master/src/configure.js): set special custom parameters, like passing a unqiue userID into UserALE.js logs.
+ * [getInitialSettings](https://github.com/apache/flagon-useralejs/blob/master/src/getInitialSettings.js): modify HTML5 parameters passed through the script tag.
+ * [main](https://github.com/apache/flagon-useralejs/blob/master/src/main.js): attaches event handlers and adds logs to queue (probably want to leave alone).
+ * [packageLogs](https://github.com/apache/flagon-useralejs/blob/master/src/packageLogs.js): modify to configure how user behaviors are added to data schema, and meta data added from the page.
+ * [sendLogs](https://github.com/apache/flagon-useralejs/blob/master/src/sendLogs.js): modify how logs are sent to logging server, etc. (be careful here, too).
 
 ### Usage
  
@@ -138,6 +138,6 @@ The easiest way to make these changes is by modifying the var `log`:
 
 ## Contributing
 
-Contributions are welcome!  Simply [submit an issue](https://github.com/apache/incubator-flagon-useralejs/issues) for problems 
+Contributions are welcome!  Simply [submit an issue](https://github.com/apache/flagon-useralejs/issues) for problems 
 you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
 incorporate it into UserALE.js. We also love Pull Requests!

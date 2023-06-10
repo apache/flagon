@@ -5,7 +5,7 @@ permalink: /docs/useralejs/build/
 priority: 1
 ---
 
-To build [Apache UserALE.js](https://github.com/apache/incubator-flagon-useralejs/tree/master), you will need to clone our repo and install [NPM and Node.js](https://nodejs.org/).
+To build [Apache UserALE.js](https://github.com/apache/flagon-useralejs/tree/master), you will need to clone our repo and install [NPM and Node.js](https://nodejs.org/).
 
 UserALE.js utilizes NPM for package and dependency management. Execute the following to install dependencies.
 ```
@@ -113,10 +113,10 @@ npm run test
 ```
 Any failing tests will also be logged in the terminal. If there are failing tests, please consider [logging an issue in JIRA](https://issues.apache.org/jira/projects/FLAGON).
 
-Further instructions can be found in our [README](https://github.com/apache/incubator-flagon-useralejs/blob/master/README.md)
+Further instructions can be found in our [README](https://github.com/apache/flagon-useralejs/blob/master/README.md)
 
 ## Contributing
 
-Contributions are welcome!  Simply [submit an issue](https://github.com/apache/incubator-flagon-useralejs/issues) for problems 
+Contributions are welcome!  Simply [submit an issue](https://github.com/apache/flagon-useralejs/issues) for problems 
 you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
 incorporate it into UserALE.js. We also love Pull Requests!

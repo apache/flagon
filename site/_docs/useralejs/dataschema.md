@@ -5,7 +5,7 @@ permalink: /docs/useralejs/dataschema/
 priority: 4
 ---
 
-This guide describes the structure of content of [Apache UserALE.js](https://github.com/apache/incubator-flagon-useralejs) 
+This guide describes the structure of content of [Apache UserALE.js](https://github.com/apache/flagon-useralejs) 
 logs, including:
  * which behaviors UserALE.js listens to;
  * which meta data UserALE.js attaches to logs, for context:
@@ -23,7 +23,7 @@ pages. Workflow analysis at this level is really crucial for understanding:
 
 In order to do workflow analysis, UserALE.js generates granular data about interactions with page elements. 
 
-This is a standard UserALE.js log from our [example test utility](https://github.com/apache/incubator-flagon-useralejs/blob/master/example/index.html): 
+This is a standard UserALE.js log from our [example test utility](https://github.com/apache/flagon-useralejs/blob/master/example/index.html): 
 
 
 ```html
@@ -61,7 +61,7 @@ This is a standard UserALE.js log from our [example test utility](https://github
     "toolName": "Apache UserALE.js Example",
     "pageTitle": "UserAleJS - Example Page",
     "logType": "raw",
-    "pageUrl": "file:///Users/jpoore/Documents/Apache_Flagon/test/incubator-flagon-useralejs/example/index.html",
+    "pageUrl": "file:///Users/jpoore/Documents/Apache_Flagon/test/flagon-useralejs/example/index.html",
     "userId": "example-user",
     "useraleVersion": "2.1.1",
     "patch_ver": "0"
@@ -141,7 +141,7 @@ You'll get location of the cursor two for mouseover and click data, too!
 ```
 
 
-[UserALE.js' WebExtension](https://github.com/apache/incubator-flagon-useralejs/tree/master/build) is deployed directly 
+[UserALE.js' WebExtension](https://github.com/apache/flagon-useralejs/tree/master/build) is deployed directly 
 into your browser, as a result you'll get browser events. 
 
 Examples are below,you'll see our details field has some pretty useful data from the browser.
@@ -177,7 +177,7 @@ configurable through our [script tag]({{ '/docs/useralejs' | prepend: site.baseu
     "pageReferrer": "", [grabbed from the page, from which page did your users find your page/app]
     "toolName": "Apache UserALE.js Example", [give your tool an alis through our script tag]
     "pageTitle": "UserAleJS - Example Page", [page title grabbed from page]
-    "pageUrl": "file:///Users/jpoore/Documents/Apache_Flagon/test/incubator-flagon-useralejs/example/index.html" 
+    "pageUrl": "file:///.../Apache_Flagon/test/flagon-useralejs/example/index.html" 
 ```
 
 
@@ -282,13 +282,13 @@ Interval logs have a start- and end-time instead of a single, discrete time-stam
     "typeChange": true, [were there any other events during the interval?]
     "pageTitle": "UserAleJS - Example Page",
     "logType": "interval", [as compared to "raw"]
-    "pageUrl": "fApache_Flagon/test/incubator-flagon-useralejs/example/index.html",
+    "pageUrl": "Apache_Flagon/test/flagon-useralejs/example/index.html",
     "userId": "example-user",
     "useraleVersion": "2.1.1",
     "patch_ver": "0"
 ```
 ## Contributing
 
-Contributions are welcome!  Simply [submit an issue](https://github.com/apache/incubator-flagon-useralejs/issues) for problems 
+Contributions are welcome!  Simply [submit an issue](https://github.com/apache/flagon-useralejs/issues) for problems 
 you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
 incorporate it into UserALE.js. We also love Pull Requests!
