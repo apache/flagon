@@ -36,3 +36,26 @@ github:
     issues: true
     # Enable projects for project management boards
     projects: true
+    # Enable Wiki
+    wiki: true
+
+  #Make auto-generated github emails easier to read/parse
+  custom_subjects:
+    new_pr: "[PR] {title} ({repository})"
+    close_pr: "Re: [PR] {title} ({repository})"
+    comment_pr: "Re: [PR] {title} ({repository})"
+    diffcomment: "Re: [PR] {title} ({repository})"
+    merge_pr: "Re: [PR] {title} ({repository})"
+    new_issue: "[I] {title} ({repository})"
+    comment_issue: "Re: [I] {title} ({repository})"
+    close_issue: "Re: [I] {title} ({repository})"
+    catchall: "[GH] {title} ({repository})"
+
+  #manages alerts by distributing to lists
+  notifications:
+    commits:              commits@flagon.apache.org
+    issues:               notifications@flagon.apache.org
+    pullrequests_status:  pr@flagon.apache.org
+    pullrequests_comment: notifications@flagon.apache.org
+    # Send dependabot PRs to commits@ instead
+    pullrequests_bot_dependabot: maintenance@flagon.apache.org
