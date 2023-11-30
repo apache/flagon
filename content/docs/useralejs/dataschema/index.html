@@ -16,7 +16,7 @@
   <script src="/js/main.js"></script>
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://flagon.incubator.apache.org/docs/useralejs/dataschema/">
+  <link rel="canonical" href="http://flagon.apache.org/docs/useralejs/dataschema/">
   <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
 
   
@@ -246,7 +246,7 @@
   </div>
   <div class="docs-content">
     <h2 class="ui header">UserALE.js' Data Schema</h2>
-    <p>This guide describes the structure of content of <a href="https://github.com/apache/incubator-flagon-useralejs">Apache UserALE.js</a> 
+    <p>This guide describes the structure of content of <a href="https://github.com/apache/flagon-useralejs">Apache UserALE.js</a> 
 logs, including:</p>
 <ul>
   <li>which behaviors UserALE.js listens to;</li>
@@ -268,7 +268,7 @@ pages. Workflow analysis at this level is really crucial for understanding:</p>
 
 <p>In order to do workflow analysis, UserALE.js generates granular data about interactions with page elements.</p>
 
-<p>This is a standard UserALE.js log from our <a href="https://github.com/apache/incubator-flagon-useralejs/blob/master/example/index.html">example test utility</a>:</p>
+<p>This is a standard UserALE.js log from our <a href="https://github.com/apache/flagon-useralejs/blob/master/example/index.html">example test utility</a>:</p>
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    "microTime": 0.185,
     "minor_ver": "0",
@@ -304,7 +304,7 @@ pages. Workflow analysis at this level is really crucial for understanding:</p>
     "toolName": "Apache UserALE.js Example",
     "pageTitle": "UserAleJS - Example Page",
     "logType": "raw",
-    "pageUrl": "file:///Users/jpoore/Documents/Apache_Flagon/test/incubator-flagon-useralejs/example/index.html",
+    "pageUrl": "file:///Users/jpoore/Documents/Apache_Flagon/test/flagon-useralejs/example/index.html",
     "userId": "example-user",
     "useraleVersion": "2.1.1",
     "patch_ver": "0"
@@ -371,7 +371,7 @@ pages. Workflow analysis at this level is really crucial for understanding:</p>
     },
 </code></pre></div></div>
 
-<p><a href="https://github.com/apache/incubator-flagon-useralejs/tree/master/build">UserALE.js’ WebExtension</a> is deployed directly 
+<p><a href="https://github.com/apache/flagon-useralejs/tree/master/build">UserALE.js’ WebExtension</a> is deployed directly 
 into your browser, as a result you’ll get browser events.</p>
 
 <p>Examples are below,you’ll see our details field has some pretty useful data from the browser.</p>
@@ -402,7 +402,7 @@ configurable through our <a href="/docs/useralejs">script tag</a></p>
     "pageReferrer": "", [grabbed from the page, from which page did your users find your page/app]
     "toolName": "Apache UserALE.js Example", [give your tool an alis through our script tag]
     "pageTitle": "UserAleJS - Example Page", [page title grabbed from page]
-    "pageUrl": "file:///Users/jpoore/Documents/Apache_Flagon/test/incubator-flagon-useralejs/example/index.html" 
+    "pageUrl": "file:///.../Apache_Flagon/test/flagon-useralejs/example/index.html" 
 </code></pre></div></div>
 
 <p>To find out more and how to change the context attached to event logs, check out our 
@@ -500,14 +500,14 @@ configurable through our <a href="/docs/useralejs">script tag</a></p>
     "typeChange": true, [were there any other events during the interval?]
     "pageTitle": "UserAleJS - Example Page",
     "logType": "interval", [as compared to "raw"]
-    "pageUrl": "fApache_Flagon/test/incubator-flagon-useralejs/example/index.html",
+    "pageUrl": "Apache_Flagon/test/flagon-useralejs/example/index.html",
     "userId": "example-user",
     "useraleVersion": "2.1.1",
     "patch_ver": "0"
 </code></pre></div></div>
 <h2 id="contributing">Contributing</h2>
 
-<p>Contributions are welcome!  Simply <a href="https://github.com/apache/incubator-flagon-useralejs/issues">submit an issue</a> for problems 
+<p>Contributions are welcome!  Simply <a href="https://github.com/apache/flagon-useralejs/issues">submit an issue</a> for problems 
 you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
 incorporate it into UserALE.js. We also love Pull Requests!</p>
 
@@ -569,7 +569,7 @@ incorporate it into UserALE.js. We also love Pull Requests!</p>
         Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
       </div>
       <div class="center aligned column">
-        Copyright &copy; 2022 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2023 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>
