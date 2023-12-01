@@ -62,4 +62,4 @@ notifications:
 
 #used for asf-site only to publish website
 publish:
-  whoami:  publish
+  whoami:  asf-site
