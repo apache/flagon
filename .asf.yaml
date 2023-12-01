@@ -59,3 +59,7 @@ notifications:
   pullrequests_comment: notifications@flagon.apache.org
   # Send dependabot PRs to commits@ instead
   pullrequests_bot_dependabot: maintenance@flagon.apache.org
+
+#used for asf-site only to publish website
+publish:
+  whoami:  asf-site
