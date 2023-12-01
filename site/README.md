@@ -8,12 +8,12 @@ How to Build and Deploy Site
     ```
 3. Deploy site on localhost:8000
     ```
-    docker run -p 8000:8000 -it flagon:site python -m SimpleHTTPServer 
+    docker run -p 8000:8000 -it flagon:site python -m http.server
     ```
 4. (Optional): To update the site, can copy the files from the container to `_site`.
     ```
     # First grab container id
-    CID=$(docker create -p 8000:8000 -it flagon:site python -m SimpleHTTPServer)
+    CID=$(docker create -p 8000:8000 -it flagon:site python -m http.server)
     # Reference container id to grab built contents
     docker cp $CID:/app/_site .
     ```

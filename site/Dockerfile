@@ -1,5 +1,5 @@
-FROM starefossen/ruby-node
-MAINTAINER Joshua Poore <poorejc@apache.org>
+FROM phusion/passenger-full
+LABEL org.opencontainers.image.authors="poorejc@apache.org"
 
 # Cache bundle
 COPY Gemfile* /tmp/
@@ -19,7 +19,7 @@ WORKDIR $app
 ADD . $app
 
 # Jekyll buld
-RUN jekyll build
+RUN bundle exec jekyll build
 
 WORKDIR $app/_site
 
