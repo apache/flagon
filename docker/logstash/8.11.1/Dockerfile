@@ -13,30 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ruby
-MAINTAINER Michelle Beard <msbeard@apache.org>
+FROM docker.elastic.co/logstash/logstash:8.11.1
+MAINTAINER Joshua Poore <poorejc@apache.org>
 
-# Install system wide dependencies
-RUN apt-get -yqq update && apt-get -yqq install \
-	curl \
-	sudo
+# Ensure default logstash configuration is removed
+RUN rm -f /usr/share/logstash/pipeline/logstash.conf
 
-# Set the work directory
-RUN mkdir -p /usr/src
-WORKDIR /usr/src
+# Copy Pipeline files over
+ADD pipeline/ /usr/share/logstash/pipeline/
 
-# Install git
-RUN sudo -E apt-get -yqq install \
-  git
+# Copy templates over
+RUN mkdir /usr/share/logstash/templates
+COPY templates/userale.json /usr/share/logstash/templates/userale.json
 
-# Clone Apache Flagon Site
-RUN git clone -b master https://github.com/apache/incubator-flagon.git
-WORKDIR /usr/src/incubator-flagon/site/_site
+EXPOSE 8100
 
-# Update data-url to send to logstash
-RUN sed -i 's/data-url=\"\"/data-url="http:\/\/localhost:8100"/' index.html
-RUN sed -i 's/noSend\: true/noSend\: false/' index.html
-
-# Install system wide dependencies
-RUN apt-get -yqq update && apt-get -yqq install \
-	python-is-python3
+CMD ["logstash"]

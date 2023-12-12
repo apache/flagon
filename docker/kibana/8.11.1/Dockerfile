@@ -13,30 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ruby
-MAINTAINER Michelle Beard <msbeard@apache.org>
+FROM docker.elastic.co/kibana/kibana:8.11.1
 
-# Install system wide dependencies
-RUN apt-get -yqq update && apt-get -yqq install \
-	curl \
-	sudo
+MAINTAINER Joshua Poore <poorejc@apache.org>
 
-# Set the work directory
-RUN mkdir -p /usr/src
-WORKDIR /usr/src
-
-# Install git
-RUN sudo -E apt-get -yqq install \
-  git
-
-# Clone Apache Flagon Site
-RUN git clone -b master https://github.com/apache/incubator-flagon.git
-WORKDIR /usr/src/incubator-flagon/site/_site
-
-# Update data-url to send to logstash
-RUN sed -i 's/data-url=\"\"/data-url="http:\/\/localhost:8100"/' index.html
-RUN sed -i 's/noSend\: true/noSend\: false/' index.html
-
-# Install system wide dependencies
-RUN apt-get -yqq update && apt-get -yqq install \
-	python-is-python3
+EXPOSE 5601
