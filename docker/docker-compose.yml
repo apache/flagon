@@ -25,7 +25,7 @@ services:
       - 8080:8080
     depends_on:
       - "logstash"
-    command: python -m SimpleHTTPServer 8080
+    command: python -m http.server 8080
 
   # Elasticsearch
   elasticsearch:

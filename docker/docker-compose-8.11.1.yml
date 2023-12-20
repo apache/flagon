@@ -32,7 +32,7 @@ services:
       - 8080:8080
     depends_on:
       - "logstash"
-    command: python -m SimpleHTTPServer 8080
+    command: python -m http.server 8080
 
   # Elasticsearch
   elasticsearch:
@@ -151,7 +151,6 @@ services:
     command: metricbeat -e -system.hostfs=/hostfs -strict.perms=false
     network_mode: host # Mandatory to monitor HOST filesystem, memory, processes,...
 
-networks:
-  esnet:
-    external:
-      name: esnet
+network:
+  name:
+    external: true
