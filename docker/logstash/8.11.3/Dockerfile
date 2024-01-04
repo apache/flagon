@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM docker.elastic.co/logstash/logstash:8.11.1
+FROM docker.elastic.co/logstash/logstash:8.11.3
 MAINTAINER Joshua Poore <poorejc@apache.org>
 
 # Ensure default logstash configuration is removed

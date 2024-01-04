@@ -13,17 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM docker.elastic.co/elasticsearch/elasticsearch:8.11.1
-
-MAINTAINER Joshua Poore <poorejc@apache.org>
-
-USER root
-
-# Override config
-COPY config /usr/share/elasticsearch/config
-RUN chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/config
-
-USER elasticsearch
+FROM docker.elastic.co/elasticsearch/elasticsearch:8.11.3
 
 # Set environment
 ENV CLUSTER_NAME Flagon
