@@ -18,6 +18,13 @@
 version: "3"
 services:
 
+  # Startup
+  startup:
+    build: ./startup
+    depends_on:
+      - "elasticsearch"
+    command: bash /opt/entrypoint.sh
+
   # Site
   site:
     build: ./site
@@ -47,7 +54,6 @@ services:
     volumes:
 #      - esdata:/usr/share/elasticsaerch/data
       - ./elasticsearch/8.11.3/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
-    user: "1000:0"
     ports:
       - "9200:9200"
     networks:
@@ -59,7 +65,6 @@ services:
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - "ELASTICSEARCH_URL=http://elasticsearch:9200"
-    user: "1000:0"
     ports:
       - "5601:5601"
     depends_on:
@@ -72,7 +77,6 @@ services:
     build: ./logstash/8.11.3
     environment:
       - "ELASTICSEARCH_URL=elasticsearch:9200"
-    user: "1000:0"
     ports:
       - 8100:8100
     volumes:
@@ -82,6 +86,34 @@ services:
       - "elasticsearch"
     networks:
       - esnet
+
+  # Distill
+  distill:
+     build: ./distill
+     ports:
+       - 8090:8090
+     depends_on:
+       - "elasticsearch"
+     networks:
+       - esnet
+
+  # TAP's Database
+  db:
+     build: ./db
+     image: senssoft/postgres:latest
+     ports:
+       - "5432:5432"
+
+  # TAP
+  tap:
+     build: ./tap
+     command: bash -c "/usr/src/app/wait-for-postgres.sh"
+     ports:
+       - "8010:8010"
+     depends_on:
+       - db
+     links:
+       - db:db
 
   # Specific container and configuration to monitor the HOST (filesystem, memory, processes,...)
   metricbeat:
@@ -104,19 +136,22 @@ services:
       #Allows us to report on docker from the hosts information
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
-      - kibana
+      - elasticsearch
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
       - KIBANA_URL=http://kibana:5601
       - LOGSTASH_URL=http://logstash:9600
+      - POSTGRESQL_URL="postgresql://db:5432/tapdb?sslmode=disable"
+      - POSTGRESQL_USERNAME=tapuser
+      - POSTGRESQL_PASSWORD="Dr@p3rUs3r"
     extra_hosts:
       - "elasticsearch:172.17.0.1" # The IP of docker0 interface to access host from container
       - "kibana:172.17.0.1" # The IP of docker0 interface to access host from container
       - "logstash:172.17.0.1"
+      - "db:172.17.0.1"
     command: metricbeat -e -system.hostfs=/hostfs -strict.perms=false
     network_mode: host # Mandatory to monitor HOST filesystem, memory, processes,...
 
-networks:
-  esnet:
-    name: esnet
+network:
+  name:
     external: true
