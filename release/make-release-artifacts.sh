@@ -101,7 +101,7 @@ detect_version
 ###############################################################################
 # Determine all filenames and paths, and confirm
 
-release_name=apache-flagon-useralejs-incubating-${current_version}
+release_name=apache-flagon-useralejs-${current_version}
 if [ -z "$rc_suffix" ]; then
     fail Specifying the RC number is required
 else
