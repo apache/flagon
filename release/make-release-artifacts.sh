@@ -109,7 +109,7 @@ else
 fi
 
 userale_dir=$( pwd )
-working_dir=${TMPDIR:-/tmp}release-working-dir
+working_dir=${TMPDIR:-/tmp}/release-working-dir
 rm -rf ${working_dir}
 staging_dir="${working_dir}/source/"
 src_staging_dir="${working_dir}/source/${release_name}-src"
