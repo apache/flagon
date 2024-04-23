@@ -1,6 +1,8 @@
 FROM phusion/passenger-full
 LABEL org.opencontainers.image.authors="poorejc@apache.org"
 
+RUN bash -lc 'rvm --default use ruby-3.2.3'
+
 # Cache bundle
 COPY Gemfile* /tmp/
 WORKDIR /tmp
