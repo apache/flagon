@@ -101,7 +101,7 @@ detect_version
 ###############################################################################
 # Determine all filenames and paths, and confirm
 
-release_name=apache-flagon-useralejs-incubating-${current_version}
+release_name=apache-flagon-useralejs-${current_version}
 if [ -z "$rc_suffix" ]; then
     fail Specifying the RC number is required
 else
@@ -109,7 +109,7 @@ else
 fi
 
 userale_dir=$( pwd )
-working_dir=${TMPDIR:-/tmp}release-working-dir
+working_dir=${TMPDIR:-/tmp}/release-working-dir
 rm -rf ${working_dir}
 staging_dir="${working_dir}/source/"
 src_staging_dir="${working_dir}/source/${release_name}-src"
@@ -204,7 +204,6 @@ cp -R ${src_staging_dir}/build/* ${bin_staging_dir}/${release_name}-bin
 cp ${src_staging_dir}/README.md ${bin_staging_dir}/${release_name}-bin
 cp ${src_staging_dir}/LICENSE ${bin_staging_dir}/${release_name}-bin
 cp ${src_staging_dir}/NOTICE ${bin_staging_dir}/${release_name}-bin
-cp ${src_staging_dir}/DISCLAIMER ${bin_staging_dir}/${release_name}-bin
 
 
 ( cd ${bin_staging_dir} && tar czf ${artifact_dir}/${artifact_name}-bin.tar.gz ${release_name}-bin )
