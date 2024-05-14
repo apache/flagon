@@ -1,6 +1,0 @@
-#------------------------------- Kibana Module -------------------------------
-- module: kibana
-  metricsets: ["status"]
-  period: 30s
-  enabled: true
-  hosts: ["${KIBANA_URL}"]
