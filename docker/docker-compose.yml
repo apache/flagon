@@ -1,21 +1,5 @@
-# Licensed to the Apache Software Foundation (ASF) under one or more
-# contributor license agreements.  See the NOTICE file distributed with
-# this work for additional information regarding copyright ownership.
-# The ASF licenses this file to You under the Apache License, Version 2.0
-# (the "License"); you may not use this file except in compliance with
-# the License.  You may obtain a copy of the License at
-#
-#   http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+version: '3.7'
 
-# Apache Flagon Single-Node Build
-
-version: "3"
 services:
 
   # Site
@@ -27,96 +11,114 @@ services:
       - "logstash"
     command: python -m http.server 8080
 
-  # Elasticsearch
+  # The 'setup' service runs a one-off script which initializes users inside
+  # Elasticsearch — such as 'logstash_internal' and 'kibana_system' — with the
+  # values of the passwords defined in the '.env' file. It also creates the
+  # roles required by some of these users.
+  #
+  # This task only needs to be performed once, during the *initial* startup of
+  # the stack. Any subsequent run will reset the passwords of existing users to
+  # the values defined inside the '.env' file, and the built-in roles to their
+  # default permissions.
+  #
+  # By default, it is excluded from the services started by 'docker compose up'
+  # due to the non-default profile it belongs to. To run it, either provide the
+  # '--profile=setup' CLI flag to Compose commands, or "up" the service by name
+  # such as 'docker compose up setup'.
+  setup:
+    profiles:
+      - setup
+    build:
+      context: setup/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    init: true
+    volumes:
+      - ./setup/entrypoint.sh:/entrypoint.sh:ro,Z
+      - ./setup/lib.sh:/lib.sh:ro,Z
+      - ./setup/roles:/roles:ro,Z
+    environment:
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+      METRICBEAT_INTERNAL_PASSWORD: ${METRICBEAT_INTERNAL_PASSWORD:-}
+      FILEBEAT_INTERNAL_PASSWORD: ${FILEBEAT_INTERNAL_PASSWORD:-}
+      HEARTBEAT_INTERNAL_PASSWORD: ${HEARTBEAT_INTERNAL_PASSWORD:-}
+      MONITORING_INTERNAL_PASSWORD: ${MONITORING_INTERNAL_PASSWORD:-}
+      BEATS_SYSTEM_PASSWORD: ${BEATS_SYSTEM_PASSWORD:-}
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
   elasticsearch:
-    build: ./elasticsearch/8.11.3
-    environment:
-      - INITIAL_MASTER_NODES=elasticsearch
-      - "DISCOVERY_SERVICE=0.0.0.0"
-      - NETWORK_HOST=0.0.0.0
-      - HTTP_CORS_ENABLE=true
-      - HTTP_CORS_ALLOW_ORIGIN=*
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    healthcheck:
-      test: ["CMD", "curl","-s" ,"-f", "-u", "http://localhost:9200/_cluster/health"]
-    # Mount volumes to backup elasticsearch data
+    build:
+      context: elasticsearch/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
     volumes:
-#      - esdata:/usr/share/elasticsaerch/data
-      - ./elasticsearch/8.11.3/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
-    user: "1000:0"
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,Z
+      - elasticsearch:/usr/share/elasticsearch/data:Z
     ports:
-      - "9200:9200"
-    networks:
-      - esnet
-
-  # Kibana
-  kibana:
-    build: ./kibana/8.11.3
+      - 9200:9200
+      - 9300:9300
     environment:
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "ELASTICSEARCH_URL=http://elasticsearch:9200"
-    user: "1000:0"
-    ports:
-      - "5601:5601"
-    depends_on:
-      - "elasticsearch"
+      node.name: elasticsearch
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      # Bootstrap password.
+      # Used to initialize the keystore during the initial startup of
+      # Elasticsearch. Ignored on subsequent runs.
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
     networks:
-      - esnet
+      - elk
+    restart: unless-stopped
 
-  # Logstash
   logstash:
-    build: ./logstash/8.11.3
-    environment:
-      - "ELASTICSEARCH_URL=elasticsearch:9200"
-    user: "1000:0"
+    build:
+      context: logstash/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+      - ./logstash/templates:/usr/share/logstash/templates:ro,z
     ports:
-      - 8100:8100
-    volumes:
-      - ./logstash/8.11.3/pipeline/logstash-userale.conf:/usr/share/logstash/pipeline/logstash-userale.conf
-      - ./logstash/8.11.3/templates/userale.json:/usr/share/logstash/templates/userale.json
-    depends_on:
-      - "elasticsearch"
-    networks:
-      - esnet
-
-  # Specific container and configuration to monitor the HOST (filesystem, memory, processes,...)
-  metricbeat:
-    image: docker.elastic.co/beats/metricbeat:8.11.3
-#    restart: unless-stopped
-    user: root
-    pid: host
-    volumes:
-      #The commented sections below enable Metricbeat to monitor the Docker host
-      #rather than the Metricbeat container. These are used by the system module.
-      - /proc:/hostfs/proc:ro
-      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
-      #We mount the host filesystem so we can report on disk usage with the system module
-      - /:/hostfs:ro
-      #Mount the metricbeat configuration so users can make edits
-      - ./beats/metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml
-      #Mount the modules.d directory into the container. This allows user to 
-      #potentially make changes to the modules and they will be dynamically loaded.
-      - ./beats/metricbeat/modules.d/:/usr/share/metricbeat/modules.d/
-      #Allows us to report on docker from the hosts information
-      - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - kibana
+      - 5044:5044
+      - 50000:50000/tcp
+      - 50000:50000/udp
+      - 9600:9600
     environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-      - KIBANA_URL=http://kibana:5601
-      - LOGSTASH_URL=http://logstash:9600
-    extra_hosts:
-      - "elasticsearch:172.17.0.1" # The IP of docker0 interface to access host from container
-      - "kibana:172.17.0.1" # The IP of docker0 interface to access host from container
-      - "logstash:172.17.0.1"
-    command: metricbeat -e -system.hostfs=/hostfs -strict.perms=false
-    network_mode: host # Mandatory to monitor HOST filesystem, memory, processes,...
+      LS_JAVA_OPTS: -Xms256m -Xmx256m
+      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+  kibana:
+    build:
+      context: kibana/
+      args:
+        ELASTIC_VERSION: ${ELASTIC_VERSION}
+    volumes:
+      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+    ports:
+      - 5601:5601
+    environment:
+      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
 
 networks:
-  esnet:
-    name: esnet
-    external: true
+  elk:
+    driver: bridge
+
+volumes:
+  elasticsearch:

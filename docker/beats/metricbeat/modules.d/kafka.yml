@@ -1,9 +1,0 @@
-#---------------------------- Kafka Module ---------------------------
-- module: kafka
-  metricsets: ["consumergroup", "partition"]
-  period: 10s
-  hosts: ["${KAFKA_URL}"]
-  enabled: false
-
-  # List of Topics to query metadata for. If empty, all topics will be queried.
-  #topics: []
