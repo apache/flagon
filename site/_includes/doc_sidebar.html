@@ -1,11 +1,6 @@
 {% assign flagon = site.docs | where:"component", "flagon" | sort: "priority" %}
-{% assign stack = site.docs | where:"component", "stack" | sort: "priority" %}
-{% assign userale = site.docs | where:"component", "userale" | sort: "priority" %}
 {% assign useralejs = site.docs | where:"component", "useralejs" | sort: "priority" %}
-{% assign useralepy = site.docs | where:"component", "useralepy" | sort: "priority" %}
 {% assign distill = site.docs | where:"component", "distill" | sort: "priority" %}
-{% assign tap = site.docs | where:"component", "tap" | sort: "priority" %}
-{% assign stout = site.docs | where:"component", "stout" | sort: "priority" %}
 
 <!-- <div class="ui inverted list">
   <a class="item" href="{{ '/docs' | prepend: site.baseurl }}">About the Docs</a>
@@ -31,47 +26,6 @@
     </div>
   </div>
 
-
-  {% if page.component == 'stack' %}
-    <div class="active title">
-  {% else %}
-    <div class="title">
-  {% endif %}
-    <i class="dropdown icon"></i>
-    Stack
-  </div>
-  {% if page.component == 'stack' %}
-    <div class="active content">
-  {% else %}
-    <div class="content">
-  {% endif %}
-    <div class="ui inverted bulleted list docs-list">
-      {% for doc in stack %}
-        <a class="item" href="{{ doc.url }}">{{ doc.title }}</a>
-      {% endfor %}
-    </div>
-  </div>
-
-  {% if page.component == 'userale' %}
-    <div class="active title">
-  {% else %}
-    <div class="title">
-  {% endif %}
-    <i class="dropdown icon"></i>
-    UserALE
-  </div>
-  {% if page.component == 'userale' %}
-    <div class="active content">
-  {% else %}
-    <div class="content">
-  {% endif %}
-    <div class="ui inverted bulleted list docs-list">
-      {% for doc in userale %}
-        <a class="item" href="{{ doc.url }}">{{ doc.title }}</a>
-      {% endfor %}
-    </div>
-  </div>
-
   {% if page.component == 'useralejs' %}
     <div class="active title">
   {% else %}
@@ -87,26 +41,6 @@
   {% endif %}
     <div class="ui inverted bulleted list docs-list">
       {% for doc in useralejs %}
-        <a class="item" href="{{ doc.url }}">{{ doc.title }}</a>
-      {% endfor %}
-    </div>
-  </div>
-
-  {% if page.component == 'useralepy' %}
-    <div class="active title">
-  {% else %}
-    <div class="title">
-  {% endif %}
-    <i class="dropdown icon"></i>
-    UserALE.py
-  </div>
-  {% if page.component == 'useralepy' %}
-    <div class="active content">
-  {% else %}
-    <div class="content">
-  {% endif %}
-    <div class="ui inverted bulleted list docs-list">
-      {% for doc in useralepy %}
         <a class="item" href="{{ doc.url }}">{{ doc.title }}</a>
       {% endfor %}
     </div>
@@ -132,43 +66,4 @@
     </div>
   </div>
 
-  {% if page.component == 'tap' %}
-    <div class="active title">
-  {% else %}
-    <div class="title">
-  {% endif %}
-    <i class="dropdown icon"></i>
-    Tap
-  </div>
-  {% if page.component == 'tap' %}
-    <div class="active content">
-  {% else %}
-    <div class="content">
-  {% endif %}
-    <div class="ui inverted bulleted list docs-list">
-      {% for doc in tap %}
-        <a class="item" href="{{ doc.url }}">{{ doc.title }}</a>
-      {% endfor %}
-    </div>
-  </div>
-
-  {% if page.component == 'stout' %}
-    <div class="active title">
-  {% else %}
-    <div class="title">
-  {% endif %}
-    <i class="dropdown icon"></i>
-    Stout
-  </div>
-  {% if page.component == 'stout' %}
-    <div class="active content">
-  {% else %}
-    <div class="content">
-  {% endif %}
-    <div class="ui inverted bulleted list docs-list">
-      {% for doc in stout %}
-        <a class="item" href="{{ doc.url }}">{{ doc.title }}</a>
-      {% endfor %}
-    </div>
-  </div>
 </div>
