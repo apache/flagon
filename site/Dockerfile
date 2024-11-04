@@ -1,14 +1,15 @@
-FROM phusion/passenger-full
+FROM phusion/passenger-full:3.0.7
 LABEL org.opencontainers.image.authors="poorejc@apache.org"
 
-RUN bash -lc 'rvm --default use ruby-3.2.3'
+RUN bash -lc 'rvm list'
+RUN bash -lc 'rvm --default use ruby-3.2.5'
 
 # Cache bundle
 COPY Gemfile* /tmp/
 WORKDIR /tmp
 RUN bundle install
 
-ENV app /app
+ENV app=/app
 
 # Install npm modules
 COPY package.json /tmp/

@@ -1,6 +1,0 @@
-#---------------------------- ZooKeeper Module ---------------------------
-- module: zookeeper
-  enabled: false
-  metricsets: ["mntr"]
-  period: 10s
-  hosts: ["${ZOOKEEPER_URL}"]

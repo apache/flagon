@@ -33,7 +33,7 @@ Our [webpack example](https://github.com/apache/flagon-useralejs/tree/master/exa
 ### Include UserALE.js as a `script-tag`:
 
 ```html
-<script src="./node_modules/flagon-userale/build/userale-2.3.0.min.js"></script>
+<script src="./node_modules/flagon-userale/build/userale-2.4.0.min.js"></script>
 ```
 
 Our [script tag example](https://github.com/apache/flagon-useralejs/tree/master/example) illustrates this use-case
@@ -47,7 +47,7 @@ npm install --save-dev flagon-userale
 ### Include UserALE.js via a CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/flagon-userale@2.1.1/build/userale-2.3.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flagon-userale@2.4.0/build/userale-2.4.0.min.js"></script>
 ```
 
 We also support a [WebExtension](https://github.com/apache/flagon-useralejs/tree/master/src/UserALEWebExtension) that can be added to your browser in developer mode. Follow the link for instructions.
@@ -61,23 +61,25 @@ UserALE.js is designed to be easily configured to fit your use case. In `script-
 For example, one thing you'll need to do is set the URL (location) of your minified UserALE.js script:
 
 ```html
-<script src="/path/to/userale-2.3.0.min.js" data-url="http://yourLoggingUrl"></script>
+<script src="/path/to/userale-2.4.0.min.js" data-url="http://yourLoggingUrl"></script>
 ```
 
 The complete list of configurable options is:
 
 | Param | Description | Default |
 |---|---|---|
-| data-url | Logging URL | http://localhost:8000 |
-| data-autostart | Should UserALE.js start on page load | true |
-| data-interval | Delay between transmit checks | 5000 (ms) |
-| data-threshold | Minimum number of logs to send | 5 |
-| data-user | User identifier | null |
-| data-version | Application version identifier | null |
-| data-log-details | Toggle detailed logs (keys pressed and input/change values) | false |
-| data-resolution | Delay between instances of high frequency logs (mouseover, scroll, etc.) | 500 (ms) |
-| data-user-from-params | Query param in the page URL to fetch userId from | null |
-| data-tool | Name of tool being logged | null |  
+| url | Logging URL | http://localhost:8000 |
+| autostart | Should UserALE start on page load | true |
+| transmitInterval | Delay between transmit checks | 5000 (ms) |
+| logCountThreshold | Minimum number of logs to send | 5 |
+| userId | User identifier | null |
+| sessionId | Session identifier | null |
+| version | Application version identifier | null |
+| logDetails | Toggle detailed logs (keys pressed and input/change values) | false |
+| resolution | Delay between instances of high frequency logs (mouseover, scroll, etc.) | 500 (ms) |
+| userFromParams | Query param in the page URL to fetch userId from | null |
+| toolName | Name of tool being logged | null |
+| authHeader | Authorization header to be passed to logging endpoint | null |
 
 **NOTE** These options are also available through our [API]({{ '/docs/useralejs/API' | prepend: site.baseurl }}), which support deploying UserALE.js as an NPM `module.`
 

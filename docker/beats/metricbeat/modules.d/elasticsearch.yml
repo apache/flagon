@@ -1,6 +1,0 @@
-#---------------------------- Elasticsearch Module ---------------------------
-- module: elasticsearch
-  metricsets: ["node", "node_stats"]
-  period: 10s
-  enabled: true
-  hosts: ["${ELASTICSEARCH_URL}"] 

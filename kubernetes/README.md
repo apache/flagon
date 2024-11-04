@@ -6,4 +6,4 @@ Prerequisites: A bash enviroment and Kubernetes running with at least 4 GB memor
 
 Use the `run.sh` script to deploy the stack.
 
-`test.py` is included as a utility to verify that logs are correctly posted to elastic locally.
+`test.py` is included as a utility to verify that logs are correctly posted to elastic locally. To run `test.py`, you must first install it's requirements via `pip install -r requirements.txt`.
