@@ -5,7 +5,7 @@ permalink: /docs/useralejs/build/
 priority: 1
 ---
 
-To build [Apache UserALE.js](https://github.com/apache/flagon-useralejs/tree/master), you will need to clone our repo and install [NPM and Node.js](https://nodejs.org/).
+To build [Apache UserALE.js](https://github.com/apache/flagon-useralejs/tree/master), you will need to clone our repo and install [NPM and Node.js](https://nodejs.org/) and [Go](https://go.dev/doc/install).
 
 UserALE.js utilizes NPM for package and dependency management. Execute the following to install dependencies.
 ```
@@ -18,7 +18,7 @@ npm ls --depth=0
 
 ## Build
 
-UserALE.js uses Gulp to manage build tasking. These tasks are executed through our build script; use the following to execute:
+UserALE.js uses Rollup to manage build tasking. These tasks are executed through our build script; use the following to execute:
 
 ```
 #Build UserALE.js
@@ -27,11 +27,10 @@ npm run build
 
 ## Test
 
-UserALE.js uses JSDOM and Mocha to execute unit tests, which are integrated into our build pipeline. See ``package.json`` for full script options. 
+UserALE.js uses Jest and Playwright to execute tests, which are integrated into our build pipeline. See ``package.json`` for full script options. 
 
 To run tests:
 ```
-#Run UserALE.js unit tests
 npm run test
 ```
 ... you'll see something like:
@@ -111,12 +110,11 @@ npm run test
   45 passing (954ms)
   1 pending
 ```
-Any failing tests will also be logged in the terminal. If there are failing tests, please consider [logging an issue in JIRA](https://issues.apache.org/jira/projects/FLAGON).
+
+Followed by e2e tests via playwright that runs in a headed browser. Note that interacting with the headed browser may contaminate test results. Unfortanutely, the browser plugin requires playwright to run with a headed browser at this time. Any failing tests will also be logged in the terminal. If there are failing tests, please consider [opening an issue in Github](https://github.com/apache/flagon-useralejs/issues).
 
 Further instructions can be found in our [README](https://github.com/apache/flagon-useralejs/blob/master/README.md)
 
 ## Contributing
 
-Contributions are welcome!  Simply [submit an issue](https://github.com/apache/flagon-useralejs/issues) for problems 
-you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
-incorporate it into UserALE.js. We also love Pull Requests!
+Contributions are welcome!  See the [contribution guide](https://github.com/apache/flagon-useralejs/blob/master/CONTRIBUTING.md) for more information.

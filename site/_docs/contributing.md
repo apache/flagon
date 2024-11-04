@@ -10,15 +10,15 @@ There are certain procedures that must be followed for all contributions. These 
 
 See individual product guides for product-specific information on getting started as a contributor, setup and testing, code style, etc.
 
-To report a bug or other issue, simply create an issue in JIRA, as described in Step 1 below.
+To report a bug or other issue, simply create an issue in Giithub, as described in Step 1 below.
 
-#### 1. Create an issue in JIRA
+#### 1. Create an issue in Github
 
-   All changes to Apache Flagon must have a corresponding issue in [JIRA](https://issues.apache.org/jira/browse/FLAGON) so the change can be properly tracked.  If you do not already have an account on JIRA, you will need to create one before creating your new issue.
+   All changes to Apache Flagon must have a corresponding issue in [GitHub](https://github.com/apache?q=flagon) so the change can be properly tracked.  If you do not already have an account on Github, you will need to create one before creating your new issue.
 
 #### 2. Make and test your changes locally
 
-   The Apache Flagon source code is maintained in [several git repositories](https://gitbox.apache.org/repos/asf?s=flagon) hosted by Apache.  These repositories are mirrored and more easily available [on GitHub](https://github.com/apache?q=flagon).  To make your changes, fork the appropriate GitHub repository and make commits to a topic branch in your fork.  Commits should be made in logical units and must reference the JIRA issue number:
+   The Apache Flagon source code is maintained in [several git repositories](https://gitbox.apache.org/repos/asf?s=flagon) hosted by Apache.  These repositories are mirrored and more easily available [on GitHub](https://github.com/apache?q=flagon).  To make your changes, fork the appropriate GitHub repository and make commits to a topic branch in your fork.  Commits should be made in logical units:
    ```shell
    git commit -S -m "[FLAGON-123] High-level message describing the changes."
    ```
