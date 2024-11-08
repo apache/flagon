@@ -16,7 +16,7 @@
   <script src="/js/main.js"></script>
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://flagon.apache.org/">
+  <link rel="canonical" href="https://flagon.apache.org/">
   <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
 
   
@@ -35,23 +35,15 @@
       <div class="ui dropdown item">
         Products
         <div class="menu">
-          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
-          <a class="item" href="/tap">Tap</a>
-          <a class="item" href="/stout">Stout</a>
         </div>
       </div>
       <div class="ui dropdown item">
         <a href="/docs">Docs</a>
         <div class="menu">
-          <a class="item" href="/docs/stack">Stack</a>
-          <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserALE.js</a>
-          <a class="item" href="/docs/useralepy">UserALE.py</a>
           <a class="item" href="/docs/distill">Distill</a>
-          <a class="item" href="/docs/tap">Tap</a>
-          <a class="item" href="/docs/stout">Stout</a>
         </div>
       </div>
       <a class="item" href="/releases">Releases</a>
@@ -77,7 +69,7 @@
 
     <br>
 
-    <a class="ui big red button" href="/docs/stack/">
+    <a class="ui big red button" href="/docs/useralejs/">
       Get Started
     </a>
     <a class="ui big blue button" href="/releases">
@@ -255,131 +247,6 @@
   </div>
 </div>
 
-<div class="ui very padded vertical segment">
-  <div class="ui text container">
-    <div class="ui two column middle aligned grid">
-      <div class="column">
-        Apache TAP is Flagon's experimental collection of specially modified D3 visual analytic libraries for exploring Apache UserALE.js data. You can explore them in our sandbox environment, or embed them in your own applications. With TAP, Gain insight from advanced sequential and graph models and reveal trends in usage across users of different types and experience, and trends across different versions of your application. Try out our Bowie plot demo below!
-      </div>
-      <div class="center aligned column">
-        <a href="/tap">
-          <img class="component-image" src="/images/tap.png">
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="ui inverted grey very padded vertical segment">
-  <div class="ui center aligned text container">
-    <h2 class="ui inverted header">The Bowie Plot</h2>
-    <p>
-      Tap uses the Bowie plot to present your users' micro-workflows and help you uncover insights into how your users interact with you apps.  Start on the left, with the activity that starts the workflow, sized by the frequency of the activity.  Next, the circles in the middle show the second activity in the workflow.  The circles are downselected and sized by a graph metric to help uncover a particular type of insight.  End on the right with the final activity of the workflow.
-    </p>
-  </div>
-
-  <div class="ui container">
-    <div class="ui padded grid">
-      <div class="four wide middle aligned column">
-        <div class="ui inverted form">
-          <h3 class="ui inverted header">Graph Metrics</h3>
-
-          <div class="grouped fields">
-            <div class="field">
-              <div class="ui radio checkbox">
-                <input type="radio" name="metric" value="out_degree" checked></input>
-                <label>Out Degree</label>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="ui radio checkbox">
-                <input type="radio" name="metric" value="in_degree"></input>
-                <label>In Degree</label>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="ui radio checkbox">
-                <input type="radio" name="metric" value="betweenness_cent_dir_weighted"></input>
-                <label>Weighted Betweenness</label>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="ui radio checkbox">
-                <input type="radio" name="metric" value="closeness_cent_dir_weighted"></input>
-                <label>Weighted Closeness</label>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="ui radio checkbox">
-                <input type="radio" name="metric" value="closeness_cent_dir_unweighted"></input>
-                <label>Unweighted Closeness</label>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="twelve wide center aligned column">
-        <div class="ui basic row segment">
-          <div id="bowie"></div>
-        </div>
-      </div>
-    </div>
-
-    <div id="metric-explanation" class="ui center aligned text container"></div>
-  </div>
-</div>
-
-<script src="/js/bowiePlot.js"></script>
-<script>
-  $(document).ready(function () {
-    // Metric explanations
-    var metricExplanations = {
-      'out_degree': 'Out degree describes how often an activity was a source.  How often did a micro-workflow start with this activity?  This could indicate an entry point to your app or the start of a particularly common workflow.',
-      'in_degree': 'In degree describes how often an activity was a sink.  How often did a micro-workflow end with this activity?  This could indicate a final confirmation, exit navigation, or a place the user got stuck.',
-      'betweenness_cent_dir_weighted': 'Betweenness centrality describes how often an activity was passed through.  This indicates a common intermediate activity, like a busy intersection of your app.',
-      'closeness_cent_dir_weighted': 'Closeness centrality indicates how "close" an activity is to all others.  A higher closeness indicates an activity that was involved in more workflows.  Weighted closeness focuses on closeness to the most common activities, rather than to all equally.',
-      'closeness_cent_dir_unweighted': 'Closeness centrality indicates how "close" an activity is to all others.  A higher closeness indicates an activity that was involved in more workflows. Unweighted closeness focuses on closeness to all activities equally, regardless of how often each activity occurred.'
-    };
-
-    // Change metric
-    function changeMetric() {
-      var metric = $('input[name=metric]:checked').val();
-      $('#metric-explanation').html(metricExplanations[metric]);
-      Bowie.update(metric);
-    }
-
-    // Initialize radio buttons
-    $('.ui.radio.checkbox').checkbox({
-      onChange: changeMetric
-    });
-
-    // Initialize
-    Bowie.create();
-    changeMetric();
-  });
-</script>
-
-
-<div class="ui very padded vertical segment">
-  <div class="ui text container">
-    <div class="ui two column middle aligned grid">
-      <div class="center aligned column">
-        <a href="/stout">
-          <img class="component-image" src="/images/stout.png">
-        </a>
-      </div>
-      <div class="column">
-        Stage systematic user research on the web. Apache STOUT provides everyone the ability to perform user research on the web. Track research participants through different tasks with your web applications, or track them through different versions of the same web application. Apache STOUT allows you to manage user research participants and data collected through Apache UserALE and 3rd party form data services.
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="ui inverted grey very padded vertical segment">
   <div class="ui text container">
     <h2 class="ui inverted header">About the Project</h2>
@@ -397,23 +264,15 @@
       <div class="column">
         <h4 class="ui inverted header">About</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
-          <a class="item" href="/tap">Tap</a>
-          <a class="item" href="/stout">Stout</a>
         </div>
       </div>
       <div class="column">
         <h4 class="ui inverted header">Docs</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/docs/stack">Stack</a>
-          <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserAle.js</a>
-          <a class="item" href="/docs/useralepy">UserAle.py</a>
           <a class="item" href="/docs/distill">Distill</a>
-          <a class="item" href="/docs/tap">Tap</a>
-          <a class="item" href="/docs/stout">Stout</a>
         </div>
       </div>
       <div class="column">
@@ -421,9 +280,6 @@
         <div class="ui inverted link list">
           <a class="item" href="https://github.com/apache?q=flagon">GitHub</a>
           <a class="item" href="http://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
-          <a class="item" href="https://issues.apache.org/jira/browse/FLAGON">Jira Issue Tracker</a>
-          <a class="item" href="https://cwiki.apache.org/confluence/display/FLAGON">Project Wiki</a>
-          <a class="item" href="https://twitter.com/ApacheFlagon">Twitter</a>
         </div>
       </div>
       <div class="column">
@@ -434,17 +290,15 @@
           <a class="item" href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
           <a class="item" href="http://www.apache.org/foundation/thanks.html">Thanks</a>
           <a class="item" href="http://www.apache.org/security/">Security</a>
+          <a class="item" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a>
         </div>
       </div>
     </div>
   </div>
   <div class="ui inverted vertical segment">
     <div class="ui two column middle aligned grid">
-      <div class="column">
-        Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
-      </div>
       <div class="center aligned column">
-        Copyright &copy; 2023 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2024 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>
@@ -452,9 +306,6 @@
   <div class="ui inverted vertical segment">
     <div class="ui one column middle aligned grid">
       <div class="center aligned column">
-        <a href="http://incubator.apache.org/">
-          <img src="/images/incubator-logo-white.jpg">
-        </a>&nbsp;
         <a href="https://www.apache.org/events/current-event.html">
           <img src="https://www.apache.org/events/current-event-234x60.png" alt="ASF Current Event">
         </a>

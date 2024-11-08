@@ -16,7 +16,7 @@
   <script src="/js/main.js"></script>
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://flagon.apache.org/docs/distill/">
+  <link rel="canonical" href="https://flagon.apache.org/docs/distill/">
   <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
 
   
@@ -35,23 +35,15 @@
       <div class="ui dropdown item">
         Products
         <div class="menu">
-          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
-          <a class="item" href="/tap">Tap</a>
-          <a class="item" href="/stout">Stout</a>
         </div>
       </div>
       <div class="ui dropdown item">
         <a href="/docs">Docs</a>
         <div class="menu">
-          <a class="item" href="/docs/stack">Stack</a>
-          <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserALE.js</a>
-          <a class="item" href="/docs/useralepy">UserALE.py</a>
           <a class="item" href="/docs/distill">Distill</a>
-          <a class="item" href="/docs/tap">Tap</a>
-          <a class="item" href="/docs/stout">Stout</a>
         </div>
       </div>
       <a class="item" href="/releases">Releases</a>
@@ -65,11 +57,6 @@
       <div class="docs-wrapper">
   <div class="docs-sidebar">
     
-
-
-
-
-
 
 
 
@@ -91,41 +78,6 @@
         <a class="item" href="/docs/">About the Docs</a>
       
         <a class="item" href="/docs/contributing/">Contributing</a>
-      
-    </div>
-  </div>
-
-
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    Stack
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/stack/">Getting Started</a>
-      
-        <a class="item" href="/docs/stack/scaling/">Scaling Considerations</a>
-      
-    </div>
-  </div>
-
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    UserALE
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/userale/">About UserALE</a>
       
     </div>
   </div>
@@ -157,28 +109,6 @@
   </div>
 
   
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    UserALE.py
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/useralepy/">Installation</a>
-      
-        <a class="item" href="/docs/useralepy/start.html">Getting Started</a>
-      
-        <a class="item" href="/docs/useralepy/api.html">API Documentation</a>
-      
-        <a class="item" href="/docs/useralepy/changelog.html">Changelog</a>
-      
-    </div>
-  </div>
-
-  
     <div class="active title">
   
     <i class="dropdown icon"></i>
@@ -191,56 +121,9 @@
       
         <a class="item" href="/docs/distill/">Installation</a>
       
-        <a class="item" href="/docs/distill/start.html">Getting Started</a>
-      
-        <a class="item" href="/docs/distill/api.html">API Documentation</a>
-      
-        <a class="item" href="/docs/distill/analytics.html">Apache Distill Analytics</a>
-      
-        <a class="item" href="/docs/distill/http.html">Apache Distill HTTP Client</a>
-      
-        <a class="item" href="/docs/distill/models.html">Apache Distill Models</a>
-      
-        <a class="item" href="/docs/distill/utilities.html">Apache Distill Utilities</a>
-      
-        <a class="item" href="/docs/distill/changelog.html">Changelog</a>
-      
     </div>
   </div>
 
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    Tap
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/tap/">Getting Started</a>
-      
-    </div>
-  </div>
-
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    Stout
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/stout/">About Stout</a>
-      
-        <a class="item" href="/docs/stout/start.html">Getting Started</a>
-      
-    </div>
-  </div>
 </div>
 
   </div>
@@ -248,148 +131,7 @@
     <h2 class="ui header">Installation</h2>
     <h3 id="installing-apache-distill">Installing Apache Distill</h3>
 
-<h4 id="this-project-is-not-currently-maintained-and-will-be-refactored-if-you-are-interested-in-distill-join-the-discussion-on-our-dev-list">This project is not currently maintained and will be refactored. If you are interested in Distill, join the discussion on our <a href="mailto:dev-subscribe@flagon.incubator.apache.org">dev list</a>.</h4>
-
-<p>The first step is to install Apache Distill. First, checkout the latest version of Apache Distill.</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>git clone https://gitbox.apache.org/repos/asf/incubator-flagon-distill.git
-</code></pre></div></div>
-
-<p>Apache Distill is a python project, so it can be installed like any other python library. Several operating systems (Mac OS X, Major Versions of Linux/BSD) have Python pre-installed, so you should just have to run</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>easy_install distill
-</code></pre></div></div>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  or
-</code></pre></div></div>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>pip install distill
-</code></pre></div></div>
-
-<p>Users are strongly recommended to install Apache Distill in a virtualenv. Instructions to setup an virtual environment will be explained below.</p>
-
-<blockquote>
-  <p><strong>Note</strong>
-When the package is installed via easy_install or pip this function will be bound to the distill executable in the Python installation’s bin directory (on Windows - the Scripts directory).</p>
-</blockquote>
-
-<h3 id="installing-apache-distill-in-an-virtual-environment">Installing Apache Distill in an Virtual Environment</h3>
-
-<p>virtualenv is a tool to create isolated Python environments. virtualenv creates a folder which contains all the necessary executables to use the packages that the Apache Distill project would need.</p>
-
-<p>Install virtualenv via pip:</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span><span class="nb">sudo </span>env/bin/pip install virtualenv
-</code></pre></div></div>
-
-<p>Start by changing directory into the root of Apache Distill’s project directory, and then use the virtualenv command-line tool to create a new environment:</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>mkdir env
-  <span class="nv">$ </span>virtualenv env
-</code></pre></div></div>
-
-<p>Activate environment:</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span><span class="nb">source </span>env/bin/activate
-</code></pre></div></div>
-
-<p>Install Apache Distill requirements:</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>env/bin/pip <span class="nt">-r</span> requirements.txt
-</code></pre></div></div>
-
-<p>To build the source code and run all unit tests.</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>env/bin/python setup.py develop <span class="nb">test</span>
-</code></pre></div></div>
-
-<p>Launch local Apache Distill server, running on localhost:8090:</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>env/bin/dev
-</code></pre></div></div>
-
-<p>Deactivate environment</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>deactivate
-</code></pre></div></div>
-
-<h3 id="running-apache-distill-on-docker-compose">Running Apache Distill on Docker Compose</h3>
-<p>From the project directory, start up Apache Distill in the background.</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>docker-compose up <span class="nt">-d</span>
-  <span class="nv">$ </span>docker-compose ps
-</code></pre></div></div>
-
-<p>To stop services once you’ve finished with them:</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>docker-compose stop
-</code></pre></div></div>
-
-<h3 id="deployment-with-nginx-and-gunicorn">Deployment with Nginx and Gunicorn</h3>
-
-<p>I will describe a setup with nginx as a web server on Ubuntu. A web server cannot communicate directly with a Flask application such as Apache Distill. Thus gunicorn will be used to act as a medium between the web server and Apache Distill. Gunicorn is like an application web server that will be running behind nginx, and it is WSGI compatible. It can communicate with applications that support WSGI – Flask, Django, etc.</p>
-
-<p>Install requirements.</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span><span class="nb">sudo </span>apt-get update
-  <span class="nv">$ </span><span class="nb">sudo </span>apt-get install <span class="nt">-y</span> python python-pip nginx gunicorn
-</code></pre></div></div>
-
-<p>Create a directory to store the project.</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span><span class="nb">sudo </span>mkdir /home/pubic_html <span class="o">&amp;&amp;</span> <span class="nb">cd</span> /home/public_html
-</code></pre></div></div>
-
-<p>Download the project from the GitHub repository and copy the application to the /home/public_html directory.</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>git clone https://gitbox.apache.org/repos/asf/incubator-flagon-distill.git /home/public_html
-</code></pre></div></div>
-
-<p>Install Apache Distill’s requirements either globally or in a virutal environment:</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>env/bin/pip install <span class="nt">-r</span> requirements.txt
-</code></pre></div></div>
-
-<p>Apache Distill has provided an nginx configuration file located in distill/deploy/nginx.conf.</p>
-
-<p>Gunicorn will use port 8000 and handle the incoming HTTP requests.</p>
-
-<p>Restart nginx to load the configuration changes.</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span><span class="nb">sudo</span> /etc/init.d/nginx restart
-</code></pre></div></div>
-
-<p>Run gunicorn on port 8000.</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>gunicorn <span class="nt">--workers</span> 4 <span class="nt">--bind</span> unix:distill.sock <span class="nt">-m</span> 007 deploy/run_server:app
-</code></pre></div></div>
-
-<p>Start a new browser instance and navigate to http://localhost.</p>
-
-<h3 id="installing-documentation">Installing Documentation</h3>
-
-<p>If you want to manually build the documentation, the instructions are below.</p>
-
-<p>First, install the documentation dependencies:</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>env/bin/pip install <span class="nt">-r</span> doc_requirements.txt
-</code></pre></div></div>
-
-<p>To build Apache Distill’s documentation, create a directory at the root level of /distill called distill-docs.</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>mkdir distill-docs &amp; <span class="nb">cd </span>distill-docs
-</code></pre></div></div>
-
-<p>Execute build command:</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c"># Inside top-level docs/ directory.</span>
-  <span class="nv">$ </span>make html
-</code></pre></div></div>
-
-<p>This should build the documentation in your shell, and output HTML. At then end, it should say something about documents being ready in distill-docs/html. You can now open them in your browser by typing</p>
-
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>open distill-docs/html/index.html
-</code></pre></div></div>
+<h4 id="this-project-is-currently-being-refactored-if-you-are-interested-in-distill-join-the-discussion-on-our-dev-list">This project is currently being refactored. If you are interested in Distill, join the discussion on our <a href="mailto:dev-subscribe@flagon.incubator.apache.org">dev list</a>.</h4>
 
   </div>
 </div>
@@ -402,23 +144,15 @@ When the package is installed via easy_install or pip this function will be boun
       <div class="column">
         <h4 class="ui inverted header">About</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
-          <a class="item" href="/tap">Tap</a>
-          <a class="item" href="/stout">Stout</a>
         </div>
       </div>
       <div class="column">
         <h4 class="ui inverted header">Docs</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/docs/stack">Stack</a>
-          <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserAle.js</a>
-          <a class="item" href="/docs/useralepy">UserAle.py</a>
           <a class="item" href="/docs/distill">Distill</a>
-          <a class="item" href="/docs/tap">Tap</a>
-          <a class="item" href="/docs/stout">Stout</a>
         </div>
       </div>
       <div class="column">
@@ -426,9 +160,6 @@ When the package is installed via easy_install or pip this function will be boun
         <div class="ui inverted link list">
           <a class="item" href="https://github.com/apache?q=flagon">GitHub</a>
           <a class="item" href="http://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
-          <a class="item" href="https://issues.apache.org/jira/browse/FLAGON">Jira Issue Tracker</a>
-          <a class="item" href="https://cwiki.apache.org/confluence/display/FLAGON">Project Wiki</a>
-          <a class="item" href="https://twitter.com/ApacheFlagon">Twitter</a>
         </div>
       </div>
       <div class="column">
@@ -439,17 +170,15 @@ When the package is installed via easy_install or pip this function will be boun
           <a class="item" href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
           <a class="item" href="http://www.apache.org/foundation/thanks.html">Thanks</a>
           <a class="item" href="http://www.apache.org/security/">Security</a>
+          <a class="item" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a>
         </div>
       </div>
     </div>
   </div>
   <div class="ui inverted vertical segment">
     <div class="ui two column middle aligned grid">
-      <div class="column">
-        Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
-      </div>
       <div class="center aligned column">
-        Copyright &copy; 2023 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2024 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>
@@ -457,9 +186,6 @@ When the package is installed via easy_install or pip this function will be boun
   <div class="ui inverted vertical segment">
     <div class="ui one column middle aligned grid">
       <div class="center aligned column">
-        <a href="http://incubator.apache.org/">
-          <img src="/images/incubator-logo-white.jpg">
-        </a>&nbsp;
         <a href="https://www.apache.org/events/current-event.html">
           <img src="https://www.apache.org/events/current-event-234x60.png" alt="ASF Current Event">
         </a>
