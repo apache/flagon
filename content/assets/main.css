@@ -1,204 +1,282 @@
 body {
   display: flex;
-  flex-direction: column; }
+  flex-direction: column;
+}
 
 .site-header {
-  flex: 0 0; }
+  flex: 0 0;
+}
 
 .main-wrapper {
   flex: 1 0;
   height: auto;
-  padding-top: 50px; }
+  padding-top: 50px;
+}
 
 .footer {
   flex: 0 0;
   width: 100%;
-  text-align: center; }
+  text-align: center;
+}
 
 #main-menu {
-  height: 50px !important; }
+  height: 50px !important;
+}
 
 .page-wrapper {
-  padding: 2em 0 2em 0; }
+  padding: 2em 0 2em 0;
+}
 
 #main-masthead {
   padding: 10em;
   background-image: url("/images/header.svg");
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center;
+}
 
 .blank-masthead {
-  padding: 10em !important; }
+  padding: 10em !important;
+}
 
 .image-masthead {
-  padding: 6.8em !important; }
+  padding: 6.8em !important;
+}
 
 .docs-wrapper {
-  display: flex; }
+  display: flex;
+}
 
 .docs-sidebar {
   flex: 1 0 180px;
   padding: 2em;
   background-color: #54595B;
-  min-height: calc(100vh - 50px); }
+  min-height: calc(100vh - 50px);
+}
 
 .docs-content {
   flex: 8;
-  padding: 2em; }
+  padding: 2em;
+}
 
 .docs-list {
-  margin-left: 3em !important; }
+  margin-left: 3em !important;
+}
 
 .docs-list > a.item:before {
-  color: #EBEBEB !important; }
+  color: #EBEBEB !important;
+}
 
 .component-image {
   max-width: 100%;
-  max-height: 170px; }
+  max-height: 170px;
+}
 
 .site-title {
-  white-space: nowrap; }
+  white-space: nowrap;
+}
 
 .segment-image {
-  max-width: 100%; }
+  max-width: 100%;
+}
 
 .feature-description {
-  color: #EBEBEB; }
+  color: #EBEBEB;
+}
 
 .indented {
-  padding-left: 2em; }
+  padding-left: 2em;
+}
 
 /**
  * Syntax highlighting styles
  */
 .highlight .c {
   color: #54595B;
-  font-style: italic; }
+  font-style: italic;
+}
 .highlight .err {
-  color: #E24614; }
+  color: #E24614;
+}
 .highlight .k {
-  font-weight: bold; }
+  font-weight: bold;
+}
 .highlight .o {
-  font-weight: bold; }
+  font-weight: bold;
+}
 .highlight .cm {
   color: #54595B;
-  font-style: italic; }
+  font-style: italic;
+}
 .highlight .cp {
   color: #54595B;
-  font-weight: bold; }
+  font-weight: bold;
+}
 .highlight .c1 {
   color: #54595B;
-  font-style: italic; }
+  font-style: italic;
+}
 .highlight .cs {
   color: #54595B;
   font-weight: bold;
-  font-style: italic; }
+  font-style: italic;
+}
 .highlight .gd {
-  color: #262626; }
+  color: #262626;
+}
 .highlight .gd .x {
-  color: #262626; }
+  color: #262626;
+}
 .highlight .ge {
-  font-style: italic; }
+  font-style: italic;
+}
 .highlight .gr {
-  color: #E24614; }
+  color: #E24614;
+}
 .highlight .gh {
-  color: #54595B; }
+  color: #54595B;
+}
 .highlight .gi {
-  color: #262626; }
+  color: #262626;
+}
 .highlight .gi .x {
-  color: #262626; }
+  color: #262626;
+}
 .highlight .go {
-  color: #54595B; }
+  color: #54595B;
+}
 .highlight .gp {
-  color: #54595B; }
+  color: #54595B;
+}
 .highlight .gs {
-  font-weight: bold; }
+  font-weight: bold;
+}
 .highlight .gu {
-  color: #54595B; }
+  color: #54595B;
+}
 .highlight .gt {
-  color: #E24614; }
+  color: #E24614;
+}
 .highlight .kc {
-  font-weight: bold; }
+  font-weight: bold;
+}
 .highlight .kd {
-  font-weight: bold; }
+  font-weight: bold;
+}
 .highlight .kp {
-  font-weight: bold; }
+  font-weight: bold;
+}
 .highlight .kr {
-  font-weight: bold; }
+  font-weight: bold;
+}
 .highlight .kt {
   color: #283F4E;
-  font-weight: bold; }
+  font-weight: bold;
+}
 .highlight .m {
-  color: #38A6D8; }
+  color: #38A6D8;
+}
 .highlight .s {
-  color: #E24614; }
+  color: #E24614;
+}
 .highlight .na {
-  color: #283F4E; }
+  color: #283F4E;
+}
 .highlight .nb {
-  color: #38A6D8; }
+  color: #38A6D8;
+}
 .highlight .nc {
   color: #38A6D8;
-  font-weight: bold; }
+  font-weight: bold;
+}
 .highlight .no {
-  color: #283F4E; }
+  color: #283F4E;
+}
 .highlight .ni {
-  color: #852EB7; }
+  color: #852EB7;
+}
 .highlight .ne {
   color: #E24614;
-  font-weight: bold; }
+  font-weight: bold;
+}
 .highlight .nf {
   color: #E24614;
-  font-weight: bold; }
+  font-weight: bold;
+}
 .highlight .nn {
-  color: #54595B; }
+  color: #54595B;
+}
 .highlight .nt {
-  color: #38A6D8; }
+  color: #38A6D8;
+}
 .highlight .nv {
-  color: #283F4E; }
+  color: #283F4E;
+}
 .highlight .ow {
-  font-weight: bold; }
+  font-weight: bold;
+}
 .highlight .w {
-  color: #54595B; }
+  color: #54595B;
+}
 .highlight .mf {
-  color: #BFD02C; }
+  color: #BFD02C;
+}
 .highlight .mh {
-  color: #BFD02C; }
+  color: #BFD02C;
+}
 .highlight .mi {
-  color: #BFD02C; }
+  color: #BFD02C;
+}
 .highlight .mo {
-  color: #BFD02C; }
+  color: #BFD02C;
+}
 .highlight .sb {
-  color: #E24614; }
+  color: #E24614;
+}
 .highlight .sc {
-  color: #E24614; }
+  color: #E24614;
+}
 .highlight .sd {
-  color: #E24614; }
+  color: #E24614;
+}
 .highlight .s2 {
-  color: #E24614; }
+  color: #E24614;
+}
 .highlight .se {
-  color: #E24614; }
+  color: #E24614;
+}
 .highlight .sh {
-  color: #E24614; }
+  color: #E24614;
+}
 .highlight .si {
-  color: #E24614; }
+  color: #E24614;
+}
 .highlight .sx {
-  color: #E24614; }
+  color: #E24614;
+}
 .highlight .sr {
-  color: #BFD02C; }
+  color: #BFD02C;
+}
 .highlight .s1 {
-  color: #E24614; }
+  color: #E24614;
+}
 .highlight .ss {
-  color: #852EB7; }
+  color: #852EB7;
+}
 .highlight .bp {
-  color: #54595B; }
+  color: #54595B;
+}
 .highlight .vc {
-  color: #283F4E; }
+  color: #283F4E;
+}
 .highlight .vg {
-  color: #283F4E; }
+  color: #283F4E;
+}
 .highlight .vi {
-  color: #283F4E; }
+  color: #283F4E;
+}
 .highlight .il {
-  color: #BFD02C; }
+  color: #BFD02C;
+}
 
 .tooltip {
   position: absolute;
@@ -211,16 +289,22 @@ body {
   background-color: #EBEBEB;
   border-style: solid;
   border-width: 1px;
-  border-color: #54595B; }
+  border-color: #54595B;
+}
 
 #log-feed {
   height: 720px;
-  overflow-y: hidden; }
+  overflow-y: hidden;
+}
 
 #map-example {
   min-height: 300px;
   width: 100%;
-  z-index: 0; }
+  z-index: 0;
+}
 
 #demo-dropdown > .default.text {
-  color: #54595B !important; }
+  color: #54595B !important;
+}
+
+/*# sourceMappingURL=main.css.map */

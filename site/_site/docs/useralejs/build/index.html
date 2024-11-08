@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>UserALE.js Build and Test</title>
-  <meta name="description" content="To build Apache UserALE.js, you will need to clone our repo and install NPM and Node.js.">
+  <meta name="description" content="To build Apache UserALE.js, you will need to clone our repo and install NPM and Node.js and Go.">
 
   <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -16,7 +16,7 @@
   <script src="/js/main.js"></script>
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://flagon.apache.org/docs/useralejs/build/">
+  <link rel="canonical" href="https://flagon.apache.org/docs/useralejs/build/">
   <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
 
   
@@ -35,23 +35,15 @@
       <div class="ui dropdown item">
         Products
         <div class="menu">
-          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
-          <a class="item" href="/tap">Tap</a>
-          <a class="item" href="/stout">Stout</a>
         </div>
       </div>
       <div class="ui dropdown item">
         <a href="/docs">Docs</a>
         <div class="menu">
-          <a class="item" href="/docs/stack">Stack</a>
-          <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserALE.js</a>
-          <a class="item" href="/docs/useralepy">UserALE.py</a>
           <a class="item" href="/docs/distill">Distill</a>
-          <a class="item" href="/docs/tap">Tap</a>
-          <a class="item" href="/docs/stout">Stout</a>
         </div>
       </div>
       <a class="item" href="/releases">Releases</a>
@@ -65,11 +57,6 @@
       <div class="docs-wrapper">
   <div class="docs-sidebar">
     
-
-
-
-
-
 
 
 
@@ -91,41 +78,6 @@
         <a class="item" href="/docs/">About the Docs</a>
       
         <a class="item" href="/docs/contributing/">Contributing</a>
-      
-    </div>
-  </div>
-
-
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    Stack
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/stack/">Getting Started</a>
-      
-        <a class="item" href="/docs/stack/scaling/">Scaling Considerations</a>
-      
-    </div>
-  </div>
-
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    UserALE
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/userale/">About UserALE</a>
       
     </div>
   </div>
@@ -160,28 +112,6 @@
     <div class="title">
   
     <i class="dropdown icon"></i>
-    UserALE.py
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/useralepy/">Installation</a>
-      
-        <a class="item" href="/docs/useralepy/start.html">Getting Started</a>
-      
-        <a class="item" href="/docs/useralepy/api.html">API Documentation</a>
-      
-        <a class="item" href="/docs/useralepy/changelog.html">Changelog</a>
-      
-    </div>
-  </div>
-
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
     Distill
   </div>
   
@@ -191,65 +121,18 @@
       
         <a class="item" href="/docs/distill/">Installation</a>
       
-        <a class="item" href="/docs/distill/start.html">Getting Started</a>
-      
-        <a class="item" href="/docs/distill/api.html">API Documentation</a>
-      
-        <a class="item" href="/docs/distill/analytics.html">Apache Distill Analytics</a>
-      
-        <a class="item" href="/docs/distill/http.html">Apache Distill HTTP Client</a>
-      
-        <a class="item" href="/docs/distill/models.html">Apache Distill Models</a>
-      
-        <a class="item" href="/docs/distill/utilities.html">Apache Distill Utilities</a>
-      
-        <a class="item" href="/docs/distill/changelog.html">Changelog</a>
-      
     </div>
   </div>
 
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    Tap
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/tap/">Getting Started</a>
-      
-    </div>
-  </div>
-
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    Stout
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/stout/">About Stout</a>
-      
-        <a class="item" href="/docs/stout/start.html">Getting Started</a>
-      
-    </div>
-  </div>
 </div>
 
   </div>
   <div class="docs-content">
     <h2 class="ui header">UserALE.js Build and Test</h2>
-    <p>To build <a href="https://github.com/apache/flagon-useralejs/tree/master">Apache UserALE.js</a>, you will need to clone our repo and install <a href="https://nodejs.org/">NPM and Node.js</a>.</p>
+    <p>To build <a href="https://github.com/apache/flagon-useralejs/tree/master">Apache UserALE.js</a>, you will need to clone our repo and install <a href="https://nodejs.org/">NPM and Node.js</a> and <a href="https://go.dev/doc/install">Go</a>.</p>
 
 <p>UserALE.js utilizes NPM for package and dependency management. Execute the following to install dependencies.</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#install required packages
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#install required packages
 npm install
 
 #review major dependencies
@@ -258,22 +141,21 @@ npm ls --depth=0
 
 <h2 id="build">Build</h2>
 
-<p>UserALE.js uses Gulp to manage build tasking. These tasks are executed through our build script; use the following to execute:</p>
+<p>UserALE.js uses Rollup to manage build tasking. These tasks are executed through our build script; use the following to execute:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#Build UserALE.js
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#Build UserALE.js
 npm run build
 </code></pre></div></div>
 
 <h2 id="test">Test</h2>
 
-<p>UserALE.js uses JSDOM and Mocha to execute unit tests, which are integrated into our build pipeline. See <code class="highlighter-rouge">package.json</code> for full script options.</p>
+<p>UserALE.js uses Jest and Playwright to execute tests, which are integrated into our build pipeline. See <code class="language-plaintext highlighter-rouge">package.json</code> for full script options.</p>
 
 <p>To run tests:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#Run UserALE.js unit tests
-npm run test
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm run test
 </code></pre></div></div>
 <p>… you’ll see something like:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
     attachHandlers
     ✓ attaches all the event handlers without duplicates
     ✓ debounces bufferedEvents (505ms)
@@ -348,15 +230,14 @@ npm run test
   45 passing (954ms)
   1 pending
 </code></pre></div></div>
-<p>Any failing tests will also be logged in the terminal. If there are failing tests, please consider <a href="https://issues.apache.org/jira/projects/FLAGON">logging an issue in JIRA</a>.</p>
+
+<p>Followed by e2e tests via playwright that runs in a headed browser. Note that interacting with the headed browser may contaminate test results. Unfortanutely, the browser plugin requires playwright to run with a headed browser at this time. Any failing tests will also be logged in the terminal. If there are failing tests, please consider <a href="https://github.com/apache/flagon-useralejs/issues">opening an issue in Github</a>.</p>
 
 <p>Further instructions can be found in our <a href="https://github.com/apache/flagon-useralejs/blob/master/README.md">README</a></p>
 
 <h2 id="contributing">Contributing</h2>
 
-<p>Contributions are welcome!  Simply <a href="https://github.com/apache/flagon-useralejs/issues">submit an issue</a> for problems 
-you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
-incorporate it into UserALE.js. We also love Pull Requests!</p>
+<p>Contributions are welcome!  See the <a href="https://github.com/apache/flagon-useralejs/blob/master/CONTRIBUTING.md">contribution guide</a> for more information.</p>
 
   </div>
 </div>
@@ -369,23 +250,15 @@ incorporate it into UserALE.js. We also love Pull Requests!</p>
       <div class="column">
         <h4 class="ui inverted header">About</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
-          <a class="item" href="/tap">Tap</a>
-          <a class="item" href="/stout">Stout</a>
         </div>
       </div>
       <div class="column">
         <h4 class="ui inverted header">Docs</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/docs/stack">Stack</a>
-          <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserAle.js</a>
-          <a class="item" href="/docs/useralepy">UserAle.py</a>
           <a class="item" href="/docs/distill">Distill</a>
-          <a class="item" href="/docs/tap">Tap</a>
-          <a class="item" href="/docs/stout">Stout</a>
         </div>
       </div>
       <div class="column">
@@ -393,9 +266,6 @@ incorporate it into UserALE.js. We also love Pull Requests!</p>
         <div class="ui inverted link list">
           <a class="item" href="https://github.com/apache?q=flagon">GitHub</a>
           <a class="item" href="http://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
-          <a class="item" href="https://issues.apache.org/jira/browse/FLAGON">Jira Issue Tracker</a>
-          <a class="item" href="https://cwiki.apache.org/confluence/display/FLAGON">Project Wiki</a>
-          <a class="item" href="https://twitter.com/ApacheFlagon">Twitter</a>
         </div>
       </div>
       <div class="column">
@@ -406,17 +276,15 @@ incorporate it into UserALE.js. We also love Pull Requests!</p>
           <a class="item" href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
           <a class="item" href="http://www.apache.org/foundation/thanks.html">Thanks</a>
           <a class="item" href="http://www.apache.org/security/">Security</a>
+          <a class="item" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a>
         </div>
       </div>
     </div>
   </div>
   <div class="ui inverted vertical segment">
     <div class="ui two column middle aligned grid">
-      <div class="column">
-        Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
-      </div>
       <div class="center aligned column">
-        Copyright &copy; 2023 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2024 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>
@@ -424,9 +292,6 @@ incorporate it into UserALE.js. We also love Pull Requests!</p>
   <div class="ui inverted vertical segment">
     <div class="ui one column middle aligned grid">
       <div class="center aligned column">
-        <a href="http://incubator.apache.org/">
-          <img src="/images/incubator-logo-white.jpg">
-        </a>&nbsp;
         <a href="https://www.apache.org/events/current-event.html">
           <img src="https://www.apache.org/events/current-event-234x60.png" alt="ASF Current Event">
         </a>

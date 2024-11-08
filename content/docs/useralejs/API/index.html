@@ -16,7 +16,7 @@
   <script src="/js/main.js"></script>
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://flagon.apache.org/docs/useralejs/API/">
+  <link rel="canonical" href="https://flagon.apache.org/docs/useralejs/API/">
   <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
 
   
@@ -35,23 +35,15 @@
       <div class="ui dropdown item">
         Products
         <div class="menu">
-          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
-          <a class="item" href="/tap">Tap</a>
-          <a class="item" href="/stout">Stout</a>
         </div>
       </div>
       <div class="ui dropdown item">
         <a href="/docs">Docs</a>
         <div class="menu">
-          <a class="item" href="/docs/stack">Stack</a>
-          <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserALE.js</a>
-          <a class="item" href="/docs/useralepy">UserALE.py</a>
           <a class="item" href="/docs/distill">Distill</a>
-          <a class="item" href="/docs/tap">Tap</a>
-          <a class="item" href="/docs/stout">Stout</a>
         </div>
       </div>
       <a class="item" href="/releases">Releases</a>
@@ -65,11 +57,6 @@
       <div class="docs-wrapper">
   <div class="docs-sidebar">
     
-
-
-
-
-
 
 
 
@@ -91,41 +78,6 @@
         <a class="item" href="/docs/">About the Docs</a>
       
         <a class="item" href="/docs/contributing/">Contributing</a>
-      
-    </div>
-  </div>
-
-
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    Stack
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/stack/">Getting Started</a>
-      
-        <a class="item" href="/docs/stack/scaling/">Scaling Considerations</a>
-      
-    </div>
-  </div>
-
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    UserALE
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/userale/">About UserALE</a>
       
     </div>
   </div>
@@ -160,28 +112,6 @@
     <div class="title">
   
     <i class="dropdown icon"></i>
-    UserALE.py
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/useralepy/">Installation</a>
-      
-        <a class="item" href="/docs/useralepy/start.html">Getting Started</a>
-      
-        <a class="item" href="/docs/useralepy/api.html">API Documentation</a>
-      
-        <a class="item" href="/docs/useralepy/changelog.html">Changelog</a>
-      
-    </div>
-  </div>
-
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
     Distill
   </div>
   
@@ -191,56 +121,9 @@
       
         <a class="item" href="/docs/distill/">Installation</a>
       
-        <a class="item" href="/docs/distill/start.html">Getting Started</a>
-      
-        <a class="item" href="/docs/distill/api.html">API Documentation</a>
-      
-        <a class="item" href="/docs/distill/analytics.html">Apache Distill Analytics</a>
-      
-        <a class="item" href="/docs/distill/http.html">Apache Distill HTTP Client</a>
-      
-        <a class="item" href="/docs/distill/models.html">Apache Distill Models</a>
-      
-        <a class="item" href="/docs/distill/utilities.html">Apache Distill Utilities</a>
-      
-        <a class="item" href="/docs/distill/changelog.html">Changelog</a>
-      
     </div>
   </div>
 
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    Tap
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/tap/">Getting Started</a>
-      
-    </div>
-  </div>
-
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    Stout
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/stout/">About Stout</a>
-      
-        <a class="item" href="/docs/stout/start.html">Getting Started</a>
-      
-    </div>
-  </div>
 </div>
 
   </div>
@@ -249,16 +132,13 @@
     <p><a href="https://github.com/apache/flagon-useralejs">Apache UserALE.js</a> features a robust API that allows you 
 customize official Apache Flagon UserALE.js <a href="https://github.com/apache/flagon-useralejs/tree/master/build">builds</a> page-by-page to suite your needs.</p>
 
-<p>The API exposes a number of functions, including: <code class="highlighter-rouge">options</code>, <code class="highlighter-rouge">setLogFilter</code>, &amp; <code class="highlighter-rouge">setLogMapper</code>. With these two powerful functions, you have a lot of 
-latitude in customizing and curating your logs.</p>
-
 <h1 id="api-usage">API Usage</h1>
 
 <p>To invoke the API, simply add additional javascript code blocks under your UserALE.js script tag.</p>
 
 <p>Don’t forget to add UserALE.js to your project!</p>
 
-<p>It can be deployed as either script-tag, NPM module, or via CDN! For in-depth example, see our <a href="/docs/useralejs">Getting Started Guide</a>) or source <a href="https://github.com/apache/flagon-useralejs#usage">README.md</a>.</p>
+<p>It can be deployed as either script-tag, NPM module, or via CDN! For in-depth example, see our <a href="/docs/useralejs">Getting Started Guide</a> or source <a href="https://github.com/apache/flagon-useralejs#usage">README.md</a>.</p>
 
 <p>Also, check out our<a href="https://github.com/apache/flagon-useralejs/tree/master/example">example test utility</a> so that you can experiment with logs in your terminal!</p>
 
@@ -269,142 +149,71 @@ latitude in customizing and curating your logs.</p>
  <span class="c">&lt;!--
  Add the UserALE.js script tag to the top of your doc
  --&gt;</span>
-   <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/path/to/userale-2.3.0.min.js"</span> <span class="na">data-url=</span><span class="s">"http://yourLoggingUrl"</span><span class="nt">&gt;&lt;/script&gt;</span>
+   <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/path/to/userale-2.4.0.min.js"</span> <span class="na">data-url=</span><span class="s">"http://yourLoggingUrl"</span><span class="nt">&gt;&lt;/script&gt;</span>
 </code></pre></div></div>
 
-<h2 id="options-examples"><code class="highlighter-rouge">options</code> Examples</h2>
+<h2 id="options"><code class="language-plaintext highlighter-rouge">options()</code></h2>
 
-<p><code class="highlighter-rouge">options</code> allows you to modify UserALE.js script tag parameters. This can be particularly useful if need to pass additional data about users from your page into the logging parameters, like username and sessionID. You can build variables constructors that pass data from form data or browser storage to UserALE’s paramters.</p>
+<p><code class="language-plaintext highlighter-rouge">options</code> allows you to modify UserALE.js script tag parameters. This can be particularly useful if need to pass additional data about users from your page into the logging parameters, like username and sessionID. You can build variables constructors that pass data from form data or browser storage to UserALE’s paramters.</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!--
-Try out the options API to pass dynamic page data into your UserALE.js params page by page.
---&gt;</span>
-<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
-    <span class="kd">const</span> <span class="nx">changeMe</span> <span class="o">=</span> <span class="s2">"me"</span><span class="p">;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+    <span class="kd">const</span> <span class="nx">changeMe</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">me</span><span class="dl">"</span><span class="p">;</span>
     <span class="nb">window</span><span class="p">.</span><span class="nx">userale</span><span class="p">.</span><span class="nx">options</span><span class="p">({</span>
-      <span class="s2">"userId"</span><span class="p">:</span> <span class="nx">changeMe</span><span class="p">,</span>
-      <span class="s2">"version"</span><span class="p">:</span> <span class="s2">"2.3.0"</span><span class="p">,</span>
-      <span class="s2">"sessionID"</span><span class="p">:</span> <span class="s2">"4"</span>
+      <span class="dl">"</span><span class="s2">userId</span><span class="dl">"</span><span class="p">:</span> <span class="nx">changeMe</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">version</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2.4.0</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">sessionID</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">4</span><span class="dl">"</span>
     <span class="p">})</span>
 <span class="nt">&lt;/script&gt;</span>
 </code></pre></div></div>
 
-<h2 id="setlogfilter-examples"><code class="highlighter-rouge">setLogFilter</code> Examples</h2>
+<h2 id="addcallbacks"><code class="language-plaintext highlighter-rouge">addCallbacks()</code></h2>
 
-<p><code class="highlighter-rouge">setLogFilter</code> allows you to eliminate log data you don’t need or want from your log stream:</p>
+<p><code class="language-plaintext highlighter-rouge">addCallbacks</code> allows you to modify UserALE.js logs via callback functions. Callback functions are passed the log to be modifyed, and the corresponding event if one exists. The value returned from the calback is used as the new log, except when a falsey value is returned. In the case of a falsey value, the log is dropped. Callbacks are executed in the order they are submitted. Pass multiple callbacks with an object of functions. The following example shows how to both filter unwanted events and add custom fields.</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!--
-Add additional code blocks to set the filters you want
-This simple array filter pulls mouseover data out of your log stream
---&gt;</span>
-  <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
-    <span class="nb">window</span><span class="p">.</span><span class="nx">userale</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">log</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nx">type</span> <span class="o">!=</span> <span class="s1">'mouseover'</span><span class="p">);</span>
-    <span class="p">});</span>
-  <span class="nt">&lt;/script&gt;</span>
-</code></pre></div></div>
-
-<p>Here is one UserALE.js filter to rule them all!</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- 
-Modify the array page-by-page to curate your log stream:
-by adding unwanted event 'types' in type_array;
-by adding unwanted log classes to eliminate 'raw' or 'interval' logs from your stream.
---&gt;</span>
-  <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
-    <span class="kd">var</span> <span class="nx">type_array</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'mouseup'</span><span class="p">,</span> <span class="s1">'mouseover'</span><span class="p">,</span> <span class="s1">'dblclick'</span><span class="p">,</span> <span class="s1">'blur'</span><span class="p">,</span> <span class="s1">'focus'</span><span class="p">]</span>
-    <span class="kd">var</span> <span class="nx">logType_array</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'interval'</span><span class="p">]</span>
-    <span class="nb">window</span><span class="p">.</span><span class="nx">userale</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">log</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="o">!</span><span class="nx">type_array</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nx">type</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">logType_array</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nx">logType</span><span class="p">);</span>
-    <span class="p">});</span>
-  <span class="nt">&lt;/script&gt;</span>
-</code></pre></div></div>
-
-<p>You can also use the <code class="highlighter-rouge">setLogFilter</code> function to do other cool stuff. Below is an example for how to further modify the 
-rate at which UserALE.js collects data, but dropping every other log (odd-even) in the logging queue.</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
-      <span class="kd">var</span> <span class="nx">logCounter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-      <span class="nb">window</span><span class="p">.</span><span class="nx">userale</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">log</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="p">(</span><span class="nx">logCounter</span><span class="o">++</span> <span class="o">%</span> <span class="mi">2</span><span class="p">);</span>
-      <span class="p">});</span>
-    <span class="nt">&lt;/script&gt;</span>
-</code></pre></div></div>
-
-<h2 id="setlogmapper-examples"><code class="highlighter-rouge">setLogMapper</code> Examples</h2>
-
-<p><code class="highlighter-rouge">setLogMapper</code> allows you to modify or add new fields to UserALE.js logs.</p>
-
-<p>This simple mapping function adds a new log field for custom labels you want to attach to certain elements:</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!--
-This will add your label to all event logs that reference a particular DOM target.
---&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
-      <span class="nb">window</span><span class="p">.</span><span class="nx">userale</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">log</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">targetsForLabels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"button#test_button"</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">targetsForLabels</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nx">target</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">({},</span> <span class="nx">log</span><span class="p">,</span> <span class="p">{</span> <span class="na">CustomLabel</span><span class="p">:</span> <span class="s2">"Click me!"</span> <span class="p">});</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">log</span><span class="p">;</span>  
-        <span class="p">}</span> 
-      <span class="p">});</span>
-    <span class="nt">&lt;/script&gt;</span>
-</code></pre></div></div>
-
-<p>This cool mapping function adds a progressive count on a given element (“app”) and writes to a new log field 
-called “score”</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nt">&lt;/head&gt;</span>
-  <span class="nt">&lt;body&gt;</span>
-    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"app"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"increment"</span><span class="nt">&gt;</span>+<span class="nt">&lt;/button&gt;</span>
-      <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"decrement"</span><span class="nt">&gt;</span>-<span class="nt">&lt;/button&gt;</span>
-      <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"scoreboard"</span><span class="nt">&gt;&lt;/div&gt;</span>
-    <span class="nt">&lt;/div&gt;</span>
-  <span class="nt">&lt;/script&gt;</span> 
-
-    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
-      <span class="kd">var</span> <span class="nx">score</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-      <span class="kd">var</span> <span class="nx">scoreBoard</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'scoreboard'</span><span class="p">);</span>
-      <span class="nx">scoreBoard</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="s1">'0'</span><span class="p">;</span>
-
-      <span class="kd">function</span> <span class="nx">setScore</span><span class="p">(</span><span class="nx">nextScore</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">score</span> <span class="o">=</span> <span class="nx">nextScore</span><span class="p">;</span>
-        <span class="nx">scoreBoard</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="nb">String</span><span class="p">(</span><span class="nx">score</span><span class="p">);</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">userale</span><span class="p">.</span><span class="nx">addCallbacks</span><span class="p">({</span>
+    <span class="nx">filter</span><span class="p">(</span><span class="nx">log</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">type_array</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="dl">"</span><span class="s2">mouseup</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">mouseover</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">mousedown</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">keydown</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">dblclick</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">blur</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">focus</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">input</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">wheel</span><span class="dl">"</span><span class="p">,</span>
+      <span class="p">];</span>
+      <span class="kd">var</span> <span class="nx">logType_array</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">interval</span><span class="dl">"</span><span class="p">];</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">type_array</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nx">type</span><span class="p">)</span> <span class="o">||</span> <span class="nx">logType_array</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nx">logType</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
       <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">log</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">addCustomFields</span><span class="p">(</span><span class="nx">log</span><span class="p">,</span> <span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">targetsForLabels</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">button#test_button</span><span class="dl">"</span><span class="p">];</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">targetsForLabels</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nx">target</span><span class="p">))</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">({},</span> <span class="nx">log</span><span class="p">,</span> <span class="p">{</span> <span class="na">CustomLabel</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Click me!</span><span class="dl">"</span> <span class="p">});</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">log</span><span class="p">;</span>  
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
 
-      <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'increment'</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-        <span class="nx">setScore</span><span class="p">(</span><span class="nx">score</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-      <span class="p">});</span>
+<h2 id="removecallbacks"><code class="language-plaintext highlighter-rouge">removeCallbacks()</code></h2>
 
-      <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'decrement'</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">score</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">setScore</span><span class="p">(</span><span class="nx">score</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="p">}</span>
-      <span class="p">});</span>
+<p><code class="language-plaintext highlighter-rouge">removeCallbacks</code> removes a list of callback function that was added by addCallbacks() by name. The following example will remove the filter from the addCallbacks() example</p>
 
-      <span class="nb">window</span><span class="p">.</span><span class="nx">userale</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">log</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">({},</span> <span class="nx">log</span><span class="p">,</span> <span class="p">{</span> <span class="na">score</span><span class="p">:</span> <span class="nx">score</span> <span class="p">});</span> <span class="c1">// Add the "score" property to the log</span>
-      <span class="p">});</span>
-    <span class="nt">&lt;/script&gt;</span>
-  <span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
-
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">userale</span><span class="p">.</span><span class="nx">removeCallbacks</span><span class="p">([</span><span class="dl">"</span><span class="s2">filter</span><span class="dl">"</span><span class="p">]);</span>
+<span class="nt">&lt;/script&gt;</span>
 </code></pre></div></div>
 
 <p>Test these examples out in our UserALE.js <a href="https://github.com/apache/flagon-useralejs/blob/master/example/index.html">example page</a> test utility!</p>
 
 <p>See more <a href="">UserALE.js API Examples</a></p>
-
-<h3 id="benefits-of-the-useralejs-api">Benefits of the UserALE.js API</h3>
-<ul>
-  <li>No need to dig into our source code</li>
-  <li>Version control is easy and no need to sweat merges–just download the latest <a href="/releases">release</a>, 
- or update via <a href="https://www.npmjs.com/package/flagon-userale">npm</a>.</li>
-  <li>Manage logs page-by-page, ideal for large or complex sites</li>
-  <li>Use basic or best-practice JS styles and methods to build your own filters, no need to learn weird custom syntax.</li>
-</ul>
 
 <h2 id="contributing">Contributing</h2>
 
@@ -423,23 +232,15 @@ incorporate it into UserALE.js. We also love Pull Requests!</p>
       <div class="column">
         <h4 class="ui inverted header">About</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
-          <a class="item" href="/tap">Tap</a>
-          <a class="item" href="/stout">Stout</a>
         </div>
       </div>
       <div class="column">
         <h4 class="ui inverted header">Docs</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/docs/stack">Stack</a>
-          <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserAle.js</a>
-          <a class="item" href="/docs/useralepy">UserAle.py</a>
           <a class="item" href="/docs/distill">Distill</a>
-          <a class="item" href="/docs/tap">Tap</a>
-          <a class="item" href="/docs/stout">Stout</a>
         </div>
       </div>
       <div class="column">
@@ -447,9 +248,6 @@ incorporate it into UserALE.js. We also love Pull Requests!</p>
         <div class="ui inverted link list">
           <a class="item" href="https://github.com/apache?q=flagon">GitHub</a>
           <a class="item" href="http://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
-          <a class="item" href="https://issues.apache.org/jira/browse/FLAGON">Jira Issue Tracker</a>
-          <a class="item" href="https://cwiki.apache.org/confluence/display/FLAGON">Project Wiki</a>
-          <a class="item" href="https://twitter.com/ApacheFlagon">Twitter</a>
         </div>
       </div>
       <div class="column">
@@ -460,17 +258,15 @@ incorporate it into UserALE.js. We also love Pull Requests!</p>
           <a class="item" href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
           <a class="item" href="http://www.apache.org/foundation/thanks.html">Thanks</a>
           <a class="item" href="http://www.apache.org/security/">Security</a>
+          <a class="item" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a>
         </div>
       </div>
     </div>
   </div>
   <div class="ui inverted vertical segment">
     <div class="ui two column middle aligned grid">
-      <div class="column">
-        Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
-      </div>
       <div class="center aligned column">
-        Copyright &copy; 2023 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2024 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>
@@ -478,9 +274,6 @@ incorporate it into UserALE.js. We also love Pull Requests!</p>
   <div class="ui inverted vertical segment">
     <div class="ui one column middle aligned grid">
       <div class="center aligned column">
-        <a href="http://incubator.apache.org/">
-          <img src="/images/incubator-logo-white.jpg">
-        </a>&nbsp;
         <a href="https://www.apache.org/events/current-event.html">
           <img src="https://www.apache.org/events/current-event-234x60.png" alt="ASF Current Event">
         </a>

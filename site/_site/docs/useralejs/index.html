@@ -16,7 +16,7 @@
   <script src="/js/main.js"></script>
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://flagon.apache.org/docs/useralejs/">
+  <link rel="canonical" href="https://flagon.apache.org/docs/useralejs/">
   <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
 
   
@@ -35,23 +35,15 @@
       <div class="ui dropdown item">
         Products
         <div class="menu">
-          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
-          <a class="item" href="/tap">Tap</a>
-          <a class="item" href="/stout">Stout</a>
         </div>
       </div>
       <div class="ui dropdown item">
         <a href="/docs">Docs</a>
         <div class="menu">
-          <a class="item" href="/docs/stack">Stack</a>
-          <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserALE.js</a>
-          <a class="item" href="/docs/useralepy">UserALE.py</a>
           <a class="item" href="/docs/distill">Distill</a>
-          <a class="item" href="/docs/tap">Tap</a>
-          <a class="item" href="/docs/stout">Stout</a>
         </div>
       </div>
       <a class="item" href="/releases">Releases</a>
@@ -65,11 +57,6 @@
       <div class="docs-wrapper">
   <div class="docs-sidebar">
     
-
-
-
-
-
 
 
 
@@ -91,41 +78,6 @@
         <a class="item" href="/docs/">About the Docs</a>
       
         <a class="item" href="/docs/contributing/">Contributing</a>
-      
-    </div>
-  </div>
-
-
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    Stack
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/stack/">Getting Started</a>
-      
-        <a class="item" href="/docs/stack/scaling/">Scaling Considerations</a>
-      
-    </div>
-  </div>
-
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    UserALE
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/userale/">About UserALE</a>
       
     </div>
   </div>
@@ -160,28 +112,6 @@
     <div class="title">
   
     <i class="dropdown icon"></i>
-    UserALE.py
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/useralepy/">Installation</a>
-      
-        <a class="item" href="/docs/useralepy/start.html">Getting Started</a>
-      
-        <a class="item" href="/docs/useralepy/api.html">API Documentation</a>
-      
-        <a class="item" href="/docs/useralepy/changelog.html">Changelog</a>
-      
-    </div>
-  </div>
-
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
     Distill
   </div>
   
@@ -191,56 +121,9 @@
       
         <a class="item" href="/docs/distill/">Installation</a>
       
-        <a class="item" href="/docs/distill/start.html">Getting Started</a>
-      
-        <a class="item" href="/docs/distill/api.html">API Documentation</a>
-      
-        <a class="item" href="/docs/distill/analytics.html">Apache Distill Analytics</a>
-      
-        <a class="item" href="/docs/distill/http.html">Apache Distill HTTP Client</a>
-      
-        <a class="item" href="/docs/distill/models.html">Apache Distill Models</a>
-      
-        <a class="item" href="/docs/distill/utilities.html">Apache Distill Utilities</a>
-      
-        <a class="item" href="/docs/distill/changelog.html">Changelog</a>
-      
     </div>
   </div>
 
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    Tap
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/tap/">Getting Started</a>
-      
-    </div>
-  </div>
-
-  
-    <div class="title">
-  
-    <i class="dropdown icon"></i>
-    Stout
-  </div>
-  
-    <div class="content">
-  
-    <div class="ui inverted bulleted list docs-list">
-      
-        <a class="item" href="/docs/stout/">About Stout</a>
-      
-        <a class="item" href="/docs/stout/start.html">Getting Started</a>
-      
-    </div>
-  </div>
 </div>
 
   </div>
@@ -258,7 +141,7 @@
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install flagon-userale
 </code></pre></div></div>
 
-<h3 id="include-useralejs-as-a-module">Include UserALE.js as a <code class="highlighter-rouge">module</code>:</h3>
+<h3 id="include-useralejs-as-a-module">Include UserALE.js as a <code class="language-plaintext highlighter-rouge">module</code>:</h3>
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import * as userale from 'flagon-userale';
 
@@ -269,21 +152,21 @@ const userale = require('flagon-userale');
 
 <p>Our <a href="https://github.com/apache/flagon-useralejs/tree/master/example/webpackUserAleExample">webpack example</a> illustrates this use-case.</p>
 
-<h3 id="include-useralejs-as-a-script-tag">Include UserALE.js as a <code class="highlighter-rouge">script-tag</code>:</h3>
+<h3 id="include-useralejs-as-a-script-tag">Include UserALE.js as a <code class="language-plaintext highlighter-rouge">script-tag</code>:</h3>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"./node_modules/flagon-userale/build/userale-2.3.0.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"./node_modules/flagon-userale/build/userale-2.4.0.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
 </code></pre></div></div>
 
 <p>Our <a href="https://github.com/apache/flagon-useralejs/tree/master/example">script tag example</a> illustrates this use-case</p>
 
-<p>If you include UserALE.js as a <code class="highlighter-rouge">script-tag</code>, consider installing via npm as a development dependency:</p>
+<p>If you include UserALE.js as a <code class="language-plaintext highlighter-rouge">script-tag</code>, consider installing via npm as a development dependency:</p>
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install --save-dev flagon-userale
 </code></pre></div></div>
 
 <h3 id="include-useralejs-via-a-cdn">Include UserALE.js via a CDN:</h3>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://cdn.jsdelivr.net/npm/flagon-userale@2.1.1/build/userale-2.3.0.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://cdn.jsdelivr.net/npm/flagon-userale@2.4.0/build/userale-2.4.0.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
 </code></pre></div></div>
 
 <p>We also support a <a href="https://github.com/apache/flagon-useralejs/tree/master/src/UserALEWebExtension">WebExtension</a> that can be added to your browser in developer mode. Follow the link for instructions.</p>
@@ -292,11 +175,11 @@ const userale = require('flagon-userale');
 
 <h2 id="configure-useralejs">Configure UserALE.js</h2>
 
-<p>UserALE.js is designed to be easily configured to fit your use case. In <code class="highlighter-rouge">script-tag</code> deployment, use HTML data parameters to pass configuration options to the library.</p>
+<p>UserALE.js is designed to be easily configured to fit your use case. In <code class="language-plaintext highlighter-rouge">script-tag</code> deployment, use HTML data parameters to pass configuration options to the library.</p>
 
 <p>For example, one thing you’ll need to do is set the URL (location) of your minified UserALE.js script:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/path/to/userale-2.3.0.min.js"</span> <span class="na">data-url=</span><span class="s">"http://yourLoggingUrl"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/path/to/userale-2.4.0.min.js"</span> <span class="na">data-url=</span><span class="s">"http://yourLoggingUrl"</span><span class="nt">&gt;&lt;/script&gt;</span>
 </code></pre></div></div>
 
 <p>The complete list of configurable options is:</p>
@@ -311,59 +194,69 @@ const userale = require('flagon-userale');
   </thead>
   <tbody>
     <tr>
-      <td>data-url</td>
+      <td>url</td>
       <td>Logging URL</td>
       <td>http://localhost:8000</td>
     </tr>
     <tr>
-      <td>data-autostart</td>
-      <td>Should UserALE.js start on page load</td>
+      <td>autostart</td>
+      <td>Should UserALE start on page load</td>
       <td>true</td>
     </tr>
     <tr>
-      <td>data-interval</td>
+      <td>transmitInterval</td>
       <td>Delay between transmit checks</td>
       <td>5000 (ms)</td>
     </tr>
     <tr>
-      <td>data-threshold</td>
+      <td>logCountThreshold</td>
       <td>Minimum number of logs to send</td>
       <td>5</td>
     </tr>
     <tr>
-      <td>data-user</td>
+      <td>userId</td>
       <td>User identifier</td>
       <td>null</td>
     </tr>
     <tr>
-      <td>data-version</td>
+      <td>sessionId</td>
+      <td>Session identifier</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <td>version</td>
       <td>Application version identifier</td>
       <td>null</td>
     </tr>
     <tr>
-      <td>data-log-details</td>
+      <td>logDetails</td>
       <td>Toggle detailed logs (keys pressed and input/change values)</td>
       <td>false</td>
     </tr>
     <tr>
-      <td>data-resolution</td>
+      <td>resolution</td>
       <td>Delay between instances of high frequency logs (mouseover, scroll, etc.)</td>
       <td>500 (ms)</td>
     </tr>
     <tr>
-      <td>data-user-from-params</td>
+      <td>userFromParams</td>
       <td>Query param in the page URL to fetch userId from</td>
       <td>null</td>
     </tr>
     <tr>
-      <td>data-tool</td>
+      <td>toolName</td>
       <td>Name of tool being logged</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <td>authHeader</td>
+      <td>Authorization header to be passed to logging endpoint</td>
       <td>null</td>
     </tr>
   </tbody>
 </table>
 
-<p><strong>NOTE</strong> These options are also available through our <a href="/docs/useralejs/API">API</a>, which support deploying UserALE.js as an NPM <code class="highlighter-rouge">module.</code></p>
+<p><strong>NOTE</strong> These options are also available through our <a href="/docs/useralejs/API">API</a>, which support deploying UserALE.js as an NPM <code class="language-plaintext highlighter-rouge">module.</code></p>
 
 <p>See our page on <a href="/docs/useralejs/build">Build and Test</a> for UserALE.js to learn how to build your own minified version of the UserALE.js script, or you check-out a pre-built script with default parameters in our <a href="https://github.com/apache/flagon-useralejs/tree/master/build">repo</a>.</p>
 
@@ -425,23 +318,15 @@ incorporate it into UserALE.js. We also love Pull Requests!</p>
       <div class="column">
         <h4 class="ui inverted header">About</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/stack">Stack</a>
           <a class="item" href="/userale">UserALE</a>
           <a class="item" href="/distill">Distill</a>
-          <a class="item" href="/tap">Tap</a>
-          <a class="item" href="/stout">Stout</a>
         </div>
       </div>
       <div class="column">
         <h4 class="ui inverted header">Docs</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/docs/stack">Stack</a>
-          <a class="item" href="/docs/userale">UserALE</a>
           <a class="item" href="/docs/useralejs">UserAle.js</a>
-          <a class="item" href="/docs/useralepy">UserAle.py</a>
           <a class="item" href="/docs/distill">Distill</a>
-          <a class="item" href="/docs/tap">Tap</a>
-          <a class="item" href="/docs/stout">Stout</a>
         </div>
       </div>
       <div class="column">
@@ -449,9 +334,6 @@ incorporate it into UserALE.js. We also love Pull Requests!</p>
         <div class="ui inverted link list">
           <a class="item" href="https://github.com/apache?q=flagon">GitHub</a>
           <a class="item" href="http://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
-          <a class="item" href="https://issues.apache.org/jira/browse/FLAGON">Jira Issue Tracker</a>
-          <a class="item" href="https://cwiki.apache.org/confluence/display/FLAGON">Project Wiki</a>
-          <a class="item" href="https://twitter.com/ApacheFlagon">Twitter</a>
         </div>
       </div>
       <div class="column">
@@ -462,17 +344,15 @@ incorporate it into UserALE.js. We also love Pull Requests!</p>
           <a class="item" href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
           <a class="item" href="http://www.apache.org/foundation/thanks.html">Thanks</a>
           <a class="item" href="http://www.apache.org/security/">Security</a>
+          <a class="item" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a>
         </div>
       </div>
     </div>
   </div>
   <div class="ui inverted vertical segment">
     <div class="ui two column middle aligned grid">
-      <div class="column">
-        Apache Flagon is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
-      </div>
       <div class="center aligned column">
-        Copyright &copy; 2023 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Copyright &copy; 2024 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
         Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
       </div>
     </div>
@@ -480,9 +360,6 @@ incorporate it into UserALE.js. We also love Pull Requests!</p>
   <div class="ui inverted vertical segment">
     <div class="ui one column middle aligned grid">
       <div class="center aligned column">
-        <a href="http://incubator.apache.org/">
-          <img src="/images/incubator-logo-white.jpg">
-        </a>&nbsp;
         <a href="https://www.apache.org/events/current-event.html">
           <img src="https://www.apache.org/events/current-event-234x60.png" alt="ASF Current Event">
         </a>
