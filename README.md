@@ -1,5 +1,5 @@
-Apache Flagon Docker Containers and Website
+Apache Flagon
 --------------------------------------
 
-Specific build instructions located in docker, kubernetes, release and site folders.
+See products/ for userale and distill. This read me is under construction.
 
