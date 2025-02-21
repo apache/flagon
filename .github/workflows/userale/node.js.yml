@@ -22,15 +22,15 @@
 
 name: Node.js CI
 run-name: ${{ github.actor }} running CI suite
-on:
-  push:
-    branches:
-      - master
-      - test
-  pull_request:
-    branches:
-      - master
-      - test
+# on:
+#   push:
+#     branches:
+#       - master
+#       - test
+#   pull_request:
+#     branches:
+#       - master
+#       - test
 jobs:
   pre-build:
     runs-on: ubuntu-latest

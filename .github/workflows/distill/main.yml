@@ -19,14 +19,14 @@
 name: CI
 
 # Controls when the workflow will run
-on: 
-  # Triggers the workflow on push or pull request events but only for the distill_toolkit_refactor branch and on changes to the rst files
-  push:
-    branches: [ distill_toolkit_refactor ]
-    paths:
-      - docs/**
-  pull_request:
-    branches: [ distill_toolkit_refactor ]
+# on: 
+#   # Triggers the workflow on push or pull request events but only for the distill_toolkit_refactor branch and on changes to the rst files
+#   push:
+#     branches: [ distill_toolkit_refactor ]
+#     paths:
+#       - docs/**
+#   pull_request:
+#     branches: [ distill_toolkit_refactor ]
     
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

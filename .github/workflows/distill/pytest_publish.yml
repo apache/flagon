@@ -16,11 +16,11 @@
 
 name: Upload Python Package to PyPI Test
 
-on:
-  workflow_run:
-    workflows: ["Bump Version"]
-    types:
-      - completed
+# on:
+#   workflow_run:
+#     workflows: ["Bump Version"]
+#     types:
+#       - completed
 
 jobs:
   publish-test-pypi:
