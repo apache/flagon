@@ -1,0 +1,172 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+[tool.poetry]
+name = "flagon-distill"
+version = "0.1.0"
+description = "An analytics framework for front-end UserALE data, enabling modeling, sequence analysis, and customization in Python."
+authors = []
+license = "Apache-2.0"
+readme = "README.rst"
+documentation = "http://flagon.incubator.apache.org/distill/"
+packages = [{ include = "distill" }]
+classifiers = [
+    'Development Status :: 4 - Beta',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Science/Research',
+    'License :: OSI Approved :: Apache Software License',
+    'Natural Language :: English',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3.8',
+    'Environment :: Web Environment',
+    'Framework :: Flask',
+    'Topic :: Internet :: Log Analysis',
+]
+
+
+#
+# Dependencies
+#
+[tool.poetry.dependencies]
+python = ">=3.8,<4.0"
+networkx = "^2.5"
+numpy = "1.24.3"
+pandas = "^1.2.4"
+plotly = "^5.5.0"
+matplotlib = "3.7.5"
+scipy = "1.9.3"
+pydantic = "^2.7.4"
+dateparser = "^1.2.0"
+pksuid = "^1.1.2"
+datetime = "^5.5"
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "^4.5.0"
+sphinx-rtd-theme = "^0.5.2"
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "^6.2.3"
+pytest-cov = "^4.0.0"
+pytest-dotenv = "^0.5.2"
+pytest-mock = "^3.10.0"
+tox = "^4.14.2"
+
+[tool.poetry.group.codespell.dependencies]
+codespell = "^2.2.0"
+
+[tool.poetry.group.lint.dependencies]
+ruff = "^0.0.249"
+types-toml = "^0.10.8.1"
+black = "^23.1.0"
+
+[tool.poetry.group.typing.dependencies]
+mypy = "^0.991"
+types-pyyaml = "^6.0.12.2"
+pandas-stubs = "2.0.1.230501"
+networkx-stubs = "^0.0.1"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+setuptools = "^67.6.1"
+pre-commit = "^3.3.3"
+ipykernel = "^6.29.4"
+jupyter = "^1.0.0"
+
+
+#
+# Changelog, versioning, and commit management
+#
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "v$version"
+version_scheme = "semver"
+version_provider = "poetry"
+update_changelog_on_bump = true
+major_version_zero = true
+version = "0.1.0"
+gpg_sign = true
+version_files = ["pyproject.toml:version", "distill/__version__.py"]
+
+
+#
+# Scripts
+#
+[tool.poetry.scripts]
+dev = "distill.server:dev_server"
+
+#
+# Linting & Formatting
+#
+[tool.ruff]
+select = [
+    "E", # pycodestyle
+    "F", # pyflakes
+    "I", # isort
+]
+exclude = ["tests/data/", ".github/", "docs/", "examples/"]
+
+[tool.black]
+line-length = 88
+preview = true
+
+[tool.mypy]
+ignore_missing_imports = "False"
+disallow_untyped_defs = "False"
+exclude = ["tests/data/", ".github/", "docs/", "examples/", "Dashboard"]
+[[tool.mypy.overrides]]
+module = "plotly."
+ignore_errors = true
+
+#
+# Testing
+#
+[tool.coverage.run]
+omit = ["tests/*", "Dashboard/*", "docs/*", "examples/*"]
+
+[tool.pytest.ini_options]
+# --strict-markers will raise errors on unknown marks.
+# https://docs.pytest.org/en/7.1.x/how-to/mark.html#raising-errors-on-unknown-marks
+#
+# https://docs.pytest.org/en/7.1.x/reference/reference.html
+# --strict-config       any warnings encountered while parsing the `pytest`
+#                       section of the configuration file raise errors.
+#
+# https://github.com/tophat/syrupy
+# --snapshot-warn-unused    Prints a warning on unused snapshots rather than fail the test suite.
+addopts = "-s --strict-markers --ignore=build --ignore=dist --ignore=docs --junitxml=test-report.xml"
+norecursedirs = "docs docker example build *.eggs *env* .git"
+testpaths = "tests distill"
+markers = [
+    "unit: Unit tests are fast and only test a single module.",
+    "pylint: Run linter",
+    "integration: Integration tests integrate several modules or integrate with the OS.",
+    "interactive: Interactive tests require interaction with the user to complete.",
+    "requires_user_action: Test cannot run without user interaction.",
+    "requires_user_validation: Test cannot validate without user interaction, but can run for sanity.",
+    "only_interactive: This test can only be run in interactive mode.",
+]
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

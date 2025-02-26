@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manipulating Collections of Segment Objects &mdash; Apache Flagon Distill  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Writing Segments" href="Writing_Segments.html" />
+    <link rel="prev" title="Combining Segments with Set Logic" href="Combining_Segments_with_Set_Logic.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Apache Flagon Distill
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Graph_Index.html">Graph</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="Segmentation.html">Segmentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Getting_Started.html">Getting Started with Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Creating_Segments.html">Creating Segment Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Combining_Segments_with_Set_Logic.html">Combining Segments with Set Logic</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Manipulating Collections of Segment Objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#iteration">Iteration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#access-and-modification-through-subscripts">Access and Modification through Subscripts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#list-comprehensions">List Comprehensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#filtering">Filtering</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#filtering-by-number-of-logs">Filtering by Number of Logs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#filtering-by-time">Filtering by Time</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#filtering-by-segment-type">Filtering by Segment Type</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#appending-and-deleting-segment-objects">Appending and Deleting <code class="docutils literal notranslate"><span class="pre">Segment</span></code> Objects</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#appending-segment-objects">Appending <code class="docutils literal notranslate"><span class="pre">Segment</span></code> Objects</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#appending-segments-objects">Appending <code class="docutils literal notranslate"><span class="pre">Segments</span></code> Objects</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deleting-segment-objects">Deleting <code class="docutils literal notranslate"><span class="pre">Segment</span></code> Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#representation-of-segment-objects-with-different-data-structures">Representation of <code class="docutils literal notranslate"><span class="pre">Segment</span></code> Objects with Different Data Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#segment-list"><code class="docutils literal notranslate"><span class="pre">Segment</span></code> List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#segment-dictionary"><code class="docutils literal notranslate"><span class="pre">Segment</span></code> Dictionary</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Writing_Segments.html">Writing Segments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exporting_Segments.html">Exporting Segments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Process.html">Process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache Flagon Distill</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="Segmentation.html">Segmentation</a> &raquo;</li>
+      <li>Manipulating Collections of Segment Objects</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Manipulating_Collections_of_Segment_Objects.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="manipulating-collections-of-segment-objects">
+<h1>Manipulating Collections of Segment Objects<a class="headerlink" href="#manipulating-collections-of-segment-objects" title="Permalink to this headline"></a></h1>
+<p>Collections of <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects are held in <code class="docutils literal notranslate"><span class="pre">Segments</span></code> objects.  <code class="docutils literal notranslate"><span class="pre">Segments</span></code> objects have a variety of capabilities
+that allow an analyst to access, filter, and represent <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects in different ways.</p>
+<section id="iteration">
+<h2>Iteration<a class="headerlink" href="#iteration" title="Permalink to this headline"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Segments</span></code> iteration can be done as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">segments</span>    <span class="c1"># A Segments object</span>
+<span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">segment</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The above code will print each <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object in the <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object.</p>
+</section>
+<section id="access-and-modification-through-subscripts">
+<h2>Access and Modification through Subscripts<a class="headerlink" href="#access-and-modification-through-subscripts" title="Permalink to this headline"></a></h2>
+<p>Individual <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects can be accessed using subscripts.  These subscripts can either be a numerical index indicating
+the location of the <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object in an underlying list or the segment name of a <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">segments</span>    <span class="c1"># A Segments object</span>
+<span class="n">segment0</span> <span class="o">=</span> <span class="n">segments</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Accessing the first Segment object via numeric index</span>
+<span class="n">segment1</span> <span class="o">=</span> <span class="n">segments</span><span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">]</span>  <span class="c1"># Accessing the Segment object whose segment name is &quot;1&quot;</span>
+</pre></div>
+</div>
+<p>Subscripts can also be used to change an underlying <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object at the indicated index or with the indicated name.
+However, when assigning a <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object through the segment name, the segment name of the new <code class="docutils literal notranslate"><span class="pre">Segment</span></code> must match the indexed segment name indicated.</p>
+</section>
+<section id="list-comprehensions">
+<h2>List Comprehensions<a class="headerlink" href="#list-comprehensions" title="Permalink to this headline"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Segments</span></code> objects can be used when performing list comprehensions.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">segments</span>    <span class="c1"># A Segments object</span>
+<span class="n">segment_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">segment</span><span class="o">.</span><span class="n">segment_name</span> <span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">]</span>     <span class="c1"># Returns a list of segment names</span>
+</pre></div>
+</div>
+<p>The list comprehension example above can be used to get a list of all of the segment names that exist in the <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object.</p>
+</section>
+<section id="filtering">
+<h2>Filtering<a class="headerlink" href="#filtering" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object is particularly useful when attempting to curate a collection of <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects.  The
+<code class="docutils literal notranslate"><span class="pre">Segments</span></code> class currently contains three functions that filter the underlying list of <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects: <code class="docutils literal notranslate"><span class="pre">get_num_logs</span></code>,
+<code class="docutils literal notranslate"><span class="pre">get_segments_before</span></code>, and <code class="docutils literal notranslate"><span class="pre">get_segments_of_type</span></code>.</p>
+<section id="filtering-by-number-of-logs">
+<h3>Filtering by Number of Logs<a class="headerlink" href="#filtering-by-number-of-logs" title="Permalink to this headline"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_num_logs</span></code> function returns a new <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object that only contains the <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects that have at
+least the number of logs specified.  An example is shown below:</p>
+<p><strong>Input:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original Segments Object:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
+
+<span class="n">segments</span> <span class="o">=</span> <span class="n">segments</span><span class="o">.</span><span class="n">get_num_logs</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Filtered Segments Object:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Console Output:</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Original Segments Object:</span>
+<span class="go">Segments: [</span>
+<span class="go">Segment: segment_name=0, start=1, end=2, num_logs=3, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">Segment: segment_name=1, start=2, end=3, num_logs=0, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.CREATE</span>
+<span class="go">Segment: segment_name=2, start=3, end=4, num_logs=9, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">Segment: segment_name=3, start=4, end=5, num_logs=7, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.DEADSPACE</span>
+<span class="go">]</span>
+
+<span class="go">Filtered Segments Object:</span>
+<span class="go">Segments: [</span>
+<span class="go">Segment: segment_name=2, start=3, end=4, num_logs=9, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">Segment: segment_name=3, start=4, end=5, num_logs=7, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.DEADSPACE</span>
+<span class="go">]</span>
+</pre></div>
+</div>
+<p>The above code removes <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects “0” and “1” since they contain less than 5 logs.</p>
+</section>
+<section id="filtering-by-time">
+<h3>Filtering by Time<a class="headerlink" href="#filtering-by-time" title="Permalink to this headline"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_segments_before</span></code> and <code class="docutils literal notranslate"><span class="pre">get_segments_after</span></code> functions return a new <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object that contains all the
+<code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects that either have end times before the user given time or start times after the user given time.  An
+example usage of each of these functions is shown below:</p>
+<p><strong>Input:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original Segments Object:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
+
+<span class="n">segments_before</span> <span class="o">=</span> <span class="n">segments</span><span class="o">.</span><span class="n">get_segments_before</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">segments_after</span> <span class="o">=</span> <span class="n">segments</span><span class="o">.</span><span class="n">get_segments_after</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Filtered Segments Object (Before):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">segments_before</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Filtered Segments Object (After):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">segments_after</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Console Output:</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Original Segments Object:</span>
+<span class="go">Segments: [</span>
+<span class="go">Segment: segment_name=0, start=1, end=2, num_logs=3, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">Segment: segment_name=1, start=2, end=3, num_logs=0, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.CREATE</span>
+<span class="go">Segment: segment_name=2, start=3, end=4, num_logs=9, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">Segment: segment_name=3, start=4, end=5, num_logs=7, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.DEADSPACE</span>
+<span class="go">]</span>
+
+<span class="go">Filtered Segments Object (Before):</span>
+<span class="go">Segments: [</span>
+<span class="go">Segment: segment_name=0, start=1, end=2, num_logs=3, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">Segment: segment_name=1, start=2, end=3, num_logs=0, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.CREATE</span>
+<span class="go">]</span>
+
+<span class="go">Filtered Segments Object (After):</span>
+<span class="go">Segments: [</span>
+<span class="go">Segment: segment_name=3, start=4, end=5, num_logs=7, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.DEADSPACE</span>
+<span class="go">]</span>
+</pre></div>
+</div>
+<p>The above output shows that the <code class="docutils literal notranslate"><span class="pre">get_segments_before</span></code> function filtered out any <code class="docutils literal notranslate"><span class="pre">Segment</span></code> that had an end time
+after or including 4 and that the <code class="docutils literal notranslate"><span class="pre">get_segments_after</span></code> function filtered out any <code class="docutils literal notranslate"><span class="pre">Segment</span></code> with a start time less than
+or equal to 3.</p>
+</section>
+<section id="filtering-by-segment-type">
+<h3>Filtering by Segment Type<a class="headerlink" href="#filtering-by-segment-type" title="Permalink to this headline"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_segments_of_type</span></code> function filters out <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects that do not have the indicated type of segment creation
+method.  An example usage of this function is shown below:</p>
+<p><strong>Input:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original Segments Object:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
+
+<span class="n">segments</span> <span class="o">=</span> <span class="n">segments</span><span class="o">.</span><span class="n">get_segments_of_type</span><span class="p">(</span><span class="n">distill</span><span class="o">.</span><span class="n">Segment_Type</span><span class="o">.</span><span class="n">FIXED_TIME</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Filtered Segments Object:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Console Output:</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Original Segments Object:</span>
+<span class="go">Segments: [</span>
+<span class="go">Segment: segment_name=0, start=1, end=2, num_logs=3, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">Segment: segment_name=1, start=2, end=3, num_logs=0, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.CREATE</span>
+<span class="go">Segment: segment_name=2, start=3, end=4, num_logs=9, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">Segment: segment_name=3, start=4, end=5, num_logs=7, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.DEADSPACE</span>
+<span class="go">]</span>
+
+<span class="go">Filtered Segments Object:</span>
+<span class="go">Segments: [</span>
+<span class="go">Segment: segment_name=0, start=1, end=2, num_logs=3, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">Segment: segment_name=2, start=3, end=4, num_logs=9, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">]</span>
+</pre></div>
+</div>
+<p>The example above shows how this function can be used to create a <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object that only contains <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects
+that were created through the fixed time generation function.</p>
+</section>
+</section>
+<section id="appending-and-deleting-segment-objects">
+<h2>Appending and Deleting <code class="docutils literal notranslate"><span class="pre">Segment</span></code> Objects<a class="headerlink" href="#appending-and-deleting-segment-objects" title="Permalink to this headline"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects can be appended or deleted from <code class="docutils literal notranslate"><span class="pre">Segments</span></code> objects using three functions: <code class="docutils literal notranslate"><span class="pre">append</span></code>,
+<code class="docutils literal notranslate"><span class="pre">append_segments</span></code>, and <code class="docutils literal notranslate"><span class="pre">delete</span></code>.</p>
+<section id="appending-segment-objects">
+<h3>Appending <code class="docutils literal notranslate"><span class="pre">Segment</span></code> Objects<a class="headerlink" href="#appending-segment-objects" title="Permalink to this headline"></a></h3>
+<p>Appending <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects can be done through the <code class="docutils literal notranslate"><span class="pre">append</span></code> function.  This function takes a <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object as
+a parameter and appends it to the calling <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object.  An example usage of this function is shown below:</p>
+<p><strong>Input:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original Segments Object:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Segment object to add:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">segment</span><span class="p">)</span>
+
+<span class="n">segments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">segment</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Modified Segments Object:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Console Output:</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Original Segments Object:</span>
+<span class="go">Segments: [</span>
+<span class="go">Segment: segment_name=0, start=1, end=2, num_logs=3, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">]</span>
+
+<span class="go">Segment object to add:</span>
+<span class="go">Segment: segment_name=1, start=2, end=3, num_logs=0, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.CREATE</span>
+
+<span class="go">Modified Segments Object:</span>
+<span class="go">Segments: [</span>
+<span class="go">Segment: segment_name=0, start=1, end=2, num_logs=3, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">Segment: segment_name=1, start=2, end=3, num_logs=0, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.CREATE</span>
+<span class="go">]</span>
+</pre></div>
+</div>
+<p>The above example shows how a <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object can be appended to a <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object.  Note that this function modifies
+the underlying <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object rather than returning a new <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object.</p>
+</section>
+<section id="appending-segments-objects">
+<h3>Appending <code class="docutils literal notranslate"><span class="pre">Segments</span></code> Objects<a class="headerlink" href="#appending-segments-objects" title="Permalink to this headline"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">append_segments</span></code> function appends an entire <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object to the calling <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object.  This results
+in an updated <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object that contains all of the <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects that were in the two <code class="docutils literal notranslate"><span class="pre">Segments</span></code> objects.
+An example usage of this function is shown below:</p>
+<p><strong>Input:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original Segments Object:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">segments1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Segments object to append:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">segments2</span><span class="p">)</span>
+
+<span class="n">segments1</span><span class="o">.</span><span class="n">append_segments</span><span class="p">(</span><span class="n">segments2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Modified Segments Object:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">segments1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Console Output:</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Original Segments Object:</span>
+<span class="go">Segments: [</span>
+<span class="go">Segment: segment_name=0, start=1, end=2, num_logs=3, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">]</span>
+
+<span class="go">Segments object to append:</span>
+<span class="go">Segments: [</span>
+<span class="go">Segment: segment_name=1, start=2, end=3, num_logs=0, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.CREATE</span>
+<span class="go">Segment: segment_name=2, start=3, end=4, num_logs=9, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">]</span>
+
+<span class="go">Modified Segments Object:</span>
+<span class="go">Segments: [</span>
+<span class="go">Segment: segment_name=0, start=1, end=2, num_logs=3, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">Segment: segment_name=1, start=2, end=3, num_logs=0, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.CREATE</span>
+<span class="go">Segment: segment_name=2, start=3, end=4, num_logs=9, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">]</span>
+</pre></div>
+</div>
+<p>The above code appends the <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects within segments2 to the segments1 object.</p>
+</section>
+<section id="deleting-segment-objects">
+<h3>Deleting <code class="docutils literal notranslate"><span class="pre">Segment</span></code> Objects<a class="headerlink" href="#deleting-segment-objects" title="Permalink to this headline"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">delete</span></code> function takes in a segment name and removes the <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object with that name from the calling <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object.
+Below is an example usage of this function:</p>
+<p><strong>Input:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original Segments Object:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
+
+<span class="n">segments</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;0&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Modified Segments Object:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Console Output:</strong></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Original Segments Object:</span>
+<span class="go">Segments: [</span>
+<span class="go">Segment: segment_name=0, start=1, end=2, num_logs=3, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">Segment: segment_name=1, start=2, end=3, num_logs=0, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.CREATE</span>
+<span class="go">Segment: segment_name=2, start=3, end=4, num_logs=9, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">Segment: segment_name=3, start=4, end=5, num_logs=7, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.DEADSPACE</span>
+<span class="go">]</span>
+
+<span class="go">Modified Segments Object:</span>
+<span class="go">Segments: [</span>
+<span class="go">Segment: segment_name=1, start=2, end=3, num_logs=0, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.CREATE</span>
+<span class="go">Segment: segment_name=2, start=3, end=4, num_logs=9, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.FIXED_TIME</span>
+<span class="go">Segment: segment_name=3, start=4, end=5, num_logs=7, generate_field_name=None, generate_matched_values=None, segment_type=Segment_Type.DEADSPACE</span>
+<span class="go">]</span>
+</pre></div>
+</div>
+<p>The above code removes the <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object from the calling <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object that is denoted by the segment name “0”.</p>
+</section>
+</section>
+<section id="representation-of-segment-objects-with-different-data-structures">
+<h2>Representation of <code class="docutils literal notranslate"><span class="pre">Segment</span></code> Objects with Different Data Structures<a class="headerlink" href="#representation-of-segment-objects-with-different-data-structures" title="Permalink to this headline"></a></h2>
+<p>An additional feature of the <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object is the ability to return different data structures that represent the
+<code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects within the <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object.  Currently there are two different data structure representations that
+can be returned by the <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object: a list of <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects and a dictionary of segment names to <code class="docutils literal notranslate"><span class="pre">Segment</span></code>
+objects.  Below are examples of each function.</p>
+<section id="segment-list">
+<h3><code class="docutils literal notranslate"><span class="pre">Segment</span></code> List<a class="headerlink" href="#segment-list" title="Permalink to this headline"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_segment_list</span></code> function returns a list of <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects within the calling <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">segments</span>    <span class="c1"># A Segments object</span>
+
+<span class="n">segments_list</span> <span class="o">=</span> <span class="n">segments</span><span class="o">.</span><span class="n">get_segment_list</span><span class="p">()</span>     <span class="c1"># A list of the Segment objects within segments</span>
+</pre></div>
+</div>
+</section>
+<section id="segment-dictionary">
+<h3><code class="docutils literal notranslate"><span class="pre">Segment</span></code> Dictionary<a class="headerlink" href="#segment-dictionary" title="Permalink to this headline"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_segment_name_dict</span></code> function returns a dictionary whose keys are the segment names of the <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects
+which refer to the <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects themselves.</p>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">segments</span>    <span class="c1"># A Segments object</span>
+
+<span class="n">segments_dict</span> <span class="o">=</span> <span class="n">segments</span><span class="o">.</span><span class="n">get_segment_name_dict</span><span class="p">()</span>     <span class="c1"># A dictionary of the Segment objects within segments</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Combining_Segments_with_Set_Logic.html" class="btn btn-neutral float-left" title="Combining Segments with Set Logic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Writing_Segments.html" class="btn btn-neutral float-right" title="Writing Segments" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, UMD ARLIS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

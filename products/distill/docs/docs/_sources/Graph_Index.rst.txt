@@ -1,0 +1,8 @@
+=====
+Graph
+=====
+.. toctree::
+   :maxdepth: 2
+
+   Sankey_Function
+   Funnel_Function

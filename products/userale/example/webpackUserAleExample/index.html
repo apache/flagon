@@ -1,0 +1,77 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+<head>
+  <title>UserAleJS - Example Page</title>
+  <script src="dist/main.js"></script>
+</head>
+<body>
+<br>
+<p>
+  This UserALE Example Page lets you explore how UserALE works, deploys with a script tag, and the data it generates.<br>
+  By default, you'll see the raw logs UserALE generates. We kept this page simple so that its easy to see how things work.
+</p>
+<p>
+  To see how our API can be used to shape UserALE logs to your needs, uncomment the 'index.js' script tag in index.html.
+</p>
+<br>
+<p>Click the button below to generate targeted click events.</p>
+<div class="container">
+  <button id="test_button">Click Me!</button>
+</div>
+<br>
+<br>
+<p>Play around with the form elements below to see a variety of UserALE log types:</p>
+<p>
+  Capture changes to fields (and values, when it's safe).
+</p>
+<p>
+  With index.js injected into the page, you can use the 'Test Field' below to see the behavior of our API dynamically.<br>
+  Type in the following UserALE function names to see their behavior.
+<ul>
+  <li>"log" - ship a fully customized log, built from scratch</li>
+  <li>"packageLog" - hijack our own pipeline to modify and ship logs packaged exactly like standard UserALE logs</li>
+  <li>"packageCustomLog" - smash a number of custom fields together with UserALE standard metadata</li>
+</ul>
+
+<form id="test_text_input">
+  <label>Test Field: <input type="text"></label>
+  <br><br>
+  <button type="submit">Submit form</button>
+</form>
+<br>
+<p>Capture inputs and changes to different types of selections.</p>
+<select name="UserALE Committers">
+  <option value="clay">Clay</option>
+  <option value="rob">Rob</option>
+  <option value="michelle">Michelle</option>
+  <option value="josh">Josh</option>
+</select>
+<br>
+<br>
+<form id="test_radio_input">
+  <input type="radio" name="Use Case" value="business analytics" checked> Business Analytics<br>
+  <input type="radio" name="Use Case" value="HCI"> HCI<br>
+  <input type="radio" name="Use Case" value="other"> Other
+</form>
+<br>
+<div class="container">
+  <button id="NonLink Button"> Don't Click Me!</button>
+</div>
+<br>
+<p>Click on the Link to Test Logging with Page Navigation</p>
+<a href="http://flagon.incubator.apache.org/"><button id="Linked Button">Link to Flagon Page</button></a>
+</body>
+</html>

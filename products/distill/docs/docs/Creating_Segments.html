@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creating Segment Objects &mdash; Apache Flagon Distill  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Combining Segments with Set Logic" href="Combining_Segments_with_Set_Logic.html" />
+    <link rel="prev" title="Getting Started with Segmentation" href="Getting_Started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Apache Flagon Distill
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Graph_Index.html">Graph</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="Segmentation.html">Segmentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Getting_Started.html">Getting Started with Segmentation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Creating Segment Objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#userale-log-preprocessing">UserALE Log Preprocessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#basic-segment-creation">Basic Segment Creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#automatic-segment-generation">Automatic Segment Generation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#generate-segments">Generate Segments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#generate-fixed-time-segments">Generate Fixed Time Segments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#generate-collapsing-window-segments">Generate Collapsing Window Segments</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#detecting-deadspace">Detecting Deadspace</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Combining_Segments_with_Set_Logic.html">Combining Segments with Set Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Manipulating_Collections_of_Segment_Objects.html">Manipulating Collections of Segment Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Writing_Segments.html">Writing Segments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exporting_Segments.html">Exporting Segments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Process.html">Process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache Flagon Distill</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="Segmentation.html">Segmentation</a> &raquo;</li>
+      <li>Creating Segment Objects</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Creating_Segments.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="creating-segment-objects">
+<h1>Creating Segment Objects<a class="headerlink" href="#creating-segment-objects" title="Permalink to this headline"></a></h1>
+<p>The creation of <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects can be done through the use of five functions: <code class="docutils literal notranslate"><span class="pre">create_segment</span></code>, <code class="docutils literal notranslate"><span class="pre">generate_segments</span></code>,
+<code class="docutils literal notranslate"><span class="pre">generate_fixed_time_segments</span></code>, <code class="docutils literal notranslate"><span class="pre">generate_collapsing_window_segments</span></code>, and <code class="docutils literal notranslate"><span class="pre">detect_deadspace</span></code> within Distill’s
+Segmentation package.  Each function creates <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects and returns them in the form of a <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object.
+These functions fall under the categories of basic <code class="docutils literal notranslate"><span class="pre">Segment</span></code> creation, automatic <code class="docutils literal notranslate"><span class="pre">Segment</span></code> generation, and detecting
+deadspace described below.</p>
+<section id="userale-log-preprocessing">
+<h2>UserALE Log Preprocessing<a class="headerlink" href="#userale-log-preprocessing" title="Permalink to this headline"></a></h2>
+<p>Before <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects can be created, the UserALE logs must be put in a format expected by the <code class="docutils literal notranslate"><span class="pre">Segment</span></code> creation
+functions.  Each function expects logs to be structured in a dictionary sorted by <code class="docutils literal notranslate"><span class="pre">clientTime</span></code>.  The keys of the dictionary
+are universally unique identifiers (UUIDs) for each log and the value for each UUID key is the log itself.  Distill provides analysts with a
+function that will generate these IDs: <code class="docutils literal notranslate"><span class="pre">get_UUID</span></code>.  This function can be used as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># A UserALE log</span>
+<span class="n">log</span>
+
+<span class="c1"># Generate UUID</span>
+<span class="n">uuid</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">getUUID</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Throughout the rest of this documentation UUID and UID will be used interchangeably to describe these unique identifiers.
+In addition, note that the functions within Distill’s Segmentation package expect the UserALE log <code class="docutils literal notranslate"><span class="pre">clientTime</span></code> field to either be
+represented as an integer or a python <code class="docutils literal notranslate"><span class="pre">datetime</span></code> object.  This is another preprocessing step that must be taken before
+beginning to use Segmentation functions.</p>
+</section>
+<section id="basic-segment-creation">
+<h2>Basic Segment Creation<a class="headerlink" href="#basic-segment-creation" title="Permalink to this headline"></a></h2>
+<p>The most literal way to create <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects is through the use of the <code class="docutils literal notranslate"><span class="pre">create_segment</span></code> function.  This function
+takes in three parameters in order to create <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects: a sorted dictionary of UserAle logs, a list of segment
+names, and a list of tuples that represent the start <code class="docutils literal notranslate"><span class="pre">clientTime</span></code> and end <code class="docutils literal notranslate"><span class="pre">clientTime</span></code> of the segment.  Given this
+information, <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects can be created as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sorted dictionary of UserALE logs</span>
+<span class="n">sorted_dict</span>
+
+<span class="c1"># List of segment names</span>
+<span class="n">segment_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;segment1&quot;</span><span class="p">,</span> <span class="s2">&quot;segment2&quot;</span><span class="p">]</span>
+
+<span class="c1"># Time tuples</span>
+<span class="n">start_end_vals</span> <span class="o">=</span> <span class="p">[(</span><span class="n">start_time_1</span><span class="p">,</span> <span class="n">end_time_1</span><span class="p">),</span> <span class="p">(</span><span class="n">start_time_2</span><span class="p">,</span> <span class="n">end_time_2</span><span class="p">)]</span>
+
+<span class="c1"># Create Segments</span>
+<span class="n">segments</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">create_segment</span><span class="p">(</span><span class="n">sorted_dict</span><span class="p">,</span> <span class="n">segment_names</span><span class="p">,</span> <span class="n">start_end_vals</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The above code will output a <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object that contains each <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object indicated.</p>
+</section>
+<section id="automatic-segment-generation">
+<h2>Automatic Segment Generation<a class="headerlink" href="#automatic-segment-generation" title="Permalink to this headline"></a></h2>
+<p>If an analyst does not know the start and end times of interest within the UserALE logs, <code class="docutils literal notranslate"><span class="pre">Segment</span></code> generation functions
+provide a more automatic way to create <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects.  There are three functions that aid in the automatic creation
+of <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects: <code class="docutils literal notranslate"><span class="pre">generate_segments</span></code>, <code class="docutils literal notranslate"><span class="pre">generate_fixed_time_segments</span></code>, and <code class="docutils literal notranslate"><span class="pre">generate_collapsing_window_segments</span></code>.
+Each of these functions provide an optional parameter entitled <code class="docutils literal notranslate"><span class="pre">label</span></code> that denotes a prefix to use for the naming of
+each generated <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object.</p>
+<section id="generate-segments">
+<h3>Generate Segments<a class="headerlink" href="#generate-segments" title="Permalink to this headline"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">generate_segments</span></code> function is an automatic way to create <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects and is based off of the matching of
+a particular UserALE log field with a list of possible values.  The function will then generate <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects based
+on windows of time starting before and after the matched field, indicated in seconds as a function parameter.  The below
+code illustrates the basic use of this function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sorted dictionary of UserALE logs</span>
+<span class="n">sorted_dict</span>
+
+<span class="c1"># Generate segment objects based on user clicks</span>
+<span class="n">segments</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">generate_segments</span><span class="p">(</span><span class="n">sorted_dict</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;click&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The above code will return a <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object that contains <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects that represent windows of time 1 second
+prior to a ‘click’ type and 2 seconds after a ‘click’ type.  If we wanted to generate <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects that matched both
+‘click’ and ‘load’ types, then we could use the following code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sorted dictionary of UserALE logs</span>
+<span class="n">sorted_dict</span>
+
+<span class="c1"># Generate segment objects based on user clicks and loads</span>
+<span class="n">segments</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">generate_segments</span><span class="p">(</span><span class="n">sorted_dict</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;load&#39;</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">generate_segments</span></code> does not overlap <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects.  In the event that two matching events happen back-to-back
+within the logs and the second log is already in the <code class="docutils literal notranslate"><span class="pre">Segment</span></code> generated by the first, the second log will not have its
+own <code class="docutils literal notranslate"><span class="pre">Segment</span></code> created.  This non-overlapping behavior also may create <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects that are shorter in time than
+expected.  For instance, if a <code class="docutils literal notranslate"><span class="pre">Segment</span></code> is created with an end time that is after the start time of a new <code class="docutils literal notranslate"><span class="pre">Segment</span></code>,
+the new <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object’s start time will default to the end time of the previous <code class="docutils literal notranslate"><span class="pre">Segment</span></code>.</p>
+</section>
+<section id="generate-fixed-time-segments">
+<h3>Generate Fixed Time Segments<a class="headerlink" href="#generate-fixed-time-segments" title="Permalink to this headline"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">generate_fixed_time_segments</span></code> function generates <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects based on fixed time intervals.  An example
+usage of this function is shown below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sorted dictionary of UserALE logs</span>
+<span class="n">sorted_dict</span>
+
+<span class="c1"># Generate segment objects based on 5 second intervals</span>
+<span class="n">segments</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">generate_fixed_time_segments</span><span class="p">(</span><span class="n">sorted_dict</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;generated&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The above code will create a <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object that contains <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects created based off of 5 second intervals.
+This example also demonstrates the usage of the optional <code class="docutils literal notranslate"><span class="pre">label</span></code> parameter.</p>
+<p>Note that by default this function will not trim additional logs that do not fit into a fixed time window if the time between
+the start of the first log and end of the last log are not divisible by the indicated interval.  To avoid this, <code class="docutils literal notranslate"><span class="pre">generate_fixed_time_segments</span></code>
+also has an optional argument entitled <code class="docutils literal notranslate"><span class="pre">trim</span></code>.  If true, <code class="docutils literal notranslate"><span class="pre">trim</span></code> will trim the logs that do not fit into an additional
+fixed time window.</p>
+</section>
+<section id="generate-collapsing-window-segments">
+<h3>Generate Collapsing Window Segments<a class="headerlink" href="#generate-collapsing-window-segments" title="Permalink to this headline"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">generate_collapsing_windows_segments</span></code> function generates <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects based on a window of time in which the
+given field name has a value matching one of the values indicated by the <code class="docutils literal notranslate"><span class="pre">field_values_of_interest</span></code> list parameter.
+An example usage of this function is shown below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sorted dictionary of UserALE logs</span>
+<span class="n">sorted_dict</span>
+
+<span class="c1"># Generate segment objects based on a collapsing window</span>
+<span class="n">segments</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">generate_collapsing_window_segments</span><span class="p">(</span><span class="n">sorted_dict</span><span class="p">,</span> <span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Window&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The above function creates a <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object that contains <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects that begin when the path field has the
+string “Window” and ends when the path field no longer contains “Window.”</p>
+</section>
+</section>
+<section id="detecting-deadspace">
+<h2>Detecting Deadspace<a class="headerlink" href="#detecting-deadspace" title="Permalink to this headline"></a></h2>
+<p>The final <code class="docutils literal notranslate"><span class="pre">Segment</span></code> creation function involves the automatic detecting of deadspace within the sorted UserALE log dictionary.
+Deadspace is time in which the user is idle.  The <code class="docutils literal notranslate"><span class="pre">detect_deadspace</span></code> function creates <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects based on deadspace
+in the logs given a threshold for what is considered to be ‘deadspace’.  An example of this is shown below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sorted dictionary of UserALE logs</span>
+<span class="n">sorted_dict</span>
+
+<span class="c1"># Create segment objects based on detected deadspace</span>
+<span class="n">segments</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">detect_deadspace</span><span class="p">(</span><span class="n">sorted_dict</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The above code will output a <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object holding <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects that represent deadspace.  In this case, we
+have defined ‘deadspace’ to be any idle time of 20 seconds.  Each time deadspace is detected, the logs that occurred 1
+second before and 2 seconds after that idle time are recorded in the <code class="docutils literal notranslate"><span class="pre">Segment</span></code>.  Note that the optional <code class="docutils literal notranslate"><span class="pre">label</span></code> parameter
+is also available for the <code class="docutils literal notranslate"><span class="pre">detect_deadspace</span></code> function.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Getting_Started.html" class="btn btn-neutral float-left" title="Getting Started with Segmentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Combining_Segments_with_Set_Logic.html" class="btn btn-neutral float-right" title="Combining Segments with Set Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, UMD ARLIS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

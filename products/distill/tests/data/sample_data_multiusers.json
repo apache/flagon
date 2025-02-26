@@ -1,0 +1,5216 @@
+[
+	{
+		"target": "input#url",
+		"path": [
+			"input#url",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708446912781,
+		"microTime": 0,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "focus",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "input#url",
+		"path": [
+			"input#url",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708446912781,
+		"microTime": 0,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "focus",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "button",
+		"path": [
+			"button",
+			"div",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 3237,
+		"startTime": 1708446909544,
+		"endTime": 1708446912781,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": true,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "input#url",
+		"path": [
+			"input#url",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708446912900,
+		"microTime": 0.2,
+		"location": {
+			"x": 153,
+			"y": 72
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "mouseup",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"clicks": 1,
+			"ctrl": false,
+			"alt": false,
+			"shift": false,
+			"meta": false
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "input#url",
+		"path": [
+			"input#url",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708446912900,
+		"microTime": 0.2,
+		"location": {
+			"x": 153,
+			"y": 72
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "click",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"clicks": 1,
+			"ctrl": false,
+			"alt": false,
+			"shift": false,
+			"meta": false
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "button",
+		"path": [
+			"button",
+			"div",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 3356,
+		"startTime": 1708446909544,
+		"endTime": 1708446912900,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": true,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "form",
+		"path": [
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708446913049,
+		"microTime": 0.1,
+		"location": {
+			"x": 216,
+			"y": 99
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "button",
+		"path": [
+			"button",
+			"div",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 3505,
+		"startTime": 1708446909544,
+		"endTime": 1708446913049,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "input#url",
+		"path": [
+			"input#url",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708446913766,
+		"microTime": 0.9,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "keydown",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "input#url",
+		"path": [
+			"input#url",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708446914182,
+		"microTime": 0,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "keydown",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "input#url",
+		"path": [
+			"input#url",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708446914184,
+		"microTime": 0.8,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "input",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "button",
+		"path": [
+			"button",
+			"div",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 4640,
+		"startTime": 1708446909544,
+		"endTime": 1708446914184,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": true,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "div",
+		"path": [
+			"div",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708446916111,
+		"microTime": 0.7,
+		"location": {
+			"x": 332,
+			"y": 206
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "button",
+		"path": [
+			"button",
+			"div",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 6567,
+		"startTime": 1708446909544,
+		"endTime": 1708446916111,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "html",
+		"path": [
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708446916140,
+		"microTime": 0.8,
+		"location": {
+			"x": 341,
+			"y": 213
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "button",
+		"path": [
+			"button",
+			"div",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 6596,
+		"startTime": 1708446909544,
+		"endTime": 1708446916140,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "button",
+		"path": [
+			"button",
+			"div",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708446916368,
+		"microTime": 0.3,
+		"location": {
+			"x": 349,
+			"y": 209
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446898329",
+		"httpSessionId": "3bd09cce555e2e0face7e362e87538f8",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "input#url",
+		"path": [
+			"input#url",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447006174,
+		"microTime": 0.3,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "keydown",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "input#url",
+		"path": [
+			"input#url",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447006177,
+		"microTime": 0.1,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "input",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "h1",
+		"path": [
+			"h1",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 2698,
+		"startTime": 1708447003479,
+		"endTime": 1708447006177,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": true,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "form",
+		"path": [
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447006954,
+		"microTime": 0.1,
+		"location": {
+			"x": 382,
+			"y": 143
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "h1",
+		"path": [
+			"h1",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 3475,
+		"startTime": 1708447003479,
+		"endTime": 1708447006954,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "button",
+		"path": [
+			"button",
+			"div",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447007203,
+		"microTime": 0.5,
+		"location": {
+			"x": 366,
+			"y": 189
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "h1",
+		"path": [
+			"h1",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 3724,
+		"startTime": 1708447003479,
+		"endTime": 1708447007203,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "button",
+		"path": [
+			"button",
+			"div",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447007323,
+		"microTime": 0.3,
+		"location": {
+			"x": 368,
+			"y": 201
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "mousedown",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"clicks": 1,
+			"ctrl": false,
+			"alt": false,
+			"shift": false,
+			"meta": false
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "input#url",
+		"path": [
+			"input#url",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447007325,
+		"microTime": 0.7,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "change",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "h1",
+		"path": [
+			"h1",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 3846,
+		"startTime": 1708447003479,
+		"endTime": 1708447007325,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": true,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "input#url",
+		"path": [
+			"input#url",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447007326,
+		"microTime": 0.9,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "blur",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "input#url",
+		"path": [
+			"input#url",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447007326,
+		"microTime": 0.9,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "blur",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "h1",
+		"path": [
+			"h1",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 3847,
+		"startTime": 1708447003479,
+		"endTime": 1708447007326,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": true,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "button",
+		"path": [
+			"button",
+			"div",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447007327,
+		"microTime": 0.4,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "focus",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "button",
+		"path": [
+			"button",
+			"div",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447007327,
+		"microTime": 0.4,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "focus",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "h1",
+		"path": [
+			"h1",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 3848,
+		"startTime": 1708447003479,
+		"endTime": 1708447007327,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": true,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "button",
+		"path": [
+			"button",
+			"div",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447007455,
+		"microTime": 0.2,
+		"location": {
+			"x": 369,
+			"y": 201
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "mouseup",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"clicks": 1,
+			"ctrl": false,
+			"alt": false,
+			"shift": false,
+			"meta": false
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "button",
+		"path": [
+			"button",
+			"div",
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447007455,
+		"microTime": 0.2,
+		"location": {
+			"x": 369,
+			"y": 201
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "click",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"clicks": 1,
+			"ctrl": false,
+			"alt": false,
+			"shift": false,
+			"meta": false
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "h1",
+		"path": [
+			"h1",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 3976,
+		"startTime": 1708447003479,
+		"endTime": 1708447007455,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": true,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "h1",
+		"path": [
+			"h1",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 3979,
+		"startTime": 1708447003479,
+		"endTime": 1708447007458,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": true,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "form",
+		"path": [
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447007458,
+		"microTime": 0,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "submit",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447007586,
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"logType": "custom",
+		"userAction": false,
+		"details": {
+			"pageLoadTime": 2
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"type": "load"
+	},
+	{
+		"target": "form",
+		"path": [
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447009532,
+		"microTime": 0.5,
+		"location": {
+			"x": 379,
+			"y": 144
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "body",
+		"path": [
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447009591,
+		"microTime": 0.3,
+		"location": {
+			"x": 385,
+			"y": 51
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "form",
+		"path": [
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 59,
+		"startTime": 1708447009532,
+		"endTime": 1708447009591,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "h1",
+		"path": [
+			"h1",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447009611,
+		"microTime": 0.2,
+		"location": {
+			"x": 383,
+			"y": 45
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "form",
+		"path": [
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 79,
+		"startTime": 1708447009532,
+		"endTime": 1708447009611,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "html",
+		"path": [
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447009806,
+		"microTime": 0.7,
+		"location": {
+			"x": 371,
+			"y": 2
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "form",
+		"path": [
+			"form",
+			"body",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 274,
+		"startTime": 1708447009532,
+		"endTime": 1708447009806,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "Window",
+		"path": [
+			"Window"
+		],
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/optionsPage.html?",
+		"pageTitle": "User ALE Web Extension - Options",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447010094,
+		"microTime": 0,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 400,
+			"height": 219
+		},
+		"type": "blur",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446999738",
+		"httpSessionId": "55032f909df7a309a51f750d3da5a379",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447010221,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"favIconUrl": "",
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195017,
+			"incognito": false,
+			"index": 0,
+			"mutedInfo": {
+				"muted": false
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "loading",
+			"title": "Extensions - User ALE Extension",
+			"url": "chrome://extensions/?id=glifkfgngpmliakinpibmjodbclonhjd",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"status": "loading",
+		"url": "chrome://extensions/?id=glifkfgngpmliakinpibmjodbclonhjd",
+		"type": "tabs.onUpdated",
+		"httpSession": null
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447010225,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"favIconUrl": "",
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195017,
+			"incognito": false,
+			"index": 0,
+			"mutedInfo": {
+				"muted": false
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "complete",
+			"title": "Extensions - User ALE Extension",
+			"url": "chrome://extensions/?id=glifkfgngpmliakinpibmjodbclonhjd",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"status": "complete",
+		"type": "tabs.onUpdated",
+		"httpSession": null
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447010226,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"favIconUrl": "",
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195017,
+			"incognito": false,
+			"index": 0,
+			"mutedInfo": {
+				"muted": false
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "complete",
+			"title": "Extensions - User ALE Extension",
+			"url": "chrome://extensions/?id=glifkfgngpmliakinpibmjodbclonhjd",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"newZoomFactor": 1,
+		"oldZoomFactor": 1,
+		"tabId": 602195017,
+		"zoomSettings": {
+			"mode": "automatic",
+			"scope": "per-origin"
+		},
+		"type": "tabs.onZoomChange",
+		"httpSession": null
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447011852,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"favIconUrl": "https://github.githubassets.com/favicons/favicon.svg",
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195154,
+			"incognito": false,
+			"index": 2,
+			"mutedInfo": {
+				"muted": true,
+				"reason": "user"
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "complete",
+			"title": "Verify two-factor authentication",
+			"url": "https://github.com/apache/flagon-distill/issues",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"tabId": 602195154,
+		"windowId": 602194905,
+		"type": "tabs.onActivated",
+		"httpSession": "a431dffa47502b473a915619dc6747ab"
+	},
+	{
+		"target": "Window",
+		"path": [
+			"Window"
+		],
+		"pageUrl": "https://github.com/apache/flagon-distill/issues",
+		"pageTitle": "Verify two-factor authentication",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447011854,
+		"microTime": 0.8,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1580,
+			"height": 740
+		},
+		"type": "focus",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446976421",
+		"httpSessionId": "a431dffa47502b473a915619dc6747ab",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "Window",
+		"path": [
+			"Window"
+		],
+		"pageUrl": "https://github.com/apache/flagon-distill/issues",
+		"pageTitle": "Verify two-factor authentication",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447011844,
+		"microTime": 0.1,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1580,
+			"height": 740
+		},
+		"type": "resize",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"width": 1280,
+			"height": 680
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446976421",
+		"httpSessionId": "a431dffa47502b473a915619dc6747ab",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "Window",
+		"path": [
+			"Window"
+		],
+		"pageUrl": "https://github.com/apache/flagon-distill/issues",
+		"pageTitle": "Verify two-factor authentication",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447013236,
+		"microTime": 0.2,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1580,
+			"height": 740
+		},
+		"type": "blur",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446976421",
+		"httpSessionId": "a431dffa47502b473a915619dc6747ab",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447013269,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"favIconUrl": "https://beam.apache.org/images/favicon.ico",
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195158,
+			"incognito": false,
+			"index": 3,
+			"mutedInfo": {
+				"muted": false
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "complete",
+			"title": "Case Studies",
+			"url": "https://beam.apache.org/case-studies/",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"tabId": 602195158,
+		"windowId": 602194905,
+		"type": "tabs.onActivated",
+		"httpSession": "72798a8ad776417183b1aa14e03c3132"
+	},
+	{
+		"target": "Window",
+		"path": [
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447013278,
+		"microTime": 0.4,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "focus",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "Window",
+		"path": [
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447013260,
+		"microTime": 0.2,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "resize",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"width": 1280,
+			"height": 680
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447014463,
+		"microTime": 0.2,
+		"location": {
+			"x": 678,
+			"y": 7
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "a.navbar-link",
+		"path": [
+			"a.navbar-link",
+			"div.navbar-links",
+			"div.navbar-bar-left",
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447014502,
+		"microTime": 0.1,
+		"location": {
+			"x": 595,
+			"y": 43
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 39,
+		"startTime": 1708447014463,
+		"endTime": 1708447014502,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "a.navbar-link",
+		"path": [
+			"a.navbar-link",
+			"div.navbar-links",
+			"div.navbar-bar-left",
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447014592,
+		"microTime": 0.4,
+		"location": {
+			"x": 496,
+			"y": 54
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 129,
+		"startTime": 1708447014463,
+		"endTime": 1708447014592,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "div.navbar-links",
+		"path": [
+			"div.navbar-links",
+			"div.navbar-bar-left",
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447014641,
+		"microTime": 0.7,
+		"location": {
+			"x": 459,
+			"y": 60
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 178,
+		"startTime": 1708447014463,
+		"endTime": 1708447014641,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447014946,
+		"microTime": 0.2,
+		"location": {
+			"x": 452,
+			"y": 65
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "img.banner-img-desktop",
+		"path": [
+			"img.banner-img-desktop",
+			"a",
+			"div.swiper-slide swiper-slide-active",
+			"div#swiper-wrapper-0b96163d25f2977f.swiper-wrapper",
+			"div.top-banners swiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447015034,
+		"microTime": 0.5,
+		"location": {
+			"x": 410,
+			"y": 97
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 2,
+		"duration": 571,
+		"startTime": 1708447014463,
+		"endTime": 1708447015034,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447015123,
+		"microTime": 0.3,
+		"location": {
+			"x": 281,
+			"y": 93
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "div.navbar-links",
+		"path": [
+			"div.navbar-links",
+			"div.navbar-bar-left",
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447015378,
+		"microTime": 0.6,
+		"location": {
+			"x": 210,
+			"y": 61
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 3,
+		"duration": 915,
+		"startTime": 1708447014463,
+		"endTime": 1708447015378,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "a.navbar-link",
+		"path": [
+			"a.navbar-link",
+			"div.navbar-links",
+			"div.navbar-bar-left",
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447015437,
+		"microTime": 0.4,
+		"location": {
+			"x": 200,
+			"y": 54
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 3,
+		"duration": 974,
+		"startTime": 1708447014463,
+		"endTime": 1708447015437,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "a.navbar-link",
+		"path": [
+			"a.navbar-link",
+			"div.navbar-links",
+			"div.navbar-bar-left",
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447015615,
+		"microTime": 0.3,
+		"location": {
+			"x": 195,
+			"y": 50
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mousedown",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"clicks": 1,
+			"ctrl": false,
+			"alt": false,
+			"shift": false,
+			"meta": false
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "a.navbar-link",
+		"path": [
+			"a.navbar-link",
+			"div.navbar-links",
+			"div.navbar-bar-left",
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447015621,
+		"microTime": 0.3,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "focus",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "a.navbar-link",
+		"path": [
+			"a.navbar-link",
+			"div.navbar-links",
+			"div.navbar-bar-left",
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447015621,
+		"microTime": 0.3,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "focus",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 3,
+		"duration": 1158,
+		"startTime": 1708447014463,
+		"endTime": 1708447015621,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": true,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "a.navbar-link",
+		"path": [
+			"a.navbar-link",
+			"div.navbar-links",
+			"div.navbar-bar-left",
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447015752,
+		"microTime": 0.8,
+		"location": {
+			"x": 195,
+			"y": 50
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseup",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"clicks": 1,
+			"ctrl": false,
+			"alt": false,
+			"shift": false,
+			"meta": false
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "a.navbar-link",
+		"path": [
+			"a.navbar-link",
+			"div.navbar-links",
+			"div.navbar-bar-left",
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447015752,
+		"microTime": 0.8,
+		"location": {
+			"x": 195,
+			"y": 50
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "click",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"clicks": 1,
+			"ctrl": false,
+			"alt": false,
+			"shift": false,
+			"meta": false
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 3,
+		"duration": 1289,
+		"startTime": 1708447014463,
+		"endTime": 1708447015752,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": true,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "a.navbar-link",
+		"path": [
+			"a.navbar-link",
+			"div.navbar-links",
+			"div.navbar-bar-left",
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447016146,
+		"microTime": 0.2,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "blur",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "a.navbar-link",
+		"path": [
+			"a.navbar-link",
+			"div.navbar-links",
+			"div.navbar-bar-left",
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447016146,
+		"microTime": 0.2,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "blur",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 3,
+		"duration": 1683,
+		"startTime": 1708447014463,
+		"endTime": 1708447016146,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": true,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "Window",
+		"path": [
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/case-studies/",
+		"pageTitle": "Case Studies",
+		"pageReferrer": "https://beam.apache.org/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447016148,
+		"microTime": 0.4,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "blur",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447016161,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195158,
+			"incognito": false,
+			"index": 3,
+			"mutedInfo": {
+				"muted": false
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "loading",
+			"title": "beam.apache.org/about/",
+			"url": "https://beam.apache.org/about/",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"status": "loading",
+		"url": "https://beam.apache.org/about/",
+		"type": "tabs.onUpdated",
+		"httpSession": "72798a8ad776417183b1aa14e03c3132"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447016165,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195158,
+			"incognito": false,
+			"index": 3,
+			"mutedInfo": {
+				"muted": false
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "loading",
+			"title": "beam.apache.org/about/",
+			"url": "https://beam.apache.org/about/",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"newZoomFactor": 1,
+		"oldZoomFactor": 1,
+		"tabId": 602195158,
+		"zoomSettings": {
+			"mode": "automatic",
+			"scope": "per-origin"
+		},
+		"type": "tabs.onZoomChange",
+		"httpSession": "72798a8ad776417183b1aa14e03c3132"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447016168,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195158,
+			"incognito": false,
+			"index": 3,
+			"mutedInfo": {
+				"muted": false
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "loading",
+			"title": "About",
+			"url": "https://beam.apache.org/about/",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"title": "About",
+		"type": "tabs.onUpdated",
+		"httpSession": "72798a8ad776417183b1aa14e03c3132"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447016459,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195158,
+			"incognito": false,
+			"index": 3,
+			"mutedInfo": {
+				"muted": false
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "complete",
+			"title": "About",
+			"url": "https://beam.apache.org/about/",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"status": "complete",
+		"type": "tabs.onUpdated",
+		"httpSession": "72798a8ad776417183b1aa14e03c3132"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447016459,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"favIconUrl": "https://beam.apache.org/images/favicon.ico",
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195158,
+			"incognito": false,
+			"index": 3,
+			"mutedInfo": {
+				"muted": false
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "complete",
+			"title": "About",
+			"url": "https://beam.apache.org/about/",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"favIconUrl": "https://beam.apache.org/images/favicon.ico",
+		"type": "tabs.onUpdated",
+		"httpSession": "72798a8ad776417183b1aa14e03c3132"
+	},
+	{
+		"pageUrl": "https://beam.apache.org/about/",
+		"pageTitle": "About",
+		"pageReferrer": "https://beam.apache.org/case-studies/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447016556,
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"logType": "custom",
+		"userAction": false,
+		"details": {
+			"pageLoadTime": 15
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"type": "load"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/about/",
+		"pageTitle": "About",
+		"pageReferrer": "https://beam.apache.org/case-studies/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447016995,
+		"microTime": 0.4,
+		"location": {
+			"x": 192,
+			"y": 65
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "img.banner-img-desktop",
+		"path": [
+			"img.banner-img-desktop",
+			"a",
+			"div.swiper-slide swiper-slide-active",
+			"div#swiper-wrapper-26c4b215eb4fdb09.swiper-wrapper",
+			"div.top-banners swiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/about/",
+		"pageTitle": "About",
+		"pageReferrer": "https://beam.apache.org/case-studies/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447017014,
+		"microTime": 0.9,
+		"location": {
+			"x": 178,
+			"y": 142
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/about/",
+		"pageTitle": "About",
+		"pageReferrer": "https://beam.apache.org/case-studies/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 19,
+		"startTime": 1708447016995,
+		"endTime": 1708447017014,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "div.clearfix container-main-content center",
+		"path": [
+			"div.clearfix container-main-content center",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/about/",
+		"pageTitle": "About",
+		"pageReferrer": "https://beam.apache.org/case-studies/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447017034,
+		"microTime": 0.6,
+		"location": {
+			"x": 173,
+			"y": 195
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/about/",
+		"pageTitle": "About",
+		"pageReferrer": "https://beam.apache.org/case-studies/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 39,
+		"startTime": 1708447016995,
+		"endTime": 1708447017034,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "img.about-graph-img-desktop",
+		"path": [
+			"img.about-graph-img-desktop",
+			"div.about-graph-container",
+			"div.body__contained body__section-nav",
+			"div.clearfix container-main-content center",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/about/",
+		"pageTitle": "About",
+		"pageReferrer": "https://beam.apache.org/case-studies/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447019500,
+		"microTime": 0.9,
+		"location": {
+			"x": 474,
+			"y": 507
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/about/",
+		"pageTitle": "About",
+		"pageReferrer": "https://beam.apache.org/case-studies/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 2505,
+		"startTime": 1708447016995,
+		"endTime": 1708447019500,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "p",
+		"path": [
+			"p",
+			"div.body__contained body__section-nav",
+			"div.clearfix container-main-content center",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/about/",
+		"pageTitle": "About",
+		"pageReferrer": "https://beam.apache.org/case-studies/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447019506,
+		"microTime": 0.3,
+		"location": {
+			"x": 544,
+			"y": 406
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/about/",
+		"pageTitle": "About",
+		"pageReferrer": "https://beam.apache.org/case-studies/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 2511,
+		"startTime": 1708447016995,
+		"endTime": 1708447019506,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "h2#why-apache-beam",
+		"path": [
+			"h2#why-apache-beam",
+			"div.body__contained body__section-nav",
+			"div.clearfix container-main-content center",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/about/",
+		"pageTitle": "About",
+		"pageReferrer": "https://beam.apache.org/case-studies/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447019537,
+		"microTime": 0.5,
+		"location": {
+			"x": 620,
+			"y": 308
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/about/",
+		"pageTitle": "About",
+		"pageReferrer": "https://beam.apache.org/case-studies/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 2542,
+		"startTime": 1708447016995,
+		"endTime": 1708447019537,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "h1#about",
+		"path": [
+			"h1#about",
+			"div.body__contained body__section-nav",
+			"div.clearfix container-main-content center",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/about/",
+		"pageTitle": "About",
+		"pageReferrer": "https://beam.apache.org/case-studies/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447019811,
+		"microTime": 0.9,
+		"location": {
+			"x": 600,
+			"y": 175
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/about/",
+		"pageTitle": "About",
+		"pageReferrer": "https://beam.apache.org/case-studies/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 1,
+		"duration": 2816,
+		"startTime": 1708447016995,
+		"endTime": 1708447019811,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "nav.navigation-bar-desktop",
+		"path": [
+			"nav.navigation-bar-desktop",
+			"body.body",
+			"html.no-js",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/about/",
+		"pageTitle": "About",
+		"pageReferrer": "https://beam.apache.org/case-studies/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447019831,
+		"microTime": 0,
+		"location": {
+			"x": 589,
+			"y": 93
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "Window",
+		"path": [
+			"Window"
+		],
+		"pageUrl": "https://beam.apache.org/about/",
+		"pageTitle": "About",
+		"pageReferrer": "https://beam.apache.org/case-studies/",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447020315,
+		"microTime": 0,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "blur",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446947239",
+		"httpSessionId": "72798a8ad776417183b1aa14e03c3132",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "Window",
+		"path": [
+			"Window"
+		],
+		"pageUrl": "https://github.com/apache/flagon-distill/issues",
+		"pageTitle": "Verify two-factor authentication",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447020329,
+		"microTime": 0.4,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1580,
+			"height": 740
+		},
+		"type": "focus",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446976421",
+		"httpSessionId": "a431dffa47502b473a915619dc6747ab",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447020335,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"favIconUrl": "https://github.githubassets.com/favicons/favicon.svg",
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195154,
+			"incognito": false,
+			"index": 2,
+			"mutedInfo": {
+				"muted": true,
+				"reason": "user"
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "complete",
+			"title": "Verify two-factor authentication",
+			"url": "https://github.com/apache/flagon-distill/issues",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"tabId": 602195154,
+		"windowId": 602194905,
+		"type": "tabs.onActivated",
+		"httpSession": "a431dffa47502b473a915619dc6747ab"
+	},
+	{
+		"target": "Window",
+		"path": [
+			"Window"
+		],
+		"pageUrl": "https://github.com/apache/flagon-distill/issues",
+		"pageTitle": "Verify two-factor authentication",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447022427,
+		"microTime": 0.8,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1580,
+			"height": 740
+		},
+		"type": "blur",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446976421",
+		"httpSessionId": "a431dffa47502b473a915619dc6747ab",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "Window",
+		"path": [
+			"Window"
+		],
+		"pageUrl": "https://github.com/apache/flagon-distill/issues",
+		"pageTitle": "Verify two-factor authentication",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447026223,
+		"microTime": 0.9,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1580,
+			"height": 740
+		},
+		"type": "focus",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446976421",
+		"httpSessionId": "a431dffa47502b473a915619dc6747ab",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447026337,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195154,
+			"incognito": false,
+			"index": 2,
+			"mutedInfo": {
+				"muted": true,
+				"reason": "user"
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "loading",
+			"title": "google.com/search?q=dis&rlz=1C1CHBF_enUS987US987&oq=dis&gs_lcrp=EgZjaHJvbWUyBggAEEUYPDIGCAEQRRg5Mg0IAhAAGIMBGLEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgoIBBAAGLEDGIAEMhAIBRAAGIMBGLEDGIAEGIoFMgYIBhBFGDwyBggHEEUYPNIBCDIwNzZqMGo0qAIAsAIA&sourceid=chrome&ie=UTF-8",
+			"url": "https://www.google.com/search?q=dis&rlz=1C1CHBF_enUS987US987&oq=dis&gs_lcrp=EgZjaHJvbWUyBggAEEUYPDIGCAEQRRg5Mg0IAhAAGIMBGLEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgoIBBAAGLEDGIAEMhAIBRAAGIMBGLEDGIAEGIoFMgYIBhBFGDwyBggHEEUYPNIBCDIwNzZqMGo0qAIAsAIA&sourceid=chrome&ie=UTF-8",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"status": "loading",
+		"url": "https://www.google.com/search?q=dis&rlz=1C1CHBF_enUS987US987&oq=dis&gs_lcrp=EgZjaHJvbWUyBggAEEUYPDIGCAEQRRg5Mg0IAhAAGIMBGLEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgoIBBAAGLEDGIAEMhAIBRAAGIMBGLEDGIAEGIoFMgYIBhBFGDwyBggHEEUYPNIBCDIwNzZqMGo0qAIAsAIA&sourceid=chrome&ie=UTF-8",
+		"type": "tabs.onUpdated",
+		"httpSession": "a431dffa47502b473a915619dc6747ab"
+	},
+	{
+		"target": "div.container clearfix width-full text-center",
+		"path": [
+			"div.container clearfix width-full text-center",
+			"div.header header-logged-out width-full pt-5 pb-4",
+			"div.position-relative js-header-wrapper ",
+			"div.logged-in env-production page-responsive session-authentication",
+			"body.logged-in env-production page-responsive session-authentication",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://github.com/apache/flagon-distill/issues",
+		"pageTitle": "Verify two-factor authentication",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447026318,
+		"microTime": 0.2,
+		"location": {
+			"x": 528,
+			"y": 52
+		},
+		"scrnRes": {
+			"width": 1580,
+			"height": 740
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446976421",
+		"httpSessionId": "a431dffa47502b473a915619dc6747ab",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "div.header header-logged-out width-full pt-5 pb-4",
+		"path": [
+			"div.header header-logged-out width-full pt-5 pb-4",
+			"div.position-relative js-header-wrapper ",
+			"div.logged-in env-production page-responsive session-authentication",
+			"body.logged-in env-production page-responsive session-authentication",
+			"html",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://github.com/apache/flagon-distill/issues",
+		"pageTitle": "Verify two-factor authentication",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"count": 2,
+		"duration": 49375,
+		"startTime": 1708446976943,
+		"endTime": 1708447026318,
+		"type": "mouseover",
+		"logType": "interval",
+		"targetChange": true,
+		"typeChange": false,
+		"userAction": false,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446976421",
+		"httpSessionId": "a431dffa47502b473a915619dc6747ab",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"target": "Window",
+		"path": [
+			"Window"
+		],
+		"pageUrl": "https://github.com/apache/flagon-distill/issues",
+		"pageTitle": "Verify two-factor authentication",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447026329,
+		"microTime": 0.2,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1580,
+			"height": 740
+		},
+		"type": "blur",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446976421",
+		"httpSessionId": "a431dffa47502b473a915619dc6747ab",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447026341,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195154,
+			"incognito": false,
+			"index": 2,
+			"mutedInfo": {
+				"muted": false,
+				"reason": "user"
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "loading",
+			"title": "dis - Google Search",
+			"url": "https://www.google.com/search?q=dis&rlz=1C1CHBF_enUS987US987&oq=dis&gs_lcrp=EgZjaHJvbWUyBggAEEUYPDIGCAEQRRg5Mg0IAhAAGIMBGLEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgoIBBAAGLEDGIAEMhAIBRAAGIMBGLEDGIAEGIoFMgYIBhBFGDwyBggHEEUYPNIBCDIwNzZqMGo0qAIAsAIA&sourceid=chrome&ie=UTF-8",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"mutedInfo": {
+			"muted": false,
+			"reason": "user"
+		},
+		"title": "dis - Google Search",
+		"type": "tabs.onUpdated",
+		"httpSession": "a431dffa47502b473a915619dc6747ab"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447026341,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195154,
+			"incognito": false,
+			"index": 2,
+			"mutedInfo": {
+				"muted": false,
+				"reason": "user"
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "loading",
+			"title": "dis - Google Search",
+			"url": "https://www.google.com/search?q=dis&rlz=1C1CHBF_enUS987US987&oq=dis&gs_lcrp=EgZjaHJvbWUyBggAEEUYPDIGCAEQRRg5Mg0IAhAAGIMBGLEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgoIBBAAGLEDGIAEMhAIBRAAGIMBGLEDGIAEGIoFMgYIBhBFGDwyBggHEEUYPNIBCDIwNzZqMGo0qAIAsAIA&sourceid=chrome&ie=UTF-8",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"newZoomFactor": 0.8,
+		"oldZoomFactor": 0.8,
+		"tabId": 602195154,
+		"zoomSettings": {
+			"mode": "automatic",
+			"scope": "per-origin"
+		},
+		"type": "tabs.onZoomChange",
+		"httpSession": "a431dffa47502b473a915619dc6747ab"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447026904,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195154,
+			"incognito": false,
+			"index": 2,
+			"mutedInfo": {
+				"muted": false,
+				"reason": "user"
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "loading",
+			"title": "dis - Google Search",
+			"url": "https://www.google.com/search?q=dis&rlz=1C1CHBF_enUS987US987&oq=dis&gs_lcrp=EgZjaHJvbWUyBggAEEUYPDIGCAEQRRg5Mg0IAhAAGIMBGLEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgoIBBAAGLEDGIAEMhAIBRAAGIMBGLEDGIAEGIoFMgYIBhBFGDwyBggHEEUYPNIBCDIwNzZqMGo0qAIAsAIA&sourceid=chrome&ie=UTF-8",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"status": "loading",
+		"type": "tabs.onUpdated",
+		"httpSession": "a431dffa47502b473a915619dc6747ab"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447026905,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195154,
+			"incognito": false,
+			"index": 2,
+			"mutedInfo": {
+				"muted": false,
+				"reason": "user"
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "loading",
+			"title": "dis - Google Search",
+			"url": "https://www.google.com/search?q=dis&rlz=1C1CHBF_enUS987US987&oq=dis&gs_lcrp=EgZjaHJvbWUyBggAEEUYPDIGCAEQRRg5Mg0IAhAAGIMBGLEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgoIBBAAGLEDGIAEMhAIBRAAGIMBGLEDGIAEGIoFMgYIBhBFGDwyBggHEEUYPNIBCDIwNzZqMGo0qAIAsAIA&sourceid=chrome&ie=UTF-8",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"newZoomFactor": 0.8,
+		"oldZoomFactor": 0.8,
+		"tabId": 602195154,
+		"zoomSettings": {
+			"mode": "automatic",
+			"scope": "per-origin"
+		},
+		"type": "tabs.onZoomChange",
+		"httpSession": "a431dffa47502b473a915619dc6747ab"
+	},
+	{
+		"pageUrl": "https://www.google.com/search?q=dis&rlz=1C1CHBF_enUS987US987&oq=dis&gs_lcrp=EgZjaHJvbWUyBggAEEUYPDIGCAEQRRg5Mg0IAhAAGIMBGLEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgoIBBAAGLEDGIAEMhAIBRAAGIMBGLEDGIAEGIoFMgYIBhBFGDwyBggHEEUYPNIBCDIwNzZqMGo0qAIAsAIA&sourceid=chrome&ie=UTF-8",
+		"pageTitle": "dis - Google Search",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447027240,
+		"scrnRes": {
+			"width": 1580,
+			"height": 740
+		},
+		"logType": "custom",
+		"userAction": false,
+		"details": {
+			"pageLoadTime": null
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708447027077",
+		"httpSessionId": "c17566612e806fca47588ce701deec40",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"type": "load"
+	},
+	{
+		"target": "#document",
+		"path": [
+			"Window"
+		],
+		"pageUrl": "https://www.google.com/search?q=dis&rlz=1C1CHBF_enUS987US987&oq=dis&gs_lcrp=EgZjaHJvbWUyBggAEEUYPDIGCAEQRRg5Mg0IAhAAGIMBGLEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgoIBBAAGLEDGIAEMhAIBRAAGIMBGLEDGIAEGIoFMgYIBhBFGDwyBggHEEUYPNIBCDIwNzZqMGo0qAIAsAIA&sourceid=chrome&ie=UTF-8",
+		"pageTitle": "dis - Google Search",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447027435,
+		"microTime": 0,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1580,
+			"height": 740
+		},
+		"type": "load",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708447027077",
+		"httpSessionId": "c17566612e806fca47588ce701deec40",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447027442,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195154,
+			"incognito": false,
+			"index": 2,
+			"mutedInfo": {
+				"muted": false,
+				"reason": "user"
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "complete",
+			"title": "dis - Google Search",
+			"url": "https://www.google.com/search?q=dis&rlz=1C1CHBF_enUS987US987&oq=dis&gs_lcrp=EgZjaHJvbWUyBggAEEUYPDIGCAEQRRg5Mg0IAhAAGIMBGLEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgoIBBAAGLEDGIAEMhAIBRAAGIMBGLEDGIAEGIoFMgYIBhBFGDwyBggHEEUYPNIBCDIwNzZqMGo0qAIAsAIA&sourceid=chrome&ie=UTF-8",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"status": "complete",
+		"type": "tabs.onUpdated",
+		"httpSession": "c17566612e806fca47588ce701deec40"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447027444,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"favIconUrl": "https://www.google.com/favicon.ico",
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195154,
+			"incognito": false,
+			"index": 2,
+			"mutedInfo": {
+				"muted": false,
+				"reason": "user"
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "complete",
+			"title": "dis - Google Search",
+			"url": "https://www.google.com/search?q=dis&rlz=1C1CHBF_enUS987US987&oq=dis&gs_lcrp=EgZjaHJvbWUyBggAEEUYPDIGCAEQRRg5Mg0IAhAAGIMBGLEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgoIBBAAGLEDGIAEMhAIBRAAGIMBGLEDGIAEGIoFMgYIBhBFGDwyBggHEEUYPNIBCDIwNzZqMGo0qAIAsAIA&sourceid=chrome&ie=UTF-8",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"favIconUrl": "https://www.google.com/favicon.ico",
+		"type": "tabs.onUpdated",
+		"httpSession": "c17566612e806fca47588ce701deec40"
+	},
+	{
+		"target": "Window",
+		"path": [
+			"Window"
+		],
+		"pageUrl": "https://www.google.com/search?q=dis&rlz=1C1CHBF_enUS987US987&oq=dis&gs_lcrp=EgZjaHJvbWUyBggAEEUYPDIGCAEQRRg5Mg0IAhAAGIMBGLEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgoIBBAAGLEDGIAEMhAIBRAAGIMBGLEDGIAEGIoFMgYIBhBFGDwyBggHEEUYPNIBCDIwNzZqMGo0qAIAsAIA&sourceid=chrome&ie=UTF-8",
+		"pageTitle": "dis - Google Search",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447032143,
+		"microTime": 0.1,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1580,
+			"height": 740
+		},
+		"type": "focus",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708447027077",
+		"httpSessionId": "c17566612e806fca47588ce701deec40",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447032169,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195154,
+			"incognito": false,
+			"index": 2,
+			"mutedInfo": {
+				"muted": false,
+				"reason": "user"
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "loading",
+			"title": "incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill",
+			"url": "https://incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"status": "loading",
+		"url": "https://incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill",
+		"type": "tabs.onUpdated",
+		"httpSession": "c17566612e806fca47588ce701deec40"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447032173,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"favIconUrl": "https://incubator-flagon-distill.readthedocs.io/favicon.ico",
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195154,
+			"incognito": false,
+			"index": 2,
+			"mutedInfo": {
+				"muted": false,
+				"reason": "user"
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "loading",
+			"title": "incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill",
+			"url": "https://incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"favIconUrl": "https://incubator-flagon-distill.readthedocs.io/favicon.ico",
+		"type": "tabs.onUpdated",
+		"httpSession": "c17566612e806fca47588ce701deec40"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447032173,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"favIconUrl": "https://incubator-flagon-distill.readthedocs.io/favicon.ico",
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195154,
+			"incognito": false,
+			"index": 2,
+			"mutedInfo": {
+				"muted": false,
+				"reason": "user"
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "loading",
+			"title": "incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill",
+			"url": "https://incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"newZoomFactor": 1,
+		"oldZoomFactor": 1,
+		"tabId": 602195154,
+		"zoomSettings": {
+			"mode": "automatic",
+			"scope": "per-origin"
+		},
+		"type": "tabs.onZoomChange",
+		"httpSession": "c17566612e806fca47588ce701deec40"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447032178,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"favIconUrl": "https://incubator-flagon-distill.readthedocs.io/favicon.ico",
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195154,
+			"incognito": false,
+			"index": 2,
+			"mutedInfo": {
+				"muted": false,
+				"reason": "user"
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "loading",
+			"title": "Installation Guide — Apache Distill 0.1.3 documentation",
+			"url": "https://incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"title": "Installation Guide — Apache Distill 0.1.3 documentation",
+		"type": "tabs.onUpdated",
+		"httpSession": "c17566612e806fca47588ce701deec40"
+	},
+	{
+		"target": "Window",
+		"path": [
+			"Window"
+		],
+		"pageUrl": "https://www.google.com/search?q=dis&rlz=1C1CHBF_enUS987US987&oq=dis&gs_lcrp=EgZjaHJvbWUyBggAEEUYPDIGCAEQRRg5Mg0IAhAAGIMBGLEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgoIBBAAGLEDGIAEMhAIBRAAGIMBGLEDGIAEGIoFMgYIBhBFGDwyBggHEEUYPNIBCDIwNzZqMGo0qAIAsAIA&sourceid=chrome&ie=UTF-8",
+		"pageTitle": "dis - Google Search",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447032172,
+		"microTime": 0.3,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1580,
+			"height": 740
+		},
+		"type": "blur",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708447027077",
+		"httpSessionId": "c17566612e806fca47588ce701deec40",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"pageUrl": "https://incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill",
+		"pageTitle": "Installation Guide — Apache Distill 0.1.3 documentation",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447032533,
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"logType": "custom",
+		"userAction": false,
+		"details": {
+			"pageLoadTime": null
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446826867",
+		"httpSessionId": "4f3c8a727266e5c52e53f719679b6977",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"type": "load"
+	},
+	{
+		"target": "#document",
+		"path": [
+			"Window"
+		],
+		"pageUrl": "https://incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill",
+		"pageTitle": "Installation Guide — Apache Distill 0.1.3 documentation",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447032644,
+		"microTime": 0.9,
+		"location": {
+			"x": null,
+			"y": null
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "load",
+		"logType": "raw",
+		"userAction": true,
+		"details": {
+			"window": true
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446826867",
+		"httpSessionId": "4f3c8a727266e5c52e53f719679b6977",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{
+		"pageUrl": "chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html",
+		"pageTitle": "",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447032646,
+		"scrnRes": {
+			"width": 0,
+			"height": 0
+		},
+		"logType": "custom",
+		"userAction": true,
+		"details": {
+			"active": true,
+			"audible": false,
+			"autoDiscardable": true,
+			"discarded": false,
+			"favIconUrl": "https://incubator-flagon-distill.readthedocs.io/favicon.ico",
+			"groupId": -1,
+			"height": 592,
+			"highlighted": true,
+			"id": 602195154,
+			"incognito": false,
+			"index": 2,
+			"mutedInfo": {
+				"muted": false,
+				"reason": "user"
+			},
+			"pinned": false,
+			"selected": true,
+			"status": "complete",
+			"title": "Installation Guide — Apache Distill 0.1.3 documentation",
+			"url": "https://incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill",
+			"width": 1264,
+			"windowId": 602194905
+		},
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446670458",
+		"httpSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc",
+		"status": "complete",
+		"type": "tabs.onUpdated",
+		"httpSession": "4f3c8a727266e5c52e53f719679b6977"
+	},
+	{
+		"target": "div.wy-nav-content",
+		"path": [
+			"div.wy-nav-content",
+			"section.wy-nav-content-wrap",
+			"div.wy-grid-for-nav",
+			"body.wy-body-for-nav",
+			"html.writer-html5",
+			"#document",
+			"Window"
+		],
+		"pageUrl": "https://incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill",
+		"pageTitle": "Installation Guide — Apache Distill 0.1.3 documentation",
+		"pageReferrer": "",
+		"browser": {
+			"browser": "chrome",
+			"version": "114.0.0"
+		},
+		"clientTime": 1708447035566,
+		"microTime": 0.8,
+		"location": {
+			"x": 350,
+			"y": 174
+		},
+		"scrnRes": {
+			"width": 1264,
+			"height": 592
+		},
+		"type": "mouseover",
+		"logType": "raw",
+		"userAction": true,
+		"details": null,
+		"userId": "MD",
+		"toolVersion": "",
+		"toolName": "",
+		"useraleVersion": "2.4.0",
+		"sessionID": "session_1708446826867",
+		"httpSessionId": "4f3c8a727266e5c52e53f719679b6977",
+		"browserSessionId": "06b0db1ab30e8e92819ba3d4091b83bc"
+	},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622797541,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":false,"details":{"pageLoadTime":6},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","type":"load","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622799410,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://beam.apache.org/images/favicon.ico","groupId":-1,"height":832,"highlighted":true,"id":602195158,"incognito":false,"index":3,"mutedInfo":{"muted":false},"pinned":false,"selected":true,"status":"complete","title":"About","url":"https://beam.apache.org/about/","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","tabId":602195158,"windowId":602194905,"type":"tabs.onActivated","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622803102,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://beam.apache.org/images/favicon.ico","groupId":-1,"height":832,"highlighted":true,"id":602195158,"incognito":false,"index":3,"mutedInfo":{"muted":false},"pinned":false,"selected":true,"status":"loading","title":"About","url":"https://beam.apache.org/about/","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"loading","type":"tabs.onUpdated","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622803104,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://beam.apache.org/images/favicon.ico","groupId":-1,"height":832,"highlighted":true,"id":602195158,"incognito":false,"index":3,"mutedInfo":{"muted":false},"pinned":false,"selected":true,"status":"loading","title":"About","url":"https://beam.apache.org/about/","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","favIconUrl":"https://beam.apache.org/images/favicon.ico","type":"tabs.onUpdated","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622803104,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://beam.apache.org/images/favicon.ico","groupId":-1,"height":832,"highlighted":true,"id":602195158,"incognito":false,"index":3,"mutedInfo":{"muted":false},"pinned":false,"selected":true,"status":"loading","title":"About","url":"https://beam.apache.org/about/","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","newZoomFactor":1,"oldZoomFactor":1,"tabId":602195158,"zoomSettings":{"mode":"automatic","scope":"per-origin"},"type":"tabs.onZoomChange","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622803478,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://beam.apache.org/images/favicon.ico","groupId":-1,"height":832,"highlighted":true,"id":602195158,"incognito":false,"index":3,"mutedInfo":{"muted":false},"pinned":false,"selected":true,"status":"complete","title":"About","url":"https://beam.apache.org/about/","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"complete","type":"tabs.onUpdated","httpSession":null},
+	{"pageUrl":"https://beam.apache.org/about/","pageTitle":"About","pageReferrer":"https://beam.apache.org/case-studies/","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622803589,"scrnRes":{"width":1264,"height":832},"logType":"custom","userAction":false,"details":{"pageLoadTime":4},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446947239","httpSessionId":"72798a8ad776417183b1aa14e03c3132","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","type":"load"},
+	{"target":"a.dropdown-toggle navbar-link","path":["a.dropdown-toggle navbar-link","li.dropdown navbar-dropdown navbar-dropdown-documentation","div.navbar-links","div.navbar-bar-left","nav.navigation-bar-desktop","body.body","html.no-js","#document","Window"],"pageUrl":"https://beam.apache.org/about/","pageTitle":"About","pageReferrer":"https://beam.apache.org/case-studies/","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622804465,"microTime":0,"location":{"x":385,"y":56},"scrnRes":{"width":1264,"height":832},"type":"mouseover","logType":"raw","userAction":true,"details":null,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446947239","httpSessionId":"72798a8ad776417183b1aa14e03c3132","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"nav.navigation-bar-desktop","path":["nav.navigation-bar-desktop","body.body","html.no-js","#document","Window"],"pageUrl":"https://beam.apache.org/about/","pageTitle":"About","pageReferrer":"https://beam.apache.org/case-studies/","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622804495,"microTime":0.9,"location":{"x":289,"y":26},"scrnRes":{"width":1264,"height":832},"type":"mouseover","logType":"raw","userAction":true,"details":null,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446947239","httpSessionId":"72798a8ad776417183b1aa14e03c3132","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"a.dropdown-toggle navbar-link","path":["a.dropdown-toggle navbar-link","li.dropdown navbar-dropdown navbar-dropdown-documentation","div.navbar-links","div.navbar-bar-left","nav.navigation-bar-desktop","body.body","html.no-js","#document","Window"],"pageUrl":"https://beam.apache.org/about/","pageTitle":"About","pageReferrer":"https://beam.apache.org/case-studies/","browser":{"browser":"chrome","version":"114.0.0"},"count":1,"duration":30,"startTime":1708622804465,"endTime":1708622804495,"type":"mouseover","logType":"interval","targetChange":true,"typeChange":false,"userAction":false,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446947239","httpSessionId":"72798a8ad776417183b1aa14e03c3132","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"Window","path":["Window"],"pageUrl":"https://beam.apache.org/about/","pageTitle":"About","pageReferrer":"https://beam.apache.org/case-studies/","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622804907,"microTime":0.4,"location":{"x":null,"y":null},"scrnRes":{"width":1264,"height":832},"type":"blur","logType":"raw","userAction":true,"details":{"window":true},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446947239","httpSessionId":"72798a8ad776417183b1aa14e03c3132","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622804927,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"","groupId":-1,"height":832,"highlighted":true,"id":602195017,"incognito":false,"index":0,"mutedInfo":{"muted":false},"pinned":false,"selected":true,"status":"complete","title":"Extensions","url":"chrome://extensions/","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","tabId":602195017,"windowId":602194905,"type":"tabs.onActivated","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622807423,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"","groupId":-1,"height":832,"highlighted":true,"id":602195017,"incognito":false,"index":0,"mutedInfo":{"muted":false},"pinned":false,"selected":true,"status":"loading","title":"Extensions","url":"chrome://extensions/?errors=glifkfgngpmliakinpibmjodbclonhjd","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"loading","url":"chrome://extensions/?errors=glifkfgngpmliakinpibmjodbclonhjd","type":"tabs.onUpdated","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622807424,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"","groupId":-1,"height":832,"highlighted":true,"id":602195017,"incognito":false,"index":0,"mutedInfo":{"muted":false},"pinned":false,"selected":true,"status":"complete","title":"Extensions","url":"chrome://extensions/?errors=glifkfgngpmliakinpibmjodbclonhjd","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"complete","type":"tabs.onUpdated","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622807425,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"","groupId":-1,"height":832,"highlighted":true,"id":602195017,"incognito":false,"index":0,"mutedInfo":{"muted":false},"pinned":false,"selected":true,"status":"complete","title":"Extensions","url":"chrome://extensions/?errors=glifkfgngpmliakinpibmjodbclonhjd","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","newZoomFactor":1,"oldZoomFactor":1,"tabId":602195017,"zoomSettings":{"mode":"automatic","scope":"per-origin"},"type":"tabs.onZoomChange","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622811173,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"complete","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/tree/test","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","tabId":602195153,"windowId":602194905,"type":"tabs.onActivated","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622813165,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"loading","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/tree/test","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"loading","type":"tabs.onUpdated","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622813166,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"loading","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/tree/test","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","type":"tabs.onUpdated","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622813167,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"loading","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/tree/test","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","newZoomFactor":0.8,"oldZoomFactor":0.8,"tabId":602195153,"zoomSettings":{"mode":"automatic","scope":"per-origin"},"type":"tabs.onZoomChange","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622813391,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"loading","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/tree/test","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"loading","type":"tabs.onUpdated","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622813392,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"loading","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/tree/test","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","newZoomFactor":0.8,"oldZoomFactor":0.8,"tabId":602195153,"zoomSettings":{"mode":"automatic","scope":"per-origin"},"type":"tabs.onZoomChange","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622813754,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"loading","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/tree/test","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"loading","type":"tabs.onUpdated","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622813755,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"loading","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/tree/test","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","newZoomFactor":0.8,"oldZoomFactor":0.8,"tabId":602195153,"zoomSettings":{"mode":"automatic","scope":"per-origin"},"type":"tabs.onZoomChange","httpSession":null},
+	{"pageUrl":"https://github.com/apache/flagon-useralejs/tree/test","pageTitle":"apache/flagon-useralejs at test","pageReferrer":"https://github.com/apache/flagon-useralejs","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814045,"scrnRes":{"width":1580,"height":1040},"logType":"custom","userAction":false,"details":{"pageLoadTime":null},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446819236","httpSessionId":"e7fc13e66e90540725f6c1c6074de227","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","type":"load"},
+	{"target":"a#pull-requests-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","path":["a#pull-requests-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","li.d-inline-flex","ul.UnderlineNav-body list-style-none","nav.js-repo-nav js-sidenav-container-pjax js-responsive-underlinenav overflow-hidden UnderlineNav","div.AppHeader-localBar","header.AppHeader","div.position-relative js-header-wrapper ","div.logged-in env-production page-responsive","body.logged-in env-production page-responsive intent-mouse","html","#document","Window"],"pageUrl":"https://github.com/apache/flagon-useralejs/tree/test","pageTitle":"apache/flagon-useralejs at test","pageReferrer":"https://github.com/apache/flagon-useralejs","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814146,"microTime":0.8,"location":{"x":285,"y":88},"scrnRes":{"width":1580,"height":1040},"type":"mouseup","logType":"raw","userAction":true,"details":{"clicks":1,"ctrl":false,"alt":false,"shift":false,"meta":false},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446819236","httpSessionId":"e7fc13e66e90540725f6c1c6074de227","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"a#pull-requests-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","path":["a#pull-requests-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","li.d-inline-flex","ul.UnderlineNav-body list-style-none","nav.js-repo-nav js-sidenav-container-pjax js-responsive-underlinenav overflow-hidden UnderlineNav","div.AppHeader-localBar","header.AppHeader","div.position-relative js-header-wrapper ","div.logged-in env-production page-responsive","body.logged-in env-production page-responsive intent-mouse","html","#document","Window"],"pageUrl":"https://github.com/apache/flagon-useralejs/tree/test","pageTitle":"apache/flagon-useralejs at test","pageReferrer":"https://github.com/apache/flagon-useralejs","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814146,"microTime":0.8,"location":{"x":285,"y":88},"scrnRes":{"width":1580,"height":1040},"type":"click","logType":"raw","userAction":true,"details":{"clicks":1,"ctrl":false,"alt":false,"shift":false,"meta":false},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446819236","httpSessionId":"e7fc13e66e90540725f6c1c6074de227","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814339,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"loading","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/tree/test","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"loading","type":"tabs.onUpdated","httpSession":"e7fc13e66e90540725f6c1c6074de227"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814341,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"loading","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/tree/test","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","newZoomFactor":0.8,"oldZoomFactor":0.8,"tabId":602195153,"zoomSettings":{"mode":"automatic","scope":"per-origin"},"type":"tabs.onZoomChange","httpSession":"e7fc13e66e90540725f6c1c6074de227"},
+	{"target":"#document","path":["Window"],"pageUrl":"https://github.com/apache/flagon-useralejs/tree/test","pageTitle":"apache/flagon-useralejs at test","pageReferrer":"https://github.com/apache/flagon-useralejs","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814340,"microTime":0.1,"location":{"x":null,"y":null},"scrnRes":{"width":1580,"height":1040},"type":"load","logType":"raw","userAction":true,"details":{"window":true},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446819236","httpSessionId":"e7fc13e66e90540725f6c1c6074de227","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814348,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"complete","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/tree/test","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"complete","type":"tabs.onUpdated","httpSession":"e7fc13e66e90540725f6c1c6074de227"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814406,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"loading","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/tree/test","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"loading","type":"tabs.onUpdated","httpSession":"e7fc13e66e90540725f6c1c6074de227"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814407,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"complete","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/tree/test","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"complete","type":"tabs.onUpdated","httpSession":"e7fc13e66e90540725f6c1c6074de227"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814408,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"complete","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/tree/test","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","newZoomFactor":0.8,"oldZoomFactor":0.8,"tabId":602195153,"zoomSettings":{"mode":"automatic","scope":"per-origin"},"type":"tabs.onZoomChange","httpSession":"e7fc13e66e90540725f6c1c6074de227"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814428,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"loading","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/pulls","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"loading","url":"https://github.com/apache/flagon-useralejs/pulls","type":"tabs.onUpdated","httpSession":"e7fc13e66e90540725f6c1c6074de227"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814429,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"complete","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/pulls","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"complete","type":"tabs.onUpdated","httpSession":"e7fc13e66e90540725f6c1c6074de227"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814429,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"complete","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/pulls","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","newZoomFactor":0.8,"oldZoomFactor":0.8,"tabId":602195153,"zoomSettings":{"mode":"automatic","scope":"per-origin"},"type":"tabs.onZoomChange","httpSession":"e7fc13e66e90540725f6c1c6074de227"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814430,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"complete","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/pulls","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","type":"tabs.onUpdated","httpSession":"e7fc13e66e90540725f6c1c6074de227"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814639,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"complete","title":"github.com/apache/flagon-useralejs/pulls","url":"https://github.com/apache/flagon-useralejs/pulls","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","title":"github.com/apache/flagon-useralejs/pulls","type":"tabs.onUpdated","httpSession":"e7fc13e66e90540725f6c1c6074de227"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814641,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"complete","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/pulls","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","title":"apache/flagon-useralejs at test","type":"tabs.onUpdated","httpSession":"e7fc13e66e90540725f6c1c6074de227"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814647,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"loading","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/pulls","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"loading","type":"tabs.onUpdated","httpSession":"e7fc13e66e90540725f6c1c6074de227"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814648,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"complete","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/pulls","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"complete","type":"tabs.onUpdated","httpSession":"e7fc13e66e90540725f6c1c6074de227"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622814648,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://github.githubassets.com/favicons/favicon.svg","groupId":-1,"height":832,"highlighted":true,"id":602195153,"incognito":false,"index":1,"mutedInfo":{"muted":true,"reason":"user"},"pinned":false,"selected":true,"status":"complete","title":"apache/flagon-useralejs at test","url":"https://github.com/apache/flagon-useralejs/pulls","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","newZoomFactor":0.8,"oldZoomFactor":0.8,"tabId":602195153,"zoomSettings":{"mode":"automatic","scope":"per-origin"},"type":"tabs.onZoomChange","httpSession":"e7fc13e66e90540725f6c1c6074de227"},
+	{"target":"a#actions-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","path":["a#actions-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","li.d-inline-flex","ul.UnderlineNav-body list-style-none","nav.js-repo-nav js-sidenav-container-pjax js-responsive-underlinenav overflow-hidden UnderlineNav","div.AppHeader-localBar","header.AppHeader","div.position-relative js-header-wrapper ","div.logged-in env-production page-responsive","body.logged-in env-production page-responsive","html","#document","Window"],"pageUrl":"https://github.com/apache/flagon-useralejs/pulls","pageTitle":"apache/flagon-useralejs at test","pageReferrer":"https://github.com/apache/flagon-useralejs","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622817336,"microTime":0.4,"location":{"x":375,"y":77},"scrnRes":{"width":1580,"height":1040},"type":"mouseover","logType":"raw","userAction":true,"details":null,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446819236","httpSessionId":"e7fc13e66e90540725f6c1c6074de227","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"a#pull-requests-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","path":["a#pull-requests-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","li.d-inline-flex","ul.UnderlineNav-body list-style-none","nav.js-repo-nav js-sidenav-container-pjax js-responsive-underlinenav overflow-hidden UnderlineNav","div.AppHeader-localBar","header.AppHeader","div.position-relative js-header-wrapper ","div.logged-in env-production page-responsive","body.logged-in env-production page-responsive intent-mouse","html","#document","Window"],"pageUrl":"https://github.com/apache/flagon-useralejs/pulls","pageTitle":"apache/flagon-useralejs at test","pageReferrer":"https://github.com/apache/flagon-useralejs","browser":{"browser":"chrome","version":"114.0.0"},"count":1,"duration":3190,"startTime":1708622814146,"endTime":1708622817336,"type":"click","logType":"interval","targetChange":true,"typeChange":true,"userAction":false,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446819236","httpSessionId":"e7fc13e66e90540725f6c1c6074de227","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"ul.list-style-none","path":["ul.list-style-none","nav","div.AppHeader-context-full","div.AppHeader-context","div.AppHeader-globalBar-start","div.AppHeader-globalBar pb-2 js-global-bar","header.AppHeader","div.position-relative js-header-wrapper ","div.logged-in env-production page-responsive","body.logged-in env-production page-responsive","html","#document","Window"],"pageUrl":"https://github.com/apache/flagon-useralejs/pulls","pageTitle":"apache/flagon-useralejs at test","pageReferrer":"https://github.com/apache/flagon-useralejs","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622817381,"microTime":0.3,"location":{"x":541,"y":31},"scrnRes":{"width":1580,"height":1040},"type":"mouseover","logType":"raw","userAction":true,"details":null,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446819236","httpSessionId":"e7fc13e66e90540725f6c1c6074de227","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"a#pull-requests-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","path":["a#pull-requests-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","li.d-inline-flex","ul.UnderlineNav-body list-style-none","nav.js-repo-nav js-sidenav-container-pjax js-responsive-underlinenav overflow-hidden UnderlineNav","div.AppHeader-localBar","header.AppHeader","div.position-relative js-header-wrapper ","div.logged-in env-production page-responsive","body.logged-in env-production page-responsive intent-mouse","html","#document","Window"],"pageUrl":"https://github.com/apache/flagon-useralejs/pulls","pageTitle":"apache/flagon-useralejs at test","pageReferrer":"https://github.com/apache/flagon-useralejs","browser":{"browser":"chrome","version":"114.0.0"},"count":1,"duration":3235,"startTime":1708622814146,"endTime":1708622817381,"type":"click","logType":"interval","targetChange":true,"typeChange":true,"userAction":false,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446819236","httpSessionId":"e7fc13e66e90540725f6c1c6074de227","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"div.AppHeader-globalBar pb-2 js-global-bar","path":["div.AppHeader-globalBar pb-2 js-global-bar","header.AppHeader","div.position-relative js-header-wrapper ","div.logged-in env-production page-responsive","body.logged-in env-production page-responsive","html","#document","Window"],"pageUrl":"https://github.com/apache/flagon-useralejs/pulls","pageTitle":"apache/flagon-useralejs at test","pageReferrer":"https://github.com/apache/flagon-useralejs","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622817412,"microTime":0.3,"location":{"x":642,"y":3},"scrnRes":{"width":1580,"height":1040},"type":"mouseover","logType":"raw","userAction":true,"details":null,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446819236","httpSessionId":"e7fc13e66e90540725f6c1c6074de227","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"a#pull-requests-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","path":["a#pull-requests-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","li.d-inline-flex","ul.UnderlineNav-body list-style-none","nav.js-repo-nav js-sidenav-container-pjax js-responsive-underlinenav overflow-hidden UnderlineNav","div.AppHeader-localBar","header.AppHeader","div.position-relative js-header-wrapper ","div.logged-in env-production page-responsive","body.logged-in env-production page-responsive intent-mouse","html","#document","Window"],"pageUrl":"https://github.com/apache/flagon-useralejs/pulls","pageTitle":"apache/flagon-useralejs at test","pageReferrer":"https://github.com/apache/flagon-useralejs","browser":{"browser":"chrome","version":"114.0.0"},"count":1,"duration":3266,"startTime":1708622814146,"endTime":1708622817412,"type":"click","logType":"interval","targetChange":true,"typeChange":true,"userAction":false,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446819236","httpSessionId":"e7fc13e66e90540725f6c1c6074de227","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"a#pull-requests-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","path":["a#pull-requests-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","li.d-inline-flex","ul.UnderlineNav-body list-style-none","nav.js-repo-nav js-sidenav-container-pjax js-responsive-underlinenav overflow-hidden UnderlineNav","div.AppHeader-localBar","header.AppHeader","div.position-relative js-header-wrapper ","div.logged-in env-production page-responsive","body.logged-in env-production page-responsive","html","#document","Window"],"pageUrl":"https://github.com/apache/flagon-useralejs/pulls","pageTitle":"apache/flagon-useralejs at test","pageReferrer":"https://github.com/apache/flagon-useralejs","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622819421,"microTime":0.5,"location":{"x":null,"y":null},"scrnRes":{"width":1580,"height":1040},"type":"blur","logType":"raw","userAction":true,"details":{"window":true},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446819236","httpSessionId":"e7fc13e66e90540725f6c1c6074de227","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"a#pull-requests-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","path":["a#pull-requests-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","li.d-inline-flex","ul.UnderlineNav-body list-style-none","nav.js-repo-nav js-sidenav-container-pjax js-responsive-underlinenav overflow-hidden UnderlineNav","div.AppHeader-localBar","header.AppHeader","div.position-relative js-header-wrapper ","div.logged-in env-production page-responsive","body.logged-in env-production page-responsive","html","#document","Window"],"pageUrl":"https://github.com/apache/flagon-useralejs/pulls","pageTitle":"apache/flagon-useralejs at test","pageReferrer":"https://github.com/apache/flagon-useralejs","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622819421,"microTime":0.5,"location":{"x":null,"y":null},"scrnRes":{"width":1580,"height":1040},"type":"blur","logType":"raw","userAction":true,"details":null,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446819236","httpSessionId":"e7fc13e66e90540725f6c1c6074de227","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"a#pull-requests-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","path":["a#pull-requests-tab.UnderlineNav-item no-wrap js-responsive-underlinenav-item js-selected-navigation-item","li.d-inline-flex","ul.UnderlineNav-body list-style-none","nav.js-repo-nav js-sidenav-container-pjax js-responsive-underlinenav overflow-hidden UnderlineNav","div.AppHeader-localBar","header.AppHeader","div.position-relative js-header-wrapper ","div.logged-in env-production page-responsive","body.logged-in env-production page-responsive intent-mouse","html","#document","Window"],"pageUrl":"https://github.com/apache/flagon-useralejs/pulls","pageTitle":"apache/flagon-useralejs at test","pageReferrer":"https://github.com/apache/flagon-useralejs","browser":{"browser":"chrome","version":"114.0.0"},"count":1,"duration":5275,"startTime":1708622814146,"endTime":1708622819421,"type":"click","logType":"interval","targetChange":false,"typeChange":true,"userAction":false,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446819236","httpSessionId":"e7fc13e66e90540725f6c1c6074de227","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622819439,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://incubator-flagon-distill.readthedocs.io/favicon.ico","groupId":-1,"height":832,"highlighted":true,"id":602195154,"incognito":false,"index":2,"mutedInfo":{"muted":false,"reason":"user"},"pinned":false,"selected":true,"status":"complete","title":"Installation Guide — Apache Distill 0.1.3 documentation","url":"https://incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","tabId":602195154,"windowId":602194905,"type":"tabs.onActivated","httpSession":null},
+	{"target":"Window","path":["Window"],"pageUrl":"https://github.com/apache/flagon-useralejs/pulls","pageTitle":"apache/flagon-useralejs at test","pageReferrer":"https://github.com/apache/flagon-useralejs","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622819441,"microTime":0.1,"location":{"x":null,"y":null},"scrnRes":{"width":1580,"height":1040},"type":"blur","logType":"raw","userAction":true,"details":{"window":true},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446819236","httpSessionId":"e7fc13e66e90540725f6c1c6074de227","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622821527,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://incubator-flagon-distill.readthedocs.io/favicon.ico","groupId":-1,"height":832,"highlighted":true,"id":602195154,"incognito":false,"index":2,"mutedInfo":{"muted":false,"reason":"user"},"pinned":false,"selected":true,"status":"loading","title":"Installation Guide — Apache Distill 0.1.3 documentation","url":"https://incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill-in-an-virtual-environment","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"loading","url":"https://incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill-in-an-virtual-environment","type":"tabs.onUpdated","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622821529,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://incubator-flagon-distill.readthedocs.io/favicon.ico","groupId":-1,"height":832,"highlighted":true,"id":602195154,"incognito":false,"index":2,"mutedInfo":{"muted":false,"reason":"user"},"pinned":false,"selected":true,"status":"complete","title":"Installation Guide — Apache Distill 0.1.3 documentation","url":"https://incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill-in-an-virtual-environment","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","status":"complete","type":"tabs.onUpdated","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622821531,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://incubator-flagon-distill.readthedocs.io/favicon.ico","groupId":-1,"height":832,"highlighted":true,"id":602195154,"incognito":false,"index":2,"mutedInfo":{"muted":false,"reason":"user"},"pinned":false,"selected":true,"status":"complete","title":"Installation Guide — Apache Distill 0.1.3 documentation","url":"https://incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill-in-an-virtual-environment","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","newZoomFactor":1,"oldZoomFactor":1,"tabId":602195154,"zoomSettings":{"mode":"automatic","scope":"per-origin"},"type":"tabs.onZoomChange","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622821531,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://incubator-flagon-distill.readthedocs.io/favicon.ico","groupId":-1,"height":832,"highlighted":true,"id":602195154,"incognito":false,"index":2,"mutedInfo":{"muted":false,"reason":"user"},"pinned":false,"selected":true,"status":"complete","title":"Installation Guide — Apache Distill 0.1.3 documentation","url":"https://incubator-flagon-distill.readthedocs.io/en/stable/installation.html#installing-apache-distill-in-an-virtual-environment","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","favIconUrl":"https://incubator-flagon-distill.readthedocs.io/favicon.ico","type":"tabs.onUpdated","httpSession":null},
+	{"pageUrl":"chrome-extension://glifkfgngpmliakinpibmjodbclonhjd/_generated_background_page.html","pageTitle":"","pageReferrer":"","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622825708,"scrnRes":{"width":0,"height":0},"logType":"custom","userAction":true,"details":{"active":true,"audible":false,"autoDiscardable":true,"discarded":false,"favIconUrl":"https://beam.apache.org/images/favicon.ico","groupId":-1,"height":832,"highlighted":true,"id":602195158,"incognito":false,"index":3,"mutedInfo":{"muted":false},"pinned":false,"selected":true,"status":"complete","title":"About","url":"https://beam.apache.org/about/","width":1264,"windowId":602194905},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708622797436","httpSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918","tabId":602195158,"windowId":602194905,"type":"tabs.onActivated","httpSession":"72798a8ad776417183b1aa14e03c3132"},
+	{"target":"Window","path":["Window"],"pageUrl":"https://beam.apache.org/about/","pageTitle":"About","pageReferrer":"https://beam.apache.org/case-studies/","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622825710,"microTime":0.5,"location":{"x":null,"y":null},"scrnRes":{"width":1264,"height":832},"type":"focus","logType":"raw","userAction":true,"details":{"window":true},"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446947239","httpSessionId":"72798a8ad776417183b1aa14e03c3132","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"nav.navigation-bar-desktop","path":["nav.navigation-bar-desktop","body.body","html.no-js","#document","Window"],"pageUrl":"https://beam.apache.org/about/","pageTitle":"About","pageReferrer":"https://beam.apache.org/case-studies/","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622826819,"microTime":0.8,"location":{"x":678,"y":5},"scrnRes":{"width":1264,"height":832},"type":"mouseover","logType":"raw","userAction":true,"details":null,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446947239","httpSessionId":"72798a8ad776417183b1aa14e03c3132","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"a.dropdown-toggle navbar-link","path":["a.dropdown-toggle navbar-link","li.dropdown navbar-dropdown navbar-dropdown-documentation","div.navbar-links","div.navbar-bar-left","nav.navigation-bar-desktop","body.body","html.no-js","#document","Window"],"pageUrl":"https://beam.apache.org/about/","pageTitle":"About","pageReferrer":"https://beam.apache.org/case-studies/","browser":{"browser":"chrome","version":"114.0.0"},"count":1,"duration":22354,"startTime":1708622804465,"endTime":1708622826819,"type":"mouseover","logType":"interval","targetChange":true,"typeChange":false,"userAction":false,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446947239","httpSessionId":"72798a8ad776417183b1aa14e03c3132","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"a.navbar-link","path":["a.navbar-link","div.navbar-links","div.navbar-bar-left","nav.navigation-bar-desktop","body.body","html.no-js","#document","Window"],"pageUrl":"https://beam.apache.org/about/","pageTitle":"About","pageReferrer":"https://beam.apache.org/case-studies/","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622826858,"microTime":0.2,"location":{"x":548,"y":56},"scrnRes":{"width":1264,"height":832},"type":"mouseover","logType":"raw","userAction":true,"details":null,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446947239","httpSessionId":"72798a8ad776417183b1aa14e03c3132","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"a.dropdown-toggle navbar-link","path":["a.dropdown-toggle navbar-link","li.dropdown navbar-dropdown navbar-dropdown-documentation","div.navbar-links","div.navbar-bar-left","nav.navigation-bar-desktop","body.body","html.no-js","#document","Window"],"pageUrl":"https://beam.apache.org/about/","pageTitle":"About","pageReferrer":"https://beam.apache.org/case-studies/","browser":{"browser":"chrome","version":"114.0.0"},"count":1,"duration":22393,"startTime":1708622804465,"endTime":1708622826858,"type":"mouseover","logType":"interval","targetChange":true,"typeChange":false,"userAction":false,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446947239","httpSessionId":"72798a8ad776417183b1aa14e03c3132","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"nav.navigation-bar-desktop","path":["nav.navigation-bar-desktop","body.body","html.no-js","#document","Window"],"pageUrl":"https://beam.apache.org/about/","pageTitle":"About","pageReferrer":"https://beam.apache.org/case-studies/","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622826869,"microTime":0.4,"location":{"x":481,"y":71},"scrnRes":{"width":1264,"height":832},"type":"mouseover","logType":"raw","userAction":true,"details":null,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446947239","httpSessionId":"72798a8ad776417183b1aa14e03c3132","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"a.dropdown-toggle navbar-link","path":["a.dropdown-toggle navbar-link","li.dropdown navbar-dropdown navbar-dropdown-documentation","div.navbar-links","div.navbar-bar-left","nav.navigation-bar-desktop","body.body","html.no-js","#document","Window"],"pageUrl":"https://beam.apache.org/about/","pageTitle":"About","pageReferrer":"https://beam.apache.org/case-studies/","browser":{"browser":"chrome","version":"114.0.0"},"count":1,"duration":22404,"startTime":1708622804465,"endTime":1708622826869,"type":"mouseover","logType":"interval","targetChange":true,"typeChange":false,"userAction":false,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446947239","httpSessionId":"72798a8ad776417183b1aa14e03c3132","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"},
+	{"target":"a.dropdown-toggle navbar-link","path":["a.dropdown-toggle navbar-link","li.dropdown navbar-dropdown navbar-dropdown-documentation","div.navbar-links","div.navbar-bar-left","nav.navigation-bar-desktop","body.body","html.no-js","#document","Window"],"pageUrl":"https://beam.apache.org/about/","pageTitle":"About","pageReferrer":"https://beam.apache.org/case-studies/","browser":{"browser":"chrome","version":"114.0.0"},"clientTime":1708622827255,"microTime":0.1,"location":{"x":353,"y":57},"scrnRes":{"width":1264,"height":832},"type":"mouseover","logType":"raw","userAction":true,"details":null,"userId":"MD","toolVersion":"","toolName":"","useraleVersion":"2.4.0","sessionID":"session_1708446947239","httpSessionId":"72798a8ad776417183b1aa14e03c3132","browserSessionId":"9486d2f32a8f9d4ef0dae14430c3b918"}
+]

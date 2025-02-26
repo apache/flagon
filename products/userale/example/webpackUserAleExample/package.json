@@ -1,0 +1,48 @@
+{
+  "name": "flagon-userale-example",
+  "version": "0.1.0",
+  "description": "NODE Example for Apache UserALE: the UserALE client for DOM and JavaScript-based applications. It automatically attaches event handlers to log every user interaction on a web page, including rich JS single-page apps.",
+  "main": "index.js",
+  "scripts": {
+    "test-example": "echo \"Error: no test specified\" && exit 1",
+    "build-example": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://git.apache.org/incubator-flagon-useralejs/example.git"
+  },
+  "keywords": [
+    "UserALE",
+    "Logging",
+    "Log Analytics",
+    "Business Analytics",
+    "Usability",
+    "User Testing",
+    "Behavioral Analytics"
+  ],
+  "author": "Apache Flagon",
+  "contributors": [
+    "Joshua C. Poore",
+    "Clay Gimenez",
+    "Robert Foley",
+    "Michelle Beard",
+    "Alex Ford",
+    "Gedd Johnson"
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://issues.apache.org/jira/browse/FLAGON"
+  },
+  "homepage": "http://flagon.incubator.apache.org",
+  "engines": {
+    "node": "10.10.0 || 11.10.0 - 12.20.1 || >=13.7.0",
+    "npm": "6.4.1 || 6.7.0 - 6.12.1 || >=6.13.4"
+  },
+  "dependencies": {
+    "flagon-userale": "^2.3.0"
+  },
+  "devDependencies": {
+    "webpack": "^5.76.0",
+    "webpack-cli": "^4.10.0"
+  }
+}

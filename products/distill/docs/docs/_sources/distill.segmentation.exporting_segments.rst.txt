@@ -1,0 +1,24 @@
+==================
+Exporting Segments
+==================
+``Segments`` objects can be exported into csv files for further analysis.  Distill provides a simple function to do this:
+``export_segments``.  This function will take in the path to place the new file along with a ``Segments`` object and output
+a new csv with each ``Segment`` on a new line.  Note that this function will not currently export user defined attributes that
+are not inherently within a ``Segment`` object.  This function can be used as follows:
+
+.. code:: python
+
+    # Segments object
+    segments
+
+    # Export segments into a csv file
+    distill.export_segments("./test.csv", segments)
+
+The above code will create a csv file in the current directory entitled "test.csv".  An example of what this file looks
+like with two ``Segment`` objects can be seen below:
+
+.. code:: console
+
+    Segment Name,Start Time,End Time,Number of Logs,Generate Field Name,Generate Matched Values,Segment Type
+    segment1,0,1,5,type,['click'],Segment_Type.GENERATE
+    segment2,2,3,6,type,['click'],Segment_Type.GENERATE
