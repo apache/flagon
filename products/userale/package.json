@@ -11,7 +11,6 @@
     "license:check": "license-eye -c .licenserc.yaml header check",
     "license:fix": "license-eye -c .licenserc.yaml header fix",
     "build": "tsc && npm run clean && rollup -c --bundleConfigAsCjs rollup.config.js",
-    "postbuild": "npm run license:fix",
     "clean": "rm -rf ./build",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "jest -c ./test/unit/jest.config.ts",
@@ -21,7 +20,7 @@
     "example:run": "node example/server.js",
     "example:watch": "nodemon -w ./example example/server.js",
     "prepare": "husky",
-    "postinstall": "go install github.com/apache/skywalking-eyes/cmd/license-eye@latest && npx playwright install",
+    "postinstall": "npx playwright install",
     "commit": "cz"
   },
   "repository": {
