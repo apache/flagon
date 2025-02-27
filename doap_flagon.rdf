@@ -1,19 +1,3 @@
-<!--
-        Licensed to the Apache Software Foundation (ASF) under one or more
-        contributor license agreements.  See the NOTICE file distributed with
-        this work for additional information regarding copyright ownership.
-        The ASF licenses this file to You under the Apache License, Version 2.0
-        (the "License"); you may not use this file except in compliance with
-        the License.  You may obtain a copy of the License at
-
-             http://www.apache.org/licenses/LICENSE-2.0
-
-        Unless required by applicable law or agreed to in writing, software
-        distributed under the License is distributed on an "AS IS" BASIS,
-        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-        See the License for the specific language governing permissions and
-        limitations under the License.
-    -->
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl"?>
 <rdf:RDF xml:lang="en"
@@ -21,38 +5,45 @@
          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:asfext="http://projects.apache.org/ns/asfext#"
          xmlns:foaf="http://xmlns.com/foaf/0.1/">
-    
-    <Project rdf:about="http://flagon.incubator.apache.org">
-        <created>2016-11-10</created>
-        <license rdf:resource="http://usefulinc.com/doap/licenses/asl20" />
-        <name>Apache Flagon</name>
-        <homepage rdf:resource="https://flagon.apache.org/" />
-        <asfext:pmc rdf:resource="https://flagon.apache.org/" />
-        <shortdesc>UserALE is the UserALE client for DOM and JavaScript-based applications.</shortdesc>
-        <description>UserALE is the UserALE client for DOM and JavaScript-based applications. It automatically attaches event handlers to log every user interaction on a web page, including rich JS single-page apps.</description>
-        <bug-database rdf:resource="https://github.com/apache/flagon-useralejs/issues" />
-        <mailing-list rdf:resource="dev@flagon.apache.org" />
-        <download-page rdf:resource="https://flagon.apache.org/releases/" />
-        <programming-language>Javascript</programming-language>
-        <category rdf:resource="https://projects.apache.org/projects.html?category#Library" />
-        <release>
-            <Version>
-                <name>2.4.0 release</name>
-                <created>2022-04-06</created>
-                <revision>2.4.0</revision>
-            </Version>
-        </release>
-        <repository>
-            <GITRepository>
-                <location rdf:resource="https://gitbox.apache.org/repos/asf/flagon-useralejs.git"/>
-                <browse rdf:resource="https://github.com/apache/flagon-useralejs"/>
-            </GITRepository>
-        </repository>
-        <maintainer>
-            <foaf:Person>
-                <foaf:name>Joshua Poore</foaf:name>
-                <foaf:mbox rdf:resource="mailto:poorejc@apache.org"/>
-            </foaf:Person>
-        </maintainer>
-    </Project>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+         https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+  <Project rdf:about="https://flagon.apache.org/">
+    <created>2024-04-10</created>
+    <license rdf:resource="https://spdx.org/licenses/Apache-2.0" />
+    <name>Apache Flagon</name>
+    <homepage rdf:resource="https://flagon.apache.org/" />
+    <asfext:pmc rdf:resource="https://flagon.apache.org/" />
+    <shortdesc>Flagon includes both UserALE, an instrumentation tool for web applications, and Distill, a python library for analyzing UserALE telemetry.</shortdesc>
+    <description>Flagon includes both UserALE, an instrumentation tool for web applications, and Distill, a python library for analyzing UserALE telemetry.</description>
+    <bug-database rdf:resource="https://github.com/apache/flagon/issues" />
+    <mailing-list rdf:resource="https://lists.apache.org/list.html?dev@flagon.apache.org" />
+    <download-page rdf:resource="https://dist.apache.org/repos/dist/release/flagon/" />
+    <programming-language>JavaScript</programming-language>
+    <programming-language>Python</programming-language>
+    <programming-language>Typescript</programming-language>
+    <category rdf:resource="https://projects.apache.org/category/observability" />
+    <category rdf:resource="https://projects.apache.org/category/testing" />
+    <category rdf:resource="https://projects.apache.org/category/python" />
+    <category rdf:resource="https://projects.apache.org/category/data-visualization" />
+    <repository>
+      <GitRepository>
+        <location rdf:resource="https://github.com/apache/flagon.git"/>
+        <browse rdf:resource="https://github.com/apache/flagon/"/>
+      </GitRepository>
+    </repository>
+  </Project>
 </rdf:RDF>

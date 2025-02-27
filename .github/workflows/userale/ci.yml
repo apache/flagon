@@ -21,17 +21,17 @@
 name: CI test suite
 run-name: ${{ github.actor }} running CI test suite
 
-# on:
-#   push:
-#     branches:
-#       - master
-#     paths:
-#       - products/userale/**
-#   pull_request:
-#     branches:
-#       - master
-#     paths:
-#       - products/userale/**
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - products/userale/**
+  pull_request:
+    branches:
+      - master
+    paths:
+      - products/userale/**
 
 defaults:
   run:
