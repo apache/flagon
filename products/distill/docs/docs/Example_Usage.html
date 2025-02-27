@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example Usage of Distill &mdash; Apache Flagon Distill  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Utility Functions" href="Utility_Functions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Apache Flagon Distill
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Graph_Index.html">Graph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Segmentation.html">Segmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Process.html">Process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Utilities</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example Usage of Distill</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#imports">Imports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#processing-and-segmentation">Processing and Segmentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#processing-the-json-file">Processing the JSON File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#further-segmentation-of-sessions">Further Segmentation of Sessions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#visualization-of-segment-objects">Visualization of <code class="docutils literal notranslate"><span class="pre">Segment</span></code> Objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#visualization-with-plotly-s-timeline">Visualization with Plotly’s Timeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#visualizing-user-workflows-with-digraphs">Visualizing User Workflows with DiGraphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#measuring-similarity-with-edit-distance">Measuring Similarity with Edit Distance</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache Flagon Distill</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Example Usage of Distill</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Example_Usage.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="example-usage-of-distill">
+<h1>Example Usage of Distill<a class="headerlink" href="#example-usage-of-distill" title="Permalink to this headline"></a></h1>
+<p>In this example, we run through a simulated user experiment using UserALE data generated within an instantiation of
+Superset. This data reflects four simulated user sessions in which the user performs three tasks within the Video Game
+Sales example dashboard:</p>
+<ol class="arabic simple">
+<li><p>Filter the Video Games Sales by Wii, Racing, and Nintendo.</p></li>
+<li><p>Find Mario Kart in the list of games.</p></li>
+<li><p>Determine the difference in global sales between the 3DS game Nintendogs + cats and Wii Sports.</p></li>
+</ol>
+<p>A screenshot of this Superset dashboard can be seen below:</p>
+<a class="reference internal image-reference" href="_images/Superset_Dashboard.png"><img alt="_images/Superset_Dashboard.png" src="_images/Superset_Dashboard.png" style="width: 700px;" /></a>
+<p>The data of these four sessions is captured in a JSON file entitled <cite>task_example.json</cite>.  In the following example, we
+will:</p>
+<ul class="simple">
+<li><p>Show how to use Distill’s Segmentation package to create useful <code class="docutils literal notranslate"><span class="pre">Segments</span></code> of data.</p></li>
+<li><p>Visualize <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects using timeline/gantt and digraph visualizations.</p></li>
+<li><p>Compare each of these user sessions through the investigation of edit distances.</p></li>
+</ul>
+<p><strong>Note: The data utilized in this example was not data collected in any user study.  Rather this data is simulated
+through developer interactions with the Superset dashboard.</strong></p>
+<section id="imports">
+<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline"></a></h2>
+<p>The first step in this example is to import all of the packages that we need.  We do this with the code below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">distill</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="kn">import</span> <span class="nn">re</span>
+</pre></div>
+</div>
+</section>
+<section id="processing-and-segmentation">
+<h2>Processing and Segmentation<a class="headerlink" href="#processing-and-segmentation" title="Permalink to this headline"></a></h2>
+<p>Now that we have imported all of the necessary packages, we can begin to process and segment the data.  This can be done
+by creating <code class="docutils literal notranslate"><span class="pre">Segment</span></code>/<code class="docutils literal notranslate"><span class="pre">Segments</span></code> objects.  These objects will help us to visualize the data and understand processes
+that the users took to perform each of the three tasks.</p>
+<section id="processing-the-json-file">
+<h3>Processing the JSON File<a class="headerlink" href="#processing-the-json-file" title="Permalink to this headline"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">setup</span></code> function is used to convert a JSON file into the required format for segmentation.  It also allows us to
+assert the date format that we want to use for our analysis (i.e., integer or <code class="docutils literal notranslate"><span class="pre">datetime</span></code>).  Below we define this
+function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">date_type</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+        <span class="n">raw_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">log</span> <span class="ow">in</span> <span class="n">raw_data</span><span class="p">:</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">distill</span><span class="o">.</span><span class="n">getUUID</span><span class="p">(</span><span class="n">log</span><span class="p">)]</span> <span class="o">=</span> <span class="n">log</span>
+
+    <span class="c1"># Convert clientTime to specified type</span>
+    <span class="k">for</span> <span class="n">uid</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">log</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">uid</span><span class="p">]</span>
+        <span class="n">client_time</span> <span class="o">=</span> <span class="n">log</span><span class="p">[</span><span class="s1">&#39;clientTime&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">date_type</span> <span class="o">==</span> <span class="s2">&quot;integer&quot;</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;clientTime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">epoch_to_datetime</span><span class="p">(</span><span class="n">client_time</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">date_type</span> <span class="o">==</span> <span class="s2">&quot;datetime&quot;</span><span class="p">:</span>
+            <span class="n">log</span><span class="p">[</span><span class="s1">&#39;clientTime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">client_time</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;ms&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;unix&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Sort</span>
+    <span class="n">sorted_data</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">kv</span><span class="p">:</span> <span class="n">kv</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;clientTime&#39;</span><span class="p">])</span>
+    <span class="n">sorted_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">sorted_data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">sorted_data</span><span class="p">,</span> <span class="n">sorted_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Using this function, we can process the UserALE data and create <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects that represent each of the four user
+sessions.  This is shown below through the utilization of the <code class="docutils literal notranslate"><span class="pre">generate_collapsing_window_segments</span></code> function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_many_session</span> <span class="o">=</span> <span class="n">setup</span><span class="p">(</span><span class="s2">&quot;./data/task_example.json&quot;</span><span class="p">,</span> <span class="s2">&quot;datetime&quot;</span><span class="p">)</span>
+<span class="n">sorted_dict</span> <span class="o">=</span> <span class="n">data_many_session</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Create segments based on sessionID</span>
+<span class="n">segments</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">Segments</span><span class="p">()</span>
+<span class="n">session_ids</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">distill</span><span class="o">.</span><span class="n">find_meta_values</span><span class="p">(</span><span class="s1">&#39;sessionID&#39;</span><span class="p">,</span> <span class="n">sorted_dict</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">sessionID</span><span class="p">:</span> <span class="n">sessionID</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">session_id</span> <span class="ow">in</span> <span class="n">session_ids</span><span class="p">:</span>
+    <span class="n">segments</span><span class="o">.</span><span class="n">append_segments</span><span class="p">(</span><span class="n">distill</span><span class="o">.</span><span class="n">generate_collapsing_window_segments</span><span class="p">(</span><span class="n">sorted_dict</span><span class="p">,</span> <span class="s1">&#39;sessionID&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">session_id</span><span class="p">],</span> <span class="n">session_id</span><span class="p">))</span>
+
+<span class="c1"># Improve readability of Segment names</span>
+<span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">segments</span><span class="p">)):</span>
+    <span class="n">segments</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">segment_name</span> <span class="o">=</span> <span class="s2">&quot;Session&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Below we list out each of the created <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects along with their number of logs and start times.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Session0   Length: 427   Start Time: 2022-05-16 21:25:57.935000</span>
+<span class="go">Session1   Length: 236   Start Time: 2022-05-16 21:27:38.283000</span>
+<span class="go">Session2   Length: 332   Start Time: 2022-05-16 21:28:59.774000</span>
+<span class="go">Session3   Length: 219   Start Time: 2022-05-16 21:30:25.633000</span>
+</pre></div>
+</div>
+</section>
+<section id="further-segmentation-of-sessions">
+<h3>Further Segmentation of Sessions<a class="headerlink" href="#further-segmentation-of-sessions" title="Permalink to this headline"></a></h3>
+<p>Now that there are <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects that represent each session, let’s write the <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects. This will allow
+us to further segment these session segments to analyze the activity of the user during each of these sessions.  This
+can be done with the following code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">segment_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">segment</span><span class="o">.</span><span class="n">segment_name</span> <span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">]</span>
+<span class="n">start_end_vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">segment</span><span class="o">.</span><span class="n">start_end_val</span> <span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">]</span>
+<span class="n">segment_map</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">write_segment</span><span class="p">(</span><span class="n">sorted_dict</span><span class="p">,</span> <span class="n">segment_names</span><span class="p">,</span> <span class="n">start_end_vals</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can now generate <code class="docutils literal notranslate"><span class="pre">Segments</span></code> objects within each of those session segments that represent user interactions on two
+different elements of the Superset dashboard.</p>
+<p>The first element involves user interactions with the filter window that filters the list of video games (shown in the
+screenshot below).  The element in the path that represents these interactions is “div.filter-container css-ffe7is.”</p>
+<a class="reference internal image-reference" href="_images/Video_Game_Filter.png"><img alt="_images/Video_Game_Filter.png" src="_images/Video_Game_Filter.png" style="width: 500px;" /></a>
+<p>The second element involves interactions with the actual list of video games (shown in the screenshot below) represented
+by the “div#chart-id-110.superset-chart-table” path element.</p>
+<a class="reference internal image-reference" href="_images/Games_List.png"><img alt="_images/Games_List.png" src="_images/Games_List.png" style="width: 500px;" /></a>
+<p>By creating <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects that show user interaction on these two windows, we can get an understanding of how the
+user is using the Superset dashboard to complete the three tasks.  We create these <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects with the
+following code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">session_0_segments</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">generate_collapsing_window_segments</span><span class="p">(</span><span class="n">segment_map</span><span class="p">[</span><span class="s1">&#39;Session0&#39;</span><span class="p">],</span> <span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;div.filter-container css-ffe7is&#39;</span><span class="p">],</span> <span class="s2">&quot;Game_Filter&quot;</span><span class="p">)</span>
+<span class="n">session_1_segments</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">generate_collapsing_window_segments</span><span class="p">(</span><span class="n">segment_map</span><span class="p">[</span><span class="s1">&#39;Session1&#39;</span><span class="p">],</span> <span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;div.filter-container css-ffe7is&#39;</span><span class="p">],</span> <span class="s2">&quot;Game_Filter&quot;</span><span class="p">)</span>
+<span class="n">session_2_segments</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">generate_collapsing_window_segments</span><span class="p">(</span><span class="n">segment_map</span><span class="p">[</span><span class="s1">&#39;Session2&#39;</span><span class="p">],</span> <span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;div.filter-container css-ffe7is&#39;</span><span class="p">],</span> <span class="s2">&quot;Game_Filter&quot;</span><span class="p">)</span>
+<span class="n">session_3_segments</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">generate_collapsing_window_segments</span><span class="p">(</span><span class="n">segment_map</span><span class="p">[</span><span class="s1">&#39;Session3&#39;</span><span class="p">],</span> <span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;div.filter-container css-ffe7is&#39;</span><span class="p">],</span> <span class="s2">&quot;Game_Filter&quot;</span><span class="p">)</span>
+
+<span class="n">session_0_segments</span><span class="o">.</span><span class="n">append_segments</span><span class="p">(</span><span class="n">distill</span><span class="o">.</span><span class="n">generate_collapsing_window_segments</span><span class="p">(</span><span class="n">segment_map</span><span class="p">[</span><span class="s1">&#39;Session0&#39;</span><span class="p">],</span> <span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;div#chart-id-110.superset-chart-table&#39;</span><span class="p">],</span> <span class="s2">&quot;Games&quot;</span><span class="p">))</span>
+<span class="n">session_1_segments</span><span class="o">.</span><span class="n">append_segments</span><span class="p">(</span><span class="n">distill</span><span class="o">.</span><span class="n">generate_collapsing_window_segments</span><span class="p">(</span><span class="n">segment_map</span><span class="p">[</span><span class="s1">&#39;Session1&#39;</span><span class="p">],</span> <span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;div#chart-id-110.superset-chart-table&#39;</span><span class="p">],</span> <span class="s2">&quot;Games&quot;</span><span class="p">))</span>
+<span class="n">session_2_segments</span><span class="o">.</span><span class="n">append_segments</span><span class="p">(</span><span class="n">distill</span><span class="o">.</span><span class="n">generate_collapsing_window_segments</span><span class="p">(</span><span class="n">segment_map</span><span class="p">[</span><span class="s1">&#39;Session2&#39;</span><span class="p">],</span> <span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;div#chart-id-110.superset-chart-table&#39;</span><span class="p">],</span> <span class="s2">&quot;Games&quot;</span><span class="p">))</span>
+<span class="n">session_3_segments</span><span class="o">.</span><span class="n">append_segments</span><span class="p">(</span><span class="n">distill</span><span class="o">.</span><span class="n">generate_collapsing_window_segments</span><span class="p">(</span><span class="n">segment_map</span><span class="p">[</span><span class="s1">&#39;Session3&#39;</span><span class="p">],</span> <span class="s1">&#39;path&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;div#chart-id-110.superset-chart-table&#39;</span><span class="p">],</span> <span class="s2">&quot;Games&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Now, we append each of those newly generated <code class="docutils literal notranslate"><span class="pre">Segments</span></code> objects to the overarching segments variable. This will create
+one large <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object that contains all <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects from all sessions.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">segments</span><span class="o">.</span><span class="n">append_segments</span><span class="p">(</span><span class="n">session_0_segments</span><span class="p">)</span>
+<span class="n">segments</span><span class="o">.</span><span class="n">append_segments</span><span class="p">(</span><span class="n">session_1_segments</span><span class="p">)</span>
+<span class="n">segments</span><span class="o">.</span><span class="n">append_segments</span><span class="p">(</span><span class="n">session_2_segments</span><span class="p">)</span>
+<span class="n">segments</span><span class="o">.</span><span class="n">append_segments</span><span class="p">(</span><span class="n">session_3_segments</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="visualization-of-segment-objects">
+<h2>Visualization of <code class="docutils literal notranslate"><span class="pre">Segment</span></code> Objects<a class="headerlink" href="#visualization-of-segment-objects" title="Permalink to this headline"></a></h2>
+<p>To understand these <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects better, we can visualize them.  First, we will visualize them using Plotly’s
+timeline function, then we will analyze them by creating DiGraphs.</p>
+<section id="visualization-with-plotly-s-timeline">
+<h3>Visualization with Plotly’s Timeline<a class="headerlink" href="#visualization-with-plotly-s-timeline" title="Permalink to this headline"></a></h3>
+<p>The following code can be used to define a function that will display a Plotly timeline of each of the <code class="docutils literal notranslate"><span class="pre">Segment</span></code>
+objects:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">display_segments</span><span class="p">(</span><span class="n">segments</span><span class="p">):</span>
+    <span class="n">segment_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">segment</span><span class="o">.</span><span class="n">start_end_val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">segment</span><span class="o">.</span><span class="n">start_end_val</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
+            <span class="n">new_segment</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">Segment</span><span class="p">()</span>
+            <span class="n">new_segment</span><span class="o">.</span><span class="n">segment_name</span> <span class="o">=</span> <span class="n">segment</span><span class="o">.</span><span class="n">segment_name</span>
+            <span class="n">new_segment</span><span class="o">.</span><span class="n">num_logs</span> <span class="o">=</span> <span class="n">segment</span><span class="o">.</span><span class="n">num_logs</span>
+            <span class="n">new_segment</span><span class="o">.</span><span class="n">uids</span> <span class="o">=</span> <span class="n">segment</span><span class="o">.</span><span class="n">uids</span>
+            <span class="n">new_segment</span><span class="o">.</span><span class="n">generate_field_name</span> <span class="o">=</span> <span class="n">segment</span><span class="o">.</span><span class="n">generate_field_name</span>
+            <span class="n">new_segment</span><span class="o">.</span><span class="n">generate_matched_values</span> <span class="o">=</span> <span class="n">segment</span><span class="o">.</span><span class="n">generate_matched_values</span>
+            <span class="n">new_segment</span><span class="o">.</span><span class="n">segment_type</span> <span class="o">=</span> <span class="n">segment</span><span class="o">.</span><span class="n">segment_type</span>
+            <span class="n">new_segment</span><span class="o">.</span><span class="n">start_end_val</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">segment</span><span class="o">.</span><span class="n">start_end_val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;ms&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;unix&#39;</span><span class="p">),</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">segment</span><span class="o">.</span><span class="n">start_end_val</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;ms&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;unix&#39;</span><span class="p">))</span>
+            <span class="n">segment_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_segment</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">segment_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">segment</span><span class="p">)</span>
+    <span class="n">new_segments</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">Segments</span><span class="p">(</span><span class="n">segments</span><span class="o">=</span><span class="n">segment_list</span><span class="p">)</span>
+    <span class="n">distill</span><span class="o">.</span><span class="n">export_segments</span><span class="p">(</span><span class="s2">&quot;./test.csv&quot;</span><span class="p">,</span><span class="n">new_segments</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;./test.csv&quot;</span><span class="p">)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">timeline</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">x_start</span><span class="o">=</span><span class="s2">&quot;Start Time&quot;</span><span class="p">,</span> <span class="n">x_end</span><span class="o">=</span><span class="s2">&quot;End Time&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Segment Name&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Number of Logs&quot;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">autorange</span><span class="o">=</span><span class="s2">&quot;reversed&quot;</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;./test.csv&quot;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Using this code, we can visualize the <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects we created.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">display_segments</span><span class="p">(</span><span class="n">segments</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will produce the following timeline graph:</p>
+<a class="reference internal image-reference" href="_images/Timeline_Graph.png"><img alt="_images/Timeline_Graph.png" src="_images/Timeline_Graph.png" style="width: 700px;" /></a>
+<p>This graph shows the number of logs in each <code class="docutils literal notranslate"><span class="pre">Segment</span></code> while also showing the length of time each <code class="docutils literal notranslate"><span class="pre">Segment</span></code>
+represents.  We can also begin to understand some of the interactions that each user had with the dashboard by
+analyzing the <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects that exist within each overarching session <code class="docutils literal notranslate"><span class="pre">Segment</span></code>.</p>
+</section>
+<section id="visualizing-user-workflows-with-digraphs">
+<h3>Visualizing User Workflows with DiGraphs<a class="headerlink" href="#visualizing-user-workflows-with-digraphs" title="Permalink to this headline"></a></h3>
+<p>Another way we can visualize user workflows is through the creation and analysis of DiGraphs. The function below
+(<code class="docutils literal notranslate"><span class="pre">draw_digraph</span></code>) draws a DiGraph based on the passed in <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object. These graphs are colored in such a way
+that interactions with the video game filter are colored in green while the interactions with the list of video games
+are colored in blue.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">draw_digraph</span><span class="p">(</span><span class="n">segments</span><span class="p">):</span>
+    <span class="n">nodes</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">segments</span><span class="o">.</span><span class="n">get_segment_list</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">segment</span><span class="p">:</span> <span class="n">segment</span><span class="o">.</span><span class="n">start_end_val</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">pairwiseSeq</span><span class="p">(</span><span class="n">segments</span><span class="o">.</span><span class="n">get_segment_list</span><span class="p">())</span>
+
+    <span class="c1"># Set coloring of graph based on element in Superset dashboard</span>
+    <span class="n">color_map</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;Game_Filter\S*&quot;</span><span class="p">,</span> <span class="n">segment</span><span class="o">.</span><span class="n">segment_name</span><span class="p">):</span>
+            <span class="n">color_map</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">color_map</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">createDiGraph</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span><span class="p">)</span>
+    <span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="n">color_map</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">graph</span>
+</pre></div>
+</div>
+<p>We can now use this function to create DiGraphs of each of the user sessions.</p>
+<p><strong>Graph 0 - Session 0</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">G0</span> <span class="o">=</span> <span class="n">draw_digraph</span><span class="p">(</span><span class="n">session_0_segments</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/Graph_0.png"><img alt="_images/Graph_0.png" src="_images/Graph_0.png" style="width: 400px;" /></a>
+<p><strong>Graph 1 - Session 1</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">G1</span> <span class="o">=</span> <span class="n">draw_digraph</span><span class="p">(</span><span class="n">session_1_segments</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/Graph_1.png"><img alt="_images/Graph_1.png" src="_images/Graph_1.png" style="width: 400px;" /></a>
+<p><strong>Graph 2 - Session 2</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">G2</span> <span class="o">=</span> <span class="n">draw_digraph</span><span class="p">(</span><span class="n">session_2_segments</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/Graph_2.png"><img alt="_images/Graph_2.png" src="_images/Graph_2.png" style="width: 400px;" /></a>
+<p><strong>Graph 3 - Session 3</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">G3</span> <span class="o">=</span> <span class="n">draw_digraph</span><span class="p">(</span><span class="n">session_3_segments</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/Graph_3.png"><img alt="_images/Graph_3.png" src="_images/Graph_3.png" style="width: 400px;" /></a>
+<p>By analyzing these graphs, we can understand the general interactions that users had with the two elements of the
+Superset dashboard. For instance, in each of these graphs, the user starts by filtering the dashboard. Based on the
+tasks that the user is meant to perform, this makes a lot of sense since the most logical way to filter the dashboard is
+through the filtering window. However, these graphs begin to differ in the amount of interactions that the user has with
+the actual list of video games. While users always follow the workflow: filter –&gt; game list –&gt; filter –&gt; game list,
+there are occasions when the user interacts more with the game list than others.</p>
+</section>
+</section>
+<section id="measuring-similarity-with-edit-distance">
+<h2>Measuring Similarity with Edit Distance<a class="headerlink" href="#measuring-similarity-with-edit-distance" title="Permalink to this headline"></a></h2>
+<p>One way to understand the differences between the previously generated DiGraphs is to look at their edit distance. Edit
+distance is a metric that measures how many distortions are necessary to turn one graph into another, thus measuring
+similarity.  For instance, taking the edit distance between a graph and itself yields an edit distance of 0, since the
+graphs are exactly the same.  We can show this using NetworkX’s <code class="docutils literal notranslate"><span class="pre">graph_edit_distance</span></code> to calculate the edit distance.</p>
+<p><strong>Input</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nx</span><span class="o">.</span><span class="n">graph_edit_distance</span><span class="p">(</span><span class="n">G0</span><span class="p">,</span> <span class="n">G0</span><span class="p">)</span>  <span class="c1"># 0.0</span>
+</pre></div>
+</div>
+<p>Let’s now calculate the edit distances between each graph to calculate an average.  Note, however, that when we try to
+calculate some edit distances, we run into a bit of an issue.  Since edit distance is a computationally complex problem,
+it can take a long time and require large amounts of computational resources to find an exact answer. To simplify this
+problem, we can use NetworkX’s <code class="docutils literal notranslate"><span class="pre">optimize_graph_edit_distance</span></code> function which will create an approximation of the graph
+edit distance.  For the following calculations, we use the function required depending on the length of time
+<code class="docutils literal notranslate"><span class="pre">graph_edit_distance</span></code> takes in each circumstance.</p>
+<p><strong>Input: G0, G1</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">next</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">optimize_graph_edit_distance</span><span class="p">(</span><span class="n">G0</span><span class="p">,</span> <span class="n">G1</span><span class="p">))</span>   <span class="c1"># 32.0</span>
+</pre></div>
+</div>
+<p><strong>Input: G0, G2</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">next</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">optimize_graph_edit_distance</span><span class="p">(</span><span class="n">G0</span><span class="p">,</span> <span class="n">G2</span><span class="p">))</span>   <span class="c1"># 34.0</span>
+</pre></div>
+</div>
+<p><strong>Input: G0, G3</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">next</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">optimize_graph_edit_distance</span><span class="p">(</span><span class="n">G0</span><span class="p">,</span> <span class="n">G3</span><span class="p">))</span>   <span class="c1"># 38.0</span>
+</pre></div>
+</div>
+<p><strong>Input: G1, G2</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nx</span><span class="o">.</span><span class="n">graph_edit_distance</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">G2</span><span class="p">)</span>   <span class="c1"># 2.0</span>
+</pre></div>
+</div>
+<p><strong>Input: G1, G3</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">next</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">optimize_graph_edit_distance</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">G3</span><span class="p">))</span>   <span class="c1"># 18.0</span>
+</pre></div>
+</div>
+<p><strong>Input: G2, G3</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nx</span><span class="o">.</span><span class="n">graph_edit_distance</span><span class="p">(</span><span class="n">G2</span><span class="p">,</span> <span class="n">G3</span><span class="p">)</span>   <span class="c1"># 4.0</span>
+</pre></div>
+</div>
+<p>Using these outputs we can now calculate the average edit distance with the following calculation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mf">32.0</span> <span class="o">+</span> <span class="mf">34.0</span> <span class="o">+</span> <span class="mf">38.0</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="mf">18.0</span> <span class="o">+</span> <span class="mf">4.0</span><span class="p">)</span><span class="o">/</span><span class="mi">6</span>   <span class="c1"># 21.33</span>
+</pre></div>
+</div>
+<p>This shows that the average edit distance between each of these session DiGraphs is 21.33.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Utility_Functions.html" class="btn btn-neutral float-left" title="Utility Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, UMD ARLIS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

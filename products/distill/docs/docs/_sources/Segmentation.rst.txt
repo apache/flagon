@@ -1,0 +1,12 @@
+============
+Segmentation
+============
+.. toctree::
+    :maxdepth: 2
+
+    Getting_Started
+    Creating_Segments
+    Combining_Segments_with_Set_Logic
+    Manipulating_Collections_of_Segment_Objects
+    Writing_Segments
+    Exporting_Segments

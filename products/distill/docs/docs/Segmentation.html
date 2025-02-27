@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Segmentation &mdash; Apache Flagon Distill  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting Started with Segmentation" href="Getting_Started.html" />
+    <link rel="prev" title="Funnel" href="Funnel_Function.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Apache Flagon Distill
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Graph_Index.html">Graph</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Segmentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Getting_Started.html">Getting Started with Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Creating_Segments.html">Creating Segment Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Combining_Segments_with_Set_Logic.html">Combining Segments with Set Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Manipulating_Collections_of_Segment_Objects.html">Manipulating Collections of Segment Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Writing_Segments.html">Writing Segments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exporting_Segments.html">Exporting Segments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Process.html">Process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache Flagon Distill</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Segmentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Segmentation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="segmentation">
+<h1>Segmentation<a class="headerlink" href="#segmentation" title="Permalink to this headline"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Getting_Started.html">Getting Started with Segmentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Getting_Started.html#why-segmentation">Why Segmentation?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Getting_Started.html#what-is-a-segment">What is a <code class="docutils literal notranslate"><span class="pre">Segment</span></code>?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Getting_Started.html#what-is-a-segments-object">What is a <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Getting_Started.html#importing-the-segmentation-package">Importing the Segmentation package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Creating_Segments.html">Creating Segment Objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Creating_Segments.html#userale-log-preprocessing">UserALE Log Preprocessing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Creating_Segments.html#basic-segment-creation">Basic Segment Creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Creating_Segments.html#automatic-segment-generation">Automatic Segment Generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Creating_Segments.html#detecting-deadspace">Detecting Deadspace</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Combining_Segments_with_Set_Logic.html">Combining Segments with Set Logic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Combining_Segments_with_Set_Logic.html#union">Union</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Combining_Segments_with_Set_Logic.html#intersection">Intersection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Combining_Segments_with_Set_Logic.html#difference">Difference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Manipulating_Collections_of_Segment_Objects.html">Manipulating Collections of Segment Objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Manipulating_Collections_of_Segment_Objects.html#iteration">Iteration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Manipulating_Collections_of_Segment_Objects.html#access-and-modification-through-subscripts">Access and Modification through Subscripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Manipulating_Collections_of_Segment_Objects.html#list-comprehensions">List Comprehensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Manipulating_Collections_of_Segment_Objects.html#filtering">Filtering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Manipulating_Collections_of_Segment_Objects.html#appending-and-deleting-segment-objects">Appending and Deleting <code class="docutils literal notranslate"><span class="pre">Segment</span></code> Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Manipulating_Collections_of_Segment_Objects.html#representation-of-segment-objects-with-different-data-structures">Representation of <code class="docutils literal notranslate"><span class="pre">Segment</span></code> Objects with Different Data Structures</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Writing_Segments.html">Writing Segments</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Writing_Segments.html#write-segment">Write Segment</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Exporting_Segments.html">Exporting Segments</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Exporting_Segments.html#visualization-examples">Visualization Examples</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Funnel_Function.html" class="btn btn-neutral float-left" title="Funnel" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Getting_Started.html" class="btn btn-neutral float-right" title="Getting Started with Segmentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, UMD ARLIS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

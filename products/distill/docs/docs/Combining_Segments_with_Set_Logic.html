@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Combining Segments with Set Logic &mdash; Apache Flagon Distill  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Manipulating Collections of Segment Objects" href="Manipulating_Collections_of_Segment_Objects.html" />
+    <link rel="prev" title="Creating Segment Objects" href="Creating_Segments.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Apache Flagon Distill
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Graph_Index.html">Graph</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="Segmentation.html">Segmentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Getting_Started.html">Getting Started with Segmentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Creating_Segments.html">Creating Segment Objects</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Combining Segments with Set Logic</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#union">Union</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#intersection">Intersection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#difference">Difference</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Manipulating_Collections_of_Segment_Objects.html">Manipulating Collections of Segment Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Writing_Segments.html">Writing Segments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exporting_Segments.html">Exporting Segments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Process.html">Process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache Flagon Distill</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="Segmentation.html">Segmentation</a> &raquo;</li>
+      <li>Combining Segments with Set Logic</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Combining_Segments_with_Set_Logic.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="combining-segments-with-set-logic">
+<h1>Combining Segments with Set Logic<a class="headerlink" href="#combining-segments-with-set-logic" title="Permalink to this headline"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects can be combined with set logic.  Distill’s Segmentation package provides three functions that perform
+set logic: <code class="docutils literal notranslate"><span class="pre">union</span></code>, <code class="docutils literal notranslate"><span class="pre">intersection</span></code>, and <code class="docutils literal notranslate"><span class="pre">difference</span></code>.</p>
+<section id="union">
+<h2>Union<a class="headerlink" href="#union" title="Permalink to this headline"></a></h2>
+<p>A union can be performed using the <code class="docutils literal notranslate"><span class="pre">union</span></code> function.  An example usage of this function is shown below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Segment 1</span>
+<span class="n">segment1</span><span class="o">.</span><span class="n">get_uids</span><span class="p">()</span>     <span class="c1">#[uid1, uid2, uid3]</span>
+
+<span class="c1"># Segment 2</span>
+<span class="n">segment2</span><span class="o">.</span><span class="n">get_uids</span><span class="p">()</span>     <span class="c1">#[uid3, uid4, uid5]</span>
+
+<span class="c1"># Perform Union</span>
+<span class="n">new_segment</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="s2">&quot;new_segment&quot;</span><span class="p">,</span> <span class="n">segment1</span><span class="p">,</span> <span class="n">segment2</span><span class="p">)</span>
+<span class="n">new_segment</span><span class="o">.</span><span class="n">get_uids</span><span class="p">()</span>  <span class="c1">#[uid1, uid2, uid3, uid4, uid5]</span>
+</pre></div>
+</div>
+<p>The above code will return a new <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object with the given segment_name, start and end values based on the smallest
+<code class="docutils literal notranslate"><span class="pre">clientTime</span></code> and largest <code class="docutils literal notranslate"><span class="pre">clientTime</span></code> of the given <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects, and a list of the union of the UIDs of segment1
+and segment2.</p>
+</section>
+<section id="intersection">
+<h2>Intersection<a class="headerlink" href="#intersection" title="Permalink to this headline"></a></h2>
+<p>An intersection can be performed using the <code class="docutils literal notranslate"><span class="pre">intersection</span></code> function.  An example usage of this function is shown below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Segment 1</span>
+<span class="n">segment1</span><span class="o">.</span><span class="n">get_uids</span><span class="p">()</span>   <span class="c1">#[uid1, uid3, uid6]</span>
+
+<span class="c1"># Segment 2</span>
+<span class="n">segment2</span><span class="o">.</span><span class="n">get_uids</span><span class="p">()</span>     <span class="c1">#[uid3, uid6, uid9]</span>
+
+<span class="n">new_segment</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="s2">&quot;new_segment&quot;</span><span class="p">,</span> <span class="n">segment1</span><span class="p">,</span> <span class="n">segment2</span><span class="p">)</span>
+<span class="n">new_segment</span><span class="o">.</span><span class="n">get_uids</span><span class="p">()</span>  <span class="c1">#[uid3, uid6]</span>
+</pre></div>
+</div>
+<p>The above code will return a new <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object (similarly to union) with UIDs that represent the intersection of the
+UIDs of segment1 and segment2.</p>
+</section>
+<section id="difference">
+<h2>Difference<a class="headerlink" href="#difference" title="Permalink to this headline"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">difference</span></code> function creates a new <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object based on the logical difference of two <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Segment 1</span>
+<span class="n">segment1</span><span class="o">.</span><span class="n">get_uids</span><span class="p">()</span>   <span class="c1">#[uid1, uid2, uid3]</span>
+
+<span class="c1"># Segment 2</span>
+<span class="n">segment2</span><span class="o">.</span><span class="n">get_uids</span><span class="p">()</span>     <span class="c1">#[uid2, uid4, uid5]</span>
+
+<span class="n">new_segment1</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="s2">&quot;new_segment_1&quot;</span><span class="p">,</span> <span class="n">segment1</span><span class="p">,</span> <span class="n">segment2</span><span class="p">)</span>
+<span class="n">new_segment1</span><span class="o">.</span><span class="n">get_uids</span><span class="p">()</span>  <span class="c1">#[uid1, uid3]</span>
+
+<span class="n">new_segment2</span> <span class="o">=</span> <span class="n">distill</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="s2">&quot;new_segment_2&quot;</span><span class="p">,</span> <span class="n">segment2</span><span class="p">,</span> <span class="n">segment1</span><span class="p">)</span>
+<span class="n">new_segment2</span><span class="o">.</span><span class="n">get_uids</span><span class="p">()</span>  <span class="c1">#[uid4, uid5]</span>
+</pre></div>
+</div>
+<p>The above code will return a new <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object (similarly to union and intersection) with UIDs that represent the difference
+of the UIDs of segment1 and segment2.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Creating_Segments.html" class="btn btn-neutral float-left" title="Creating Segment Objects" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Manipulating_Collections_of_Segment_Objects.html" class="btn btn-neutral float-right" title="Manipulating Collections of Segment Objects" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, UMD ARLIS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

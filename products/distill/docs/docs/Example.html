@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Graph Function Examples &mdash; Graph Analytics Flagon Distill  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Segmentation" href="Segmentation.html" />
+    <link rel="prev" title="Graph.py Documentation" href="Graph.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Graph Analytics Flagon Distill
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="Graph_Index.html">Graph</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Graph.html">Graph.py Documentation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Graph Function Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sankey-function">Sankey Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#funnel-function">Funnel Function</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Segmentation.html">Segmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Process.html">Process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Graph Analytics Flagon Distill</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="Graph_Index.html">Graph</a> &raquo;</li>
+      <li>Graph Function Examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Example.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="graph-function-examples">
+<h1>Graph Function Examples<a class="headerlink" href="#graph-function-examples" title="Permalink to this headline"></a></h1>
+<p>The file ‘graph.py’ provides Python functions for creating charts from
+edge lists.</p>
+<section id="sankey-function">
+<h2>Sankey Function<a class="headerlink" href="#sankey-function" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sankey</span><span class="p">(</span><span class="n">edges_segmentN</span><span class="p">,</span> <span class="n">node_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The Sankey Function passes an edge list, or a list of tuples, and
+returns a Sankey, or a flow chart where width corresponds to quantity.
+Below is an example of a Sankey Diagram:</p>
+<p><a class="reference external" href="https://postimg.cc/w789ryVP"><img alt="sankey0.png" src="https://i.postimg.cc/4NnnmphJ/sankey0.png" /></a> Additionally, users have the option to pass a dictionary
+of node labels to replace existing labels.</p>
+<p>Below is an example:</p>
+<p><strong>Input:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">)]</span>
+
+<span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;d&#39;</span><span class="p">:</span><span class="s1">&#39;enD&#39;</span><span class="p">}</span>
+
+<span class="n">sankey</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output:</strong> <a class="reference external" href="https://postimg.cc/YGrpbJzS"><img alt="sankey.png" src="https://i.postimg.cc/50v6NJH8/sankey.png" /></a></p>
+</section>
+<section id="funnel-function">
+<h2>Funnel Function<a class="headerlink" href="#funnel-function" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">funnel</span><span class="p">(</span><span class="n">edges_segmentN</span><span class="p">,</span> <span class="n">user_specification</span><span class="p">,</span> <span class="n">node_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The Funnel Function takes the arguments: edges_segmentN: List of Tuples
+user_specification: A string of target of interest e.g. #document
+node_labels (Optional): Optional Dictionary of key default values with
+value replacements And it will return a Funnel graph. Below is an
+example of a Funnel Diagram:</p>
+<p><a class="reference external" href="https://postimg.cc/tsz67YFS"><img alt="funnelexample.png" src="https://i.postimg.cc/qvPxbKqT/newplot-2.png" /></a> Additionally, users have the option to pass a
+dictionary of node labels to replace existing labels.</p>
+<p>Below is an example:</p>
+<p><strong>Input:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;button#test_button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button#test_button&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_text_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_text_input&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_text_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_text_input&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;button#Mock Request Button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button#Mock Request Button&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_text_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_text_input&#39;</span><span class="p">,</span> <span class="s1">&#39;p&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;button#test_button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button#test_button&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">)]</span>
+
+<span class="n">userspec</span> <span class="o">=</span> <span class="s1">&#39;input&#39;</span>
+
+<span class="n">funnel</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">userspec</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output:</strong> <a class="reference external" href="https://postimg.cc/dkgkgdK1"><img alt="image1" src="https://i.postimg.cc/FzHydgWj/newplot-3.png" /></a></p>
+<p>Now we can add the optional node labels to be replaced. <strong>Input:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;button#test_button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button#test_button&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_text_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_text_input&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_text_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_text_input&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;button#Mock Request Button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button#Mock Request Button&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_text_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_text_input&#39;</span><span class="p">,</span> <span class="s1">&#39;p&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;button#test_button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button#test_button&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">)]</span>
+
+<span class="n">userspec</span> <span class="o">=</span> <span class="s1">&#39;input&#39;</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;form#test_text_input&#39;</span><span class="p">:</span><span class="s1">&#39;test_text_input&#39;</span><span class="p">}</span>
+<span class="n">funnel</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">userspec</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output:</strong> <a class="reference external" href="https://postimg.cc/RWv6r42c"><img alt="image2" src="https://i.postimg.cc/rwrSrpJY/newplot-4.png" /></a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Graph.html" class="btn btn-neutral float-left" title="Graph.py Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Segmentation.html" class="btn btn-neutral float-right" title="Segmentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, UMD ARLIS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

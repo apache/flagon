@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Funnel &mdash; Apache Flagon Distill  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Segmentation" href="Segmentation.html" />
+    <link rel="prev" title="Sankey" href="Sankey_Function.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Apache Flagon Distill
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="Graph_Index.html">Graph</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Sankey_Function.html">Sankey</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Funnel</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-funnel-function">The Funnel Function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#funnel-example">Funnel Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Segmentation.html">Segmentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Process.html">Process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache Flagon Distill</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="Graph_Index.html">Graph</a> &raquo;</li>
+      <li>Funnel</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Funnel_Function.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="funnel">
+<h1>Funnel<a class="headerlink" href="#funnel" title="Permalink to this headline"></a></h1>
+<section id="the-funnel-function">
+<h2>The Funnel Function<a class="headerlink" href="#the-funnel-function" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">funnel</span><span class="p">(</span><span class="n">edges_segmentN</span><span class="p">,</span> <span class="n">user_specification</span><span class="p">,</span> <span class="n">node_labels</span><span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>Creates Funnel Graph from defined edge list and optional user-provided labels</em>
+<strong>edges_segmentN</strong>: List of Tuples
+<strong>user_specification</strong>: String of Target of interest e.g. #document
+<strong>node_labels</strong>: Optional Dictionary of key default values, value replacements
+Returns a Funnel graph.</p>
+<p><strong>Remove the duplicates</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edge_list_temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">edges_segmentN</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">edge_list_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+<span class="n">edge_list</span> <span class="o">=</span> <span class="n">edge_list_temp</span>
+</pre></div>
+</div>
+<p><strong>Convert from list of 2s to list of 1s</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edgelist_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">edge_list</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">edge_list</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">edge_list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">!=</span> <span class="n">length</span><span class="p">:</span>
+        <span class="n">edgelist_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">edgelist_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">edgelist_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><strong>Remove the none values</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">funnel_targets_temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">edgelist_list</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">item</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">funnel_targets_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+<span class="n">funnel_targets</span> <span class="o">=</span> <span class="n">funnel_targets_temp</span>
+</pre></div>
+</div>
+<p><strong>Convert that list into a list of 3s</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edge_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">funnel_targets</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">funnel_targets</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">edge_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">funnel_targets</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">funnel_targets</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">funnel_targets</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p><strong>Convert the list of 3s to a counter</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edge_list_counter</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">(</span><span class="n">edge_list</span><span class="p">)</span>
+<span class="n">first_rung</span> <span class="o">=</span> <span class="n">user_specification</span>
+<span class="n">new_edge_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">edge_list</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">user_specification</span><span class="p">:</span>
+        <span class="n">new_edge_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+
+<span class="n">new_edge_list_counter</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">(</span><span class="n">new_edge_list</span><span class="p">)</span>
+<span class="n">new_edge_list_counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">first_rung</span> <span class="o">=</span> <span class="n">new_edge_list_counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">second_rung</span> <span class="o">=</span> <span class="n">new_edge_list_counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">third_rung</span> <span class="o">=</span> <span class="n">new_edge_list_counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="n">counter1</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">counter2</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">counter3</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">edge_list</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">first_rung</span><span class="p">:</span>
+        <span class="n">counter1</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">second_rung</span><span class="p">:</span>
+            <span class="n">counter2</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">third_rung</span><span class="p">:</span>
+                <span class="n">counter3</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p><strong>Numbers are how many times each target occured</strong>
+<strong>Edges are the targets</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="n">counter1</span><span class="p">,</span> <span class="n">counter2</span><span class="p">,</span> <span class="n">counter3</span><span class="p">]</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="p">[</span><span class="n">first_rung</span><span class="p">,</span> <span class="n">second_rung</span><span class="p">,</span> <span class="n">third_rung</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>If node labels was given as an argument, replaces the targets with the provided names</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">node_labels</span><span class="p">:</span>
+    <span class="n">new_edges</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">node_labels</span><span class="p">:</span>
+            <span class="n">new_edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_labels</span><span class="p">[</span><span class="n">edge</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">new_edges</span>
+</pre></div>
+</div>
+<p><strong>Plotting labels from the list with the values from the dictionary</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="n">number</span><span class="o">=</span><span class="n">numbers</span><span class="p">,</span>
+    <span class="n">edge</span><span class="o">=</span><span class="n">edges</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Plotting the figure</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Funnel</span><span class="p">(</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">edges</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">numbers</span><span class="p">,</span>
+    <span class="n">textposition</span><span class="o">=</span><span class="s2">&quot;inside&quot;</span><span class="p">,</span>
+    <span class="n">textinfo</span><span class="o">=</span><span class="s2">&quot;value+percent initial&quot;</span><span class="p">,</span>
+    <span class="n">opacity</span><span class="o">=</span><span class="mf">0.65</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;deepskyblue&quot;</span><span class="p">,</span> <span class="s2">&quot;lightsalmon&quot;</span><span class="p">,</span> <span class="s2">&quot;tan&quot;</span><span class="p">],</span>
+                          <span class="s2">&quot;line&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">]}},</span>
+    <span class="n">connector</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;line&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;lime&quot;</span><span class="p">,</span> <span class="s2">&quot;dash&quot;</span><span class="p">:</span> <span class="s2">&quot;dot&quot;</span><span class="p">,</span> <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}})</span>
+<span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="funnel-example">
+<h2>Funnel Example<a class="headerlink" href="#funnel-example" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">funnel</span><span class="p">(</span><span class="n">edges_segmentN</span><span class="p">,</span> <span class="n">user_specification</span><span class="p">,</span> <span class="n">node_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The Funnel Function takes the arguments: edges_segmentN: List of Tuples
+user_specification: A string of target of interest e.g. #document
+node_labels (Optional): Optional Dictionary of key default values with
+value replacements And it will return a Funnel graph. Below is an
+example of a Funnel Diagram:</p>
+<p><a class="reference external" href="https://postimg.cc/tsz67YFS"><img alt="funnelexample.png" src="https://i.postimg.cc/qvPxbKqT/newplot-2.png" /></a> Additionally, users have the option to pass a
+dictionary of node labels to replace existing labels.</p>
+<p>Below is an example:</p>
+<p><strong>Input:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;button#test_button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button#test_button&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_text_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_text_input&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_text_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_text_input&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;button#Mock Request Button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button#Mock Request Button&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_text_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_text_input&#39;</span><span class="p">,</span> <span class="s1">&#39;p&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;button#test_button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button#test_button&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">)]</span>
+
+<span class="n">userspec</span> <span class="o">=</span> <span class="s1">&#39;input&#39;</span>
+
+<span class="n">funnel</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">userspec</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output:</strong> <a class="reference external" href="https://postimg.cc/dkgkgdK1"><img alt="image1" src="https://i.postimg.cc/FzHydgWj/newplot-3.png" /></a></p>
+<p>Now we can add the optional node labels to be replaced. <strong>Input:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;button#test_button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button#test_button&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_text_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_text_input&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_text_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_text_input&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;button#Mock Request Button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button#Mock Request Button&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_text_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_text_input&#39;</span><span class="p">,</span> <span class="s1">&#39;p&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;button#test_button&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;button#test_button&#39;</span><span class="p">,</span> <span class="s1">&#39;#document&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;#document&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;form#test_radio_input&#39;</span><span class="p">,</span> <span class="s1">&#39;input&#39;</span><span class="p">)]</span>
+
+<span class="n">userspec</span> <span class="o">=</span> <span class="s1">&#39;input&#39;</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;form#test_text_input&#39;</span><span class="p">:</span><span class="s1">&#39;test_text_input&#39;</span><span class="p">}</span>
+<span class="n">funnel</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">userspec</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output:</strong> <a class="reference external" href="https://postimg.cc/RWv6r42c"><img alt="image2" src="https://i.postimg.cc/rwrSrpJY/newplot-4.png" /></a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Sankey_Function.html" class="btn btn-neutral float-left" title="Sankey" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Segmentation.html" class="btn btn-neutral float-right" title="Segmentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, UMD ARLIS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

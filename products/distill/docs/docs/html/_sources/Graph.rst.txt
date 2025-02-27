@@ -1,0 +1,239 @@
+Graph.py Documentation
+======================
+
+Sankey Function
+---------------
+.. code:: python
+
+    def sankey(edges_segmentN, node_labels=False):
+
+*Creates Sankey Graph from defined edge list and optional user-provided labels*
+**edges_segmentN**: List of Tuples
+**node_labels**: Optional Dictionary of Values; keys are originals, values are replacements
+Returns a Sankey graph.
+
+**Remove self-to-self recursions**
+
+.. code:: python
+
+    edge_list_temp = []
+    for row in edges_segmentN:
+        if row[0] != row[1]:
+            edge_list_temp.append(row)
+    edge_list = edge_list_temp
+
+**Create a counter to count how many elements are in the edge list**
+
+.. code:: python
+
+    edge_list_counter = collections.Counter(edge_list)
+
+**Extract source list, target list, and value list from the tuples**
+
+.. code:: python
+
+    source_list = [i[0] for i in edge_list_counter.keys()]
+    target_list = [i[1] for i in edge_list_counter.keys()]
+    value_list = [i for i in edge_list_counter.values()]
+
+**Extract the node names if node_labels does not exist as an argument**
+
+.. code:: python
+
+    nodes = []
+    for row in edge_list:
+        for col in row:
+            if col not in nodes:
+                nodes.append(col)
+            
+**Replace node names with the give node_labels if it is given as an argument**
+
+.. code:: python
+
+    if node_labels:
+        new_nodes = []
+        for node in nodes:
+            if node in node_labels:
+                new_nodes.append(node_labels[node])
+            else:
+                new_nodes.append(node)
+
+**Sources are the nodes sending connections**
+
+.. code:: python
+
+    sources = []
+    for i in source_list:
+        sources.append(nodes.index(i))
+
+**Targets are the nodes receiving connections**
+
+.. code:: python
+
+    targets = []
+    for i in target_list:
+        targets.append(nodes.index(i))
+
+**Values are the weight of the connections**
+
+.. code:: python
+
+        values = value_list
+
+**If node labels is given as an argument, we replace nodes with node labels**
+**If not, we use the original node names**
+
+.. code:: python
+
+    if node_labels:
+        fig = go.Figure(data=[go.Sankey(
+            node=dict(
+                label=[new_nodes[item].split("|")[0] for item in range(len(new_nodes))],
+            ),
+            link=dict(
+                source=sources,
+                target=targets,
+                value=values
+            ))])
+    else:
+        fig = go.Figure(data=[go.Sankey(
+            node=dict(
+                label=[nodes[item].split("|")[0] for item in range(len(nodes))],
+            ),
+            link=dict(
+                source=sources,
+                target=targets,
+                value=values
+            ))])
+
+    fig.show()
+
+Funnel Function
+---------------
+.. code:: python
+
+    funnel(edges_segmentN, user_specification, node_labels= False)
+
+*Creates Funnel Graph from defined edge list and optional user-provided labels*
+**edges_segmentN**: List of Tuples
+**user_specification**: String of Target of interest e.g. #document
+**node_labels**: Optional Dictionary of key default values, value replacements
+Returns a Funnel graph.
+
+**Remove the duplicates**
+
+.. code:: python
+
+    edge_list_temp = []
+    for row in edges_segmentN:
+        if row[0] != row[1]:
+            edge_list_temp.append(row)
+    edge_list = edge_list_temp
+ 
+**Convert from list of 2s to list of 1s**
+
+.. code:: python
+
+    edgelist_list = []
+    length = len(edge_list) - 1
+    for i in edge_list:
+        if edge_list.index(i) != length:
+            edgelist_list.append(i[0])
+        else:
+            edgelist_list.append(i[0])
+            edgelist_list.append(i[1])
+
+**Remove the none values**
+
+.. code:: python
+
+    funnel_targets_temp = []
+    for item in edgelist_list:
+        if item != None:
+            funnel_targets_temp.append(item)
+    funnel_targets = funnel_targets_temp
+
+**Convert that list into a list of 3s**
+
+.. code:: python
+
+    edge_list = []
+    for i in range(len(funnel_targets)):
+        if i == (len(funnel_targets) - 2):
+            break
+        else:
+            edge_list.append((funnel_targets[i], funnel_targets[i + 1], funnel_targets[i + 2]))
+
+**Convert the list of 3s to a counter**
+
+.. code:: python
+
+    edge_list_counter = collections.Counter(edge_list)
+    first_rung = user_specification
+    new_edge_list = []
+    for i in edge_list:
+        if i[0] == user_specification:
+            new_edge_list.append((i[0], i[1], i[2]))
+
+    new_edge_list_counter = collections.Counter(new_edge_list)
+    new_edge_list_counter.most_common(1)
+
+    first_rung = new_edge_list_counter.most_common(1)[0][0][0]
+    second_rung = new_edge_list_counter.most_common(1)[0][0][1]
+    third_rung = new_edge_list_counter.most_common(1)[0][0][2]
+
+    counter1 = 0
+    counter2 = 0
+    counter3 = 0
+    for i in edge_list:
+        if i[0] == first_rung:
+            counter1 += 1
+            if i[1] == second_rung:
+                counter2 += 1
+                if i[2] == third_rung:
+                    counter3 += 1
+
+**Numbers are how many times each target occured**
+**Edges are the targets**
+
+.. code:: python
+
+    numbers = [counter1, counter2, counter3]
+    edges = [first_rung, second_rung, third_rung]
+
+**If node labels was given as an argument, replaces the targets with the provided names**
+
+.. code:: python
+
+    if node_labels:
+        new_edges = []
+        for edge in edges:
+            if edge in node_labels:
+                new_edges.append(node_labels[edge])
+            else:
+                new_edges.append(edge)
+        edges = new_edges
+
+**Plotting labels from the list with the values from the dictionary**
+
+.. code:: python
+
+    data = dict(
+        number=numbers,
+        edge=edges)
+
+**Plotting the figure**
+
+.. code:: python
+
+    fig = go.Figure(go.Funnel(
+        y=edges,
+        x=numbers,
+        textposition="inside",
+        textinfo="value+percent initial",
+        opacity=0.65, marker={"color": ["deepskyblue", "lightsalmon", "tan"],
+                              "line": {"width": [2]}},
+        connector={"line": {"color": "lime", "dash": "dot", "width": 5}})
+    )
+
+    fig.show()

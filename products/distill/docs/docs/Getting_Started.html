@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started with Segmentation &mdash; Apache Flagon Distill  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Creating Segment Objects" href="Creating_Segments.html" />
+    <link rel="prev" title="Segmentation" href="Segmentation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Apache Flagon Distill
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Graph_Index.html">Graph</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="Segmentation.html">Segmentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Getting Started with Segmentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#why-segmentation">Why Segmentation?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-a-segment">What is a <code class="docutils literal notranslate"><span class="pre">Segment</span></code>?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-a-segments-object">What is a <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#importing-the-segmentation-package">Importing the Segmentation package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Creating_Segments.html">Creating Segment Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Combining_Segments_with_Set_Logic.html">Combining Segments with Set Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Manipulating_Collections_of_Segment_Objects.html">Manipulating Collections of Segment Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Writing_Segments.html">Writing Segments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Exporting_Segments.html">Exporting Segments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Process.html">Process</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utilities.html">Utilities</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Apache Flagon Distill</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="Segmentation.html">Segmentation</a> &raquo;</li>
+      <li>Getting Started with Segmentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Getting_Started.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getting-started-with-segmentation">
+<h1>Getting Started with Segmentation<a class="headerlink" href="#getting-started-with-segmentation" title="Permalink to this headline"></a></h1>
+<section id="why-segmentation">
+<h2>Why Segmentation?<a class="headerlink" href="#why-segmentation" title="Permalink to this headline"></a></h2>
+<p>When collecting UserALE logs, it is easy to get bombarded with hundreds of logs.  Distill’s Segmentation package seeks
+to make the analysis of these logs easier through the creation of meaningful segments.  These segments are created and
+collected through Distill’s custom <code class="docutils literal notranslate"><span class="pre">Segment</span></code> and <code class="docutils literal notranslate"><span class="pre">Segments</span></code> objects.  The creation of these objects provides a
+useful abstraction for analysts to compare UserALE logs and analyze patterns in the data.</p>
+</section>
+<section id="what-is-a-segment">
+<h2>What is a <code class="docutils literal notranslate"><span class="pre">Segment</span></code>?<a class="headerlink" href="#what-is-a-segment" title="Permalink to this headline"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects group together UserALE logs via their UIDs and represent the metadata associated with a collection
+of logs.  Each object has a variety of fields, including:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">segment_name</span></code>: The given name of a <code class="docutils literal notranslate"><span class="pre">Segment</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">start_end_val</span></code>: The start and end <code class="docutils literal notranslate"><span class="pre">clientTime</span></code>’s of a <code class="docutils literal notranslate"><span class="pre">Segment</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">num_logs</span></code>: The number of logs in a <code class="docutils literal notranslate"><span class="pre">Segment</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uids</span></code>: A list of the UIDs of the logs within the <code class="docutils literal notranslate"><span class="pre">Segment</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">segment_type</span></code>: An enumerated type (<code class="docutils literal notranslate"><span class="pre">Segment_Type</span></code>) that denotes how the <code class="docutils literal notranslate"><span class="pre">Segment</span></code> was created</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">generate_field_name</span></code>: The field name used for value-matching if a <code class="docutils literal notranslate"><span class="pre">Segment</span></code> was created through the <code class="docutils literal notranslate"><span class="pre">generate_segments</span></code> or <code class="docutils literal notranslate"><span class="pre">generate_collapsing_window_segments</span></code> functions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">generate_matched_values</span></code>: The values used for value-matching if a <code class="docutils literal notranslate"><span class="pre">Segment</span></code> was created through the <code class="docutils literal notranslate"><span class="pre">generate_segments</span></code> or <code class="docutils literal notranslate"><span class="pre">generate_collapsing_window_segments</span></code> functions</p></li>
+</ul>
+<p>The analysis of these fields help analysts to create collections of meaningful <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects based on their
+metadata.  Since <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects create an association with UserALE logs through the logs` UID, there is no need to
+hold UserALE logs within the <code class="docutils literal notranslate"><span class="pre">Segment</span></code> object themselves.  This allows for the easy creation of <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects
+without the need to manage UserALE logs behind the scenes.</p>
+</section>
+<section id="what-is-a-segments-object">
+<h2>What is a <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object?<a class="headerlink" href="#what-is-a-segments-object" title="Permalink to this headline"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Segments</span></code> objects are another abstraction used by Distill’s Segmentation package to hold a collection of <code class="docutils literal notranslate"><span class="pre">Segment</span></code>
+objects.  This custom data structure gives the Segmentation package the ability to aid analysts even further with the
+curation of meaningful collections of <code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects.  The <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object also allows for easy access to
+<code class="docutils literal notranslate"><span class="pre">Segment</span></code> objects, utilizing syntax similar to both python lists and dictionaries.  Through the <code class="docutils literal notranslate"><span class="pre">Segments</span></code> object,
+the following capabilities are available and will be described further under the <em>Manipulating Collections of
+Segment Objects</em> section:</p>
+<ul class="simple">
+<li><p>Iteration</p></li>
+<li><p>Access and Modification through Subscripts</p></li>
+<li><p>List Comprehensions</p></li>
+<li><p>Filtering</p></li>
+<li><p>Appending and Deleting <code class="docutils literal notranslate"><span class="pre">Segment</span></code> Objects</p></li>
+<li><p>Representation of <code class="docutils literal notranslate"><span class="pre">Segment</span></code> Objects with Different Data Structures</p></li>
+</ul>
+</section>
+<section id="importing-the-segmentation-package">
+<h2>Importing the Segmentation package<a class="headerlink" href="#importing-the-segmentation-package" title="Permalink to this headline"></a></h2>
+<p>Once Distill is installed, the easiest way to import Distill’s Segmentation package is to import the entire Distill project at the top of a python
+file as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">distill</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Segmentation.html" class="btn btn-neutral float-left" title="Segmentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Creating_Segments.html" class="btn btn-neutral float-right" title="Creating Segment Objects" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, UMD ARLIS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

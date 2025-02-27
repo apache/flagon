@@ -1,0 +1,30 @@
+{
+  "parserOptions" : {
+    "sourceType" : "module",
+    "ecmaFeatures" : {
+      "modules" : true
+    }
+  },
+  "plugins": ["@typescript-eslint"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "env" : {
+    "browser" : true,
+    "es6" : true
+  },
+  "rules" : {
+    "no-cond-assign" : "warn",
+    "no-constant-condition" : "warn",
+    "no-unused-vars" : "warn",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-explicit-any": "warn"
+  },
+  "overrides": [
+    {
+        "files": ["test/**/*"],
+        "plugins": ["jest"],
+        "env": {
+            "jest": true
+        }
+    }
+  ]
+}

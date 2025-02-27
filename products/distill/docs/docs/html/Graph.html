@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Graph.py Documentation &mdash; Graph Analytics Flagon Distill  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/dark_mode_css/general.css" type="text/css" />
+      <link rel="stylesheet" href="_static/dark_mode_css/dark.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/dark_mode_js/default_dark.js"></script>
+        <script src="_static/dark_mode_js/theme_switcher.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Graph Analytics Flagon Distill
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Graph.py Documentation</a><ul>
+<li><a class="reference internal" href="#sankey-function">Sankey Function</a></li>
+<li><a class="reference internal" href="#funnel-function">Funnel Function</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Graph Analytics Flagon Distill</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Graph.py Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Graph.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="graph-py-documentation">
+<h1>Graph.py Documentation<a class="headerlink" href="#graph-py-documentation" title="Permalink to this headline"></a></h1>
+<section id="sankey-function">
+<h2>Sankey Function<a class="headerlink" href="#sankey-function" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sankey</span><span class="p">(</span><span class="n">edges_segmentN</span><span class="p">,</span> <span class="n">node_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</pre></div>
+</div>
+<p><em>Creates Sankey Graph from defined edge list and optional user-provided labels</em>
+<strong>edges_segmentN</strong>: List of Tuples
+<strong>node_labels</strong>: Optional Dictionary of Values; keys are originals, values are replacements
+Returns a Sankey graph.</p>
+<p><strong>Remove self-to-self recursions</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edge_list_temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">edges_segmentN</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">edge_list_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+<span class="n">edge_list</span> <span class="o">=</span> <span class="n">edge_list_temp</span>
+</pre></div>
+</div>
+<p><strong>Create a counter to count how many elements are in the edge list</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edge_list_counter</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">(</span><span class="n">edge_list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Extract source list, target list, and value list from the tuples</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">source_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">edge_list_counter</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+<span class="n">target_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">edge_list_counter</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+<span class="n">value_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">edge_list_counter</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+</pre></div>
+</div>
+<p><strong>Extract the node names if node_labels does not exist as an argument</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">edge_list</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="n">nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Replace node names with the give node_labels if it is given as an argument</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">node_labels</span><span class="p">:</span>
+    <span class="n">new_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">node_labels</span><span class="p">:</span>
+            <span class="n">new_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_labels</span><span class="p">[</span><span class="n">node</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Sources are the nodes sending connections</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sources</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">source_list</span><span class="p">:</span>
+    <span class="n">sources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><strong>Targets are the nodes receiving connections</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">targets</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">target_list</span><span class="p">:</span>
+    <span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nodes</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><strong>Values are the weight of the connections</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">values</span> <span class="o">=</span> <span class="n">value_list</span>
+</pre></div>
+</div>
+<p><strong>If node labels is given as an argument, we replace nodes with node labels</strong>
+<strong>If not, we use the original node names</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">node_labels</span><span class="p">:</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">go</span><span class="o">.</span><span class="n">Sankey</span><span class="p">(</span>
+        <span class="n">node</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">label</span><span class="o">=</span><span class="p">[</span><span class="n">new_nodes</span><span class="p">[</span><span class="n">item</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">new_nodes</span><span class="p">))],</span>
+        <span class="p">),</span>
+        <span class="n">link</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">source</span><span class="o">=</span><span class="n">sources</span><span class="p">,</span>
+            <span class="n">target</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">values</span>
+        <span class="p">))])</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">go</span><span class="o">.</span><span class="n">Sankey</span><span class="p">(</span>
+        <span class="n">node</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">label</span><span class="o">=</span><span class="p">[</span><span class="n">nodes</span><span class="p">[</span><span class="n">item</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">))],</span>
+        <span class="p">),</span>
+        <span class="n">link</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">source</span><span class="o">=</span><span class="n">sources</span><span class="p">,</span>
+            <span class="n">target</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="n">values</span>
+        <span class="p">))])</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="funnel-function">
+<h2>Funnel Function<a class="headerlink" href="#funnel-function" title="Permalink to this headline"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">funnel</span><span class="p">(</span><span class="n">edges_segmentN</span><span class="p">,</span> <span class="n">user_specification</span><span class="p">,</span> <span class="n">node_labels</span><span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>Creates Funnel Graph from defined edge list and optional user-provided labels</em>
+<strong>edges_segmentN</strong>: List of Tuples
+<strong>user_specification</strong>: String of Target of interest e.g. #document
+<strong>node_labels</strong>: Optional Dictionary of key default values, value replacements
+Returns a Funnel graph.</p>
+<p><strong>Remove the duplicates</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edge_list_temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">edges_segmentN</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">edge_list_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+<span class="n">edge_list</span> <span class="o">=</span> <span class="n">edge_list_temp</span>
+</pre></div>
+</div>
+<p><strong>Convert from list of 2s to list of 1s</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edgelist_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">edge_list</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">edge_list</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">edge_list</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">!=</span> <span class="n">length</span><span class="p">:</span>
+        <span class="n">edgelist_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">edgelist_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">edgelist_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><strong>Remove the none values</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">funnel_targets_temp</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">edgelist_list</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">item</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">funnel_targets_temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+<span class="n">funnel_targets</span> <span class="o">=</span> <span class="n">funnel_targets_temp</span>
+</pre></div>
+</div>
+<p><strong>Convert that list into a list of 3s</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edge_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">funnel_targets</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">funnel_targets</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">edge_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">funnel_targets</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">funnel_targets</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">funnel_targets</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p><strong>Convert the list of 3s to a counter</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edge_list_counter</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">(</span><span class="n">edge_list</span><span class="p">)</span>
+<span class="n">first_rung</span> <span class="o">=</span> <span class="n">user_specification</span>
+<span class="n">new_edge_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">edge_list</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">user_specification</span><span class="p">:</span>
+        <span class="n">new_edge_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+
+<span class="n">new_edge_list_counter</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">Counter</span><span class="p">(</span><span class="n">new_edge_list</span><span class="p">)</span>
+<span class="n">new_edge_list_counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">first_rung</span> <span class="o">=</span> <span class="n">new_edge_list_counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">second_rung</span> <span class="o">=</span> <span class="n">new_edge_list_counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">third_rung</span> <span class="o">=</span> <span class="n">new_edge_list_counter</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="n">counter1</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">counter2</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">counter3</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">edge_list</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">first_rung</span><span class="p">:</span>
+        <span class="n">counter1</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">second_rung</span><span class="p">:</span>
+            <span class="n">counter2</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">third_rung</span><span class="p">:</span>
+                <span class="n">counter3</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p><strong>Numbers are how many times each target occured</strong>
+<strong>Edges are the targets</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="n">counter1</span><span class="p">,</span> <span class="n">counter2</span><span class="p">,</span> <span class="n">counter3</span><span class="p">]</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="p">[</span><span class="n">first_rung</span><span class="p">,</span> <span class="n">second_rung</span><span class="p">,</span> <span class="n">third_rung</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>If node labels was given as an argument, replaces the targets with the provided names</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">node_labels</span><span class="p">:</span>
+    <span class="n">new_edges</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">node_labels</span><span class="p">:</span>
+            <span class="n">new_edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_labels</span><span class="p">[</span><span class="n">edge</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge</span><span class="p">)</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">new_edges</span>
+</pre></div>
+</div>
+<p><strong>Plotting labels from the list with the values from the dictionary</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="n">number</span><span class="o">=</span><span class="n">numbers</span><span class="p">,</span>
+    <span class="n">edge</span><span class="o">=</span><span class="n">edges</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Plotting the figure</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Funnel</span><span class="p">(</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">edges</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">numbers</span><span class="p">,</span>
+    <span class="n">textposition</span><span class="o">=</span><span class="s2">&quot;inside&quot;</span><span class="p">,</span>
+    <span class="n">textinfo</span><span class="o">=</span><span class="s2">&quot;value+percent initial&quot;</span><span class="p">,</span>
+    <span class="n">opacity</span><span class="o">=</span><span class="mf">0.65</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;deepskyblue&quot;</span><span class="p">,</span> <span class="s2">&quot;lightsalmon&quot;</span><span class="p">,</span> <span class="s2">&quot;tan&quot;</span><span class="p">],</span>
+                          <span class="s2">&quot;line&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">]}},</span>
+    <span class="n">connector</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;line&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;lime&quot;</span><span class="p">,</span> <span class="s2">&quot;dash&quot;</span><span class="p">:</span> <span class="s2">&quot;dot&quot;</span><span class="p">,</span> <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}})</span>
+<span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, UMD ARLIS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

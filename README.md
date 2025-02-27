@@ -1,5 +1,7 @@
-Apache Flagon Docker Containers and Website
+Apache Flagon
 --------------------------------------
 
-Specific build instructions located in docker, kubernetes, release and site folders.
+Flagon includes both UserALE, an instrumentation tool for web applications, and Distill, a python library for analyzing UserALE telemetry.
+
+See products/ for userale and distill. This read me is under construction.
 

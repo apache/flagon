@@ -1,0 +1,139 @@
+Graph Function Examples
+=======================
+
+The file ‘graph.py’ provides Python functions for creating charts from
+edge lists.
+
+Sankey Function
+---------------
+
+.. code:: python
+
+   sankey(edges_segmentN, node_labels=False)
+
+The Sankey Function passes an edge list, or a list of tuples, and
+returns a Sankey, or a flow chart where width corresponds to quantity.
+Below is an example of a Sankey Diagram:
+
+|sankey0.png| Additionally, users have the option to pass a dictionary
+of node labels to replace existing labels.
+
+Below is an example:
+
+**Input:**
+
+.. code:: python
+
+   edges = [('a','b'),
+            ('b','c'),
+            ('c','b'),
+            ('b','c'),
+            ('c','d'),
+            ('d','a')]
+
+   labels = {'d':'enD'}
+            
+   sankey(edges, labels)
+
+**Output:** |sankey.png|
+
+Funnel Function
+---------------
+
+.. code:: python
+
+   funnel(edges_segmentN, user_specification, node_labels=False)
+
+The Funnel Function takes the arguments: edges_segmentN: List of Tuples
+user_specification: A string of target of interest e.g. #document
+node_labels (Optional): Optional Dictionary of key default values with
+value replacements And it will return a Funnel graph. Below is an
+example of a Funnel Diagram:
+
+|funnelexample.png| Additionally, users have the option to pass a
+dictionary of node labels to replace existing labels.
+
+Below is an example:
+
+**Input:**
+
+.. code:: python
+
+   edges = [('#document', 'button#test_button'),
+    ('button#test_button', '#document'),
+    ('#document', 'input'),
+    ('input', 'button'),
+    ('button', 'input'),
+    ('input', 'form#test_text_input'),
+    ('form#test_text_input', 'input'),
+    ('input', 'button'),
+    ('button', 'form#test_text_input'),
+    ('form#test_text_input', '#document'),
+    ('#document', 'form#test_radio_input'),
+    ('form#test_radio_input', 'input'),
+    ('input', 'button#Mock Request Button'),
+    ('button#Mock Request Button', '#document'),
+    ('#document', 'input'),
+    ('input', 'button'),
+    ('button', 'form#test_text_input'),
+    ('form#test_text_input', 'p'),
+    ('p', '#document'),
+    ('#document', 'button#test_button'),
+    ('button#test_button', '#document'),
+    ('#document', 'form#test_radio_input'),
+    ('form#test_radio_input', 'input'),
+    ('input', 'form#test_radio_input'),
+    ('form#test_radio_input', 'input')]
+
+   userspec = 'input'
+            
+   funnel(edges, userspec)
+
+**Output:** |image1|
+
+Now we can add the optional node labels to be replaced. **Input:**
+
+.. code:: python
+
+   edges = [('#document', 'button#test_button'),
+    ('button#test_button', '#document'),
+    ('#document', 'input'),
+    ('input', 'button'),
+    ('button', 'input'),
+    ('input', 'form#test_text_input'),
+    ('form#test_text_input', 'input'),
+    ('input', 'button'),
+    ('button', 'form#test_text_input'),
+    ('form#test_text_input', '#document'),
+    ('#document', 'form#test_radio_input'),
+    ('form#test_radio_input', 'input'),
+    ('input', 'button#Mock Request Button'),
+    ('button#Mock Request Button', '#document'),
+    ('#document', 'input'),
+    ('input', 'button'),
+    ('button', 'form#test_text_input'),
+    ('form#test_text_input', 'p'),
+    ('p', '#document'),
+    ('#document', 'button#test_button'),
+    ('button#test_button', '#document'),
+    ('#document', 'form#test_radio_input'),
+    ('form#test_radio_input', 'input'),
+    ('input', 'form#test_radio_input'),
+    ('form#test_radio_input', 'input')]
+
+   userspec = 'input'
+   labels = {'form#test_text_input':'test_text_input'}        
+   funnel(edges, userspec, labels)
+
+**Output:** |image2|
+
+.. |sankey0.png| image:: https://i.postimg.cc/4NnnmphJ/sankey0.png
+   :target: https://postimg.cc/w789ryVP
+.. |sankey.png| image:: https://i.postimg.cc/50v6NJH8/sankey.png
+   :target: https://postimg.cc/YGrpbJzS
+.. |funnelexample.png| image:: https://i.postimg.cc/qvPxbKqT/newplot-2.png
+   :target: https://postimg.cc/tsz67YFS
+.. |image1| image:: https://i.postimg.cc/FzHydgWj/newplot-3.png
+   :target: https://postimg.cc/dkgkgdK1
+.. |image2| image:: https://i.postimg.cc/rwrSrpJY/newplot-4.png
+   :target: https://postimg.cc/RWv6r42c
