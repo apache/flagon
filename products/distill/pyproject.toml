@@ -64,7 +64,7 @@ sphinx-rtd-theme = "^0.5.2"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^6.2.3"
-pytest-cov = "^4.0.0"
+pytest-cov = ">=4,<6"
 pytest-dotenv = "^0.5.2"
 pytest-mock = "^3.10.0"
 tox = "^4.14.2"
