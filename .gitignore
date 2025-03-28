@@ -10,3 +10,5 @@ node_modules/
 .npm
 npm-debug.log
 *.DS_store
+./site/_site
+.jekyll-cache
