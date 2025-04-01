@@ -85,7 +85,7 @@
     "babel-jest": "^29.7.0",
     "body-parser": "^1.20.2",
     "commander": "^12.1.0",
-    "cypress": "^13.6.0",
+    "cypress": "^14.2.1",
     "cz-conventional-changelog": "^3.3.0",
     "detect-browser": "^5.3.0",
     "dom-storage": "^2.1.0",
