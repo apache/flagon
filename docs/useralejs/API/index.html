@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>The UserALE.js API</title>
+  <meta name="description" content="Apache UserALE.js features a robust API that allows you customize official Apache Flagon UserALE.js builds page-by-page to suite your needs.">
+
+  <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="/semantic/dist/semantic.min.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="/js/main.js"></script>
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="https://flagon.apache.org/docs/useralejs/API/">
+  <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
+
+  
+</head>
+
+
+  <body>
+
+    <div class="site-header">
+  <div id="main-menu" class="ui inverted padded fixed top borderless menu">
+    <a class="site-title" href="/">
+      <h3 class="ui inverted header item">Apache Flagon</h3>
+    </a>
+
+    <div class="right menu">
+      <div class="ui dropdown item">
+        Products
+        <div class="menu">
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+        </div>
+      </div>
+      <div class="ui dropdown item">
+        <a href="/docs">Docs</a>
+        <div class="menu">
+          <a class="item" href="/docs/useralejs">UserALE.js</a>
+          <a class="item" href="/docs/distill">Distill</a>
+        </div>
+      </div>
+      <a class="item" href="/releases">Releases</a>
+      <a class="item" href="/community">Community</a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="main-wrapper">
+      <div class="docs-wrapper">
+  <div class="docs-sidebar">
+    
+
+
+
+<!-- <div class="ui inverted list">
+  <a class="item" href="/docs">About the Docs</a>
+</div> -->
+<div id="docs-nav" class="ui inverted accordion">
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Apache Flagon
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/">About the Docs</a>
+      
+        <a class="item" href="/docs/contributing/">Contributing</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="active title">
+  
+    <i class="dropdown icon"></i>
+    UserALE.js
+  </div>
+  
+    <div class="active content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/useralejs/">Getting Started</a>
+      
+        <a class="item" href="/docs/useralejs/build/">UserALE.js Build and Test</a>
+      
+        <a class="item" href="/docs/useralejs/API/">The UserALE.js API</a>
+      
+        <a class="item" href="/docs/useralejs/modifying/">Modifying UserALE.js Source Code</a>
+      
+        <a class="item" href="/docs/useralejs/dataschema/">UserALE.js' Data Schema</a>
+      
+        <a class="item" href="/docs/useralejs/troubleshooting/">Troubleshooting</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Distill
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/distill/">Installation</a>
+      
+    </div>
+  </div>
+
+</div>
+
+  </div>
+  <div class="docs-content">
+    <h2 class="ui header">The UserALE.js API</h2>
+    <p><a href="https://github.com/apache/flagon-useralejs">Apache UserALE.js</a> features a robust API that allows you 
+customize official Apache Flagon UserALE.js <a href="https://github.com/apache/flagon-useralejs/tree/master/build">builds</a> page-by-page to suite your needs.</p>
+
+<h1 id="api-usage">API Usage</h1>
+
+<p>To invoke the API, simply add additional javascript code blocks under your UserALE.js script tag.</p>
+
+<p>Don’t forget to add UserALE.js to your project!</p>
+
+<p>It can be deployed as either script-tag, NPM module, or via CDN! For in-depth example, see our <a href="/docs/useralejs">Getting Started Guide</a> or source <a href="https://github.com/apache/flagon-useralejs#usage">README.md</a>.</p>
+
+<p>Also, check out our<a href="https://github.com/apache/flagon-useralejs/tree/master/example">example test utility</a> so that you can experiment with logs in your terminal!</p>
+
+<p>The following API examples use script-tag deployment methods for illustration:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;head&gt;</span>
+  <span class="nt">&lt;title&gt;</span>UserAleJS - Example Page<span class="nt">&lt;/title&gt;</span>
+ <span class="c">&lt;!--
+ Add the UserALE.js script tag to the top of your doc
+ --&gt;</span>
+   <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/path/to/userale-2.4.0.min.js"</span> <span class="na">data-url=</span><span class="s">"http://yourLoggingUrl"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<h2 id="options"><code class="language-plaintext highlighter-rouge">options()</code></h2>
+
+<p><code class="language-plaintext highlighter-rouge">options</code> allows you to modify UserALE.js script tag parameters. This can be particularly useful if need to pass additional data about users from your page into the logging parameters, like username and sessionID. You can build variables constructors that pass data from form data or browser storage to UserALE’s paramters.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+    <span class="kd">const</span> <span class="nx">changeMe</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">me</span><span class="dl">"</span><span class="p">;</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">userale</span><span class="p">.</span><span class="nx">options</span><span class="p">({</span>
+      <span class="dl">"</span><span class="s2">userId</span><span class="dl">"</span><span class="p">:</span> <span class="nx">changeMe</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">version</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2.4.0</span><span class="dl">"</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">sessionID</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">4</span><span class="dl">"</span>
+    <span class="p">})</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<h2 id="addcallbacks"><code class="language-plaintext highlighter-rouge">addCallbacks()</code></h2>
+
+<p><code class="language-plaintext highlighter-rouge">addCallbacks</code> allows you to modify UserALE.js logs via callback functions. Callback functions are passed the log to be modifyed, and the corresponding event if one exists. The value returned from the calback is used as the new log, except when a falsey value is returned. In the case of a falsey value, the log is dropped. Callbacks are executed in the order they are submitted. Pass multiple callbacks with an object of functions. The following example shows how to both filter unwanted events and add custom fields.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">userale</span><span class="p">.</span><span class="nx">addCallbacks</span><span class="p">({</span>
+    <span class="nx">filter</span><span class="p">(</span><span class="nx">log</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">type_array</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="dl">"</span><span class="s2">mouseup</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">mouseover</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">mousedown</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">keydown</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">dblclick</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">blur</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">focus</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">input</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">wheel</span><span class="dl">"</span><span class="p">,</span>
+      <span class="p">];</span>
+      <span class="kd">var</span> <span class="nx">logType_array</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">interval</span><span class="dl">"</span><span class="p">];</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">type_array</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nx">type</span><span class="p">)</span> <span class="o">||</span> <span class="nx">logType_array</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nx">logType</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">log</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">addCustomFields</span><span class="p">(</span><span class="nx">log</span><span class="p">,</span> <span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">targetsForLabels</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">button#test_button</span><span class="dl">"</span><span class="p">];</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">targetsForLabels</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nx">target</span><span class="p">))</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">({},</span> <span class="nx">log</span><span class="p">,</span> <span class="p">{</span> <span class="na">CustomLabel</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Click me!</span><span class="dl">"</span> <span class="p">});</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">log</span><span class="p">;</span>  
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<h2 id="removecallbacks"><code class="language-plaintext highlighter-rouge">removeCallbacks()</code></h2>
+
+<p><code class="language-plaintext highlighter-rouge">removeCallbacks</code> removes a list of callback function that was added by addCallbacks() by name. The following example will remove the filter from the addCallbacks() example</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">userale</span><span class="p">.</span><span class="nx">removeCallbacks</span><span class="p">([</span><span class="dl">"</span><span class="s2">filter</span><span class="dl">"</span><span class="p">]);</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>Test these examples out in our UserALE.js <a href="https://github.com/apache/flagon-useralejs/blob/master/example/index.html">example page</a> test utility!</p>
+
+<p>See more <a href="">UserALE.js API Examples</a></p>
+
+<h2 id="contributing">Contributing</h2>
+
+<p>Contributions are welcome!  Simply <a href="https://github.com/apache/flagon-useralejs/issues">submit an issue</a> for problems 
+you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
+incorporate it into UserALE.js. We also love Pull Requests!</p>
+
+  </div>
+</div>
+
+    </div>
+
+    <div class="footer ui inverted very padded vertical segment">
+  <div class="ui vertical segment">
+    <div class="ui four column grid">
+      <div class="column">
+        <h4 class="ui inverted header">About</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Docs</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/docs/useralejs">UserAle.js</a>
+          <a class="item" href="/docs/distill">Distill</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Community</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="https://github.com/apache?q=flagon">GitHub</a>
+          <a class="item" href="http://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Apache</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="http://www.apache.org/">Apache Software Foundation</a>
+          <a class="item" href="http://www.apache.org/licenses/">License</a>
+          <a class="item" href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+          <a class="item" href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+          <a class="item" href="http://www.apache.org/security/">Security</a>
+          <a class="item" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui two column middle aligned grid">
+      <div class="center aligned column">
+        Copyright &copy; 2025 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui one column middle aligned grid">
+      <div class="center aligned column">
+        <a href="https://www.apache.org/events/current-event.html">
+          <img src="https://www.apache.org/events/current-event-234x60.png" alt="ASF Current Event">
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </body>
+
+</html>

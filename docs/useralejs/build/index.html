@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>UserALE.js Build and Test</title>
+  <meta name="description" content="To build Apache UserALE.js, you will need to clone our repo and install NPM and Node.js and Go.">
+
+  <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="/semantic/dist/semantic.min.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="/js/main.js"></script>
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="https://flagon.apache.org/docs/useralejs/build/">
+  <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
+
+  
+</head>
+
+
+  <body>
+
+    <div class="site-header">
+  <div id="main-menu" class="ui inverted padded fixed top borderless menu">
+    <a class="site-title" href="/">
+      <h3 class="ui inverted header item">Apache Flagon</h3>
+    </a>
+
+    <div class="right menu">
+      <div class="ui dropdown item">
+        Products
+        <div class="menu">
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+        </div>
+      </div>
+      <div class="ui dropdown item">
+        <a href="/docs">Docs</a>
+        <div class="menu">
+          <a class="item" href="/docs/useralejs">UserALE.js</a>
+          <a class="item" href="/docs/distill">Distill</a>
+        </div>
+      </div>
+      <a class="item" href="/releases">Releases</a>
+      <a class="item" href="/community">Community</a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="main-wrapper">
+      <div class="docs-wrapper">
+  <div class="docs-sidebar">
+    
+
+
+
+<!-- <div class="ui inverted list">
+  <a class="item" href="/docs">About the Docs</a>
+</div> -->
+<div id="docs-nav" class="ui inverted accordion">
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Apache Flagon
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/">About the Docs</a>
+      
+        <a class="item" href="/docs/contributing/">Contributing</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="active title">
+  
+    <i class="dropdown icon"></i>
+    UserALE.js
+  </div>
+  
+    <div class="active content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/useralejs/">Getting Started</a>
+      
+        <a class="item" href="/docs/useralejs/build/">UserALE.js Build and Test</a>
+      
+        <a class="item" href="/docs/useralejs/API/">The UserALE.js API</a>
+      
+        <a class="item" href="/docs/useralejs/modifying/">Modifying UserALE.js Source Code</a>
+      
+        <a class="item" href="/docs/useralejs/dataschema/">UserALE.js' Data Schema</a>
+      
+        <a class="item" href="/docs/useralejs/troubleshooting/">Troubleshooting</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Distill
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/distill/">Installation</a>
+      
+    </div>
+  </div>
+
+</div>
+
+  </div>
+  <div class="docs-content">
+    <h2 class="ui header">UserALE.js Build and Test</h2>
+    <p>To build <a href="https://github.com/apache/flagon-useralejs/tree/master">Apache UserALE.js</a>, you will need to clone our repo and install <a href="https://nodejs.org/">NPM and Node.js</a> and <a href="https://go.dev/doc/install">Go</a>.</p>
+
+<p>UserALE.js utilizes NPM for package and dependency management. Execute the following to install dependencies.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#install required packages
+npm install
+
+#review major dependencies
+npm ls --depth=0
+</code></pre></div></div>
+
+<h2 id="build">Build</h2>
+
+<p>UserALE.js uses Rollup to manage build tasking. These tasks are executed through our build script; use the following to execute:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#Build UserALE.js
+npm run build
+</code></pre></div></div>
+
+<h2 id="test">Test</h2>
+
+<p>UserALE.js uses Jest and Playwright to execute tests, which are integrated into our build pipeline. See <code class="language-plaintext highlighter-rouge">package.json</code> for full script options.</p>
+
+<p>To run tests:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm run test
+</code></pre></div></div>
+<p>… you’ll see something like:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
+    attachHandlers
+    ✓ attaches all the event handlers without duplicates
+    ✓ debounces bufferedEvents (505ms)
+    defineDetails
+      - configures high detail events correctly
+
+  configure
+    ✓ merges new configs into main config object
+    ✓ includes a userid if present in the window.location
+    getUserIdFromParams
+      ✓ fetches userId from URL params
+      ✓ returns null if no matching param
+
+  getInitialSettings
+    timeStampScale
+      ✓ no event.timestamp
+      ✓ zero
+      ✓ epoch milliseconds
+      ✓ epoch microseconds
+      ✓ performance navigation time
+    getInitialSettings
+      ✓ fetches all settings from a script tag (122ms)
+      ✓ grabs user id from params
+
+  Userale API
+    ✓ provides configs
+    ✓ edits configs
+    ✓ starts + stops (214ms)
+    ✓ sends custom logs
+
+  packageLogs
+    setLogFilter
+      ✓ assigns the handler to the provided value
+      ✓ allows the handler to be nulled
+    setLogMapper
+      ✓ assigns the handler to the provided value
+      ✓ allows the handler to be nulled
+    packageLog
+      ✓ only executes if on
+      ✓ calls detailFcn with the event as an argument if provided
+      ✓ packages logs
+      ✓ filters logs when a handler is assigned and returns false
+      ✓ assigns logs to the mapper's return value if a handler is assigned
+      ✓ does not call the map handler if the log is filtered out
+      ✓ does not attempt to call a non-function filter/mapper
+    extractTimeFields
+      ✓ returns the millisecond and microsecond portions of a timestamp
+      ✓ sets micro to 0 when no decimal is present
+      ✓ always returns an object
+    getLocation
+      ✓ returns event page location
+      ✓ calculates page location if unavailable
+      ✓ fails to null
+    selectorizePath
+      ✓ returns a new array of the same length provided
+    getSelector
+      ✓ builds a selector
+      ✓ identifies window
+      ✓ handles a non-null unknown value
+    buildPath
+      ✓ builds a path
+      ✓ defaults to path if available
+
+  sendLogs
+    ✓ sends logs on an interval
+    ✓ does not send logs if the config is off
+    ✓ sends logs on page exit with navigator
+    ✓ sends logs on page exit without navigator
+    ✓ does not send logs on page exit if config is off
+
+
+  45 passing (954ms)
+  1 pending
+</code></pre></div></div>
+
+<p>Followed by e2e tests via playwright that runs in a headed browser. Note that interacting with the headed browser may contaminate test results. Unfortanutely, the browser plugin requires playwright to run with a headed browser at this time. Any failing tests will also be logged in the terminal. If there are failing tests, please consider <a href="https://github.com/apache/flagon-useralejs/issues">opening an issue in Github</a>.</p>
+
+<p>Further instructions can be found in our <a href="https://github.com/apache/flagon-useralejs/blob/master/README.md">README</a></p>
+
+<h2 id="contributing">Contributing</h2>
+
+<p>Contributions are welcome!  See the <a href="https://github.com/apache/flagon-useralejs/blob/master/CONTRIBUTING.md">contribution guide</a> for more information.</p>
+
+  </div>
+</div>
+
+    </div>
+
+    <div class="footer ui inverted very padded vertical segment">
+  <div class="ui vertical segment">
+    <div class="ui four column grid">
+      <div class="column">
+        <h4 class="ui inverted header">About</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Docs</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/docs/useralejs">UserAle.js</a>
+          <a class="item" href="/docs/distill">Distill</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Community</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="https://github.com/apache?q=flagon">GitHub</a>
+          <a class="item" href="http://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Apache</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="http://www.apache.org/">Apache Software Foundation</a>
+          <a class="item" href="http://www.apache.org/licenses/">License</a>
+          <a class="item" href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+          <a class="item" href="http://www.apache.org/foundation/thanks.html">Thanks</a>
+          <a class="item" href="http://www.apache.org/security/">Security</a>
+          <a class="item" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui two column middle aligned grid">
+      <div class="center aligned column">
+        Copyright &copy; 2025 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui one column middle aligned grid">
+      <div class="center aligned column">
+        <a href="https://www.apache.org/events/current-event.html">
+          <img src="https://www.apache.org/events/current-event-234x60.png" alt="ASF Current Event">
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </body>
+
+</html>
