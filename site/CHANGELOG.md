@@ -2,7 +2,7 @@ CHANGELOG
 ---------
 
 ### 1.0.2 (2025-04-03)
-- Updated site build process
+- Updated site build process.
 
 ### 1.0.1 (2023-6-10)
 - Remove "Incubating" Status Refs

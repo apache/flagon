@@ -65,7 +65,9 @@ jobs:
       run: |
         git config user.name "GitHub Actions Bot"
         git config user.email "<>"
+        git stash
         git checkout asf-site
+        git add .
         git commit -m "Automatic Site Publish by Buildbot"
         git push
       env:
