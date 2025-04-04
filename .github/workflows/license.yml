@@ -33,6 +33,6 @@ jobs:
       - name: Check license header
         uses: apache/skywalking-eyes/header@v0.7.0
         with:
-          log: debug # optional: set the log level. The default value is `info`.
+          log: info # optional: set the log level. The default value is `info`.
           config: .licenserc.yaml # optional: set the config file. The default value is `.licenserc.yaml`.
           mode: check # optional: Which mode License-Eye should be run in. Choices are `check` or `fix`. The default value is `check`.
