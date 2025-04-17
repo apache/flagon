@@ -51,13 +51,13 @@ jobs:
 
     - name: Run build script
       run: |
-        cd site/
         chmod +x ./build.sh
         ./build.sh
+      working-directory: site
 
     - name: Remove non-site files
       run: |
-        cp -r site/_site/ /tmp/
+        cp -r site/_site /tmp/
         rm -rf *
         cp -r /tmp/_site/* .
 
