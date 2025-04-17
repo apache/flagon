@@ -60,6 +60,7 @@ jobs:
         git config user.name "GitHub Actions Bot"
         git config user.email "action@github.com"
         cp -r site/_site /tmp/
+        git reset --hard
         git clean -fdx
         git checkout asf-site
         rm -rf *
