@@ -55,20 +55,17 @@ jobs:
         ./build.sh
       working-directory: site
 
-    - name: Remove non-site files
-      run: |
-        cp -r site/_site /tmp/
-        rm -rf *
-        cp -r /tmp/_site/* .
-
     - name: Commit and push to asf-site branch
       run: |
         git config user.name "GitHub Actions Bot"
-        git config user.email "<>"
-        git stash
+        git config user.email "action@github.com"
+        cp -r site/_site /tmp/
+        git clean -fdx
         git checkout asf-site
+        rm -rf *
+        mv /tmp/_site ./content
         git add .
-        git commit -m "Automatic Site Publish by Buildbot"
-        git push
+        git commit -m "Automatic Site Publish by Buildbot" || echo "No changes to commit"
+        git push origin asf-site
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
