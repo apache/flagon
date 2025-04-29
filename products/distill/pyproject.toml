@@ -59,7 +59,7 @@ optional = true
 
 [tool.poetry.group.docs.dependencies]
 sphinx = "^4.5.0"
-sphinx-rtd-theme = "^0.5.2"
+sphinx-rtd-theme = ">=0.5.2,<1.4.0"
 
 
 [tool.poetry.group.test.dependencies]
