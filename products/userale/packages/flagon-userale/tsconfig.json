@@ -1,0 +1,52 @@
+{
+    "compilerOptions": {
+        "allowJs": false,
+        "allowSyntheticDefaultImports": true,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "baseUrl": ".",
+        "checkJs": false,
+        "declaration": true,
+        "declarationDir": "./build",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": false,
+        "isolatedModules": true,
+        "jsx": "preserve",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "module": "esnext",
+        "moduleResolution": "node",
+        "noEmit": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": false,
+        "noUnusedLocals": true,
+        "noUnusedParameters": false,
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ]
+        },
+        "pretty": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "sourceMap": true,
+        "strict": true,
+        "target": "es2015",
+        "typeRoots": [
+            "node_modules/@types/"
+        ],
+    },
+    "include": [
+        "src",
+        "test",
+        "src/types.d.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "build",
+        "logs"
+    ],
+}

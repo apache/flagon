@@ -1,0 +1,106 @@
+{
+  "name": "flagon-userale",
+  "version": "2.4.0",
+  "description": "UserALE is the UserALE client for DOM and JavaScript-based applications. It automatically attaches event handlers to log every user interaction on a web page, including rich JS single-page apps.",
+  "main": "build/main.mjs",
+  "module": "build/main.mjs",
+  "types": "build/main.d.ts",
+  "exports": {
+    ".": {
+      "import": "./build/main.mjs"
+    }
+  },
+  "scripts": {
+    "format": "prettier --ignore-path .gitignore --write src/ test/",
+    "lint": "eslint ./src --fix --ext ts --ext js",
+    "check-types": "tsc --pretty --noEmit",
+    "build": "tsc && tsup",
+    "clean": "rm -rf ./build",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "jest -c ./test/unit/jest.config.ts",
+    "test:e2e": "playwright test -c ./test/e2e/playwright.config.ts",
+    "pretest:e2e": "rm -rf ./test/e2e/chromeData/*",
+    "posttest:e2e": "rm -rf ./test/e2e/chromeData/*",
+    "example:run": "node example/server.js",
+    "example:watch": "nodemon -w ./example example/server.js",
+    "prepare": "husky",
+    "pretest": "npx playwright install",
+    "commit": "cz"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://https://github.com/apache/flagon-useralejs"
+  },
+  "keywords": [
+    "UserALE",
+    "Logging",
+    "Log Analytics",
+    "Business Analytics",
+    "Usability",
+    "User Testing",
+    "Behavioral Analytics"
+  ],
+  "author": "Apache Flagon",
+  "contributors": [
+    "Michelle Beard",
+    "Robert Foley",
+    "Alex Ford",
+    "Clay Gimenez",
+    "Gedd Johnson",
+    "Evan Jones",
+    "Lewis McGibbney",
+    "Joshua C. Poore",
+    "Ryan Thenhaus",
+    "Jason Young"
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/apache/flagon-useralejs/issues"
+  },
+  "homepage": "https://flagon.apache.org/",
+  "engines": {
+    "node": ">= 18.x",
+    "npm": ">= 9.x"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.2.0",
+    "@playwright/test": "^1.51.0",
+    "@types/jest": "^29.5.12",
+    "@types/jsdom": "^21.1.6",
+    "@types/node": "^20.14.2",
+    "@types/ws": "^8.5.12",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "@typescript/lib-dom": "npm:@types/web@^0.0.144",
+    "body-parser": "^1.20.2",
+    "commander": "^12.1.0",
+    "cypress": "^13.6.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "dom-storage": "^2.1.0",
+    "esbuild": "^0.21.2",
+    "eslint": "^8.57.0",
+    "express": "^4.18.2",
+    "global-jsdom": "^24.0.0",
+    "globals": "^15.2.0",
+    "husky": "^9.0.11",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^24.0.0",
+    "jsonschema": "^1.4.1",
+    "nodemon": "^3.0.2",
+    "prettier": "^3.2.5",
+    "ts-node": "^10.9.2",
+    "tsup": "^5.10.0",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.8.0",
+    "ws": "^8.18.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "@jest/globals": "^29.7.0"
+  }
+}
