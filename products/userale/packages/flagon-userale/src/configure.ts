@@ -64,12 +64,8 @@ export class Configuration {
   }
 
   private initialize(): void {
-    try {
-      const settings = getInitialSettings();
-      this.update(settings);
-    } catch (error) {
-      console.log(error);
-    }
+    const settings = getInitialSettings();
+    this.update(settings);
   }
 
   /**
@@ -123,13 +119,5 @@ export class Configuration {
       return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
     return null;
-  }
-
-  /**
-   * 
-   * @return {bool}
-   */
-  public isWebSocket(): boolean {
-    return this.url.startsWith("ws://") || this.url.startsWith("wss://");
   }
 }

@@ -65,6 +65,7 @@ export declare namespace Settings {
     useraleVersion: Version;
     userId: UserId;
     version?: Version;
+    websocketsEnabled?: boolean;
   }
 
   export interface IConfiguration extends Config {
@@ -142,10 +143,19 @@ export declare namespace Events {
   }>;
 }
 
-export interface CallbackHandlerOptions<T> {
-  getValue: () => T;
-  validate: (value: T) => void;
-  setValue: (config: any, value: T) => void;
-  description: string; // for error messages
+export declare namespace Callbacks {
+  export type AuthCallback = () => string;
+  export type HeadersCallback = () => Settings.HeaderObject;
+
+  export type CallbackMap = {
+    [key in string]: CallableFunction;
+  };
 }
 
+export declare namespace Extension {
+  export type PluginConfig = { urlWhitelist: string };
+  export type ConfigPayload = {
+    useraleConfig: Partial<Settings.Config>;
+    pluginConfig: PluginConfig;
+  };
+}

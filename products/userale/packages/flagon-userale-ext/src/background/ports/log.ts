@@ -1,14 +1,16 @@
 import type { PlasmoMessaging } from "@plasmohq/messaging";
-// import { add_log } from "~/background";
+import * as userale from "flagon-userale";
  
 const handler: PlasmoMessaging.PortHandler = async (req, res) => {
-  // console.log(req);
+  console.log(req);
+  // todo apply browser session id to logs
   // // log.browserSessionId = browserSessionId;
+  // todo filter logs based off filter url in getstorageoptions
   // // req = filterUrl(req);
-  // if (req) {
-  //   console.log(req);
-  //   add_log(req);
-  // }
+  if (req) {
+    console.log(req);
+    userale.log(req);
+  }
   
 }
  
