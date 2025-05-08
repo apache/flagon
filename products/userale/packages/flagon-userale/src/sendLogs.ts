@@ -59,11 +59,11 @@ export function sendOnInterval(
   }, config.transmitInterval);
 }
 
-/**
- * Attempts to flush the remaining logs when the window is closed.
- * @param  {Array<Logging.Log>} logs   Array of logs to be flushed.
- * @param  {Configuration} config Configuration singleton to be read from.
- */
+// /**
+//  * Attempts to flush the remaining logs when the window is closed.
+//  * @param  {Array<Logging.Log>} logs   Array of logs to be flushed.
+//  * @param  {Configuration} config Configuration singleton to be read from.
+//  */
 export function sendOnClose(
   logs: Array<Logging.Log>,
   config: Configuration,
