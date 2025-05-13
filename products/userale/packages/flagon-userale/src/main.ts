@@ -19,7 +19,7 @@ import { version as userAleVersion } from "../package.json";
 import { Configuration } from "@/configure";
 import { attachHandlers } from "@/attachHandlers";
 import { initPackager, packageCustomLog } from "@/packageLogs";
-import { initSender } from "@/sendLogs"; //, sendOnClose
+import { initSender, sendOnClose } from "@/sendLogs";
 
 import type { Settings, Logging } from "@/types";
 
@@ -53,7 +53,7 @@ config.update({
   useraleVersion: userAleVersion,
 });
 initPackager(logs, config);
-// getWebsocketsEnabled(config);
+getWebsocketsEnabled(config);
 if (config.autostart) {
   setup(config);
 }
@@ -99,19 +99,19 @@ function setup(config: Configuration) {
  * Checks to see if the specified backend URL supporsts Websockets
  * and updates the config accordingly
  */
-// function getWebsocketsEnabled(config: Configuration) {
-//   wsock = new WebSocket(config.url.replace("http://", "ws://"));
-//   wsock.onerror = () => {
-//     console.log("no websockets detected");
-//   };
-//   wsock.onopen = () => {
-//     console.log("connection established with websockets");
-//     config.websocketsEnabled = true;
-//   };
-//   wsock.onclose = () => {
-//     sendOnClose(logs, config);
-//   };
-// }
+function getWebsocketsEnabled(config: Configuration) {
+  wsock = new WebSocket(config.url.replace("http://", "ws://"));
+  wsock.onerror = () => {
+    console.log("no websockets detected");
+  };
+  wsock.onopen = () => {
+    console.log("connection established with websockets");
+    config.websocketsEnabled = true;
+  };
+  wsock.onclose = () => {
+    sendOnClose(logs, config);
+  };
+}
 
 // Export the Userale API
 export const version = userAleVersion;
