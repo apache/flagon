@@ -35,6 +35,7 @@ export async function getStoredOptions(): Promise<StoredOptions> {
 
 // Only to be used in ~/options
 export async function setStoredOptions(values: Partial<StoredOptions>) {
+  // Validate the new options
   try {
     new RegExp(values.allowList);
     new URL(values.loggingUrl);
@@ -42,9 +43,12 @@ export async function setStoredOptions(values: Partial<StoredOptions>) {
     return error;
   }
   
+  // Store the options for after the browser is closed
   await browser.storage.local.set(values);
+
+  // Notify the background script of the change
   return await sendToBackground({
     name: "config_change",
-    body: { values }
+    body: values
   })
 }

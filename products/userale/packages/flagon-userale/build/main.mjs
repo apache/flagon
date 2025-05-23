@@ -1,17 +1,17 @@
 /* Licensed to the Apache Software Foundation (ASF) under one or more
-contributor license agreements. See the NOTICE file distributed with
-this work for additional information regarding copyright ownership.
-The ASF licenses this file to you under the Apache License, Version 2.0
-(the "License"); you may not use this file except in compliance with
-the License. You may obtain a copy of the License at
+  contributor license agreements. See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License. You may obtain a copy of the License at
 
-http://www.apache.org/licenses/LICENSE-2.0
+  http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.*/
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.*/
 // package.json
 var version = "2.4.0";
 
@@ -19,6 +19,29 @@ var version = "2.4.0";
 var sessionId = null;
 var httpSessionId = null;
 function getInitialSettings() {
+  if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
+    const settings2 = {
+      authHeader: null,
+      autostart: true,
+      browserSessionId: null,
+      custIndex: null,
+      headers: null,
+      httpSessionId: null,
+      logCountThreshold: 5,
+      logDetails: false,
+      resolution: 500,
+      sessionId,
+      time: (ts) => ts !== void 0 ? ts : Date.now(),
+      toolName: null,
+      toolVersion: null,
+      transmitInterval: 5e3,
+      url: "http://localhost:8000",
+      useraleVersion: null,
+      userFromParams: null,
+      userId: null
+    };
+    return settings2;
+  }
   if (sessionId === null) {
     sessionId = getsessionId(
       "userAlesessionId",
@@ -62,11 +85,11 @@ function getInitialSettings() {
   return settings;
 }
 function getsessionId(sessionKey, value) {
-  if (window.sessionStorage.getItem(sessionKey) === null) {
-    window.sessionStorage.setItem(sessionKey, JSON.stringify(value));
+  if (self.sessionStorage.getItem(sessionKey) === null) {
+    self.sessionStorage.setItem(sessionKey, JSON.stringify(value));
     return value;
   }
-  return JSON.parse(window.sessionStorage.getItem(sessionKey) || "");
+  return JSON.parse(self.sessionStorage.getItem(sessionKey) || "");
 }
 function timeStampScale(e) {
   let tsScaler;
@@ -137,12 +160,8 @@ var _Configuration = class {
     return _Configuration.instance;
   }
   initialize() {
-    try {
-      const settings = getInitialSettings();
-      this.update(settings);
-    } catch (error) {
-      console.log(error);
-    }
+    const settings = getInitialSettings();
+    this.update(settings);
   }
   reset() {
     this.initialize();
@@ -176,214 +195,11 @@ var _Configuration = class {
     }
     return null;
   }
-  isWebSocket() {
-    return this.url.startsWith("ws://") || this.url.startsWith("wss://");
-  }
 };
 var Configuration = _Configuration;
 Configuration.instance = null;
 
-// ../../node_modules/.pnpm/detect-browser@5.3.0/node_modules/detect-browser/es/index.js
-var __spreadArray = function(to, from, pack) {
-  if (pack || arguments.length === 2)
-    for (var i = 0, l = from.length, ar; i < l; i++) {
-      if (ar || !(i in from)) {
-        if (!ar)
-          ar = Array.prototype.slice.call(from, 0, i);
-        ar[i] = from[i];
-      }
-    }
-  return to.concat(ar || Array.prototype.slice.call(from));
-};
-var BrowserInfo = function() {
-  function BrowserInfo2(name, version3, os) {
-    this.name = name;
-    this.version = version3;
-    this.os = os;
-    this.type = "browser";
-  }
-  return BrowserInfo2;
-}();
-var NodeInfo = function() {
-  function NodeInfo2(version3) {
-    this.version = version3;
-    this.type = "node";
-    this.name = "node";
-    this.os = process.platform;
-  }
-  return NodeInfo2;
-}();
-var SearchBotDeviceInfo = function() {
-  function SearchBotDeviceInfo2(name, version3, os, bot) {
-    this.name = name;
-    this.version = version3;
-    this.os = os;
-    this.bot = bot;
-    this.type = "bot-device";
-  }
-  return SearchBotDeviceInfo2;
-}();
-var BotInfo = function() {
-  function BotInfo2() {
-    this.type = "bot";
-    this.bot = true;
-    this.name = "bot";
-    this.version = null;
-    this.os = null;
-  }
-  return BotInfo2;
-}();
-var ReactNativeInfo = function() {
-  function ReactNativeInfo2() {
-    this.type = "react-native";
-    this.name = "react-native";
-    this.version = null;
-    this.os = null;
-  }
-  return ReactNativeInfo2;
-}();
-var SEARCHBOX_UA_REGEX = /alexa|bot|crawl(er|ing)|facebookexternalhit|feedburner|google web preview|nagios|postrank|pingdom|slurp|spider|yahoo!|yandex/;
-var SEARCHBOT_OS_REGEX = /(nuhk|curl|Googlebot|Yammybot|Openbot|Slurp|MSNBot|Ask\ Jeeves\/Teoma|ia_archiver)/;
-var REQUIRED_VERSION_PARTS = 3;
-var userAgentRules = [
-  ["aol", /AOLShield\/([0-9\._]+)/],
-  ["edge", /Edge\/([0-9\._]+)/],
-  ["edge-ios", /EdgiOS\/([0-9\._]+)/],
-  ["yandexbrowser", /YaBrowser\/([0-9\._]+)/],
-  ["kakaotalk", /KAKAOTALK\s([0-9\.]+)/],
-  ["samsung", /SamsungBrowser\/([0-9\.]+)/],
-  ["silk", /\bSilk\/([0-9._-]+)\b/],
-  ["miui", /MiuiBrowser\/([0-9\.]+)$/],
-  ["beaker", /BeakerBrowser\/([0-9\.]+)/],
-  ["edge-chromium", /EdgA?\/([0-9\.]+)/],
-  [
-    "chromium-webview",
-    /(?!Chrom.*OPR)wv\).*Chrom(?:e|ium)\/([0-9\.]+)(:?\s|$)/
-  ],
-  ["chrome", /(?!Chrom.*OPR)Chrom(?:e|ium)\/([0-9\.]+)(:?\s|$)/],
-  ["phantomjs", /PhantomJS\/([0-9\.]+)(:?\s|$)/],
-  ["crios", /CriOS\/([0-9\.]+)(:?\s|$)/],
-  ["firefox", /Firefox\/([0-9\.]+)(?:\s|$)/],
-  ["fxios", /FxiOS\/([0-9\.]+)/],
-  ["opera-mini", /Opera Mini.*Version\/([0-9\.]+)/],
-  ["opera", /Opera\/([0-9\.]+)(?:\s|$)/],
-  ["opera", /OPR\/([0-9\.]+)(:?\s|$)/],
-  ["pie", /^Microsoft Pocket Internet Explorer\/(\d+\.\d+)$/],
-  ["pie", /^Mozilla\/\d\.\d+\s\(compatible;\s(?:MSP?IE|MSInternet Explorer) (\d+\.\d+);.*Windows CE.*\)$/],
-  ["netfront", /^Mozilla\/\d\.\d+.*NetFront\/(\d.\d)/],
-  ["ie", /Trident\/7\.0.*rv\:([0-9\.]+).*\).*Gecko$/],
-  ["ie", /MSIE\s([0-9\.]+);.*Trident\/[4-7].0/],
-  ["ie", /MSIE\s(7\.0)/],
-  ["bb10", /BB10;\sTouch.*Version\/([0-9\.]+)/],
-  ["android", /Android\s([0-9\.]+)/],
-  ["ios", /Version\/([0-9\._]+).*Mobile.*Safari.*/],
-  ["safari", /Version\/([0-9\._]+).*Safari/],
-  ["facebook", /FB[AS]V\/([0-9\.]+)/],
-  ["instagram", /Instagram\s([0-9\.]+)/],
-  ["ios-webview", /AppleWebKit\/([0-9\.]+).*Mobile/],
-  ["ios-webview", /AppleWebKit\/([0-9\.]+).*Gecko\)$/],
-  ["curl", /^curl\/([0-9\.]+)$/],
-  ["searchbot", SEARCHBOX_UA_REGEX]
-];
-var operatingSystemRules = [
-  ["iOS", /iP(hone|od|ad)/],
-  ["Android OS", /Android/],
-  ["BlackBerry OS", /BlackBerry|BB10/],
-  ["Windows Mobile", /IEMobile/],
-  ["Amazon OS", /Kindle/],
-  ["Windows 3.11", /Win16/],
-  ["Windows 95", /(Windows 95)|(Win95)|(Windows_95)/],
-  ["Windows 98", /(Windows 98)|(Win98)/],
-  ["Windows 2000", /(Windows NT 5.0)|(Windows 2000)/],
-  ["Windows XP", /(Windows NT 5.1)|(Windows XP)/],
-  ["Windows Server 2003", /(Windows NT 5.2)/],
-  ["Windows Vista", /(Windows NT 6.0)/],
-  ["Windows 7", /(Windows NT 6.1)/],
-  ["Windows 8", /(Windows NT 6.2)/],
-  ["Windows 8.1", /(Windows NT 6.3)/],
-  ["Windows 10", /(Windows NT 10.0)/],
-  ["Windows ME", /Windows ME/],
-  ["Windows CE", /Windows CE|WinCE|Microsoft Pocket Internet Explorer/],
-  ["Open BSD", /OpenBSD/],
-  ["Sun OS", /SunOS/],
-  ["Chrome OS", /CrOS/],
-  ["Linux", /(Linux)|(X11)/],
-  ["Mac OS", /(Mac_PowerPC)|(Macintosh)/],
-  ["QNX", /QNX/],
-  ["BeOS", /BeOS/],
-  ["OS/2", /OS\/2/]
-];
-function detect(userAgent) {
-  if (!!userAgent) {
-    return parseUserAgent(userAgent);
-  }
-  if (typeof document === "undefined" && typeof navigator !== "undefined" && navigator.product === "ReactNative") {
-    return new ReactNativeInfo();
-  }
-  if (typeof navigator !== "undefined") {
-    return parseUserAgent(navigator.userAgent);
-  }
-  return getNodeVersion();
-}
-function matchUserAgent(ua) {
-  return ua !== "" && userAgentRules.reduce(function(matched, _a) {
-    var browser = _a[0], regex = _a[1];
-    if (matched) {
-      return matched;
-    }
-    var uaMatch = regex.exec(ua);
-    return !!uaMatch && [browser, uaMatch];
-  }, false);
-}
-function parseUserAgent(ua) {
-  var matchedRule = matchUserAgent(ua);
-  if (!matchedRule) {
-    return null;
-  }
-  var name = matchedRule[0], match = matchedRule[1];
-  if (name === "searchbot") {
-    return new BotInfo();
-  }
-  var versionParts = match[1] && match[1].split(".").join("_").split("_").slice(0, 3);
-  if (versionParts) {
-    if (versionParts.length < REQUIRED_VERSION_PARTS) {
-      versionParts = __spreadArray(__spreadArray([], versionParts, true), createVersionParts(REQUIRED_VERSION_PARTS - versionParts.length), true);
-    }
-  } else {
-    versionParts = [];
-  }
-  var version3 = versionParts.join(".");
-  var os = detectOS(ua);
-  var searchBotMatch = SEARCHBOT_OS_REGEX.exec(ua);
-  if (searchBotMatch && searchBotMatch[1]) {
-    return new SearchBotDeviceInfo(name, version3, os, searchBotMatch[1]);
-  }
-  return new BrowserInfo(name, version3, os);
-}
-function detectOS(ua) {
-  for (var ii = 0, count = operatingSystemRules.length; ii < count; ii++) {
-    var _a = operatingSystemRules[ii], os = _a[0], regex = _a[1];
-    var match = regex.exec(ua);
-    if (match) {
-      return os;
-    }
-  }
-  return null;
-}
-function getNodeVersion() {
-  var isNode = typeof process !== "undefined" && process.version;
-  return isNode ? new NodeInfo(process.version.slice(1)) : null;
-}
-function createVersionParts(count) {
-  var output = [];
-  for (var ii = 0; ii < count; ii++) {
-    output.push("0");
-  }
-  return output;
-}
-
 // src/packageLogs.ts
-var browserInfo = detect();
 var logs;
 var config;
 var intervalId;
@@ -444,10 +260,10 @@ function packageLog(e, detailFcn) {
   let log2 = {
     target: e.target ? getSelector(e.target) : null,
     path: buildPath(e),
-    pageUrl: window.location.href,
+    pageUrl: self.location.href,
     pageTitle: document.title,
     pageReferrer: document.referrer,
-    browser: detectBrowser(),
+    browser: self.navigator.userAgent,
     clientTime: timeFields.milli,
     microTime: timeFields.micro,
     location: getLocation(e),
@@ -493,10 +309,8 @@ function packageCustomLog(customLog, detailFcn, userAction) {
     details = staticDetailFcn();
   }
   const metaData = {
-    pageUrl: window.location.href,
-    pageTitle: document.title,
-    pageReferrer: document.referrer,
-    browser: detectBrowser(),
+    pageUrl: self.location.href,
+    browser: self.navigator.userAgent,
     clientTime: Date.now(),
     scrnRes: getScreenRes(),
     logType: "custom",
@@ -553,10 +367,10 @@ function packageIntervalLog(e) {
       intervalLog = {
         target: intervalId,
         path: intervalPath,
-        pageUrl: window.location.href,
+        pageUrl: self.location.href,
         pageTitle: document.title,
         pageReferrer: document.referrer,
-        browser: detectBrowser(),
+        browser: self.navigator.userAgent,
         count: intervalCounter,
         duration: timestamp - intervalTimer,
         startTime: intervalTimer,
@@ -619,7 +433,7 @@ function getLocation(e) {
   }
 }
 function getScreenRes() {
-  return { width: window.innerWidth, height: window.innerHeight };
+  return { width: self.innerWidth, height: self.innerHeight };
 }
 function getSelector(ele) {
   if (ele instanceof HTMLElement || ele instanceof Element) {
@@ -649,12 +463,6 @@ function selectorizePath(path) {
     pathEle = path[i];
   }
   return pathSelectors;
-}
-function detectBrowser() {
-  return {
-    browser: browserInfo ? browserInfo.name : "",
-    version: browserInfo ? browserInfo.version : ""
-  };
 }
 function buildAttrs(e) {
   const attributes = {};
@@ -798,7 +606,7 @@ function attachHandlers(config3) {
   try {
     defineDetails(config3);
     Object.keys(events).forEach(function(ev) {
-      document.addEventListener(
+      self.addEventListener(
         ev,
         function(e) {
           packageLog(e, events[ev]);
@@ -807,7 +615,7 @@ function attachHandlers(config3) {
       );
     });
     intervalEvents.forEach(function(ev) {
-      document.addEventListener(
+      self.addEventListener(
         ev,
         function(e) {
           packageIntervalLog(e);
@@ -818,7 +626,7 @@ function attachHandlers(config3) {
     Object.keys(bufferedEvents).forEach(
       function(ev) {
         bufferBools[ev] = true;
-        window.addEventListener(
+        self.addEventListener(
           ev,
           function(e) {
             if (bufferBools[ev]) {
@@ -845,7 +653,7 @@ function attachHandlers(config3) {
       }
     );
     windowEvents.forEach(function(ev) {
-      window.addEventListener(
+      self.addEventListener(
         ev,
         function(e) {
           packageLog(e, function() {
@@ -863,6 +671,15 @@ function attachHandlers(config3) {
 
 // src/utils/auth/index.ts
 var authCallback = null;
+function updateAuthHeader(config3) {
+  if (authCallback) {
+    try {
+      config3.authHeader = authCallback();
+    } catch (e) {
+      console.error(`Error encountered while setting the auth header: ${e}`);
+    }
+  }
+}
 function registerAuthCallback(callback) {
   try {
     verifyCallback(callback);
@@ -882,37 +699,51 @@ function verifyCallback(callback) {
   }
 }
 
+// src/utils/headers/index.ts
+var headersCallback = null;
+function updateCustomHeaders(config3) {
+  if (headersCallback) {
+    try {
+      config3.headers = headersCallback();
+    } catch (e) {
+      console.error(`Error encountered while setting the headers: ${e}`);
+    }
+  }
+}
+
 // src/sendLogs.ts
 var sendIntervalId;
-var wsock;
 function initSender(logs3, config3) {
   if (sendIntervalId) {
     clearInterval(sendIntervalId);
   }
-  wsock = new WebSocket(config3.url);
-  wsock.onerror = () => {
-    console.log("no websockets detected");
-  };
-  wsock.onopen = () => {
-    console.log("connection established with websockets");
-  };
-  wsock.onclose = () => {
-    sendOnClose(logs3, config3);
-  };
+  sendIntervalId = sendOnInterval(logs3, config3);
   sendOnClose(logs3, config3);
 }
+function sendOnInterval(logs3, config3) {
+  return setInterval(function() {
+    if (!config3.on) {
+      return;
+    }
+    if (logs3.length >= config3.logCountThreshold) {
+      sendLogs(logs3.slice(0), config3, 0);
+      logs3.splice(0);
+    }
+  }, config3.transmitInterval);
+}
 function sendOnClose(logs3, config3) {
-  window.addEventListener("pagehide", function() {
+  self.addEventListener("pagehide", function() {
     if (!config3.on) {
       return;
     }
     if (logs3.length > 0) {
-      if (config3.isWebSocket()) {
+      const url = new URL(config3.url);
+      if (url.protocol === "ws:" || url.protocol === "wss:") {
         const data = JSON.stringify(logs3);
         wsock.send(data);
       } else {
         const headers = new Headers();
-        headers.set("Content-Type", "application/json;charset=UTF-8");
+        headers.set("Content-Type", "applicaiton/json;charset=UTF-8");
         if (config3.authHeader) {
           headers.set("Authorization", config3.authHeader.toString());
         }
@@ -929,20 +760,61 @@ function sendOnClose(logs3, config3) {
     }
   });
 }
+async function sendLogs(logs3, config3, retries) {
+  const data = JSON.stringify(logs3);
+  const url = new URL(config3.url);
+  if (url.protocol === "ws:" || url.protocol === "wss:") {
+    wsock.send(data);
+    return;
+  }
+  const headers = new Headers({
+    "Content-Type": "application/json;charset=UTF-8"
+  });
+  updateAuthHeader(config3);
+  if (config3.authHeader) {
+    const authHeaderValue = typeof config3.authHeader === "function" ? config3.authHeader() : config3.authHeader;
+    headers.set("Authorization", authHeaderValue);
+  }
+  updateCustomHeaders(config3);
+  if (config3.headers) {
+    for (const [header, value] of Object.entries(config3.headers)) {
+      headers.set(header, value);
+    }
+  }
+  async function attemptSend(remainingRetries) {
+    try {
+      const response = await fetch(config3.url, {
+        method: "POST",
+        headers,
+        body: data
+      });
+      if (!response.ok) {
+        if (remainingRetries > 0) {
+          return attemptSend(remainingRetries - 1);
+        } else {
+          throw new Error(`Failed to send logs: ${response.statusText}`);
+        }
+      }
+    } catch (error) {
+      if (remainingRetries > 0) {
+        return attemptSend(remainingRetries - 1);
+      }
+      throw error;
+    }
+  }
+  return attemptSend(retries);
+}
 
 // src/main.ts
 var config2 = Configuration.getInstance();
 var logs2 = [];
 var startLoadTimestamp = Date.now();
 var endLoadTimestamp;
-try {
-  window.onload = function() {
-    endLoadTimestamp = Date.now();
-  };
-} catch (error) {
+self.onload = function() {
   endLoadTimestamp = Date.now();
-}
+};
 var started = false;
+var wsock;
 config2.update({
   useraleVersion: version
 });
@@ -957,7 +829,7 @@ function setup(config3) {
       try {
         state = document.readyState;
       } catch (error) {
-        return;
+        state = "complete";
       }
       if (config3.autostart && (state === "interactive" || state === "complete")) {
         attachHandlers(config3);
@@ -1013,10 +885,10 @@ export {
   packageLog,
   registerAuthCallback,
   removeCallbacks,
-  setup,
   start,
   started,
   stop,
-  version2 as version
+  version2 as version,
+  wsock
 };
 //# sourceMappingURL=main.mjs.map

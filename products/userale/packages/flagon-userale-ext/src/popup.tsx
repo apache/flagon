@@ -1,15 +1,32 @@
 import { useState } from "react";
 import Options from "~/options";
+import { sendToContent } from "~utils/messaging"
 
 function IndexPopup() {
   const [issueType, setIssueType] = useState("Bug");
   const [issueDescription, setIssueDescription] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO add messaging
-  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
 
+    try {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (!tab?.id) throw new Error("No active tab found");
+      const response = await sendToContent(tab.id, {
+        type: "issue-report",
+        payload: {
+          issueType,
+          issueDescription
+        }
+      });
+      console.log("Content script response:", response)
+      alert("Issue report sent!")
+      setIssueDescription("") // clear after send
+    } catch (error) {
+      console.error("Failed to send message", error)
+      alert("Failed to send issue report.")
+    }
+  }
   return (
     <div>
       <Options />

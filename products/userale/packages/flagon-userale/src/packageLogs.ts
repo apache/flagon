@@ -15,10 +15,8 @@
  * limitations under the License.
  */
 
-import { detect } from "detect-browser";
 import { Callbacks, Logging } from "@/types";
 import { Configuration } from "@/configure";
-const browserInfo = detect();
 
 export let logs: Array<Logging.Log>;
 let config: Configuration;
@@ -119,10 +117,10 @@ export function packageLog(
   let log: Logging.Log = {
     target: e.target ? getSelector(e.target) : null,
     path: buildPath(e),
-    pageUrl: window.location.href,
+    pageUrl: self.location.href,
     pageTitle: document.title,
     pageReferrer: document.referrer,
-    browser: detectBrowser(),
+    browser: self.navigator.userAgent,
     clientTime: timeFields.milli,
     microTime: timeFields.micro,
     location: getLocation(e),
@@ -191,10 +189,10 @@ export function packageCustomLog(
   }
 
   const metaData = {
-    pageUrl: window.location.href,
-    pageTitle: document.title,
-    pageReferrer: document.referrer,
-    browser: detectBrowser(),
+    pageUrl: self.location.href,
+    // pageTitle: document.title,
+    // pageReferrer: document.referrer,
+    browser: self.navigator.userAgent,
     clientTime: Date.now(),
     scrnRes: getScreenRes(),
     logType: "custom",
@@ -276,10 +274,10 @@ export function packageIntervalLog(e: Event) {
       intervalLog = {
         target: intervalId,
         path: intervalPath,
-        pageUrl: window.location.href,
+        pageUrl: self.location.href,
         pageTitle: document.title,
         pageReferrer: document.referrer,
-        browser: detectBrowser(),
+        browser: self.navigator.userAgent,
         count: intervalCounter,
         duration: timestamp - intervalTimer, // microseconds
         startTime: intervalTimer,
@@ -362,7 +360,7 @@ export function getLocation(e: Event) {
  * @return {Object} An object containing the innerWidth and InnerHeight
  */
 export function getScreenRes() {
-  return { width: window.innerWidth, height: window.innerHeight };
+  return { width: self.innerWidth, height: self.innerHeight };
 }
 
 /**
@@ -418,13 +416,6 @@ export function selectorizePath(path: EventTarget[]) {
     pathEle = path[i];
   }
   return pathSelectors;
-}
-
-export function detectBrowser() {
-  return {
-    browser: browserInfo ? browserInfo.name : "",
-    version: browserInfo ? browserInfo.version : "",
-  };
 }
 
 /**

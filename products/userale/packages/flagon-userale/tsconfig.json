@@ -13,12 +13,14 @@
         "isolatedModules": true,
         "jsx": "preserve",
         "lib": [
+            "ES2021",
+            "WebWorker",
             "dom",
             "dom.iterable",
             "esnext"
         ],
         "module": "esnext",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "noEmit": true,
         "noFallthroughCasesInSwitch": true,
         "noImplicitReturns": false,
@@ -34,7 +36,7 @@
         "skipLibCheck": true,
         "sourceMap": true,
         "strict": true,
-        "target": "es2015",
+        "target": "ES2021",
         "typeRoots": [
             "node_modules/@types/"
         ],

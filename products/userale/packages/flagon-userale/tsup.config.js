@@ -4,7 +4,7 @@ export default defineConfig([
   {
     tsconfig: './tsconfig.json',
     entry: ['src/main.ts'],
-    outDir: 'build/esm',
+    outDir: 'build',
     format: ['esm'],
     name: 'userale',
     target: 'es2021',

@@ -68,13 +68,15 @@ export function sendOnClose(
   logs: Array<Logging.Log>,
   config: Configuration,
 ): void {
-  window.addEventListener("pagehide", function() {
+  self.addEventListener("pagehide", function() {
     if (!config.on) {
       return;
     }
 
     if (logs.length > 0) {
-      if (config.websocketsEnabled) {
+      const url = new URL(config.url);
+    
+      if (url.protocol === "ws:" || url.protocol === "wss:") {
         const data = JSON.stringify(logs);
         wsock.send(data);
       } else {
@@ -106,51 +108,64 @@ export function sendOnClose(
  * @param  {Configuration} config     configuration singleton.
  * @param  {Number} retries Maximum number of attempts to send the logs.
  */
-
-// @todo expose config object to sendLogs replate url with config.url
-export function sendLogs(
+export async function sendLogs(
   logs: Array<Logging.Log>,
   config: Configuration,
   retries: number,
-) {
+): Promise<void> {
   const data = JSON.stringify(logs);
+  const url = new URL(config.url);
 
-  if (config.websocketsEnabled) {
+  if (url.protocol === "ws:" || url.protocol === "wss:") {
     wsock.send(data);
-  } else {
-    const req = new XMLHttpRequest();
+    return;
+  }
 
-    req.open("POST", config.url);
+  // Build headers
+  const headers = new Headers({
+    "Content-Type": "application/json;charset=UTF-8",
+  });
 
-    // Update headers
-    updateAuthHeader(config);
-    if (config.authHeader) {
-      req.setRequestHeader(
-        "Authorization",
-        typeof config.authHeader === "function"
-          ? config.authHeader()
-          : config.authHeader,
-      );
+  updateAuthHeader(config);
+  if (config.authHeader) {
+    const authHeaderValue =
+      typeof config.authHeader === "function"
+        ? config.authHeader()
+        : config.authHeader;
+    headers.set("Authorization", authHeaderValue);
+  }
+
+  // Update custom headers last to allow them to over-write the defaults. This assumes
+  // the user knows what they are doing and may want to over-write the defaults.
+  updateCustomHeaders(config);
+  if (config.headers) {
+    for (const [header, value] of Object.entries(config.headers)) {
+      headers.set(header, value);
     }
-    req.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+  }
 
-    // Update custom headers last to allow them to over-write the defaults. This assumes
-    // the user knows what they are doing and may want to over-write the defaults.
-    updateCustomHeaders(config);
-    if (config.headers) {
-      Object.entries(config.headers).forEach(([header, value]) => {
-        req.setRequestHeader(header, value);
+  async function attemptSend(remainingRetries: number): Promise<void> {
+    try {
+      const response = await fetch(config.url, {
+        method: "POST",
+        headers,
+        body: data,
       });
-    }
 
-    req.onreadystatechange = function() {
-      if (req.readyState === 4 && req.status !== 200) {
-        if (retries > 0) {
-          sendLogs(logs, config, retries--);
+      if (!response.ok) {
+        if (remainingRetries > 0) {
+          return attemptSend(remainingRetries - 1);
+        } else {
+          throw new Error(`Failed to send logs: ${response.statusText}`);
         }
       }
-    };
-
-    req.send(data);
+    } catch (error) {
+      if (remainingRetries > 0) {
+        return attemptSend(remainingRetries - 1);
+      }
+      throw error;
+    }
   }
+
+  return attemptSend(retries);
 }

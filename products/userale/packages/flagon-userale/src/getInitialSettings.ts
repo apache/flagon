@@ -26,19 +26,46 @@ let httpSessionId: string | null = null;
  * @return {Object} The extracted configuration object
  */
 export function getInitialSettings(): Settings.Config {
-  if (sessionId === null) {
-    sessionId = getsessionId(
-      "userAlesessionId",
-      "session_" + String(Date.now()),
-    );
-  }
 
-  if (httpSessionId === null) {
-    httpSessionId = getsessionId(
-      "userAleHttpSessionId",
-      generatehttpSessionId(),
-    );
-  }
+  if (typeof WorkerGlobalScope !== "undefined" &&
+    self instanceof WorkerGlobalScope) {
+      const settings: Settings.Config = {
+        authHeader: null,
+        autostart: true,
+        browserSessionId: null,
+        custIndex: null,
+        headers: null,
+        httpSessionId: null,
+        logCountThreshold: +(5),
+        logDetails: false,
+        resolution: +(500),
+        sessionId: sessionId,
+        time: (ts?: number) => (ts !== undefined ? ts : Date.now()),
+        toolName: null,
+        toolVersion: null,
+        transmitInterval: +(5000),
+        url: "http://localhost:8000",
+        useraleVersion: null,
+        userFromParams: null,
+        userId: null,
+      };
+      return settings;
+    }
+
+    if (sessionId === null) {
+      sessionId = getsessionId(
+        "userAlesessionId",
+        "session_" + String(Date.now()),
+      );
+    }
+
+    if (httpSessionId === null) {
+      httpSessionId = getsessionId(
+        "userAleHttpSessionId",
+        generatehttpSessionId(),
+      );
+    }
+    
 
   const script =
     document.currentScript ||
@@ -83,12 +110,12 @@ export function getInitialSettings(): Settings.Config {
  *
  */
 export function getsessionId(sessionKey: string, value: any) {
-  if (window.sessionStorage.getItem(sessionKey) === null) {
-    window.sessionStorage.setItem(sessionKey, JSON.stringify(value));
+  if (self.sessionStorage.getItem(sessionKey) === null) {
+    self.sessionStorage.setItem(sessionKey, JSON.stringify(value));
     return value;
   }
 
-  return JSON.parse(window.sessionStorage.getItem(sessionKey) || "");
+  return JSON.parse(self.sessionStorage.getItem(sessionKey) || "");
 }
 
 /**

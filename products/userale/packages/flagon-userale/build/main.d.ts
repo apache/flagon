@@ -65,6 +65,7 @@ declare namespace Settings {
     useraleVersion: Version;
     userId: UserId;
     version?: Version;
+    websocketsEnabled?: boolean;
   }
 
   export interface IConfiguration extends Config {
@@ -151,56 +152,6 @@ declare namespace Callbacks {
   };
 }
 
-declare class Configuration$1 {
-    [key: string]: Settings.ConfigValueTypes;
-    private static instance;
-    autostart: boolean;
-    authHeader: Settings.AuthHeader;
-    browserSessionId: Settings.SessionId;
-    custIndex: Settings.CustomIndex;
-    headers: Settings.Headers;
-    httpSessionId: Settings.SessionId;
-    logCountThreshold: number;
-    logDetails: boolean;
-    on: boolean;
-    resolution: number;
-    sessionId: Settings.SessionId;
-    time: Settings.TimeFunction;
-    toolName: Settings.ToolName;
-    toolVersion: Settings.Version;
-    transmitInterval: number;
-    url: string;
-    userFromParams: Settings.UserFromParams;
-    useraleVersion: Settings.Version;
-    userId: Settings.UserId;
-    version: Settings.Version;
-    websocketsEnabled: boolean;
-    private constructor();
-    static getInstance(): Configuration$1;
-    private initialize;
-    /**
-     * Resets the configuration to its initial state.
-     */
-    reset(): void;
-    /**
-     * Shallow merges a newConfig with the configuration class, updating it.
-     * Retrieves/updates the userid if userFromParams is provided.
-     * @param  {Partial<Settings.Config>} newConfig Configuration object to merge into the current config.
-     */
-    update(newConfig: Partial<Settings.Config>): void;
-    /**
-     * Attempts to extract the userid from the query parameters of the URL.
-     * @param  {string} param The name of the query parameter containing the userid.
-     * @return {string | null}       The extracted/decoded userid, or null if none is found.
-     */
-    static getUserIdFromParams(param: string): string | null;
-    /**
-     *
-     * @return {bool}
-     */
-    isWebSocket(): boolean;
-}
-
 /**
  * Defines the way information is extracted from various events.
  * Also defines which events we will listen to.
@@ -255,13 +206,8 @@ declare function getSelector(ele: EventTarget): string;
 declare function buildPath(e: Event): string[];
 
 declare let started: boolean;
+declare let wsock: WebSocket;
 
-/**
- * Hooks the global event listener, and starts up the
- * logging interval.
- * @param  {Configuration} config Configuration settings for the logger
- */
-declare function setup(config: Configuration$1): void;
 declare const version: string;
 /**
  * Used to start the logging process if the
@@ -286,4 +232,4 @@ declare function options(newConfig: Partial<Settings.Config> | undefined): Setti
  */
 declare function log(customLog: Logging.CustomLog | undefined): boolean;
 
-export { addCallbacks, buildPath, defineCustomDetails as details, getSelector, log, options, packageCustomLog, packageLog, registerAuthCallback, removeCallbacks, setup, start, started, stop, version };
+export { addCallbacks, buildPath, defineCustomDetails as details, getSelector, log, options, packageCustomLog, packageLog, registerAuthCallback, removeCallbacks, start, started, stop, version, wsock };
