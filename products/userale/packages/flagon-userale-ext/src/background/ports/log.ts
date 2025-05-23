@@ -6,7 +6,6 @@ const handler: PlasmoMessaging.PortHandler = async (req, res) => {
   let log = req.body
   log.browserSessionId = browserSessionId;
   let allowListRegExp = getAllowListRegExp();
-  console.log(allowListRegExp);
   if (allowListRegExp.test(log.pageUrl)) {
     userale.log(log);
   }

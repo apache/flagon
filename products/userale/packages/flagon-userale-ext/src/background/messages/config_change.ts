@@ -9,14 +9,11 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
 }
 
 export function setOptions(options: StoredOptions) {
-  console.log(options);
   userale.options({url: options.loggingUrl});
   allowListRegExp = new RegExp(options.allowList);
 }
 
 export function getAllowListRegExp() {
-  console.log("getAllowListRegExp");
-  console.log(allowListRegExp);
   return allowListRegExp;
 }
 

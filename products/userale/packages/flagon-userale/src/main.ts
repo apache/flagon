@@ -76,14 +76,16 @@ function setup(config: Configuration) {
         attachHandlers(config);
         initSender(logs, config);
         started = config.on = true;
-        packageCustomLog(
-          {
-            type: "load",
-            details: { pageLoadTime: endLoadTimestamp - startLoadTimestamp },
-          },
-          () => ({}),
-          false,
-        );
+        if(typeof window !== "undefined" && typeof document !== "undefined") {
+          packageCustomLog(
+            {
+              type: "load",
+              details: { pageLoadTime: endLoadTimestamp - startLoadTimestamp },
+            },
+            () => ({}),
+            false,
+          );
+        }
       } else {
         setup(config);
       }

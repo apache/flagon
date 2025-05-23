@@ -310,6 +310,8 @@ function packageCustomLog(customLog, detailFcn, userAction) {
   }
   const metaData = {
     pageUrl: self.location.href,
+    pageTitle: document.title,
+    pageReferrer: document.referrer,
     browser: self.navigator.userAgent,
     clientTime: Date.now(),
     scrnRes: getScreenRes(),
@@ -835,14 +837,16 @@ function setup(config3) {
         attachHandlers(config3);
         initSender(logs2, config3);
         started = config3.on = true;
-        packageCustomLog(
-          {
-            type: "load",
-            details: { pageLoadTime: endLoadTimestamp - startLoadTimestamp }
-          },
-          () => ({}),
-          false
-        );
+        if (typeof window !== "undefined" && typeof document !== "undefined") {
+          packageCustomLog(
+            {
+              type: "load",
+              details: { pageLoadTime: endLoadTimestamp - startLoadTimestamp }
+            },
+            () => ({}),
+            false
+          );
+        }
       } else {
         setup(config3);
       }

@@ -190,8 +190,8 @@ export function packageCustomLog(
 
   const metaData = {
     pageUrl: self.location.href,
-    // pageTitle: document.title,
-    // pageReferrer: document.referrer,
+    pageTitle: document.title,
+    pageReferrer: document.referrer,
     browser: self.navigator.userAgent,
     clientTime: Date.now(),
     scrnRes: getScreenRes(),
