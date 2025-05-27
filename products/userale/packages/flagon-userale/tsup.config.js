@@ -5,7 +5,7 @@ export default defineConfig([
     tsconfig: './tsconfig.json',
     entry: ['src/main.ts'],
     outDir: 'build',
-    format: ['esm'],
+    format: ['esm', 'iife'],
     name: 'userale',
     target: 'es2021',
     dts: true,
