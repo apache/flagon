@@ -50,7 +50,7 @@ export function registerAuthCallback(callback: Callbacks.AuthCallback) {
     verifyCallback(callback);
     authCallback = callback;
     return true;
-  } catch{
+  } catch {
     return false;
   }
 }

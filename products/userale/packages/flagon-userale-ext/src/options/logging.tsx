@@ -1,24 +1,22 @@
-import { useState, useEffect } from "react";
-import {
-  getStoredOptions,
-  setStoredOptions,
-} from "~/utils/storage";
+import { useEffect, useState } from "react"
+
+import { getStoredOptions, setStoredOptions } from "~/utils/storage"
 
 function Logging() {
-  const [loggingUrl, setLoggingUrl] = useState("");
-  const [allowList, setAllowList] = useState("");
+  const [loggingUrl, setLoggingUrl] = useState("")
+  const [allowList, setAllowList] = useState("")
 
   useEffect(() => {
     getStoredOptions().then((data) => {
-      setLoggingUrl(data.loggingUrl);
-      setAllowList(data.allowList);
-    });
-  }, []);
+      setLoggingUrl(data.loggingUrl)
+      setAllowList(data.allowList)
+    })
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const resp = await setStoredOptions({ loggingUrl, allowList });
-    alert(resp);
+    e.preventDefault()
+    const resp = await setStoredOptions({ loggingUrl, allowList })
+    alert(resp)
   }
 
   return (
@@ -26,11 +24,17 @@ function Logging() {
       <h2>Logging Options</h2>
       <form onSubmit={handleSubmit}>
         <label>Logging Endpoint URL:</label>
-        <input value={loggingUrl} onChange={(e) => setLoggingUrl(e.target.value)} />
+        <input
+          value={loggingUrl}
+          onChange={(e) => setLoggingUrl(e.target.value)}
+        />
         <br />
 
         <label>URL allowlist regex:</label>
-        <input value={allowList} onChange={(e) => setAllowList(e.target.value)} />
+        <input
+          value={allowList}
+          onChange={(e) => setAllowList(e.target.value)}
+        />
         <br />
 
         <div style={{ textAlign: "right" }}>
@@ -38,7 +42,7 @@ function Logging() {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
 export default Logging

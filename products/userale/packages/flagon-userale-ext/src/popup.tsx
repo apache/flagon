@@ -1,14 +1,15 @@
-import { useState } from "react";
-import Options from "~/options";
+import { useState } from "react"
+
+import Options from "~/options"
 
 function IndexPopup() {
-  const [issueType, setIssueType] = useState("Bug");
-  const [issueDescription, setIssueDescription] = useState("");
+  const [issueType, setIssueType] = useState("Bug")
+  const [issueDescription, setIssueDescription] = useState("")
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     // TODO add messaging
-  };
+  }
 
   return (
     <div>
@@ -60,7 +61,7 @@ function IndexPopup() {
         </div>
       </form>
     </div>
-  );
+  )
 }
 
-export default IndexPopup;
+export default IndexPopup

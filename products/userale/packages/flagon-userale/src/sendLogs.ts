@@ -47,7 +47,7 @@ export function sendOnInterval(
   logs: Array<Logging.Log>,
   config: Configuration,
 ): NodeJS.Timeout {
-  return setInterval(function() {
+  return setInterval(function () {
     if (!config.on) {
       return;
     }
@@ -68,7 +68,7 @@ export function sendOnClose(
   logs: Array<Logging.Log>,
   config: Configuration,
 ): void {
-  window.addEventListener("pagehide", function() {
+  window.addEventListener("pagehide", function () {
     if (!config.on) {
       return;
     }
@@ -143,7 +143,7 @@ export function sendLogs(
       });
     }
 
-    req.onreadystatechange = function() {
+    req.onreadystatechange = function () {
       if (req.readyState === 4 && req.status !== 200) {
         if (retries > 0) {
           sendLogs(logs, config, retries--);

@@ -50,7 +50,7 @@ export function registerHeadersCallback(callback: Callbacks.HeadersCallback) {
     verifyCallback(callback);
     headersCallback = callback;
     return true;
-  } catch{
+  } catch {
     return false;
   }
 }

@@ -25,13 +25,13 @@ echo '\a'
 
 echo "Running pre-commit hooks..."
 
-# # Check Prettier standards
-# npm run format ||
-# (
-#     sound
-#     echo "❌ Prettier Check Failed. Run npm run format, add changes and try commit again.";
-#     exit 1;
-# )
+# Check Prettier standards
+npm run format ||
+(
+    sound
+    echo "❌ Prettier Check Failed. Run npm run format, add changes and try commit again.";
+    exit 1;
+)
 
 # Check ESLint Standards
 npm run lint ||

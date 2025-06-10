@@ -29,10 +29,10 @@ const logs: Array<Logging.Log> = [];
 const startLoadTimestamp = Date.now();
 let endLoadTimestamp: number;
 try {
-  window.onload = function() {
+  window.onload = function () {
     endLoadTimestamp = Date.now();
   };
-} catch{
+} catch {
   endLoadTimestamp = Date.now();
 }
 
@@ -65,11 +65,11 @@ if (config.autostart) {
  */
 function setup(config: Configuration) {
   if (!started) {
-    setTimeout(function() {
+    setTimeout(function () {
       let state;
       try {
         state = document.readyState;
-      } catch{
+      } catch {
         initSender(logs, config);
       }
 
