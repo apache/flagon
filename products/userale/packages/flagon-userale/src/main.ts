@@ -32,7 +32,7 @@ try {
   window.onload = function() {
     endLoadTimestamp = Date.now();
   };
-} catch (error) {
+} catch{
   endLoadTimestamp = Date.now();
 }
 
@@ -69,7 +69,7 @@ function setup(config: Configuration) {
       let state;
       try {
         state = document.readyState;
-      } catch (error) {
+      } catch{
         initSender(logs, config);
       }
 

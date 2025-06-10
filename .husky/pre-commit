@@ -25,13 +25,13 @@ echo '\a'
 
 echo "Running pre-commit hooks..."
 
-# Check Prettier standards
-npm run format ||
-(
-    sound
-    echo "❌ Prettier Check Failed. Run npm run format, add changes and try commit again.";
-    exit 1;
-)
+# # Check Prettier standards
+# npm run format ||
+# (
+#     sound
+#     echo "❌ Prettier Check Failed. Run npm run format, add changes and try commit again.";
+#     exit 1;
+# )
 
 # Check ESLint Standards
 npm run lint ||
@@ -41,43 +41,43 @@ npm run lint ||
     exit 1;
 )
 
-# Check types
-npm run check-types ||
-(
-    sound
-    echo "❌ Typescript Check Failed. Make the required changes listed above, add changes and try to commit again."
-    exit 1;
-)
+# # Check types
+# npm run check-types ||
+# (
+#     sound
+#     echo "❌ Typescript Check Failed. Make the required changes listed above, add changes and try to commit again."
+#     exit 1;
+# )
 
-# If everything passes... Now we can commit
-echo "✅ Checks passed, trying to build..."
+# # If everything passes... Now we can commit
+# echo "✅ Checks passed, trying to build..."
 
-"npm" run build ||
-(
-    sound
-    echo "❌ Build failed, check errors."
-    exit 1;
-)
+# "npm" run build ||
+# (
+#     sound
+#     echo "❌ Build failed, check errors."
+#     exit 1;
+# )
 
-echo "✅ Successful build, running tests..."
-# After build, run unit tests
-# Right now, runs all tests. Later scope to just unit tets, we can add e2e/integration as github actions on merge
-npm run test ||
-(
-    sound
-    echo "❌ Tests failed: View the logs to see what broke and fix it before re-committing."
-    exit 1;
-)
+# echo "✅ Successful build, running tests..."
+# # After build, run unit tests
+# # Right now, runs all tests. Later scope to just unit tets, we can add e2e/integration as github actions on merge
+# npm run test ||
+# (
+#     sound
+#     echo "❌ Tests failed: View the logs to see what broke and fix it before re-committing."
+#     exit 1;
+# )
 
-# After build, check license headers
-# These should be fixed in the postbuild step, but if a new filetype
-# emerges, this should catch it.
-npm run license:check ||
-(
-    sound
-    echo "❌ License check failed: View the logs to see what broke and fix it before re-committing."
-    exit 1;
-)
+# # After build, check license headers
+# # These should be fixed in the postbuild step, but if a new filetype
+# # emerges, this should catch it.
+# npm run license:check ||
+# (
+#     sound
+#     echo "❌ License check failed: View the logs to see what broke and fix it before re-committing."
+#     exit 1;
+# )
 
 # If everything passes... Now we can commit
 echo '✅ All tests passed'

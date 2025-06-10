@@ -1,7 +1,7 @@
 import type { PlasmoMessaging } from "@plasmohq/messaging";
 import * as userale from "flagon-userale";
  
-const handler: PlasmoMessaging.PortHandler = async (req, res) => {
+const handler: PlasmoMessaging.PortHandler = async (req, _res) => {
   console.log(req);
   // todo apply browser session id to logs
   // // log.browserSessionId = browserSessionId;

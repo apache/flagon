@@ -443,7 +443,7 @@ export function buildAttrs(e: Event): Record<string, any> {
       let val: any = attr.value;
       try {
         val = JSON.parse(val);
-      } catch (error) {
+      } catch{
         // Ignore parsing errors, fallback to raw string value
       }
       attributes[attr.name] = val;

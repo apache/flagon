@@ -1,5 +1,5 @@
 import * as userale from "flagon-userale";
-import { getStoredOptions,} from "~/utils/storage";
+//import { getStoredOptions,} from "~/utils/storage";
 
 console.log("Service worker loaded!");
 
