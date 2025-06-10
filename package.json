@@ -1,7 +1,15 @@
 {
+    "devDependencies": {
+        "husky": "^9.1.7"
+    },
+    "husky": {
+        "hooks": {
+        "pre-commit": "npm run lint"
+        }
+    },
     "scripts": {
         "format": "prettier --ignore-path .gitignore --write products/userale/packages/flagon-userale/src products/userale/packages/flagon-userale-ext/src products/distill/distill",
         "lint": "eslint products/userale/packages/flagon-userale/src products/userale/packages/flagon-userale-ext/src products/distill/distill --fix --ext .ts --ext .js",
         "check-types": "tsc --pretty --noEmit"
-      }
+    }
 }
