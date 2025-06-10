@@ -1,15 +1,17 @@
 {
+    "name": "flagon",
+    "version": "1.0.0",
+    "scripts": {
+      "lint": "eslint products/userale/packages/flagon-userale/src products/userale/packages/flagon-userale-ext/src products/distill/distill --fix --ext .ts --ext .js"
+    },
     "devDependencies": {
-        "husky": "^9.1.7"
+      "husky": "^9.1.7",
+      "eslint": "^9.28.0"
     },
     "husky": {
-        "hooks": {
+      "hooks": {
         "pre-commit": "npm run lint"
-        }
-    },
-    "scripts": {
-        "format": "prettier --ignore-path .gitignore --write products/userale/packages/flagon-userale/src products/userale/packages/flagon-userale-ext/src products/distill/distill",
-        "lint": "eslint products/userale/packages/flagon-userale/src products/userale/packages/flagon-userale-ext/src products/distill/distill --fix --ext .ts --ext .js",
-        "check-types": "tsc --pretty --noEmit"
+      }
     }
-}
+  }
+  
