@@ -2,16 +2,16 @@
     "name": "flagon",
     "version": "1.0.0",
     "scripts": {
-      "lint": "eslint products/userale/packages/flagon-userale/src products/userale/packages/flagon-userale-ext/src products/distill/distill --fix --ext .ts --ext .js"
+        "prepare": "husky install",
+        "lint": "eslint products/userale/packages/flagon-userale/src products/userale/packages/flagon-userale-ext/src products/distill/distill --fix --ext .ts --ext .js"
     },
     "devDependencies": {
-      "husky": "^9.1.7",
-      "eslint": "^9.28.0"
+        "eslint": "^9.28.0",
+        "husky": "^8.0.3"
     },
     "husky": {
-      "hooks": {
-        "pre-commit": "npm run lint"
-      }
+        "hooks": {
+            "pre-commit": "npm run lint"
+        }
     }
-  }
-  
+}
