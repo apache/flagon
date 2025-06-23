@@ -1,24 +1,22 @@
-import { useState, useEffect } from "react";
-import {
-  getStoredOptions,
-  setStoredOptions,
-} from "~/utils/storage";
+import { useEffect, useState } from "react"
+
+import { getStoredOptions, setStoredOptions } from "~/utils/storage"
 
 function Logging() {
-  const [loggingUrl, setLoggingUrl] = useState("");
-  const [allowList, setAllowList] = useState("");
+  const [loggingUrl, setLoggingUrl] = useState("")
+  const [allowList, setAllowList] = useState("")
 
   useEffect(() => {
     getStoredOptions().then((data) => {
-      setLoggingUrl(data.loggingUrl);
-      setAllowList(data.allowList);
-    });
-  }, []);
+      setLoggingUrl(data.loggingUrl)
+      setAllowList(data.allowList)
+    })
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const resp = await setStoredOptions({ loggingUrl, allowList });
-    alert(resp);
+    e.preventDefault()
+    const resp = await setStoredOptions({ loggingUrl, allowList })
+    alert(resp)
   }
 
   return (
@@ -46,7 +44,7 @@ function Logging() {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
 export default Logging

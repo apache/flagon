@@ -24,5 +24,5 @@ function generateSessionId(): string {
       return dec.toString(16).padStart(2, "0");
     }).join("");
 }
- 
-export default handler;
+
+export default handler

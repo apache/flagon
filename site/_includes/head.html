@@ -6,11 +6,11 @@
   <title>{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
   <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}">
 
-  <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="/semantic/dist/semantic.min.js"></script>
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-  <script src="/js/main.js"></script>
+  <link rel="stylesheet" type="text/css" href="../semantic/dist/semantic.min.css">
+  <script src="../assets/jquery.min.js"></script>
+  <script src="../semantic/dist/semantic.min.js"></script>
+  <script src="../assets/d3.v4.min.js"></script>
+  <script src="../js/main.js"></script>
 
   <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">

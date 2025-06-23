@@ -60,7 +60,7 @@ if (config.autostart) {
  */
 function setup(config: Configuration) {
   if (!started) {
-    setTimeout(function() {
+    setTimeout(function () {
       let state;
       try {
         state = document.readyState;

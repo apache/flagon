@@ -1,21 +1,20 @@
-import { useState } from "react";
-import browser from "webextension-polyfill";
-import pkceChallenge from "pkce-challenge";
-import {
-  setStoredOptions,
-} from "~/utils/storage";
+import pkceChallenge from "pkce-challenge"
+import { useState } from "react"
+import browser from "webextension-polyfill"
+
+import { setStoredOptions } from "~/utils/storage"
 
 function Auth() {
-  const [issuerUrl, setIssuerUrl] = useState("");
-  const [clientId, setClientId] = useState("");
-  const [message, setMessage] = useState("");
+  const [issuerUrl, setIssuerUrl] = useState("")
+  const [clientId, setClientId] = useState("")
+  const [message, setMessage] = useState("")
 
   const handleLogin = async () => {
     try {
       // Generate the PKCE challenge pair (code_verifier and code_challenge)
-      const { code_verifier, code_challenge } = await pkceChallenge();
+      const { code_verifier, code_challenge } = await pkceChallenge()
 
-      const redirectUri = browser.identity.getRedirectURL("oauth2");
+      const redirectUri = browser.identity.getRedirectURL("oauth2")
 
       // Construct the OAuth authorization URL
       const authUrl =
@@ -25,19 +24,19 @@ function Auth() {
         `&redirect_uri=${encodeURIComponent(redirectUri)}` +
         `&scope=openid profile` +
         `&code_challenge=${code_challenge}` +
-        `&code_challenge_method=S256`;
+        `&code_challenge_method=S256`
 
       // Launch the web auth flow
       const resultUrl = await browser.identity.launchWebAuthFlow({
         url: authUrl,
-        interactive: true,
-      });
+        interactive: true
+      })
 
       // Extract the authorization code from the redirect URL
-      const url = new URL(resultUrl);
-      const authCode = url.searchParams.get("code");
+      const url = new URL(resultUrl)
+      const authCode = url.searchParams.get("code")
 
-      if (!authCode) throw new Error("No code returned");
+      if (!authCode) throw new Error("No code returned")
 
       // Exchange the authorization code for an access token
       const tokenRes = await fetch(
@@ -50,20 +49,20 @@ function Auth() {
             client_id: clientId,
             redirect_uri: redirectUri,
             code: authCode,
-            code_verifier: code_verifier,
-          }),
+            code_verifier: code_verifier
+          })
         }
-      );
+      )
 
-      const tokens = await tokenRes.json();
-      await setStoredOptions({ accessToken: tokens.access_token });
+      const tokens = await tokenRes.json()
+      await setStoredOptions({ accessToken: tokens.access_token })
 
-      setMessage("Login successful!");
+      setMessage("Login successful!")
     } catch (err) {
-      console.error("Login error:", err);
-      setMessage(err.toString());
+      console.error("Login error:", err)
+      setMessage(err.toString())
     }
-  };
+  }
 
   return (
     <div>
@@ -95,7 +94,7 @@ function Auth() {
       </form>
       {message && <p>{message}</p>}
     </div>
-  );
+  )
 }
 
-export default Auth;
+export default Auth

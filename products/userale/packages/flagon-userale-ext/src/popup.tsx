@@ -3,8 +3,8 @@ import Options from "~/options";
 import { sendToContent } from "~utils/messaging"
 
 function IndexPopup() {
-  const [issueType, setIssueType] = useState("Bug");
-  const [issueDescription, setIssueDescription] = useState("");
+  const [issueType, setIssueType] = useState("Bug")
+  const [issueDescription, setIssueDescription] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -77,7 +77,7 @@ function IndexPopup() {
         </div>
       </form>
     </div>
-  );
+  )
 }
 
-export default IndexPopup;
+export default IndexPopup

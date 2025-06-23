@@ -1,5 +1,5 @@
-import Auth from "~/options/auth";
-import Logging from "~/options/logging";
+import Auth from "~/options/auth"
+import Logging from "~/options/logging"
 
 function Options() {
   return (
@@ -8,7 +8,7 @@ function Options() {
       <Auth />
       <Logging />
     </div>
-  );
+  )
 }
 
-export default Options;
+export default Options
