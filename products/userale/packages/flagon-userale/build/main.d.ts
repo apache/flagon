@@ -206,7 +206,6 @@ declare function getSelector(ele: EventTarget): string;
 declare function buildPath(e: Event): string[];
 
 declare let started: boolean;
-declare let wsock: WebSocket;
 
 declare const version: string;
 /**
@@ -232,4 +231,4 @@ declare function options(newConfig: Partial<Settings.Config> | undefined): Setti
  */
 declare function log(customLog: Logging.CustomLog | undefined): boolean;
 
-export { addCallbacks, buildPath, defineCustomDetails as details, getSelector, log, options, packageCustomLog, packageLog, registerAuthCallback, removeCallbacks, start, started, stop, version, wsock };
+export { Logging, addCallbacks, buildPath, defineCustomDetails as details, getSelector, log, options, packageCustomLog, packageLog, registerAuthCallback, removeCallbacks, start, started, stop, version };

@@ -22,27 +22,17 @@
  * https://jestjs.io/docs/configuration
  */
 
-import type { Config } from "jest";
-
-const config: Config = {
-  // The root directory that Jest should scan for tests and modules within
-  rootDir: "../../",
-
-  // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
+/** @type {import('jest').Config} */
+const config = {
+  rootDir: "../",
+  preset: "ts-jest",
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
-
-  // The paths to modules that run some code to configure or set up the testing environment before each test
-  setupFiles: ["<rootDir>/test/unit/jest.setup.js"],
-
-  // The test environment that will be used for testing
-  // Turned off to avoid jsdom invoking node 'ws' module, which can't be used in browser
-  // Instead we specify jsdom environment on a per-test-file basis
-  //testEnvironment: "jsdom",
-
-  // The glob patterns Jest uses to detect test files
-  testMatch: ["<rootDir>/test/unit/spec/(*.)+(spec|test).[tj]s?(x)"],
+  setupFiles: ["<rootDir>/test/jest.setup.js"],
+  testMatch: ["<rootDir>/test/spec/(*.)+(spec|test).[tj]s?(x)"],
+  // Optionally specify this if you want default jsdom behavior:
+  // testEnvironment: "jsdom",
 };
 
-export default config;
+module.exports = config;

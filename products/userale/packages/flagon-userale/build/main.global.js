@@ -14,6 +14,646 @@
   See the License for the specific language governing permissions and
   limitations under the License.*/
 (() => {
+  var __defProp = Object.defineProperty;
+  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+  var __getOwnPropNames = Object.getOwnPropertyNames;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __esm = (fn, res) => function __init() {
+    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+  };
+  var __export = (target, all) => {
+    for (var name in all)
+      __defProp(target, name, { get: all[name], enumerable: true });
+  };
+  var __copyProps = (to, from, except, desc) => {
+    if (from && typeof from === "object" || typeof from === "function") {
+      for (let key of __getOwnPropNames(from))
+        if (!__hasOwnProp.call(to, key) && key !== except)
+          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+    }
+    return to;
+  };
+  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+  // src/packageLogs.ts
+  var packageLogs_exports = {};
+  __export(packageLogs_exports, {
+    addCallbacks: () => addCallbacks,
+    buildAttrs: () => buildAttrs,
+    buildCSS: () => buildCSS,
+    buildPath: () => buildPath,
+    cbHandlers: () => cbHandlers,
+    extractTimeFields: () => extractTimeFields,
+    filterHandler: () => filterHandler,
+    getLocation: () => getLocation,
+    getScreenRes: () => getScreenRes,
+    getSelector: () => getSelector,
+    initPackager: () => initPackager,
+    logs: () => logs,
+    mapHandler: () => mapHandler,
+    packageCustomLog: () => packageCustomLog,
+    packageIntervalLog: () => packageIntervalLog,
+    packageLog: () => packageLog,
+    removeCallbacks: () => removeCallbacks,
+    selectorizePath: () => selectorizePath
+  });
+  function addCallbacks(...newCallbacks) {
+    newCallbacks.forEach((source) => {
+      let descriptors = {};
+      descriptors = Object.keys(source).reduce((descriptors2, key) => {
+        descriptors2[key] = Object.getOwnPropertyDescriptor(source, key);
+        return descriptors2;
+      }, descriptors);
+      Object.getOwnPropertySymbols(source).forEach((sym) => {
+        const descriptor = Object.getOwnPropertyDescriptor(source, sym);
+        if (descriptor?.enumerable) {
+          descriptors[sym] = descriptor;
+        }
+      });
+      Object.defineProperties(cbHandlers, descriptors);
+    });
+    return cbHandlers;
+  }
+  function removeCallbacks(targetKeys) {
+    targetKeys.forEach((key) => {
+      if (Object.prototype.hasOwnProperty.call(cbHandlers, key)) {
+        delete cbHandlers[key];
+      }
+    });
+  }
+  function initPackager(newLogs, newConfig) {
+    logs = newLogs;
+    config = newConfig;
+    cbHandlers = {};
+    intervalId = null;
+    intervalType = null;
+    intervalPath = null;
+    intervalTimer = null;
+    intervalCounter = 0;
+    intervalLog = null;
+  }
+  function packageLog(e, detailFcn) {
+    if (!config.on) {
+      return false;
+    }
+    let details = null;
+    if (detailFcn) {
+      details = detailFcn(e);
+    }
+    const timeFields = extractTimeFields(
+      e.timeStamp && e.timeStamp > 0 ? config.time(e.timeStamp) : Date.now()
+    );
+    let log2 = {
+      target: e.target ? getSelector(e.target) : null,
+      path: buildPath(e),
+      pageUrl: self.location.href,
+      pageTitle: document.title,
+      pageReferrer: document.referrer,
+      userAgent: self.navigator.userAgent,
+      clientTime: timeFields.milli,
+      microTime: timeFields.micro,
+      location: getLocation(e),
+      scrnRes: getScreenRes(),
+      type: e.type,
+      logType: "raw",
+      userAction: true,
+      details,
+      userId: config.userId,
+      toolVersion: config.toolVersion,
+      toolName: config.toolName,
+      useraleVersion: config.useraleVersion,
+      sessionId: config.sessionId,
+      httpSessionId: config.httpSessionId,
+      browserSessionId: config.browserSessionId,
+      attributes: buildAttrs(e),
+      style: buildCSS(e)
+    };
+    if (typeof filterHandler === "function" && !filterHandler(log2)) {
+      return false;
+    }
+    if (typeof mapHandler === "function") {
+      log2 = mapHandler(log2, e);
+    }
+    for (const func of Object.values(cbHandlers)) {
+      if (typeof func === "function") {
+        log2 = func(log2, e);
+        if (!log2) {
+          return false;
+        }
+      }
+    }
+    logs.push(log2);
+    return true;
+  }
+  function packageCustomLog(customLog, detailFcn, userAction) {
+    if (!config.on) {
+      return false;
+    }
+    let details = null;
+    if (detailFcn.length === 0) {
+      const staticDetailFcn = detailFcn;
+      details = staticDetailFcn();
+    }
+    const metaData = {
+      pageUrl: self.location.href,
+      pageTitle: document.title,
+      pageReferrer: document.referrer,
+      userAgent: self.navigator.userAgent,
+      clientTime: Date.now(),
+      scrnRes: getScreenRes(),
+      logType: "custom",
+      userAction,
+      details,
+      userId: config.userId,
+      toolVersion: config.toolVersion,
+      toolName: config.toolName,
+      useraleVersion: config.useraleVersion,
+      sessionId: config.sessionId,
+      httpSessionId: config.httpSessionId,
+      browserSessionId: config.browserSessionId
+    };
+    let log2 = Object.assign(metaData, customLog);
+    if (typeof filterHandler === "function" && !filterHandler(log2)) {
+      return false;
+    }
+    if (typeof mapHandler === "function") {
+      log2 = mapHandler(log2);
+    }
+    for (const func of Object.values(cbHandlers)) {
+      if (typeof func === "function") {
+        log2 = func(log2, null);
+        if (!log2) {
+          return false;
+        }
+      }
+    }
+    logs.push(log2);
+    return true;
+  }
+  function extractTimeFields(timeStamp) {
+    return {
+      milli: Math.floor(timeStamp),
+      micro: Number((timeStamp % 1).toFixed(3))
+    };
+  }
+  function packageIntervalLog(e) {
+    try {
+      const target = e.target ? getSelector(e.target) : null;
+      const path = buildPath(e);
+      const type = e.type;
+      const timestamp = Math.floor(
+        e.timeStamp && e.timeStamp > 0 ? config.time(e.timeStamp) : Date.now()
+      );
+      if (intervalId == null) {
+        intervalId = target;
+        intervalType = type;
+        intervalPath = path;
+        intervalTimer = timestamp;
+        intervalCounter = 0;
+      }
+      if ((intervalId !== target || intervalType !== type) && intervalTimer) {
+        intervalLog = {
+          target: intervalId,
+          path: intervalPath,
+          pageUrl: self.location.href,
+          pageTitle: document.title,
+          pageReferrer: document.referrer,
+          userAgent: self.navigator.userAgent,
+          count: intervalCounter,
+          duration: timestamp - intervalTimer,
+          startTime: intervalTimer,
+          endTime: timestamp,
+          type: intervalType,
+          logType: "interval",
+          targetChange: intervalId !== target,
+          typeChange: intervalType !== type,
+          userAction: false,
+          userId: config.userId,
+          toolVersion: config.toolVersion,
+          toolName: config.toolName,
+          useraleVersion: config.useraleVersion,
+          sessionId: config.sessionId,
+          httpSessionId: config.httpSessionId,
+          browserSessionId: config.browserSessionId
+        };
+        if (typeof filterHandler === "function" && !filterHandler(intervalLog)) {
+          return false;
+        }
+        if (typeof mapHandler === "function") {
+          intervalLog = mapHandler(intervalLog, e);
+        }
+        for (const func of Object.values(cbHandlers)) {
+          if (typeof func === "function") {
+            intervalLog = func(intervalLog, null);
+            if (!intervalLog) {
+              return false;
+            }
+          }
+        }
+        if (intervalLog)
+          logs.push(intervalLog);
+        intervalId = target;
+        intervalType = type;
+        intervalPath = path;
+        intervalTimer = timestamp;
+        intervalCounter = 0;
+      }
+      if (intervalId == target && intervalType == type && intervalCounter) {
+        intervalCounter = intervalCounter + 1;
+      }
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  function getLocation(e) {
+    if (e instanceof MouseEvent) {
+      if (e.pageX != null) {
+        return { x: e.pageX, y: e.pageY };
+      } else if (e.clientX != null) {
+        return {
+          x: document.documentElement.scrollLeft + e.clientX,
+          y: document.documentElement.scrollTop + e.clientY
+        };
+      }
+    } else {
+      return { x: null, y: null };
+    }
+  }
+  function getScreenRes() {
+    return { width: self.innerWidth, height: self.innerHeight };
+  }
+  function getSelector(ele) {
+    if (ele instanceof HTMLElement || ele instanceof Element) {
+      if (ele.localName) {
+        return ele.localName + (ele.id ? "#" + ele.id : "") + (ele.className ? "." + ele.className : "");
+      } else if (ele.nodeName) {
+        return ele.nodeName + (ele.id ? "#" + ele.id : "") + (ele.className ? "." + ele.className : "");
+      }
+    } else if (ele instanceof Document) {
+      return "#document";
+    } else if (ele === globalThis) {
+      return "Window";
+    }
+    return "Unknown";
+  }
+  function buildPath(e) {
+    const path = e.composedPath();
+    return selectorizePath(path);
+  }
+  function selectorizePath(path) {
+    let i = 0;
+    let pathEle;
+    const pathSelectors = [];
+    while (pathEle = path[i]) {
+      pathSelectors.push(getSelector(pathEle));
+      ++i;
+      pathEle = path[i];
+    }
+    return pathSelectors;
+  }
+  function buildAttrs(e) {
+    const attributes = {};
+    const attributeBlackList = ["style"];
+    if (e.target && e.target instanceof Element) {
+      for (const attr of e.target.attributes) {
+        if (attributeBlackList.includes(attr.name))
+          continue;
+        let val = attr.value;
+        try {
+          val = JSON.parse(val);
+        } catch (error) {
+        }
+        attributes[attr.name] = val;
+      }
+    }
+    return attributes;
+  }
+  function buildCSS(e) {
+    const properties = {};
+    if (e.target && e.target instanceof HTMLElement) {
+      const styleObj = e.target.style;
+      for (let i = 0; i < styleObj.length; i++) {
+        const prop = styleObj[i];
+        properties[prop] = styleObj.getPropertyValue(prop);
+      }
+    }
+    return properties;
+  }
+  var logs, config, intervalId, intervalType, intervalPath, intervalTimer, intervalCounter, intervalLog, filterHandler, mapHandler, cbHandlers;
+  var init_packageLogs = __esm({
+    "src/packageLogs.ts"() {
+      "use strict";
+      filterHandler = null;
+      mapHandler = null;
+      cbHandlers = {};
+    }
+  });
+
+  // src/attachHandlers.ts
+  var attachHandlers_exports = {};
+  __export(attachHandlers_exports, {
+    attachHandlers: () => attachHandlers,
+    defineCustomDetails: () => defineCustomDetails,
+    defineDetails: () => defineDetails,
+    extractChangeDetails: () => extractChangeDetails,
+    extractInputDetails: () => extractInputDetails,
+    extractKeyboardDetails: () => extractKeyboardDetails,
+    extractMouseDetails: () => extractMouseDetails,
+    extractResizeDetails: () => extractResizeDetails,
+    extractScrollDetails: () => extractScrollDetails,
+    extractWheelDetails: () => extractWheelDetails
+  });
+  function extractMouseDetails(e) {
+    return {
+      clicks: e.detail,
+      ctrl: e.ctrlKey,
+      alt: e.altKey,
+      shift: e.shiftKey,
+      meta: e.metaKey
+    };
+  }
+  function extractKeyboardDetails(e) {
+    return {
+      key: e.key,
+      code: e.code,
+      ctrl: e.ctrlKey,
+      alt: e.altKey,
+      shift: e.shiftKey,
+      meta: e.metaKey
+    };
+  }
+  function extractInputDetails(e) {
+    return {
+      value: e.target.value
+    };
+  }
+  function extractChangeDetails(e) {
+    return {
+      value: e.target.value
+    };
+  }
+  function extractWheelDetails(e) {
+    return {
+      x: e.deltaX,
+      y: e.deltaY,
+      z: e.deltaZ
+    };
+  }
+  function extractScrollDetails() {
+    return {
+      x: window.scrollX,
+      y: window.scrollY
+    };
+  }
+  function extractResizeDetails() {
+    return {
+      width: window.outerWidth,
+      height: window.outerHeight
+    };
+  }
+  function defineDetails(config3) {
+    events = {
+      click: extractMouseDetails,
+      dblclick: extractMouseDetails,
+      mousedown: extractMouseDetails,
+      mouseup: extractMouseDetails,
+      focus: null,
+      blur: null,
+      input: config3.logDetails ? extractKeyboardDetails : null,
+      change: config3.logDetails ? extractChangeDetails : null,
+      dragstart: null,
+      dragend: null,
+      drag: null,
+      drop: null,
+      keydown: config3.logDetails ? extractKeyboardDetails : null,
+      mouseover: null
+    };
+    bufferBools = {};
+    bufferedEvents = {
+      wheel: extractWheelDetails,
+      scroll: extractScrollDetails,
+      resize: extractResizeDetails
+    };
+    refreshEvents = {
+      submit: null
+    };
+  }
+  function defineCustomDetails(options2, type) {
+    const eventType = {
+      click: extractMouseDetails,
+      dblclick: extractMouseDetails,
+      mousedown: extractMouseDetails,
+      mouseup: extractMouseDetails,
+      focus: null,
+      blur: null,
+      load: null,
+      input: options2.logDetails ? extractKeyboardDetails : null,
+      change: options2.logDetails ? extractChangeDetails : null,
+      dragstart: null,
+      dragend: null,
+      drag: null,
+      drop: null,
+      keydown: options2.logDetails ? extractKeyboardDetails : null,
+      mouseover: null,
+      wheel: extractWheelDetails,
+      scroll: extractScrollDetails,
+      resize: extractResizeDetails,
+      submit: null
+    };
+    return eventType[type];
+  }
+  function attachHandlers(config3) {
+    try {
+      defineDetails(config3);
+      Object.keys(events).forEach(function(ev) {
+        document.addEventListener(
+          ev,
+          function(e) {
+            packageLog(e, events[ev]);
+          },
+          true
+        );
+      });
+      intervalEvents.forEach(function(ev) {
+        document.addEventListener(
+          ev,
+          function(e) {
+            packageIntervalLog(e);
+          },
+          true
+        );
+      });
+      Object.keys(bufferedEvents).forEach(
+        function(ev) {
+          bufferBools[ev] = true;
+          self.addEventListener(
+            ev,
+            function(e) {
+              if (bufferBools[ev]) {
+                bufferBools[ev] = false;
+                packageLog(e, bufferedEvents[ev]);
+                setTimeout(function() {
+                  bufferBools[ev] = true;
+                }, config3.resolution);
+              }
+            },
+            true
+          );
+        }
+      );
+      Object.keys(refreshEvents).forEach(
+        function(ev) {
+          document.addEventListener(
+            ev,
+            function(e) {
+              packageLog(e, events[ev]);
+            },
+            true
+          );
+        }
+      );
+      windowEvents.forEach(function(ev) {
+        self.addEventListener(
+          ev,
+          function(e) {
+            packageLog(e, function() {
+              return { window: true };
+            });
+          },
+          true
+        );
+      });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  var events, bufferBools, bufferedEvents, refreshEvents, intervalEvents, windowEvents;
+  var init_attachHandlers = __esm({
+    "src/attachHandlers.ts"() {
+      "use strict";
+      init_packageLogs();
+      intervalEvents = [
+        "click",
+        "focus",
+        "blur",
+        "input",
+        "change",
+        "mouseover",
+        "submit"
+      ];
+      windowEvents = ["load", "blur", "focus"];
+    }
+  });
+
+  // src/utils/auth/index.ts
+  function updateAuthHeader(config3) {
+    if (authCallback) {
+      try {
+        config3.authHeader = authCallback();
+      } catch (e) {
+        console.error(`Error encountered while setting the auth header: ${e}`);
+      }
+    }
+  }
+  function registerAuthCallback(callback) {
+    try {
+      verifyCallback(callback);
+      authCallback = callback;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function verifyCallback(callback) {
+    if (typeof callback !== "function") {
+      throw new Error("Userale auth callback must be a function");
+    }
+    const result = callback();
+    if (typeof result !== "string") {
+      throw new Error("Userale auth callback must return a string");
+    }
+  }
+  function resetAuthCallback() {
+    authCallback = null;
+  }
+  var authCallback;
+  var init_auth = __esm({
+    "src/utils/auth/index.ts"() {
+      "use strict";
+      authCallback = null;
+    }
+  });
+
+  // src/utils/headers/index.ts
+  function updateCustomHeaders(config3) {
+    if (headersCallback) {
+      try {
+        config3.headers = headersCallback();
+      } catch (e) {
+        console.error(`Error encountered while setting the headers: ${e}`);
+      }
+    }
+  }
+  function registerHeadersCallback(callback) {
+    try {
+      verifyCallback2(callback);
+      headersCallback = callback;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  function verifyCallback2(callback) {
+    if (typeof callback !== "function") {
+      throw new Error("Userale headers callback must be a function");
+    }
+    const result = callback();
+    if (typeof result !== "object") {
+      throw new Error("Userale headers callback must return an object");
+    }
+    for (const [key, value] of Object.entries(result)) {
+      if (typeof key !== "string" || typeof value !== "string") {
+        throw new Error(
+          "Userale header callback must return an object with string keys and values"
+        );
+      }
+    }
+  }
+  function resetHeadersCallback() {
+    headersCallback = null;
+  }
+  var headersCallback;
+  var init_headers = __esm({
+    "src/utils/headers/index.ts"() {
+      "use strict";
+      headersCallback = null;
+    }
+  });
+
+  // src/utils/index.ts
+  var utils_exports = {};
+  __export(utils_exports, {
+    authCallback: () => authCallback,
+    headersCallback: () => headersCallback,
+    registerAuthCallback: () => registerAuthCallback,
+    registerHeadersCallback: () => registerHeadersCallback,
+    resetAuthCallback: () => resetAuthCallback,
+    resetHeadersCallback: () => resetHeadersCallback,
+    updateAuthHeader: () => updateAuthHeader,
+    updateCustomHeaders: () => updateCustomHeaders,
+    verifyAuthCallback: () => verifyCallback,
+    verifyHeadersCallback: () => verifyCallback2
+  });
+  var init_utils = __esm({
+    "src/utils/index.ts"() {
+      "use strict";
+      init_auth();
+      init_headers();
+    }
+  });
+
   // package.json
   var version = "2.4.0";
 
@@ -201,525 +841,21 @@
   var Configuration = _Configuration;
   Configuration.instance = null;
 
-  // src/packageLogs.ts
-  var logs;
-  var config;
-  var intervalId;
-  var intervalType;
-  var intervalPath;
-  var intervalTimer;
-  var intervalCounter;
-  var intervalLog;
-  var filterHandler = null;
-  var mapHandler = null;
-  var cbHandlers = {};
-  function addCallbacks(...newCallbacks) {
-    newCallbacks.forEach((source) => {
-      let descriptors = {};
-      descriptors = Object.keys(source).reduce((descriptors2, key) => {
-        descriptors2[key] = Object.getOwnPropertyDescriptor(source, key);
-        return descriptors2;
-      }, descriptors);
-      Object.getOwnPropertySymbols(source).forEach((sym) => {
-        const descriptor = Object.getOwnPropertyDescriptor(source, sym);
-        if (descriptor?.enumerable) {
-          descriptors[sym] = descriptor;
-        }
-      });
-      Object.defineProperties(cbHandlers, descriptors);
-    });
-    return cbHandlers;
-  }
-  function removeCallbacks(targetKeys) {
-    targetKeys.forEach((key) => {
-      if (Object.prototype.hasOwnProperty.call(cbHandlers, key)) {
-        delete cbHandlers[key];
-      }
-    });
-  }
-  function initPackager(newLogs, newConfig) {
-    logs = newLogs;
-    config = newConfig;
-    cbHandlers = {};
-    intervalId = null;
-    intervalType = null;
-    intervalPath = null;
-    intervalTimer = null;
-    intervalCounter = 0;
-    intervalLog = null;
-  }
-  function packageLog(e, detailFcn) {
-    if (!config.on) {
-      return false;
-    }
-    let details = null;
-    if (detailFcn) {
-      details = detailFcn(e);
-    }
-    const timeFields = extractTimeFields(
-      e.timeStamp && e.timeStamp > 0 ? config.time(e.timeStamp) : Date.now()
-    );
-    let log2 = {
-      target: e.target ? getSelector(e.target) : null,
-      path: buildPath(e),
-      pageUrl: self.location.href,
-      pageTitle: document.title,
-      pageReferrer: document.referrer,
-      browser: self.navigator.userAgent,
-      clientTime: timeFields.milli,
-      microTime: timeFields.micro,
-      location: getLocation(e),
-      scrnRes: getScreenRes(),
-      type: e.type,
-      logType: "raw",
-      userAction: true,
-      details,
-      userId: config.userId,
-      toolVersion: config.toolVersion,
-      toolName: config.toolName,
-      useraleVersion: config.useraleVersion,
-      sessionId: config.sessionId,
-      httpSessionId: config.httpSessionId,
-      browserSessionId: config.browserSessionId,
-      attributes: buildAttrs(e),
-      style: buildCSS(e)
-    };
-    if (typeof filterHandler === "function" && !filterHandler(log2)) {
-      return false;
-    }
-    if (typeof mapHandler === "function") {
-      log2 = mapHandler(log2, e);
-    }
-    for (const func of Object.values(cbHandlers)) {
-      if (typeof func === "function") {
-        log2 = func(log2, e);
-        if (!log2) {
-          return false;
-        }
-      }
-    }
-    logs.push(log2);
-    return true;
-  }
-  function packageCustomLog(customLog, detailFcn, userAction) {
-    if (!config.on) {
-      return false;
-    }
-    let details = null;
-    if (detailFcn.length === 0) {
-      const staticDetailFcn = detailFcn;
-      details = staticDetailFcn();
-    }
-    const metaData = {
-      pageUrl: self.location.href,
-      pageTitle: document.title,
-      pageReferrer: document.referrer,
-      browser: self.navigator.userAgent,
-      clientTime: Date.now(),
-      scrnRes: getScreenRes(),
-      logType: "custom",
-      userAction,
-      details,
-      userId: config.userId,
-      toolVersion: config.toolVersion,
-      toolName: config.toolName,
-      useraleVersion: config.useraleVersion,
-      sessionId: config.sessionId,
-      httpSessionId: config.httpSessionId,
-      browserSessionId: config.browserSessionId
-    };
-    let log2 = Object.assign(metaData, customLog);
-    if (typeof filterHandler === "function" && !filterHandler(log2)) {
-      return false;
-    }
-    if (typeof mapHandler === "function") {
-      log2 = mapHandler(log2);
-    }
-    for (const func of Object.values(cbHandlers)) {
-      if (typeof func === "function") {
-        log2 = func(log2, null);
-        if (!log2) {
-          return false;
-        }
-      }
-    }
-    logs.push(log2);
-    return true;
-  }
-  function extractTimeFields(timeStamp) {
-    return {
-      milli: Math.floor(timeStamp),
-      micro: Number((timeStamp % 1).toFixed(3))
-    };
-  }
-  function packageIntervalLog(e) {
-    try {
-      const target = e.target ? getSelector(e.target) : null;
-      const path = buildPath(e);
-      const type = e.type;
-      const timestamp = Math.floor(
-        e.timeStamp && e.timeStamp > 0 ? config.time(e.timeStamp) : Date.now()
-      );
-      if (intervalId == null) {
-        intervalId = target;
-        intervalType = type;
-        intervalPath = path;
-        intervalTimer = timestamp;
-        intervalCounter = 0;
-      }
-      if ((intervalId !== target || intervalType !== type) && intervalTimer) {
-        intervalLog = {
-          target: intervalId,
-          path: intervalPath,
-          pageUrl: self.location.href,
-          pageTitle: document.title,
-          pageReferrer: document.referrer,
-          browser: self.navigator.userAgent,
-          count: intervalCounter,
-          duration: timestamp - intervalTimer,
-          startTime: intervalTimer,
-          endTime: timestamp,
-          type: intervalType,
-          logType: "interval",
-          targetChange: intervalId !== target,
-          typeChange: intervalType !== type,
-          userAction: false,
-          userId: config.userId,
-          toolVersion: config.toolVersion,
-          toolName: config.toolName,
-          useraleVersion: config.useraleVersion,
-          sessionId: config.sessionId,
-          httpSessionId: config.httpSessionId,
-          browserSessionId: config.browserSessionId
-        };
-        if (typeof filterHandler === "function" && !filterHandler(intervalLog)) {
-          return false;
-        }
-        if (typeof mapHandler === "function") {
-          intervalLog = mapHandler(intervalLog, e);
-        }
-        for (const func of Object.values(cbHandlers)) {
-          if (typeof func === "function") {
-            intervalLog = func(intervalLog, null);
-            if (!intervalLog) {
-              return false;
-            }
-          }
-        }
-        if (intervalLog)
-          logs.push(intervalLog);
-        intervalId = target;
-        intervalType = type;
-        intervalPath = path;
-        intervalTimer = timestamp;
-        intervalCounter = 0;
-      }
-      if (intervalId == target && intervalType == type && intervalCounter) {
-        intervalCounter = intervalCounter + 1;
-      }
-      return true;
-    } catch {
-      return false;
-    }
-  }
-  function getLocation(e) {
-    if (e instanceof MouseEvent) {
-      if (e.pageX != null) {
-        return { x: e.pageX, y: e.pageY };
-      } else if (e.clientX != null) {
-        return {
-          x: document.documentElement.scrollLeft + e.clientX,
-          y: document.documentElement.scrollTop + e.clientY
-        };
-      }
-    } else {
-      return { x: null, y: null };
-    }
-  }
-  function getScreenRes() {
-    return { width: self.innerWidth, height: self.innerHeight };
-  }
-  function getSelector(ele) {
-    if (ele instanceof HTMLElement || ele instanceof Element) {
-      if (ele.localName) {
-        return ele.localName + (ele.id ? "#" + ele.id : "") + (ele.className ? "." + ele.className : "");
-      } else if (ele.nodeName) {
-        return ele.nodeName + (ele.id ? "#" + ele.id : "") + (ele.className ? "." + ele.className : "");
-      }
-    } else if (ele instanceof Document) {
-      return "#document";
-    } else if (ele === globalThis) {
-      return "Window";
-    }
-    return "Unknown";
-  }
-  function buildPath(e) {
-    const path = e.composedPath();
-    return selectorizePath(path);
-  }
-  function selectorizePath(path) {
-    let i = 0;
-    let pathEle;
-    const pathSelectors = [];
-    while (pathEle = path[i]) {
-      pathSelectors.push(getSelector(pathEle));
-      ++i;
-      pathEle = path[i];
-    }
-    return pathSelectors;
-  }
-  function buildAttrs(e) {
-    const attributes = {};
-    const attributeBlackList = ["style"];
-    if (e.target && e.target instanceof Element) {
-      for (const attr of e.target.attributes) {
-        if (attributeBlackList.includes(attr.name))
-          continue;
-        let val = attr.value;
-        try {
-          val = JSON.parse(val);
-        } catch (error) {
-        }
-        attributes[attr.name] = val;
-      }
-    }
-    return attributes;
-  }
-  function buildCSS(e) {
-    const properties = {};
-    if (e.target && e.target instanceof HTMLElement) {
-      const styleObj = e.target.style;
-      for (let i = 0; i < styleObj.length; i++) {
-        const prop = styleObj[i];
-        properties[prop] = styleObj.getPropertyValue(prop);
-      }
-    }
-    return properties;
-  }
-
-  // src/attachHandlers.ts
-  var events;
-  var bufferBools;
-  var bufferedEvents;
-  var refreshEvents;
-  var intervalEvents = [
-    "click",
-    "focus",
-    "blur",
-    "input",
-    "change",
-    "mouseover",
-    "submit"
-  ];
-  var windowEvents = ["load", "blur", "focus"];
-  function extractMouseDetails(e) {
-    return {
-      clicks: e.detail,
-      ctrl: e.ctrlKey,
-      alt: e.altKey,
-      shift: e.shiftKey,
-      meta: e.metaKey
-    };
-  }
-  function extractKeyboardDetails(e) {
-    return {
-      key: e.key,
-      code: e.code,
-      ctrl: e.ctrlKey,
-      alt: e.altKey,
-      shift: e.shiftKey,
-      meta: e.metaKey
-    };
-  }
-  function extractChangeDetails(e) {
-    return {
-      value: e.target.value
-    };
-  }
-  function extractWheelDetails(e) {
-    return {
-      x: e.deltaX,
-      y: e.deltaY,
-      z: e.deltaZ
-    };
-  }
-  function extractScrollDetails() {
-    return {
-      x: window.scrollX,
-      y: window.scrollY
-    };
-  }
-  function extractResizeDetails() {
-    return {
-      width: window.outerWidth,
-      height: window.outerHeight
-    };
-  }
-  function defineDetails(config3) {
-    events = {
-      click: extractMouseDetails,
-      dblclick: extractMouseDetails,
-      mousedown: extractMouseDetails,
-      mouseup: extractMouseDetails,
-      focus: null,
-      blur: null,
-      input: config3.logDetails ? extractKeyboardDetails : null,
-      change: config3.logDetails ? extractChangeDetails : null,
-      dragstart: null,
-      dragend: null,
-      drag: null,
-      drop: null,
-      keydown: config3.logDetails ? extractKeyboardDetails : null,
-      mouseover: null
-    };
-    bufferBools = {};
-    bufferedEvents = {
-      wheel: extractWheelDetails,
-      scroll: extractScrollDetails,
-      resize: extractResizeDetails
-    };
-    refreshEvents = {
-      submit: null
-    };
-  }
-  function defineCustomDetails(options2, type) {
-    const eventType = {
-      click: extractMouseDetails,
-      dblclick: extractMouseDetails,
-      mousedown: extractMouseDetails,
-      mouseup: extractMouseDetails,
-      focus: null,
-      blur: null,
-      load: null,
-      input: options2.logDetails ? extractKeyboardDetails : null,
-      change: options2.logDetails ? extractChangeDetails : null,
-      dragstart: null,
-      dragend: null,
-      drag: null,
-      drop: null,
-      keydown: options2.logDetails ? extractKeyboardDetails : null,
-      mouseover: null,
-      wheel: extractWheelDetails,
-      scroll: extractScrollDetails,
-      resize: extractResizeDetails,
-      submit: null
-    };
-    return eventType[type];
-  }
-  function attachHandlers(config3) {
-    try {
-      defineDetails(config3);
-      Object.keys(events).forEach(function(ev) {
-        self.addEventListener(
-          ev,
-          function(e) {
-            packageLog(e, events[ev]);
-          },
-          true
-        );
-      });
-      intervalEvents.forEach(function(ev) {
-        self.addEventListener(
-          ev,
-          function(e) {
-            packageIntervalLog(e);
-          },
-          true
-        );
-      });
-      Object.keys(bufferedEvents).forEach(
-        function(ev) {
-          bufferBools[ev] = true;
-          self.addEventListener(
-            ev,
-            function(e) {
-              if (bufferBools[ev]) {
-                bufferBools[ev] = false;
-                packageLog(e, bufferedEvents[ev]);
-                setTimeout(function() {
-                  bufferBools[ev] = true;
-                }, config3.resolution);
-              }
-            },
-            true
-          );
-        }
-      );
-      Object.keys(refreshEvents).forEach(
-        function(ev) {
-          document.addEventListener(
-            ev,
-            function(e) {
-              packageLog(e, events[ev]);
-            },
-            true
-          );
-        }
-      );
-      windowEvents.forEach(function(ev) {
-        self.addEventListener(
-          ev,
-          function(e) {
-            packageLog(e, function() {
-              return { window: true };
-            });
-          },
-          true
-        );
-      });
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  // src/utils/auth/index.ts
-  var authCallback = null;
-  function updateAuthHeader(config3) {
-    if (authCallback) {
-      try {
-        config3.authHeader = authCallback();
-      } catch (e) {
-        console.error(`Error encountered while setting the auth header: ${e}`);
-      }
-    }
-  }
-  function registerAuthCallback(callback) {
-    try {
-      verifyCallback(callback);
-      authCallback = callback;
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-  function verifyCallback(callback) {
-    if (typeof callback !== "function") {
-      throw new Error("Userale auth callback must be a function");
-    }
-    const result = callback();
-    if (typeof result !== "string") {
-      throw new Error("Userale auth callback must return a string");
-    }
-  }
-
-  // src/utils/headers/index.ts
-  var headersCallback = null;
-  function updateCustomHeaders(config3) {
-    if (headersCallback) {
-      try {
-        config3.headers = headersCallback();
-      } catch (e) {
-        console.error(`Error encountered while setting the headers: ${e}`);
-      }
-    }
-  }
+  // src/main.ts
+  init_attachHandlers();
+  init_packageLogs();
 
   // src/sendLogs.ts
+  init_utils();
   var sendIntervalId;
+  var wsock;
   function initSender(logs3, config3) {
     if (sendIntervalId) {
       clearInterval(sendIntervalId);
+    }
+    const url = new URL(config3.url);
+    if (url.protocol === "ws:" || url.protocol === "wss:") {
+      wsock = new WebSocket(config3.url);
     }
     sendIntervalId = sendOnInterval(logs3, config3);
     sendOnClose(logs3, config3);
@@ -747,7 +883,7 @@
           wsock.send(data);
         } else {
           const headers = new Headers();
-          headers.set("Content-Type", "applicaiton/json;charset=UTF-8");
+          headers.set("Content-Type", "application/json;charset=UTF-8");
           if (config3.authHeader) {
             headers.set("Authorization", config3.authHeader.toString());
           }
@@ -810,6 +946,9 @@
   }
 
   // src/main.ts
+  init_attachHandlers();
+  init_utils();
+  init_packageLogs();
   var config2 = Configuration.getInstance();
   var logs2 = [];
   var startLoadTimestamp = Date.now();
@@ -818,7 +957,6 @@
     endLoadTimestamp = Date.now();
   };
   var started = false;
-  var wsock;
   config2.update({
     useraleVersion: version
   });
@@ -879,6 +1017,23 @@
     } else {
       return false;
     }
+  }
+  if (typeof window !== "undefined") {
+    window.userale = {
+      start,
+      stop,
+      options,
+      log,
+      version,
+      details: (init_attachHandlers(), __toCommonJS(attachHandlers_exports)).defineCustomDetails,
+      registerAuthCallback: (init_utils(), __toCommonJS(utils_exports)).registerAuthCallback,
+      addCallbacks: (init_packageLogs(), __toCommonJS(packageLogs_exports)).addCallbacks,
+      removeCallbacks: (init_packageLogs(), __toCommonJS(packageLogs_exports)).removeCallbacks,
+      packageLog: (init_packageLogs(), __toCommonJS(packageLogs_exports)).packageLog,
+      packageCustomLog: (init_packageLogs(), __toCommonJS(packageLogs_exports)).packageCustomLog,
+      getSelector: (init_packageLogs(), __toCommonJS(packageLogs_exports)).getSelector,
+      buildPath: (init_packageLogs(), __toCommonJS(packageLogs_exports)).buildPath
+    };
   }
 })();
 //# sourceMappingURL=main.global.js.map

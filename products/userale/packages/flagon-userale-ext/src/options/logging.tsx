@@ -25,12 +25,20 @@ function Logging() {
     <div>
       <h2>Logging Options</h2>
       <form onSubmit={handleSubmit}>
-        <label>Logging Endpoint URL:</label>
-        <input value={loggingUrl} onChange={(e) => setLoggingUrl(e.target.value)} />
+      <label htmlFor="logging-url">Logging Endpoint URL:</label>
+        <input
+          id="logging-url"
+          value={loggingUrl}
+          onChange={(e) => setLoggingUrl(e.target.value)}
+        />
         <br />
 
-        <label>URL allowlist regex:</label>
-        <input value={allowList} onChange={(e) => setAllowList(e.target.value)} />
+        <label htmlFor="allowlist">URL allowlist regex:</label>
+        <input
+          id="allowlist"
+          value={allowList}
+          onChange={(e) => setAllowList(e.target.value)}
+        />
         <br />
 
         <div style={{ textAlign: "right" }}>

@@ -33,7 +33,6 @@ self.onload = function() {
 };
 
 export let started = false;
-export let wsock: WebSocket;
 export { defineCustomDetails as details } from "@/attachHandlers";
 export { registerAuthCallback as registerAuthCallback } from "@/utils";
 export {
@@ -44,6 +43,7 @@ export {
   getSelector as getSelector,
   buildPath as buildPath,
 } from "@/packageLogs";
+export type { Logging } from "@/types";
 
 config.update({
   useraleVersion: userAleVersion,
@@ -143,4 +143,24 @@ export function log(customLog: Logging.CustomLog | undefined) {
   } else {
     return false;
   }
+}
+
+
+// Only attach to window in IIFE builds
+if (typeof window !== "undefined") {
+  (window as any).userale = {
+    start,
+    stop,
+    options,
+    log,
+    version: userAleVersion,
+    details: require("@/attachHandlers").defineCustomDetails,
+    registerAuthCallback: require("@/utils").registerAuthCallback,
+    addCallbacks: require("@/packageLogs").addCallbacks,
+    removeCallbacks: require("@/packageLogs").removeCallbacks,
+    packageLog: require("@/packageLogs").packageLog,
+    packageCustomLog: require("@/packageLogs").packageCustomLog,
+    getSelector: require("@/packageLogs").getSelector,
+    buildPath: require("@/packageLogs").buildPath,
+  };
 }

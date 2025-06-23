@@ -18,9 +18,9 @@
 import { Configuration } from "@/configure";
 import { Logging } from "@/types";
 import { updateAuthHeader, updateCustomHeaders } from "@/utils";
-import { wsock } from "./main";
 
 let sendIntervalId: string | number | NodeJS.Timeout | undefined;
+let wsock: WebSocket;
 
 /**
  * Initializes the log queue processors.
@@ -30,6 +30,11 @@ let sendIntervalId: string | number | NodeJS.Timeout | undefined;
 export function initSender(logs: Array<Logging.Log>, config: Configuration) {
   if (sendIntervalId) {
     clearInterval(sendIntervalId);
+  }
+
+  const url = new URL(config.url);
+  if (url.protocol === "ws:" || url.protocol === "wss:") {
+    wsock = new WebSocket(config.url);
   }
 
   sendIntervalId = sendOnInterval(logs, config);
@@ -81,7 +86,7 @@ export function sendOnClose(
         wsock.send(data);
       } else {
         const headers: HeadersInit = new Headers();
-        headers.set("Content-Type", "applicaiton/json;charset=UTF-8");
+        headers.set("Content-Type", "application/json;charset=UTF-8");
 
         if (config.authHeader) {
           headers.set("Authorization", config.authHeader.toString());

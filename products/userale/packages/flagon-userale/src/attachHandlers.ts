@@ -201,7 +201,7 @@ export function attachHandlers(config: Configuration): boolean {
     defineDetails(config);
 
     (Object.keys(events) as Events.AllowedEvents[]).forEach(function (ev) {
-      self.addEventListener(
+      document.addEventListener(
         ev,
         function (e) {
           packageLog(e, events[ev]);
@@ -211,7 +211,7 @@ export function attachHandlers(config: Configuration): boolean {
     });
 
     intervalEvents.forEach(function (ev) {
-      self.addEventListener(
+      document.addEventListener(
         ev,
         function (e) {
           packageIntervalLog(e);

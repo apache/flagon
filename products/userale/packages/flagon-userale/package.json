@@ -7,7 +7,8 @@
   "types": "build/main.d.ts",
   "exports": {
     ".": {
-      "import": "./build/main.mjs"
+      "import": "./build/main.mjs",
+      "types": "./build/main.d.ts"
     }
   },
   "scripts": {
@@ -16,15 +17,8 @@
     "check-types": "tsc --pretty --noEmit",
     "build": "tsc && tsup",
     "clean": "rm -rf ./build",
-    "test": "npm run test:unit && npm run test:e2e",
-    "test:unit": "jest -c ./test/unit/jest.config.ts",
-    "test:e2e": "playwright test -c ./test/e2e/playwright.config.ts",
-    "pretest:e2e": "rm -rf ./test/e2e/chromeData/*",
-    "posttest:e2e": "rm -rf ./test/e2e/chromeData/*",
-    "example:run": "node example/server.js",
-    "example:watch": "nodemon -w ./example example/server.js",
+    "test": "jest -c ./test/jest.config.js",
     "prepare": "husky",
-    "pretest": "npx playwright install",
     "commit": "cz"
   },
   "repository": {
@@ -55,7 +49,7 @@
   ],
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/apache/flagon-useralejs/issues"
+    "url": "https://github.com/apache/flagon/issues"
   },
   "homepage": "https://flagon.apache.org/",
   "engines": {
@@ -64,8 +58,9 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.2.0",
-    "@playwright/test": "^1.51.0",
-    "@types/jest": "^29.5.12",
+    "@jest/globals": "^29.7.0",
+    "@playwright/test": "^1.52.0",
+    "@types/jest": "^29.5.14",
     "@types/jsdom": "^21.1.6",
     "@types/node": "^20.14.2",
     "@types/ws": "^8.5.12",
@@ -87,20 +82,18 @@
     "jest-environment-jsdom": "^29.7.0",
     "jsdom": "^24.0.0",
     "jsonschema": "^1.4.1",
-    "nodemon": "^3.0.2",
     "prettier": "^3.2.5",
+    "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "tsup": "^5.10.0",
-    "typescript": "^5.4.5",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^7.8.0",
+    "whatwg-fetch": "^3.6.20",
     "ws": "^8.18.0"
   },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  },
-  "dependencies": {
-    "@jest/globals": "^29.7.0"
   }
 }

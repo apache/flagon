@@ -1,0 +1,116 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://flagon.incubator.apache.org/log.schema.json",
+    "title": "Log",
+    "description": "A raw or custom log produced by userale",
+    "type": "object",
+    "properties": {
+        "target": {
+            "type": "string"
+        },
+        "path": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "minItems": 1
+        },
+        "pageUrl": {
+            "type": "string"
+        },
+        "pageTitle": {
+            "type": "string"
+        },
+        "userAgent": {
+            "type": "string"
+        },
+        "clientTime": {
+            "type": "integer"
+        },
+        "microTime": {
+            "type": "number",
+            "minimum": 0,
+            "maxmaximumi": 1
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+              "x": {
+                  "type": ["integer", "null"]
+              },
+              "y": {
+                  "type": ["integer", "null"]
+              }
+          },
+          "required" : ["x", "y"]
+        },
+        "scrnRes": {
+          "type": "object",
+          "properties": {
+              "height": {
+                  "type": "integer"
+              },
+              "width": {
+                  "type": "integer"
+              }
+          },
+          "required" : ["height", "width"]
+        },
+        "type": {
+          "type": "string"
+        },
+        "logType": {
+          "type": "string",
+          "enum": ["raw", "custom"]
+        },
+        "userAction": {
+          "type": "boolean"
+        },
+        "details": {
+          "type": ["object", "null"]
+        },
+        "userId": {
+          "type": ["string", "null"]
+        },
+        "toolVersion": {
+          "type":["string", "null"]
+        },
+        "toolName": {
+          "type": ["string", "null"]
+        },
+        "useraleVersion": {
+          "type": "string"
+        },
+        "sessionId": {
+          "type": "string"
+        }
+    },
+    "required": [
+        "pageUrl",
+        "pageTitle",
+        "pageReferrer",
+        "userAgent",
+        "clientTime",
+        "scrnRes",
+        "logType",
+        "userAction",
+        "details",
+        "userId",
+        "toolVersion",
+        "toolName",
+        "useraleVersion",
+        "sessionId"
+    ],
+    "if": {
+        "properties": { "logType": { "const": "raw" } }
+    },
+    "then": {
+        "required": [
+            "target",
+            "path",
+            "microTime",
+            "location",
+            "type"
+        ]
+    }
+}

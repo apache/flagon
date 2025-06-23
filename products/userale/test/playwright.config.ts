@@ -19,6 +19,8 @@
 
 import { defineConfig } from "@playwright/test";
 
+process.env.PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS = '1';
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -69,18 +71,17 @@ export default defineConfig({
       testMatch: "*websocket*",
       use: {
         browserName: "chromium",
-        headless: false,
         baseURL: "http://127.0.0.1:8000/ws",
       },
     },
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: [
+  webServer:
     {
-      command: "npm run example:run",
+      command: "pnpm run example:run",
       url: "http://127.0.0.1:8000",
-      reuseExistingServer: !process.env.CI,
-    },
-  ]
+      reuseExistingServer: false,
+      gracefulShutdown: { signal: 'SIGTERM', timeout: 1000 }
+    }
 });

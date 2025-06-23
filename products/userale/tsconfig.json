@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "target": "ESNext",
+      "module": "CommonJS",
+      "lib": ["DOM", "ESNext"],
+      "strict": true,
+      "esModuleInterop": true,
+      "moduleResolution": "Node",
+      "types": ["node", "playwright"],
+      "skipLibCheck": true
+    },
+    "include": ["**/*.ts", "packages/flagon-userale/test/jest.config.js"]
+  }
+  

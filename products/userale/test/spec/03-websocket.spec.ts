@@ -17,12 +17,7 @@
 import { test, expect } from "./fixtures/extension.fixture";
 
 test.describe("Userale logging", () => {
-  test("should connect to WebSocket server", async ({ page }) => {
-    page.on("websocket", ws => {
-      console.log(`WebSocket opened with URL: ${ws.url()}`);
-      expect(ws.url()).toBe("ws://localhost:8001/");
-    })
-
+  test("connects to WebSocket server and sends logs", async ({ page }) => {
     const wsPromise = page.waitForEvent("websocket");
 
     await page.goto("http://127.0.0.1:8000/ws");
@@ -31,9 +26,16 @@ test.describe("Userale logging", () => {
     }
 
     const ws = await wsPromise;
-    const message = ws.waitForEvent("framesent", { predicate: ev => ev.payload.includes("\"logType\":\"custom\"") });
-    expect(await message).toEqual(expect.objectContaining({
-      payload: expect.stringContaining("\"logType\":\"custom\""),
-    }));
+    expect(ws.url()).toBe("ws://localhost:8000/");
+
+    const message = await ws.waitForEvent("framesent", {
+      predicate: (event) => event.payload.includes('"logType":"custom"'),
+    });
+
+    expect(message).toEqual(
+      expect.objectContaining({
+        payload: expect.stringContaining('"logType":"custom"'),
+      })
+    );
   });
 });
