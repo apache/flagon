@@ -43,9 +43,9 @@ export async function setStoredOptions(values: Partial<StoredOptions>) {
   } catch (error) {
     return error
   }
-  
+
   // Store the options for after the browser is closed
-  await browser.storage.local.set(values);
+  await browser.storage.local.set(values)
 
   // Notify the background script of the change
   return await sendToBackground({

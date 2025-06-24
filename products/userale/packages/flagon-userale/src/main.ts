@@ -15,10 +15,20 @@
  * limitations under the License.
  */
 
+import { defineCustomDetails } from "@/attachHandlers";
+import { registerAuthCallback } from "@/utils";
+import {
+  addCallbacks,
+  removeCallbacks,
+  packageLog,
+  packageCustomLog,
+  getSelector,
+  buildPath,
+  initPackager,
+} from "@/packageLogs";
 import { version as userAleVersion } from "../package.json";
 import { Configuration } from "@/configure";
 import { attachHandlers } from "@/attachHandlers";
-import { initPackager, packageCustomLog } from "@/packageLogs";
 import { initSender } from "@/sendLogs";
 
 import type { Settings, Logging } from "@/types";
@@ -28,7 +38,7 @@ const logs: Array<Logging.Log> = [];
 
 const startLoadTimestamp = Date.now();
 let endLoadTimestamp: number;
-self.onload = function() {
+self.onload = function () {
   endLoadTimestamp = Date.now();
 };
 
@@ -76,7 +86,7 @@ function setup(config: Configuration) {
         attachHandlers(config);
         initSender(logs, config);
         started = config.on = true;
-        if(typeof window !== "undefined" && typeof document !== "undefined") {
+        if (typeof window !== "undefined" && typeof document !== "undefined") {
           packageCustomLog(
             {
               type: "load",
@@ -145,7 +155,6 @@ export function log(customLog: Logging.CustomLog | undefined) {
   }
 }
 
-
 // Only attach to window in IIFE builds
 if (typeof window !== "undefined") {
   (window as any).userale = {
@@ -154,13 +163,13 @@ if (typeof window !== "undefined") {
     options,
     log,
     version: userAleVersion,
-    details: require("@/attachHandlers").defineCustomDetails,
-    registerAuthCallback: require("@/utils").registerAuthCallback,
-    addCallbacks: require("@/packageLogs").addCallbacks,
-    removeCallbacks: require("@/packageLogs").removeCallbacks,
-    packageLog: require("@/packageLogs").packageLog,
-    packageCustomLog: require("@/packageLogs").packageCustomLog,
-    getSelector: require("@/packageLogs").getSelector,
-    buildPath: require("@/packageLogs").buildPath,
+    details: defineCustomDetails,
+    registerAuthCallback,
+    addCallbacks,
+    removeCallbacks,
+    packageLog,
+    packageCustomLog,
+    getSelector,
+    buildPath,
   };
 }

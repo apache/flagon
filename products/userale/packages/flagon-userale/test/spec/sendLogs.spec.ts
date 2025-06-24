@@ -106,7 +106,7 @@ describe("sendLogs", () => {
 
   it("sends logs on page exit with fetch", () => {
     const fetchSpy = jest.spyOn(global, "fetch");
-    
+
     config.update({ on: true, url: "http://test.com" });
     sendOnClose([], config);
     config.update({ on: true, url: "http://test.com" });
@@ -118,10 +118,9 @@ describe("sendLogs", () => {
     fetchSpy.mockRestore();
   });
 
-
   it("does not send logs on page exit when config is off", () => {
     const fetchSpy = jest.spyOn(global, "fetch");
-    
+
     config.update({ on: false, url: "test" });
     sendOnClose([{ foo: "bar" }], config);
     global.window.dispatchEvent(new window.CustomEvent("pagehide"));
@@ -140,30 +139,29 @@ describe("sendLogs", () => {
       logCountThreshold: 1,
     });
     jest.useFakeTimers();
-  
+
     const authCallback = jest.fn().mockReturnValue("fakeAuthToken");
     registerAuthCallback(authCallback);
-  
+
     initSender(logs, config);
     logs.push({ foo: "bar" });
-  
+
     jest.advanceTimersByTime(config.transmitInterval);
-  
+
     expect(xhrMock.send).toHaveBeenCalledTimes(1);
-  
+
     // Filter only calls to setRequestHeader with 'Authorization'
     const calls = (xhrMock.setRequestHeader as jest.Mock).mock.calls;
     const authHeaderCall = calls.find(
-      ([header]) => header.toLowerCase() === "authorization"
+      ([header]) => header.toLowerCase() === "authorization",
     );
-    
+
     expect(authHeaderCall?.[0].toLowerCase()).toBe("authorization");
     expect(authHeaderCall?.[1]).toBe("fakeAuthToken");
-  
+
     jest.useRealTimers();
     done();
   });
-  
 
   it("sends logs with proper custom headers when using registerHeadersCallback", (done) => {
     const logs: Array<Logging.Log> = [];

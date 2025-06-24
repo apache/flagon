@@ -1,14 +1,18 @@
 {
-    "compilerOptions": {
-      "target": "ESNext",
-      "module": "CommonJS",
-      "lib": ["DOM", "ESNext"],
-      "strict": true,
-      "esModuleInterop": true,
-      "moduleResolution": "Node",
-      "types": ["node", "playwright"],
-      "skipLibCheck": true
-    },
-    "include": ["**/*.ts", "packages/flagon-userale/test/jest.config.js"]
-  }
-  
+  "references": [
+    { "path": "packages/flagon-userale" },
+    { "path": "packages/flagon-userale-ext" }
+  ],
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "lib": ["DOM", "ESNext"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "composite": false
+  },
+  "exclude": ["node_modules"]
+}

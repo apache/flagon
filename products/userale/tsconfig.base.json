@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "target": "ES2021",
+      "module": "ESNext",
+      "lib": ["DOM", "DOM.Iterable", "ESNext", "WebWorker"],
+      "strict": true,
+      "esModuleInterop": true,
+      "moduleResolution": "node",
+      "skipLibCheck": true,
+      "resolveJsonModule": true,
+      "allowSyntheticDefaultImports": true,
+      "forceConsistentCasingInFileNames": true,
+      "sourceMap": true,
+      "pretty": true,
+      "typeRoots": ["node_modules/@types"]
+    }
+  }
+  

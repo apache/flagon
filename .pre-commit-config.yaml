@@ -1,0 +1,30 @@
+repos:
+  - repo: local
+    hooks:
+      - id: userale-format
+        name: Prettier Format Check (userale)
+        entry: bash -c 'cd products/userale && pnpm run format'
+        language: system
+        pass_filenames: false
+        files: ^products/userale/
+
+      - id: userale-lint
+        name: ESLint Check (userale)
+        entry: bash -c 'cd products/userale && pnpm run lint'
+        language: system
+        pass_filenames: false
+        files: ^products/userale/
+
+      - id: userale-build
+        name: Build Check (userale)
+        entry: bash -c 'cd products/userale && pnpm run build'
+        language: system
+        pass_filenames: false
+        files: ^products/userale/
+
+      - id: userale-test
+        name: Tests (userale)
+        entry: bash -c 'cd products/userale && pnpm run test'
+        language: system
+        pass_filenames: false
+        files: ^products/userale/

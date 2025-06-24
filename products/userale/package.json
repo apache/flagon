@@ -3,6 +3,8 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
+    "format": "prettier --ignore-path .gitignore --write 'packages/**/{src,test}/**/*.{ts,js,tsx,jsx}'",
+    "lint": "eslint 'packages/**/src/**/*.{ts,js,tsx,jsx}' --fix",
     "build": "pnpm -r run build",
     "test": "playwright test -c ./test/playwright.config.ts && pnpm -r test",
     "pretest": "npx playwright install",
@@ -10,14 +12,21 @@
     "example:watch": "nodemon -w ./example/server example/server/server.js"
   },
   "devDependencies": {
+    "@eslint/js": "^9.29.0",
+    "@ianvs/prettier-plugin-sort-imports": "4.1.1",
     "@playwright/test": "^1.52.0",
     "@types/node": "^22.15.30",
     "body-parser": "^1.20.2",
+    "eslint": "9.29.0",
+    "eslint-plugin-jest": "^29.0.1",
     "express": "^4.18.2",
     "flagon-userale": "workspace:flagon-userale",
     "jsonschema": "^1.4.1",
-    "pnpm": "^10.0.0",
     "nodemon": "^3.0.2",
+    "pnpm": "^10.0.0",
+    "prettier": "3.6.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^7.8.0",
     "ws": "^8.18.0"
   }
 }

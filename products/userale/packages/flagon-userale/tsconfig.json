@@ -1,54 +1,23 @@
 {
+    "extends": "../../tsconfig.base.json",
     "compilerOptions": {
-        "allowJs": false,
-        "allowSyntheticDefaultImports": true,
-        "allowUnreachableCode": false,
-        "allowUnusedLabels": false,
-        "baseUrl": ".",
-        "checkJs": false,
-        "declaration": true,
-        "declarationDir": "./build",
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": false,
-        "isolatedModules": true,
-        "jsx": "preserve",
-        "lib": [
-            "ES2021",
-            "WebWorker",
-            "dom",
-            "dom.iterable",
-            "esnext"
-        ],
-        "module": "esnext",
-        "moduleResolution": "bundler",
-        "noEmit": true,
-        "noFallthroughCasesInSwitch": true,
-        "noImplicitReturns": false,
-        "noUnusedLocals": true,
-        "noUnusedParameters": false,
-        "paths": {
-            "@/*": [
-                "./src/*"
-            ]
-        },
-        "pretty": true,
-        "resolveJsonModule": true,
-        "skipLibCheck": true,
-        "sourceMap": true,
-        "strict": true,
-        "target": "ES2021",
-        "typeRoots": [
-            "node_modules/@types/"
-        ],
+      "composite": true,
+      "declaration": true,
+      "declarationMap": true,
+      "declarationDir": "./build",
+      "module": "ESNext",
+      "moduleResolution": "node",
+      "noEmit": true,
+      "rootDir": "./src",
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["./src/*"]
+      }
     },
     "include": [
-        "src",
-        "test",
-        "src/types.d.ts"
+      "src/**/*.ts",
+      "src/types.d.ts"
     ],
-    "exclude": [
-        "node_modules",
-        "build",
-        "logs"
-    ],
-}
+    "exclude": ["node_modules", "build"]
+  }
+  

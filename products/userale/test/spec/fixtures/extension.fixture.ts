@@ -16,6 +16,7 @@ export const test = base.extend<{
     );
     const context = await chromium.launchPersistentContext(os.tmpdir(), {
       channel: 'chromium',
+      headless: false,
       args: [
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,
@@ -40,7 +41,6 @@ export const test = base.extend<{
         const listener = async (req: Request) => {
           const url = req.url();
           const method = req.method();
-          // console.log(req);
 
           if (!url.startsWith('http://localhost:8000') || method !== 'POST') return;
 

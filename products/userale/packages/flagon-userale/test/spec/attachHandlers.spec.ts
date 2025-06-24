@@ -106,7 +106,7 @@ describe("attachHandlers", () => {
     const rate = 500;
     jest
       .spyOn(global.document, "addEventListener")
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
     // Tries to call an event 3 times. Twice in quick succession, then once after the set delay.
     // Number of actual calls to packageLog are recorded in callCount. Should amount to exactly 2 calls.
     const listenerHook = (ev: string, fn: CallableFunction) => {
@@ -135,6 +135,6 @@ describe("attachHandlers", () => {
 
   describe("defineDetails", () => {
     // TODO: clarify what constitutes "high detail events" and what is "correct"
-    it.skip("configures high detail events correctly", () => { });
+    it.skip("configures high detail events correctly", () => {});
   });
 });

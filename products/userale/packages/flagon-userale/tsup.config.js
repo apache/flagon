@@ -8,7 +8,7 @@ export default defineConfig([
     format: ['esm', 'iife'],
     name: 'userale',
     target: 'es2021',
-    dts: true,
+    dts: false,
     sourcemap: true,
     clean: true,
     minify: false,

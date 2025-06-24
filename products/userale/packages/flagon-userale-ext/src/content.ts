@@ -12,29 +12,33 @@ const logPort = getPort("log")
 
 userale.addCallbacks({
   rerouteLog(log) {
-    console.log(log);
-    logPort.postMessage({body: log});
-    return false;
+    console.log(log)
+    logPort.postMessage({ body: log })
+    return false
   }
 })
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if( message.type == "tab-event") {
-    const { type, tab, data } = message.payload;
+  if (message.type == "tab-event") {
+    const { type, tab, data } = message.payload
     userale.packageCustomLog(
-      {type},
-      () => { return data; },
-      true,
-    );
-    sendResponse({ status: "received" });
+      { type },
+      () => {
+        return data
+      },
+      true
+    )
+    sendResponse({ status: "received" })
   } else if (message.type === "issue-report") {
     userale.packageCustomLog(
-      {type: message.type},
-      () => { return message.payload; },
-      true,
-    );
-    sendResponse({ status: "received" });
-  }  
+      { type: message.type },
+      () => {
+        return message.payload
+      },
+      true
+    )
+    sendResponse({ status: "received" })
+  }
 
-  return true 
+  return true
 })

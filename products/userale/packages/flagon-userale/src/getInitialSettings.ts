@@ -26,46 +26,46 @@ let httpSessionId: string | null = null;
  * @return {Object} The extracted configuration object
  */
 export function getInitialSettings(): Settings.Config {
+  if (
+    typeof WorkerGlobalScope !== "undefined" &&
+    self instanceof WorkerGlobalScope
+  ) {
+    const settings: Settings.Config = {
+      authHeader: null,
+      autostart: true,
+      browserSessionId: null,
+      custIndex: null,
+      headers: null,
+      httpSessionId: null,
+      logCountThreshold: +5,
+      logDetails: false,
+      resolution: +500,
+      sessionId: sessionId,
+      time: (ts?: number) => (ts !== undefined ? ts : Date.now()),
+      toolName: null,
+      toolVersion: null,
+      transmitInterval: +5000,
+      url: "http://localhost:8000",
+      useraleVersion: null,
+      userFromParams: null,
+      userId: null,
+    };
+    return settings;
+  }
 
-  if (typeof WorkerGlobalScope !== "undefined" &&
-    self instanceof WorkerGlobalScope) {
-      const settings: Settings.Config = {
-        authHeader: null,
-        autostart: true,
-        browserSessionId: null,
-        custIndex: null,
-        headers: null,
-        httpSessionId: null,
-        logCountThreshold: +(5),
-        logDetails: false,
-        resolution: +(500),
-        sessionId: sessionId,
-        time: (ts?: number) => (ts !== undefined ? ts : Date.now()),
-        toolName: null,
-        toolVersion: null,
-        transmitInterval: +(5000),
-        url: "http://localhost:8000",
-        useraleVersion: null,
-        userFromParams: null,
-        userId: null,
-      };
-      return settings;
-    }
+  if (sessionId === null) {
+    sessionId = getsessionId(
+      "userAlesessionId",
+      "session_" + String(Date.now()),
+    );
+  }
 
-    if (sessionId === null) {
-      sessionId = getsessionId(
-        "userAlesessionId",
-        "session_" + String(Date.now()),
-      );
-    }
-
-    if (httpSessionId === null) {
-      httpSessionId = getsessionId(
-        "userAleHttpSessionId",
-        generatehttpSessionId(),
-      );
-    }
-    
+  if (httpSessionId === null) {
+    httpSessionId = getsessionId(
+      "userAleHttpSessionId",
+      generatehttpSessionId(),
+    );
+  }
 
   const script =
     document.currentScript ||

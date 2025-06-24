@@ -15,35 +15,46 @@
  * limitations under the License.
  */
 
-import logo from './logo.svg';
-import './App.css';
-import * as userale from  'flagon-userale'
+import logo from "./logo.svg";
+import "./App.css";
+import * as userale from "flagon-userale";
 
 function App() {
   const handleOnClick = () => {
-    userale.start()
-  }
+    userale.start();
+  };
 
   userale.options({
     autostart: false,
-    logCountThreshold: '1',
-    transmitInterval: '1000',
-    toolName: "Apache UserALE React Example"
-  })
+    logCountThreshold: "1",
+    transmitInterval: "1000",
+    toolName: "Apache UserALE React Example",
+  });
 
   userale.filter(function (log) {
-    var type_array = ['mouseup', 'mouseover', 'mousedown', 'keydown', 'dblclick', 'blur', 'focus', 'input', 'wheel', 'scroll'];
-    var logType_array = ['interval'];
-    return !type_array.includes(log.type) && !logType_array.includes(log.logType);
-  })
+    var type_array = [
+      "mouseup",
+      "mouseover",
+      "mousedown",
+      "keydown",
+      "dblclick",
+      "blur",
+      "focus",
+      "input",
+      "wheel",
+      "scroll",
+    ];
+    var logType_array = ["interval"];
+    return (
+      !type_array.includes(log.type) && !logType_array.includes(log.logType)
+    );
+  });
 
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p onClick={handleOnClick}>
-          Click this text to start userale.
-        </p>
+        <p onClick={handleOnClick}>Click this text to start userale.</p>
         <a
           className="App-link"
           href="https://reactjs.org"

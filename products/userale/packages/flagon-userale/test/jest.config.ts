@@ -17,13 +17,30 @@
  * under the License.
  */
 
-import globals from "globals";
-import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
+/**
+ * For a detailed explanation regarding each configuration property, visit:
+ * https://jestjs.io/docs/configuration
+ */
 
+/** @type {import('jest').Config} */
+const config = {
+  rootDir: "../",
+  preset: "ts-jest",
+  moduleNameMapper: {
+    "^@/(.*)$": "<rootDir>/src/$1",
+  },
+  setupFiles: ["<rootDir>/test/jest.setup.js"],
+  testMatch: ["<rootDir>/test/spec/(*.)+(spec|test).[tj]s?(x)"],
+  transform: {
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        tsconfig: "./tsconfig.test.json",
+      },
+    ],
+  },
+  // Optionally specify this if you want default jsdom behavior:
+  // testEnvironment: "jsdom",
+};
 
-export default [
-  {languageOptions: { globals: globals.browser }},
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-];
+module.exports = config;

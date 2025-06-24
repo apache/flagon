@@ -73,14 +73,14 @@ export function sendOnClose(
   logs: Array<Logging.Log>,
   config: Configuration,
 ): void {
-  self.addEventListener("pagehide", function() {
+  self.addEventListener("pagehide", function () {
     if (!config.on) {
       return;
     }
 
     if (logs.length > 0) {
       const url = new URL(config.url);
-    
+
       if (url.protocol === "ws:" || url.protocol === "wss:") {
         const data = JSON.stringify(logs);
         wsock.send(data);

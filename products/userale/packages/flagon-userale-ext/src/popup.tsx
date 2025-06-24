@@ -1,5 +1,6 @@
-import { useState } from "react";
-import Options from "~/options";
+import { useState } from "react"
+
+import Options from "~/options"
 import { sendToContent } from "~utils/messaging"
 
 function IndexPopup() {
@@ -10,15 +11,18 @@ function IndexPopup() {
     e.preventDefault()
 
     try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      if (!tab?.id) throw new Error("No active tab found");
+      const [tab] = await chrome.tabs.query({
+        active: true,
+        currentWindow: true
+      })
+      if (!tab?.id) throw new Error("No active tab found")
       const response = await sendToContent(tab.id, {
         type: "issue-report",
         payload: {
           issueType,
           issueDescription
         }
-      });
+      })
       console.log("Content script response:", response)
       alert("Issue report sent!")
       setIssueDescription("") // clear after send

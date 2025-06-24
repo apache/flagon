@@ -23,7 +23,7 @@ function Logging() {
     <div>
       <h2>Logging Options</h2>
       <form onSubmit={handleSubmit}>
-      <label htmlFor="logging-url">Logging Endpoint URL:</label>
+        <label htmlFor="logging-url">Logging Endpoint URL:</label>
         <input
           id="logging-url"
           value={loggingUrl}

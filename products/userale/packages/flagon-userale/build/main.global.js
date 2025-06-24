@@ -14,49 +14,18 @@
   See the License for the specific language governing permissions and
   limitations under the License.*/
 (() => {
-  var __defProp = Object.defineProperty;
-  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-  var __getOwnPropNames = Object.getOwnPropertyNames;
-  var __hasOwnProp = Object.prototype.hasOwnProperty;
-  var __esm = (fn, res) => function __init() {
-    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-  };
-  var __export = (target, all) => {
-    for (var name in all)
-      __defProp(target, name, { get: all[name], enumerable: true });
-  };
-  var __copyProps = (to, from, except, desc) => {
-    if (from && typeof from === "object" || typeof from === "function") {
-      for (let key of __getOwnPropNames(from))
-        if (!__hasOwnProp.call(to, key) && key !== except)
-          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-    }
-    return to;
-  };
-  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
   // src/packageLogs.ts
-  var packageLogs_exports = {};
-  __export(packageLogs_exports, {
-    addCallbacks: () => addCallbacks,
-    buildAttrs: () => buildAttrs,
-    buildCSS: () => buildCSS,
-    buildPath: () => buildPath,
-    cbHandlers: () => cbHandlers,
-    extractTimeFields: () => extractTimeFields,
-    filterHandler: () => filterHandler,
-    getLocation: () => getLocation,
-    getScreenRes: () => getScreenRes,
-    getSelector: () => getSelector,
-    initPackager: () => initPackager,
-    logs: () => logs,
-    mapHandler: () => mapHandler,
-    packageCustomLog: () => packageCustomLog,
-    packageIntervalLog: () => packageIntervalLog,
-    packageLog: () => packageLog,
-    removeCallbacks: () => removeCallbacks,
-    selectorizePath: () => selectorizePath
-  });
+  var logs;
+  var config;
+  var intervalId;
+  var intervalType;
+  var intervalPath;
+  var intervalTimer;
+  var intervalCounter;
+  var intervalLog;
+  var filterHandler = null;
+  var mapHandler = null;
+  var cbHandlers = {};
   function addCallbacks(...newCallbacks) {
     newCallbacks.forEach((source) => {
       let descriptors = {};
@@ -322,7 +291,7 @@
         let val = attr.value;
         try {
           val = JSON.parse(val);
-        } catch (error) {
+        } catch {
         }
         attributes[attr.name] = val;
       }
@@ -340,30 +309,22 @@
     }
     return properties;
   }
-  var logs, config, intervalId, intervalType, intervalPath, intervalTimer, intervalCounter, intervalLog, filterHandler, mapHandler, cbHandlers;
-  var init_packageLogs = __esm({
-    "src/packageLogs.ts"() {
-      "use strict";
-      filterHandler = null;
-      mapHandler = null;
-      cbHandlers = {};
-    }
-  });
 
   // src/attachHandlers.ts
-  var attachHandlers_exports = {};
-  __export(attachHandlers_exports, {
-    attachHandlers: () => attachHandlers,
-    defineCustomDetails: () => defineCustomDetails,
-    defineDetails: () => defineDetails,
-    extractChangeDetails: () => extractChangeDetails,
-    extractInputDetails: () => extractInputDetails,
-    extractKeyboardDetails: () => extractKeyboardDetails,
-    extractMouseDetails: () => extractMouseDetails,
-    extractResizeDetails: () => extractResizeDetails,
-    extractScrollDetails: () => extractScrollDetails,
-    extractWheelDetails: () => extractWheelDetails
-  });
+  var events;
+  var bufferBools;
+  var bufferedEvents;
+  var refreshEvents;
+  var intervalEvents = [
+    "click",
+    "focus",
+    "blur",
+    "input",
+    "change",
+    "mouseover",
+    "submit"
+  ];
+  var windowEvents = ["load", "blur", "focus"];
   function extractMouseDetails(e) {
     return {
       clicks: e.detail,
@@ -381,11 +342,6 @@
       alt: e.altKey,
       shift: e.shiftKey,
       meta: e.metaKey
-    };
-  }
-  function extractInputDetails(e) {
-    return {
-      value: e.target.value
     };
   }
   function extractChangeDetails(e) {
@@ -529,25 +485,9 @@
       return false;
     }
   }
-  var events, bufferBools, bufferedEvents, refreshEvents, intervalEvents, windowEvents;
-  var init_attachHandlers = __esm({
-    "src/attachHandlers.ts"() {
-      "use strict";
-      init_packageLogs();
-      intervalEvents = [
-        "click",
-        "focus",
-        "blur",
-        "input",
-        "change",
-        "mouseover",
-        "submit"
-      ];
-      windowEvents = ["load", "blur", "focus"];
-    }
-  });
 
   // src/utils/auth/index.ts
+  var authCallback = null;
   function updateAuthHeader(config3) {
     if (authCallback) {
       try {
@@ -562,7 +502,7 @@
       verifyCallback(callback);
       authCallback = callback;
       return true;
-    } catch (e) {
+    } catch {
       return false;
     }
   }
@@ -575,18 +515,9 @@
       throw new Error("Userale auth callback must return a string");
     }
   }
-  function resetAuthCallback() {
-    authCallback = null;
-  }
-  var authCallback;
-  var init_auth = __esm({
-    "src/utils/auth/index.ts"() {
-      "use strict";
-      authCallback = null;
-    }
-  });
 
   // src/utils/headers/index.ts
+  var headersCallback = null;
   function updateCustomHeaders(config3) {
     if (headersCallback) {
       try {
@@ -596,63 +527,6 @@
       }
     }
   }
-  function registerHeadersCallback(callback) {
-    try {
-      verifyCallback2(callback);
-      headersCallback = callback;
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-  function verifyCallback2(callback) {
-    if (typeof callback !== "function") {
-      throw new Error("Userale headers callback must be a function");
-    }
-    const result = callback();
-    if (typeof result !== "object") {
-      throw new Error("Userale headers callback must return an object");
-    }
-    for (const [key, value] of Object.entries(result)) {
-      if (typeof key !== "string" || typeof value !== "string") {
-        throw new Error(
-          "Userale header callback must return an object with string keys and values"
-        );
-      }
-    }
-  }
-  function resetHeadersCallback() {
-    headersCallback = null;
-  }
-  var headersCallback;
-  var init_headers = __esm({
-    "src/utils/headers/index.ts"() {
-      "use strict";
-      headersCallback = null;
-    }
-  });
-
-  // src/utils/index.ts
-  var utils_exports = {};
-  __export(utils_exports, {
-    authCallback: () => authCallback,
-    headersCallback: () => headersCallback,
-    registerAuthCallback: () => registerAuthCallback,
-    registerHeadersCallback: () => registerHeadersCallback,
-    resetAuthCallback: () => resetAuthCallback,
-    resetHeadersCallback: () => resetHeadersCallback,
-    updateAuthHeader: () => updateAuthHeader,
-    updateCustomHeaders: () => updateCustomHeaders,
-    verifyAuthCallback: () => verifyCallback,
-    verifyHeadersCallback: () => verifyCallback2
-  });
-  var init_utils = __esm({
-    "src/utils/index.ts"() {
-      "use strict";
-      init_auth();
-      init_headers();
-    }
-  });
 
   // package.json
   var version = "2.4.0";
@@ -841,12 +715,7 @@
   var Configuration = _Configuration;
   Configuration.instance = null;
 
-  // src/main.ts
-  init_attachHandlers();
-  init_packageLogs();
-
   // src/sendLogs.ts
-  init_utils();
   var sendIntervalId;
   var wsock;
   function initSender(logs3, config3) {
@@ -946,9 +815,6 @@
   }
 
   // src/main.ts
-  init_attachHandlers();
-  init_utils();
-  init_packageLogs();
   var config2 = Configuration.getInstance();
   var logs2 = [];
   var startLoadTimestamp = Date.now();
@@ -1025,14 +891,14 @@
       options,
       log,
       version,
-      details: (init_attachHandlers(), __toCommonJS(attachHandlers_exports)).defineCustomDetails,
-      registerAuthCallback: (init_utils(), __toCommonJS(utils_exports)).registerAuthCallback,
-      addCallbacks: (init_packageLogs(), __toCommonJS(packageLogs_exports)).addCallbacks,
-      removeCallbacks: (init_packageLogs(), __toCommonJS(packageLogs_exports)).removeCallbacks,
-      packageLog: (init_packageLogs(), __toCommonJS(packageLogs_exports)).packageLog,
-      packageCustomLog: (init_packageLogs(), __toCommonJS(packageLogs_exports)).packageCustomLog,
-      getSelector: (init_packageLogs(), __toCommonJS(packageLogs_exports)).getSelector,
-      buildPath: (init_packageLogs(), __toCommonJS(packageLogs_exports)).buildPath
+      details: defineCustomDetails,
+      registerAuthCallback,
+      addCallbacks,
+      removeCallbacks,
+      packageLog,
+      packageCustomLog,
+      getSelector,
+      buildPath
     };
   }
 })();
