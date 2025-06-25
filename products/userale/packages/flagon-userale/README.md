@@ -21,7 +21,7 @@
 
 ![Node.js CI](https://github.com/apache/flagon-useralejs/workflows/Node.js%20CI/badge.svg)
 [![Known Vulnerabilities](https://snyk.io/test/npm/flagon-userale/badge.svg)](https://snyk.io/test/npm/flagon-userale)
-![Maintenance](https://img.shields.io/maintenance/yes/2024)
+![Maintenance](https://img.shields.io/maintenance/yes/2025)
 ![npm](https://img.shields.io/npm/v/flagon-userale)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 ![Node.js](https://img.shields.io/badge/Node.js%20Support-16.x%2C%2018.x-orange)
