@@ -1,8 +1,8 @@
-import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import pluginJest from 'eslint-plugin-jest';
+const js = require('@eslint/js');
+const tseslint = require('typescript-eslint');
+const pluginJest = require('eslint-plugin-jest');
 
-export default [
+module.exports = [
     js.configs.recommended,
     ...tseslint.configs.recommended,
     {
@@ -44,7 +44,6 @@ export default [
             },
         },
         rules: {
-        // Optional Jest-specific rules
         },
     },
 ];
