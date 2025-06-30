@@ -51,14 +51,19 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Setup pnpm v10
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Install dependencies
-        run: npm ci
+        run: pnpm i
 
       - name: Format 
-        run: npm run format
+        run: pnpm format
 
       - name: Lint 
-        run: npm run lint
+        run: pnpm lint
 
   test:
     runs-on: ubuntu-latest
@@ -75,8 +80,13 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Setup pnpm v10
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Install dependencies
-        run: npm ci
+        run: pnpm i
 
       - name: Install Playwright Browsers
         run: |
@@ -87,13 +97,13 @@ jobs:
       - name: Build
         run: |
           export PATH=${PATH}:`go env GOPATH`/bin
-          npm run build
+          pnpm build
 
       - name: Test
         run: |
           export DISPLAY=:99
           Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-          npm test
+          pnpm test
 
       # TODO: add automatic release notes
       # TODO: add cronjobs for automatically triggering new release candidates

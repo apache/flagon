@@ -21,8 +21,17 @@
         "pageTitle": {
             "type": "string"
         },
-        "userAgent": {
-            "type": "string"
+        "browser": {
+            "type": "object",
+            "properties": {
+                "browser": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            },
+            "required" : ["browser", "version"]
         },
         "clientTime": {
             "type": "integer"
@@ -70,13 +79,13 @@
           "type": ["object", "null"]
         },
         "userId": {
-          "type": ["string", "null"]
+          "type": "string"
         },
         "toolVersion": {
-          "type":["string", "null"]
+          "type": "string"
         },
         "toolName": {
-          "type": ["string", "null"]
+          "type": "string"
         },
         "useraleVersion": {
           "type": "string"
@@ -89,7 +98,7 @@
         "pageUrl",
         "pageTitle",
         "pageReferrer",
-        "userAgent",
+        "browser",
         "clientTime",
         "scrnRes",
         "logType",

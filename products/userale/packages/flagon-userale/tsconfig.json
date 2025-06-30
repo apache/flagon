@@ -1,0 +1,23 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+      "composite": true,
+      "declaration": true,
+      "declarationMap": true,
+      "declarationDir": "./build",
+      "module": "ESNext",
+      "moduleResolution": "node",
+      "noEmit": true,
+      "rootDir": "./src",
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["./src/*"]
+      }
+    },
+    "include": [
+      "src/**/*.ts",
+      "src/types.d.ts"
+    ],
+    "exclude": ["node_modules", "build"]
+  }
+  

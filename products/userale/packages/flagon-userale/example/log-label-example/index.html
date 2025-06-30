@@ -1,0 +1,62 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+<head>
+    <script
+            src="../../build/main.global.js"
+            data-url=""
+            data-tool="Apache UserALE Example"
+            data-threshold="1"
+            data-interval="100"
+    ></script>
+</head>
+<body>
+<div class="new-feature-button">
+    <button>New Feature</button>
+</div>
+<div>
+    <input type="checkbox" onchange="document.dispatchEvent(new Event('customEvent'))">
+</div>
+</body>
+<script>
+    window.userale.filter(log => ['click', 'customEvent'].includes(log.type))
+
+    // Example 1
+    window.userale.addCallbacks({
+        map(log, e) {
+            // determine whether we want to add custom labels to the log
+            if (e && e.target.innerHTML !== 'New Feature') {
+                return log; // normal logging
+            }
+            // if the event occurred on the New Feature, add custom labeling
+            return {
+                ...log,
+                customLabel: 'New Feature',
+                logType: 'custom',
+            }
+        }
+    });
+
+    // Example 2
+    document.addEventListener('customEvent', function (e) {
+            window.userale.packageCustomLog({
+                type: 'customEvent',
+                customLabel: 'custom label',
+                customField1: 'custom field',
+            }, () => ({customDetails: Date.now()}), true);
+        }
+    );
+</script>
+</html>

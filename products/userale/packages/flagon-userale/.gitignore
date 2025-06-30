@@ -17,7 +17,7 @@
 .idea
 .vscode
 /node_modules/*
-*/logs/*
+/logs/*
 /.git/*
 npm-debug.log
 .DS_store
