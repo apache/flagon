@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "tsup --onSuccess 'tsc --emitDeclarationOnly --declaration'",
-    "clean": "rm -rf ./build",
+    "clean": "rm -rf ./build && rm tsconfig.tsbuildinfo",
     "test": "jest -c ./test/jest.config.ts",
     "commit": "cz"
   },

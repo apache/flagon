@@ -8,6 +8,7 @@
       "module": "ESNext",
       "moduleResolution": "node",
       "noEmit": false,
+      "removeComments": false,
       "rootDir": "./src",
       "baseUrl": ".",
       "paths": {
@@ -20,4 +21,3 @@
     ],
     "exclude": ["node_modules", "build"]
   }
-  
