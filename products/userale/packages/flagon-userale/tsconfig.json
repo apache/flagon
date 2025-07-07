@@ -7,7 +7,7 @@
       "declarationDir": "./build",
       "module": "ESNext",
       "moduleResolution": "node",
-      "noEmit": true,
+      "noEmit": false,
       "rootDir": "./src",
       "baseUrl": ".",
       "paths": {
