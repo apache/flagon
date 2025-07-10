@@ -20,20 +20,20 @@ header:
     spdx-id: Apache-2.0
     copyright-owner: Apache Software Foundation
 
-  paths-ignore:
-    - 'dist'
-    - 'licenses'
-    - 'LICENSE'
-    - 'NOTICE'
-    - 'logs'
-    - '**/*.json'
-    - '**/*.mjs'
-    - 'KEYS'
-    - '**/*.js.map'
+  paths:
+    - 'products/distill/distill/**'
+    - 'products/userale/packages/flagon-userale/build/**'
+    - 'products/userale/packages/flagon-userale/src/**'
+    - 'products/userale/packages/flagon-userale-ext/src/**'
 
+  paths-ignore:
+    - '**/*.map'
   comment: on-failure
+
 
 dependency:
   files:
     - products/userale/package.json
+    - products/userale/packages/flagon-userale/package.json
+    - products/userale/packages/flagon-userale-ext/package.json
     - products/distill/pyproject.toml
