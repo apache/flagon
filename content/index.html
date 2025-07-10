@@ -1,60 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements.  See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership.  The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License.  You may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+-->
 
-  <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+---
+layout: default
+---
 
-  <title>Apache Flagon</title>
-  <meta name="description" content="The homepage for Apache Flagon">
-
-  <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
-  <script src="/assets/jquery.min.js"></script>
-  <script src="/semantic/dist/semantic.min.js"></script>
-  <script src="/assets/d3.v4.min.js"></script>
-  <script src="/js/main.js"></script>
-
-  <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="https://flagon.apache.org/">
-  <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
-
-  
-</head>
-
-
-  <body>
-
-    <div class="site-header">
-  <div id="main-menu" class="ui inverted padded fixed top borderless menu">
-    <a class="site-title" href="/">
-      <h3 class="ui inverted header item">Apache Flagon</h3>
-    </a>
-
-    <div class="right menu">
-      <div class="ui dropdown item">
-        Products
-        <div class="menu">
-          <a class="item" href="/userale">UserALE</a>
-          <a class="item" href="/distill">Distill</a>
-        </div>
-      </div>
-      <div class="ui dropdown item">
-        <a href="/docs">Docs</a>
-        <div class="menu">
-          <a class="item" href="/docs/useralejs">UserALE.js</a>
-          <a class="item" href="/docs/distill">Distill</a>
-        </div>
-      </div>
-      <a class="item" href="/releases">Releases</a>
-      <a class="item" href="/community">Community</a>
-    </div>
-  </div>
-</div>
-
-
-    <div class="main-wrapper">
-      <div id="main-masthead" class="ui masthead padded center aligned inverted vertical segment">
+<div id="main-masthead" class="ui masthead padded center aligned inverted vertical segment">
 
   <h1 class="ui header">Apache Flagon</h1>
   <h2 class="ui header">Instrument Software. &nbsp; Understand Humans.</h2>
@@ -69,10 +36,10 @@
 
     <br>
 
-    <a class="ui big red button" href="/docs/useralejs/">
+    <a class="ui big red button" href="{{ '/docs/useralejs/' | prepend: site.baseurl }}">
       Get Started
     </a>
-    <a class="ui big blue button" href="/releases">
+    <a class="ui big blue button" href="{{ '/releases' | prepend: site.baseurl }}">
       Download Flagon
     </a>
     <a class="ui big yellow button" href="mailto:dev-subscribe@flagon.apache.org">
@@ -88,7 +55,7 @@
         With a single line of code capture all of your users' behavior on your web page with enough resolution and granularity for advanced behavioral modeling. Apache UserALE is Flagon's free, open-source application for thin-client behavioral logging. It's perfect for business analytics and enterprise application monitoring, but powerful enough for UI/UX research and user-testing. Check out our slick demo!
       </div>
       <div class="center aligned column">
-        <a href="/userale">
+        <a href="{{ '/userale' | prepend: site.baseurl }}">
           <img class="component-image" src="/images/userale_inverted.png">
         </a>
       </div>
@@ -96,147 +63,13 @@
   </div>
 </div>
 
-<div class="ui  very padded vertical segment">
-  <div class="ui center aligned text container">
-    <h2 class="ui  header">UserALE.js</h2>
-    <p>
-      UserALE.js is the DOM/JavaScript client for UserALE.  Every user activity is logged and sent to the UserALE backend for storage and analysis by Distill.
-    </p>
-    <div class="ui basic vertical segment">
-      <div id="start-button" class="ui green button">Start Logging</div>
-      <div id="stop-button" class="ui red button">Pause Logging</div>
-    </div>
-  </div>
-
-  <div class="ui container">
-    <div class="ui equal height two column grid">
-      <div class="center aligned column">
-        <div class="ui basic row segment">
-          <h4 class="ui dividing header">Buttons</h4>
-          <div class="ui blue button">Blue</div>
-          <div class="ui yellow button">Yellow</div>
-          <div class="ui green button">Green</div>
-          <div class="ui red button">Red</div>
-        </div>
-
-        <div class="ui form">
-          <h4 class="ui dividing header">Checkboxes</h4>
-          <div class="field">
-            <div class="two fields">
-              <div class="field">
-                <input type="checkbox">
-                <label>Checked!</label>
-              </div>
-              <div class="field">
-                <div class="two fields">
-                  <div class="field">
-                    <div class="ui radio checkbox">
-                      <input type="radio" name="demo-checkbox">
-                      <label>Yes</label>
-                    </div>
-                  </div>
-                  <div class="field">
-                    <div class="ui radio checkbox">
-                      <input type="radio" name="demo-checkbox">
-                      <label>No</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <h4 class="ui dividing header">Inputs</h4>
-          <div class="field">
-            <div class="two fields">
-              <div class="field">
-                <div class="ui labeled input">
-                  <div class="ui grey label">Text</div>
-                  <input type="text">
-                </div>
-              </div>
-
-              <div class="field">
-                <div id="demo-dropdown" class="ui fluid selection dropdown">
-                  <input type="hidden" name="flagon-component">
-                  <i class="dropdown icon"></i>
-                  <div class="default text">Select Component</div>
-                  <div class="menu">
-                    <div class="item">UserALE</div>
-                    <div class="item">Distill</div>
-                    <div class="item">Tap</div>
-                    <div class="item">Stout</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <h4 class="ui dividing header">Maps</h4>
-          <div class="ui basic row segment">
-            <div id="map-example"></div>
-          </div>
-
-
-        </div>
-      </div>
-
-      <div id="log-feed" class="center aligned column">
-        <div class="ui fluid row segment">
-
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<link rel="stylesheet" href="/assets/leaflet/leaflet.css" />
-<script src="/assets/leaflet/leaflet.js"></script>
-<script src="/js/userale-demo.min.js" data-url=""></script>
-
-<script>
-  $(document).ready(function () {
-    $('#demo-dropdown').dropdown();
-    $('.ui.checkbox').checkbox();
-
-    $('#start-button').on('click', userale.start);
-    $('#stop-button').on('click', userale.stop);
-    userale.options({
-      logCb: addLog,
-      noSend: true
-    });
-
-    var map = L.map('map-example').setView([42.3601, -71.0589], 13);
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    function addLog(log) {
-      var html = '<div class="log ui fluid row segment">' + JSON.stringify(log) + '</div>';
-      $('#log-feed').prepend(html);
-    }
-
-    function clearLogs() {
-      setTimeout(function () {
-        var $feed = $('#log-feed .log');
-        if ($feed.length > 10) {
-          $feed.slice(9).remove();
-        }
-        clearLogs();
-      }, 1000);
-    }
-
-    clearLogs();
-  });
-</script>
-
+{% include useralejsDemo.html inverted=false %}
 
 <div class="ui inverted grey very padded vertical segment">
   <div class="ui text container">
     <div class="ui two column middle aligned grid">
       <div class="center aligned column">
-        <a href="/distill">
+        <a href="{{ '/distill' | prepend: site.baseurl }}">
           <img class="component-image" src="/images/distill_inverted.png">
         </a>
       </div>
@@ -255,66 +88,3 @@
     </p>
   </div>
 </div>
-
-    </div>
-
-    <div class="footer ui inverted very padded vertical segment">
-  <div class="ui vertical segment">
-    <div class="ui four column grid">
-      <div class="column">
-        <h4 class="ui inverted header">About</h4>
-        <div class="ui inverted link list">
-          <a class="item" href="/userale">UserALE</a>
-          <a class="item" href="/distill">Distill</a>
-        </div>
-      </div>
-      <div class="column">
-        <h4 class="ui inverted header">Docs</h4>
-        <div class="ui inverted link list">
-          <a class="item" href="/docs/useralejs">UserAle.js</a>
-          <a class="item" href="/docs/distill">Distill</a>
-        </div>
-      </div>
-      <div class="column">
-        <h4 class="ui inverted header">Community</h4>
-        <div class="ui inverted link list">
-          <a class="item" href="https://github.com/apache?q=flagon">GitHub</a>
-          <a class="item" href="http://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
-        </div>
-      </div>
-      <div class="column">
-        <h4 class="ui inverted header">Apache</h4>
-        <div class="ui inverted link list">
-          <a class="item" href="http://www.apache.org/">Apache Software Foundation</a>
-          <a class="item" href="http://www.apache.org/licenses/">License</a>
-          <a class="item" href="http://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
-          <a class="item" href="http://www.apache.org/foundation/thanks.html">Thanks</a>
-          <a class="item" href="http://www.apache.org/security/">Security</a>
-          <a class="item" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="ui inverted vertical segment">
-    <div class="ui two column middle aligned grid">
-      <div class="center aligned column">
-        Copyright &copy; 2025 The Apache Software Foundation, Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
-        Apache Flagon, Flagon, Apache, the Apache feather logo, the Apache Flagon logo and the Apache Incubator logo are trademarks of The Apache Software Foundation.
-      </div>
-    </div>
-  </div>
-  <div class="ui inverted vertical segment">
-    <div class="ui one column middle aligned grid">
-      <div class="center aligned column">
-        <a href="https://www.apache.org/events/current-event.html">
-          <img src="https://www.apache.org/events/current-event-234x60.png" alt="ASF Current Event">
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-  </body>
-
-</html>

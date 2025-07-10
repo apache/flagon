@@ -17,15 +17,13 @@
   ~ under the License.
 -->
 
-How to Build and Deploy Site
-----------------------------
+---
+title: Installation
+component: distill
+permalink: /docs/distill/
+priority: 0
+---
 
-1. Download and Install [``Docker``](http://docker.com)
-2. Build site
-    ```
-    docker build -t flagon:site .
-    ```
-3. Deploy site on localhost:8000
-    ```
-    docker run -p 8000:8000 -it flagon:site python -m http.server
-    ```
+### Installing Apache Distill
+
+#### This project is currently being refactored. If you are interested in Distill, join the discussion on our [dev list](mailto:dev-subscribe@flagon.incubator.apache.org).
