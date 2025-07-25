@@ -17,10 +17,28 @@
   ~ under the License.
 -->
 
-Apache Flagon
---------------------------------------
+# Apache Flagon
 
-Flagon includes both UserALE, an instrumentation tool for web applications, and Distill, a python library for analyzing UserALE telemetry.
+Flagon is a collection of open-source tools for user behavior analytics, including instrumentation libraries and analytics pipelines. This monorepo contains multiple Flagon products in a unified codebase.
 
-See products/ for userale and distill. This read me is under construction.
+## Repository Structure
+```text
+/examples # Integration examples
+/products
+├── userale
+│ └── packages
+│  ├── flagon-userale # JavaScript client instrumentation library
+│  └── flagon-userale-ext # Browser extension for deploying UserALE
+└── distill # Data processing toolkit (Python)
+/site # Code for https://flagon.apache.org/
+```
 
+## Products
+
+- [UserALE Core Library](./products/userale/packages/flagon-userale/README.md)
+- [UserALE Browser Extension](./products/userale/packages/flagon-userale-ext/README.md)
+- [Distill Toolkit](./products/distill/README.md)
+
+## Documentation
+
+- 📚 [Flagon Website](https://flagon.apache.org/)
