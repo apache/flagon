@@ -18,6 +18,7 @@ import type { Settings } from "@/types";
 export declare class Configuration {
     [key: string]: Settings.ConfigValueTypes;
     private static instance;
+    apiKey: Settings.ApiKey;
     autostart: boolean;
     authHeader: Settings.AuthHeader;
     browserSessionId: Settings.SessionId;
