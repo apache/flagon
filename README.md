@@ -23,20 +23,23 @@ Flagon is a collection of open-source tools for user behavior analytics, includi
 
 ## Repository Structure
 ```text
-/examples # Integration examples
 /products
 ├── userale
 │ └── packages
-│  ├── flagon-userale # JavaScript client instrumentation library
-│  └── flagon-userale-ext # Browser extension for deploying UserALE
-└── distill # Data processing toolkit (Python)
-/site # Code for https://flagon.apache.org/
+│  ├── core-sdk    # flagon-userale — JS instrumentation library (ESM + types)
+│  ├── iife        # flagon-userale-iife — script-tag drop-in build
+│  └── extension   # flagon-userale-ext — browser extension (Chrome MV3 / Firefox)
+└── distill        # Data processing toolkit (Python)
+/site              # Code for https://flagon.apache.org/
+docker-compose.yml # Shared OTLP collector (Jaeger)
 ```
 
 ## Products
 
-- [UserALE Core Library](./products/userale/packages/flagon-userale/README.md)
-- [UserALE Browser Extension](./products/userale/packages/flagon-userale-ext/README.md)
+- [UserALE](./products/userale/README.md) — behavioral telemetry for web applications
+  - [Core SDK](./products/userale/packages/core-sdk/README.md) (`flagon-userale`)
+  - [IIFE build](./products/userale/packages/iife/README.md) (`flagon-userale-iife`)
+  - [Browser Extension](./products/userale/packages/extension/README.md) (`flagon-userale-ext`)
 - [Distill Toolkit](./products/distill/README.md)
 
 ## Documentation

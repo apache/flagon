@@ -6,10 +6,10 @@
     "format": "prettier --ignore-path .gitignore --write 'packages/**/{src,test}/**/*.{ts,js,tsx,jsx}'",
     "lint": "eslint 'packages/**/src/**/*.{ts,js,tsx,jsx}' --fix",
     "build": "pnpm -r run build",
-    "test": "playwright test -c ./test/playwright.config.ts && pnpm -r test",
-    "pretest": "npx playwright install",
-    "example:run": "node example/server/server.js",
-    "example:watch": "nodemon -w ./example/server example/server/server.js"
+    "test": "pnpm -r test && pnpm exec playwright test -c ./test/playwright.config.ts",
+    "pretest": "pnpm exec playwright install",
+    "example:run": "node example-server/server.js",
+    "example:watch": "nodemon -w ./example-server example-server/server.js"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
@@ -21,12 +21,10 @@
     "eslint-plugin-jest": "^29.0.1",
     "express": "^4.18.2",
     "flagon-userale": "workspace:flagon-userale",
-    "jsonschema": "^1.4.1",
     "nodemon": "^3.0.2",
     "pnpm": "^10.0.0",
     "prettier": "3.6.0",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^7.8.0",
-    "ws": "^8.18.0"
+    "typescript-eslint": "^7.8.0"
   }
 }

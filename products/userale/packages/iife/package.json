@@ -1,0 +1,17 @@
+{
+  "name": "flagon-userale-iife",
+  "version": "2.4.0",
+  "description": "Script-tag (IIFE) build of UserALE. Loads via <script> tag and exposes window.userale.",
+  "main": "build/main.global.js",
+  "scripts": {
+    "build": "tsup"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "flagon-userale": "workspace:*"
+  },
+  "devDependencies": {
+    "tsup": "^5.10.0",
+    "typescript": "^5.8.3"
+  }
+}

@@ -1,0 +1,10 @@
+services:
+  jaeger:
+    image: cr.jaegertracing.io/jaegertracing/jaeger:2.17.0
+    ports:
+      - "4317:4317"   # OTLP/gRPC receiver
+      - "4318:4318"   # OTLP/HTTP receiver
+      - "16686:16686" # Jaeger UI
+    volumes:
+      - ./jaeger.yaml:/jaeger/config.yaml
+    command: ["--config=/jaeger/config.yaml"]

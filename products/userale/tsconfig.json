@@ -1,7 +1,7 @@
 {
   "references": [
-    { "path": "packages/flagon-userale" },
-    { "path": "packages/flagon-userale-ext" }
+    { "path": "packages/core-sdk" },
+    { "path": "packages/extension" }
   ],
   "compilerOptions": {
     "target": "ESNext",

@@ -17,46 +17,22 @@
  * under the License.
  */
 
-import { test as base, chromium, type BrowserContext, type Request } from '@playwright/test';
-import path from 'path';
-import os from 'os';
+import { test as base, type BrowserContext, type Request } from '@playwright/test';
 
+/**
+ * Fixture for iife/esm tests that run in a plain browser (no extension).
+ * Uses the standard Playwright page/context so browserName from the project
+ * config is respected (chromium, firefox, etc.).
+ */
 export const test = base.extend<{
-  context: BrowserContext;
-  extensionId: string;
   waitForPostRequest: (
     filterFn?: (req: Request) => boolean
   ) => Promise<Request>;
 }>({
-  context: async ({ }, use) => {
-    const pathToExtension = path.join(
-      __dirname,
-      "../../../packages/extension/build/chrome-mv3-prod/"
-    );
-    const context = await chromium.launchPersistentContext(os.tmpdir(), {
-      headless: false,
-      args: [
-        `--disable-extensions-except=${pathToExtension}`,
-        `--load-extension=${pathToExtension}`,
-      ],
-    });
-    await use(context);
-    await context.close();
-  },
-
-  extensionId: async ({ context }, use) => {
-    let [background] = context.serviceWorkers();
-    if (!background)
-      background = await context.waitForEvent('serviceworker');
-
-    const extensionId = background.url().split('/')[2];
-    await use(extensionId);
-  },
-
-  waitForPostRequest: async ({ context }, use) => {
+  waitForPostRequest: async ({ context }: { context: BrowserContext }, use) => {
     const waitForPostRequest = (filterFn?: (req: Request) => boolean) => {
       return new Promise<Request>((resolve) => {
-        const listener = async (req: Request) => {
+        const listener = (req: Request) => {
           const url = req.url();
           const method = req.method();
 

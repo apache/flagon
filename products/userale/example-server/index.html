@@ -1,0 +1,78 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+  http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+<head>
+  <title>UserALE - Example Page</title>
+
+  <!--
+    Load UserALE via script tag.
+    data-url: OTLP/HTTP collector endpoint (default: http://localhost:4318)
+    data-user: identifies the user in logs
+    data-tool: identifies the instrumented application
+    data-threshold: send after this many logs are queued
+    data-interval: also send every N milliseconds
+  -->
+  <script
+    src="/build/main.global.js"
+    data-url="http://localhost:4318"
+    data-user="example-user"
+    data-tool="Apache UserALE Example"
+    data-version="2.4.0"
+    data-threshold="1"
+    data-interval="1000"
+  ></script>
+  <script src="./index.js"></script>
+</head>
+<body>
+  <p>
+    This page lets you explore UserALE: how it deploys via script tag and what
+    data it generates. Logs are sent as OTLP to the collector at
+    <code>data-url</code> — point that at any OpenTelemetry-compatible endpoint.
+  </p>
+  <hr>
+
+  <h3>Click events</h3>
+  <div class="container">
+    <button id="test_button">Click Me!</button>
+  </div>
+
+  <h3>Form events</h3>
+  <p>Interact with these fields to generate input, change, focus, and submit logs.</p>
+  <form id="test_text_input">
+    <label>Text field: <input type="text" placeholder="try typing 'log' or 'packageCustomLog'"></label>
+    <br><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <br>
+  <select name="options">
+    <option value="option1">Option 1</option>
+    <option value="option2">Option 2</option>
+    <option value="option3">Option 3</option>
+  </select>
+
+  <br><br>
+  <form id="test_radio_input">
+    <input type="radio" name="choice" value="a" checked> Choice A<br>
+    <input type="radio" name="choice" value="b"> Choice B<br>
+    <input type="radio" name="choice" value="c"> Choice C
+  </form>
+
+  <hr>
+
+  <h3>Navigation</h3>
+  <a href="http://flagon.apache.org/">Flagon project page</a>
+</body>
+</html>

@@ -43,45 +43,47 @@ export default defineConfig({
 
   projects: [
     {
-      name: "package-chromium",
-      testIgnore: ["*extension*", "*websocket*"],
+      // IIFE / script-tag build — tests 01-iife.spec.ts
+      name: "iife-chromium",
+      testMatch: ["*01-iife*"],
       use: {
         browserName: "chromium",
         baseURL: "http://127.0.0.1:8000/",
       },
     },
     {
-      name: "package-firefox",
-      testIgnore: ["*extension*", "*websocket*"],
+      name: "iife-firefox",
+      testMatch: ["*01-iife*"],
       use: {
         browserName: "firefox",
         baseURL: "http://127.0.0.1:8000/",
       },
     },
     {
+      // ESM build — tests 02-esm.spec.ts
+      name: "esm-chromium",
+      testMatch: ["*02-esm*"],
+      use: {
+        browserName: "chromium",
+        baseURL: "http://127.0.0.1:8000/",
+      },
+    },
+    {
+      // Browser extension — tests 03-extension.spec.ts
       name: "extension-chromium",
-      testIgnore: ["*package*", "*websocket*"],
+      testMatch: ["*03-extension*"],
       use: {
         browserName: "chromium",
         baseURL: "http://127.0.0.1:8000/no-logging/",
       },
     },
-    {
-      name: "websocket",
-      testMatch: "*websocket*",
-      use: {
-        browserName: "chromium",
-        baseURL: "http://127.0.0.1:8000/ws",
-      },
-    },
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer:
-    {
-      command: "pnpm run example:run",
-      url: "http://127.0.0.1:8000",
-      reuseExistingServer: false,
-      gracefulShutdown: { signal: 'SIGTERM', timeout: 1000 }
-    }
+  webServer: {
+    command: "pnpm run example:run",
+    url: "http://127.0.0.1:8000",
+    reuseExistingServer: false,
+    gracefulShutdown: { signal: 'SIGTERM', timeout: 1000 },
+  },
 });
