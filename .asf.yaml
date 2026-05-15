@@ -52,14 +52,27 @@ github:
     catchall: "[GH] {title} ({repository})"
 
 #manages alerts by distributing to lists
+  rulesets:
+    - name: "Default Branch Protection"
+      type: branch
+      branches:
+        includes:
+          - "~DEFAULT_BRANCH"
+          - "release/*"
+          - "rel/*"
+        excludes: []
+      bypass_teams:
+        - root
+      restrict_deletion: true
+      restrict_force_push: true
 notifications:
-  commits:              commits@flagon.apache.org
-  issues:               notifications@flagon.apache.org
-  pullrequests_status:  pr@flagon.apache.org
+  commits: commits@flagon.apache.org
+  issues: notifications@flagon.apache.org
+  pullrequests_status: pr@flagon.apache.org
   pullrequests_comment: notifications@flagon.apache.org
   # Send dependabot PRs to commits@ instead
   pullrequests_bot_dependabot: maintenance@flagon.apache.org
 
 #used for asf-site only to publish website
 publish:
-  whoami:  asf-site
+  whoami: asf-site
