@@ -19,5 +19,6 @@
         "hooks": {
             "pre-commit": "npm run lint"
         }
-    }
+    },
+    "packageManager": "pnpm@10.34.5"
 }
