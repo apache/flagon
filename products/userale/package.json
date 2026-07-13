@@ -12,7 +12,7 @@
     "example:watch": "nodemon -w ./example/server example/server/server.js"
   },
   "devDependencies": {
-    "@eslint/js": "^9.29.0",
+    "@eslint/js": "^10.0.1",
     "@ianvs/prettier-plugin-sort-imports": "4.1.1",
     "@playwright/test": "^1.52.0",
     "@types/node": "^22.15.30",
