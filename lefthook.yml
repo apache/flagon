@@ -15,22 +15,27 @@
 # specific language governing permissions and limitations
 # under the License.
 
-env
-venv
-.idea
-release/incubator-*
-release/apache-*
-.sass-cache
-.jekyll-metadata
-secret.py
-node_modules/
-.npm
-npm-debug.log
-*.DS_store
-./site/_site
-.jekyll-cache
-pnpm-lock.yaml
+pre-commit:
+  parallel: true
+  commands:
+    nix-fmt:
+      glob: "*.nix"
+      run: nixpkgs-fmt {staged_files}
+    ts-lint:
+      glob: "*.{ts,tsx}"
+      root: "products/userale/"
+      run: pnpm eslint {staged_files}
+    ts-fmt:
+      glob: "*.{ts,tsx,js,jsx,json,css,md}"
+      root: "products/userale/"
+      run: pnpm prettier --check {staged_files}
 
-# Nix / direnv
-result
-.direnv/
+pre-push:
+  parallel: false
+  commands:
+    userale-build:
+      root: "products/userale/packages/flagon-userale/"
+      run: npx tsup --onSuccess 'tsc --emitDeclarationOnly --declaration'
+    userale-test:
+      root: "products/userale/packages/flagon-userale/"
+      run: npx jest -c ./test/jest.config.ts
