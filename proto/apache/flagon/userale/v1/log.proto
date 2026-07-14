@@ -1,0 +1,154 @@
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+syntax = "proto3";
+
+package apache.flagon.userale.v1;
+
+import "google/protobuf/struct.proto";
+
+// LogType discriminates the three categories of UserALE log entries.
+enum LogType {
+  LOG_TYPE_UNSPECIFIED = 0;
+  LOG_TYPE_RAW = 1;
+  LOG_TYPE_INTERVAL = 2;
+  LOG_TYPE_CUSTOM = 3;
+}
+
+// ScreenResolution captures the viewport dimensions at log time.
+message ScreenResolution {
+  int32 width = 1;
+  int32 height = 2;
+}
+
+// Location captures pointer coordinates, nullable for non-mouse events.
+message Location {
+  optional double x = 1;
+  optional double y = 2;
+}
+
+// Common metadata present on every log entry.
+// These fields correspond to the shared fields across raw, interval,
+// and custom logs in packageLogs.ts.
+message LogMetadata {
+  // Page context
+  string page_url = 1;
+  string page_title = 2;
+  string page_referrer = 3;
+
+  // Browser / client info
+  string user_agent = 4;
+  int64 client_time = 5;             // Unix epoch milliseconds
+  ScreenResolution screen_resolution = 6;
+
+  // Identity — all optional, set via configuration
+  optional string user_id = 7;
+  optional string session_id = 8;
+  optional string http_session_id = 9;
+  optional string browser_session_id = 10;
+
+  // Tool metadata
+  optional string tool_name = 11;
+  optional string tool_version = 12;
+  optional string userale_version = 13;
+}
+
+// RawLog captures a single DOM event (click, keydown, drag, etc.).
+// Created by packageLog() in packageLogs.ts.
+message RawLog {
+  LogMetadata metadata = 1;
+
+  // Event target
+  string target = 2;                  // CSS selector of event target
+  repeated string path = 3;           // DOM path from target to root
+  string event_type = 4;              // DOM event type (click, keydown, etc.)
+
+  // Pointer position
+  Location location = 5;
+
+  // Sub-millisecond timing
+  optional double micro_time = 6;
+
+  // Whether this represents direct user action
+  bool user_action = 7;
+
+  // Dynamic detail extracted by detailFcn
+  google.protobuf.Struct details = 8;
+
+  // Element attributes (excluding style)
+  google.protobuf.Struct attributes = 9;
+
+  // Inline CSS properties of the target element
+  google.protobuf.Struct style = 10;
+}
+
+// IntervalLog captures an aggregated sequence of repeated events
+// (e.g., sustained scrolling, repeated clicks on same target).
+// Created by packageIntervalLog() in packageLogs.ts.
+message IntervalLog {
+  LogMetadata metadata = 1;
+
+  // Event target
+  string target = 2;
+  repeated string path = 3;
+  string event_type = 4;
+
+  // Aggregation fields
+  int32 count = 5;                    // Number of events in the interval
+  int64 duration = 6;                 // Duration in milliseconds
+  int64 start_time = 7;              // Interval start (epoch ms)
+  int64 end_time = 8;                // Interval end (epoch ms)
+
+  // Transition flags — why the interval ended
+  bool target_change = 9;
+  bool type_change = 10;
+
+  bool user_action = 11;
+}
+
+// CustomLog captures application-defined events logged via the public API.
+// Created by packageCustomLog() in packageLogs.ts.
+message CustomLog {
+  LogMetadata metadata = 1;
+
+  bool user_action = 2;
+
+  // Detail function output
+  google.protobuf.Struct details = 3;
+
+  // Arbitrary fields merged from the user-provided customLog object.
+  // This preserves backward compatibility with the current Object.assign()
+  // pattern in packageCustomLog().
+  google.protobuf.Struct custom_fields = 4;
+}
+
+// UserALELog is the top-level discriminated union wrapper.
+// Every log produced by UserALE is one of the three variants.
+message UserALELog {
+  LogType log_type = 1;
+  oneof log {
+    RawLog raw = 2;
+    IntervalLog interval = 3;
+    CustomLog custom = 4;
+  }
+}
+
+// LogBatch is the transmission envelope — a collection of logs
+// to be sent in a single HTTP POST or WebSocket message.
+message LogBatch {
+  repeated UserALELog logs = 1;
+}
