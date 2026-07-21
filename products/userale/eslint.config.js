@@ -43,6 +43,7 @@ module.exports = [
             'no-cond-assign': 'warn',
             'no-constant-condition': 'warn',
             'no-unused-vars': 'warn',
+            'no-useless-assignment': 'warn',
             '@typescript-eslint/no-unused-vars': 'warn',
             '@typescript-eslint/no-explicit-any': 'warn',
         },
