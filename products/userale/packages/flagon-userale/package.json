@@ -44,13 +44,16 @@
     "Jason Young"
   ],
   "license": "Apache-2.0",
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.12.1"
+  },
   "bugs": {
     "url": "https://github.com/apache/flagon/issues"
   },
   "homepage": "https://flagon.apache.org/",
   "engines": {
-    "node": ">= 18.x",
-    "npm": ">= 9.x"
+    "node": ">= 20.x",
+    "npm": ">= 10.x"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.27.1",

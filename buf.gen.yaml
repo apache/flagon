@@ -15,14 +15,16 @@
 # specific language governing permissions and limitations
 # under the License.
 
-packages:
-  # all packages in direct subdirs of packages/
-  - 'packages/*'
-allowBuilds:
-  '@parcel/watcher': true
-  '@swc/core': true
-  cypress: true
-  esbuild: true
-  lmdb: true
-  msgpackr-extract: true
-  sharp: true
+version: v2
+managed:
+  enabled: true
+plugins:
+  # TypeScript generation for UserALE.js
+  - remote: buf.build/bufbuild/es
+    out: products/userale/packages/flagon-userale/src/gen
+    opt:
+      - target=ts
+
+  # Python generation for Distill (future)
+  # - remote: buf.build/protocolbuffers/python
+  #   out: products/distill/flagon_distill/gen

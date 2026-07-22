@@ -15,14 +15,15 @@
 # specific language governing permissions and limitations
 # under the License.
 
-packages:
-  # all packages in direct subdirs of packages/
-  - 'packages/*'
-allowBuilds:
-  '@parcel/watcher': true
-  '@swc/core': true
-  cypress: true
-  esbuild: true
-  lmdb: true
-  msgpackr-extract: true
-  sharp: true
+version: v2
+modules:
+  - path: proto
+    name: buf.build/apache/flagon
+lint:
+  use:
+    - STANDARD
+  except:
+    - PACKAGE_VERSION_SUFFIX
+breaking:
+  use:
+    - FILE
