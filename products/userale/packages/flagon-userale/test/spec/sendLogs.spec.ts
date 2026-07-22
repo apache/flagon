@@ -163,6 +163,65 @@ describe("sendLogs", () => {
     done();
   });
 
+  it("sends x-api-key header when config.apiKey is set", () => {
+    const fetchSpy = jest.spyOn(global, "fetch").mockResolvedValue(new Response());
+
+    config.update({
+      on: true,
+      url: "http://test.com",
+      apiKey: "my-secret-key",
+    });
+    sendOnClose([{ foo: "bar" }], config);
+    global.window.dispatchEvent(new window.CustomEvent("pagehide"));
+
+    expect(fetchSpy).toHaveBeenCalled();
+    const lastCall = fetchSpy.mock.calls[fetchSpy.mock.calls.length - 1]!;
+    const callHeaders = lastCall[1]!.headers as Headers;
+    expect(callHeaders.get("x-api-key")).toBe("my-secret-key");
+
+    fetchSpy.mockRestore();
+  });
+
+  it("does not send x-api-key header when config.apiKey is null", () => {
+    const fetchSpy = jest.spyOn(global, "fetch").mockResolvedValue(new Response());
+
+    config.update({
+      on: true,
+      url: "http://test.com",
+      apiKey: null,
+    });
+    sendOnClose([{ foo: "bar" }], config);
+    global.window.dispatchEvent(new window.CustomEvent("pagehide"));
+
+    expect(fetchSpy).toHaveBeenCalled();
+    const lastCall = fetchSpy.mock.calls[fetchSpy.mock.calls.length - 1]!;
+    const callHeaders = lastCall[1]!.headers as Headers;
+    expect(callHeaders.get("x-api-key")).toBeNull();
+
+    fetchSpy.mockRestore();
+  });
+
+  it("sends both Authorization and x-api-key headers when both are configured", () => {
+    const fetchSpy = jest.spyOn(global, "fetch").mockResolvedValue(new Response());
+
+    config.update({
+      on: true,
+      url: "http://test.com",
+      authHeader: "Bearer some-token",
+      apiKey: "my-secret-key",
+    });
+    sendOnClose([{ foo: "bar" }], config);
+    global.window.dispatchEvent(new window.CustomEvent("pagehide"));
+
+    expect(fetchSpy).toHaveBeenCalled();
+    const lastCall = fetchSpy.mock.calls[fetchSpy.mock.calls.length - 1]!;
+    const callHeaders = lastCall[1]!.headers as Headers;
+    expect(callHeaders.get("Authorization")).toBe("Bearer some-token");
+    expect(callHeaders.get("x-api-key")).toBe("my-secret-key");
+
+    fetchSpy.mockRestore();
+  });
+
   it("sends logs with proper custom headers when using registerHeadersCallback", (done) => {
     const logs: Array<Logging.Log> = [];
     config.update({

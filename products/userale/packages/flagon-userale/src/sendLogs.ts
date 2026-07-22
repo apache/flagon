@@ -92,6 +92,10 @@ export function sendOnClose(
           headers.set("Authorization", config.authHeader.toString());
         }
 
+        if (config.apiKey) {
+          headers.set("x-api-key", config.apiKey as string);
+        }
+
         fetch(config.url, {
           keepalive: true,
           method: "POST",
@@ -138,6 +142,10 @@ export async function sendLogs(
         ? config.authHeader()
         : config.authHeader;
     headers.set("Authorization", authHeaderValue);
+  }
+
+  if (config.apiKey) {
+    headers.set("x-api-key", config.apiKey as string);
   }
 
   // Update custom headers last to allow them to over-write the defaults. This assumes

@@ -21,6 +21,7 @@ export declare namespace Settings {
   type UserFromParams = string | null;
   type ToolName = string | null;
   type AuthHeader = CallableFunction | string | null;
+  type ApiKey = string | null;
   type CustomIndex = string | null;
   type HeaderObject = { [key: string]: string };
   type Headers = HeaderObject | null;
@@ -35,6 +36,7 @@ export declare namespace Settings {
     | UserFromParams
     | ToolName
     | AuthHeader
+    | ApiKey
     | CustomIndex
     | Headers;
 
@@ -46,6 +48,7 @@ export declare namespace Settings {
 
   export interface Config extends DefaultConfig {
     autostart: boolean;
+    apiKey: ApiKey;
     authHeader: AuthHeader;
     browserSessionId: SessionId;
     custIndex: CustomIndex;

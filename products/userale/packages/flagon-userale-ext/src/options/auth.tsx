@@ -18,15 +18,46 @@
  */
 
 import pkceChallenge from "pkce-challenge"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import browser from "webextension-polyfill"
 
-import { setStoredOptions } from "~/utils/storage"
+import { getStoredOptions, setStoredOptions } from "~/utils/storage"
+import type { StoredOptions } from "~/utils/storage"
 
 function Auth() {
+  const [authMode, setAuthMode] = useState<StoredOptions["authMode"]>("none")
+  const [apiKey, setApiKey] = useState("")
   const [issuerUrl, setIssuerUrl] = useState("")
   const [clientId, setClientId] = useState("")
   const [message, setMessage] = useState("")
+
+  useEffect(() => {
+    getStoredOptions().then((opts) => {
+      setAuthMode(opts.authMode)
+      setApiKey(opts.apiKey)
+    })
+  }, [])
+
+  const handleAuthModeChange = async (
+    mode: StoredOptions["authMode"]
+  ) => {
+    setAuthMode(mode)
+    setMessage("")
+    if (mode === "none") {
+      await setStoredOptions({ authMode: "none", accessToken: "", apiKey: "" })
+      setApiKey("")
+      setMessage("Auth disabled.")
+    }
+  }
+
+  const handleSaveApiKey = async () => {
+    await setStoredOptions({
+      authMode: "apikey",
+      apiKey,
+      accessToken: ""
+    })
+    setMessage("API key saved.")
+  }
 
   const handleLogin = async () => {
     try {
@@ -74,7 +105,11 @@ function Auth() {
       )
 
       const tokens = await tokenRes.json()
-      await setStoredOptions({ accessToken: tokens.access_token })
+      await setStoredOptions({
+        authMode: "oauth",
+        accessToken: tokens.access_token,
+        apiKey: ""
+      })
 
       setMessage("Login successful!")
     } catch (err) {
@@ -85,32 +120,91 @@ function Auth() {
 
   return (
     <div>
-      <h2>OAuth Login</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Issuer URL:</label>
+      <h2>Authentication</h2>
+      <div>
+        <label>
           <input
-            type="url"
-            value={issuerUrl}
-            onChange={(e) => setIssuerUrl(e.target.value)}
-            placeholder="https://issuer.com/realms/myrealm"
-            required
+            type="radio"
+            name="authMode"
+            value="none"
+            checked={authMode === "none"}
+            onChange={() => handleAuthModeChange("none")}
           />
-        </div>
-        <div>
-          <label>Client ID:</label>
+          None
+        </label>
+        <label style={{ marginLeft: 16 }}>
           <input
-            type="text"
-            value={clientId}
-            onChange={(e) => setClientId(e.target.value)}
-            placeholder="your-client-id"
-            required
+            type="radio"
+            name="authMode"
+            value="oauth"
+            checked={authMode === "oauth"}
+            onChange={() => handleAuthModeChange("oauth")}
           />
+          OAuth
+        </label>
+        <label style={{ marginLeft: 16 }}>
+          <input
+            type="radio"
+            name="authMode"
+            value="apikey"
+            checked={authMode === "apikey"}
+            onChange={() => handleAuthModeChange("apikey")}
+          />
+          API Key
+        </label>
+      </div>
+
+      {authMode === "oauth" && (
+        <div>
+          <h3>OAuth Login</h3>
+          <form onSubmit={handleLogin}>
+            <div>
+              <label>Issuer URL:</label>
+              <input
+                type="url"
+                value={issuerUrl}
+                onChange={(e) => setIssuerUrl(e.target.value)}
+                placeholder="https://issuer.com/realms/myrealm"
+                required
+              />
+            </div>
+            <div>
+              <label>Client ID:</label>
+              <input
+                type="text"
+                value={clientId}
+                onChange={(e) => setClientId(e.target.value)}
+                placeholder="your-client-id"
+                required
+              />
+            </div>
+            <div style={{ textAlign: "right" }}>
+              <button type="submit">Log In</button>
+            </div>
+          </form>
         </div>
-        <div style={{ textAlign: "right" }}>
-          <button type="submit">Log In</button>
+      )}
+
+      {authMode === "apikey" && (
+        <div>
+          <h3>API Key</h3>
+          <div>
+            <label>API Key:</label>
+            <input
+              type="password"
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              placeholder="Enter your API key"
+            />
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <button type="button" onClick={handleSaveApiKey}>
+              Save
+            </button>
+          </div>
         </div>
-      </form>
+      )}
+
       {message && <p>{message}</p>}
     </div>
   )

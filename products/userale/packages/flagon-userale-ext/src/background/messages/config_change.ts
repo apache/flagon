@@ -32,6 +32,23 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
 export function setOptions(options: StoredOptions) {
   userale.options({ url: options.loggingUrl })
   allowListRegExp = new RegExp(options.allowList)
+
+  switch (options.authMode) {
+    case "oauth":
+      userale.options({
+        authHeader: options.accessToken ? `Bearer ${options.accessToken}` : null,
+        apiKey: null
+      })
+      break
+    case "apikey":
+      userale.options({
+        authHeader: null,
+        apiKey: options.apiKey || null
+      })
+      break
+    default:
+      userale.options({ authHeader: null, apiKey: null })
+  }
 }
 
 export function getAllowListRegExp() {

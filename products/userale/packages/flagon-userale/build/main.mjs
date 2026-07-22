@@ -535,6 +535,7 @@ var httpSessionId = null;
 function getInitialSettings() {
   if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
     const settings2 = {
+      apiKey: null,
       authHeader: null,
       autostart: true,
       browserSessionId: null,
@@ -577,6 +578,7 @@ function getInitialSettings() {
   };
   const headers = get("data-headers");
   const settings = {
+    apiKey: get("data-api-key") || null,
     authHeader: get("data-auth") || null,
     autostart: get("data-autostart") === "false" ? false : true,
     browserSessionId: null,
@@ -642,6 +644,7 @@ function generatehttpSessionId() {
 // src/configure.ts
 var _Configuration = class {
   constructor() {
+    this.apiKey = null;
     this.autostart = false;
     this.authHeader = null;
     this.browserSessionId = null;
@@ -754,6 +757,9 @@ function sendOnClose(logs3, config3) {
         if (config3.authHeader) {
           headers.set("Authorization", config3.authHeader.toString());
         }
+        if (config3.apiKey) {
+          headers.set("x-api-key", config3.apiKey);
+        }
         fetch(config3.url, {
           keepalive: true,
           method: "POST",
@@ -781,6 +787,9 @@ async function sendLogs(logs3, config3, retries) {
   if (config3.authHeader) {
     const authHeaderValue = typeof config3.authHeader === "function" ? config3.authHeader() : config3.authHeader;
     headers.set("Authorization", authHeaderValue);
+  }
+  if (config3.apiKey) {
+    headers.set("x-api-key", config3.apiKey);
   }
   updateCustomHeaders(config3);
   if (config3.headers) {

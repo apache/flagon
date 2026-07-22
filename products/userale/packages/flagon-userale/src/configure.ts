@@ -25,6 +25,7 @@ export class Configuration {
   private static instance: Configuration | null = null;
 
   // Public properties corresponding to fields in the Config interface
+  public apiKey: Settings.ApiKey = null;
   public autostart: boolean = false;
   public authHeader: Settings.AuthHeader = null;
   public browserSessionId: Settings.SessionId = null;

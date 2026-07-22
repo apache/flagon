@@ -31,6 +31,7 @@ export function getInitialSettings(): Settings.Config {
     self instanceof WorkerGlobalScope
   ) {
     const settings: Settings.Config = {
+      apiKey: null,
       authHeader: null,
       autostart: true,
       browserSessionId: null,
@@ -81,6 +82,7 @@ export function getInitialSettings(): Settings.Config {
       };
   const headers = get("data-headers");
   const settings: Settings.Config = {
+    apiKey: get("data-api-key") || null,
     authHeader: get("data-auth") || null,
     autostart: get("data-autostart") === "false" ? false : true,
     browserSessionId: null,
