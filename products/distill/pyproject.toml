@@ -45,7 +45,7 @@ classifiers = [
 python = ">=3.8,<4.0"
 networkx = "^2.5"
 numpy = "1.24.3"
-pandas = "^1.2.4"
+pandas = ">=1.2.4,<3.0.0"
 plotly = "^5.5.0"
 matplotlib = "3.7.5"
 scipy = "1.9.3"
