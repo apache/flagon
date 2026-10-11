@@ -21,6 +21,7 @@ export declare namespace Settings {
   type UserFromParams = string | null;
   type ToolName = string | null;
   type AuthHeader = CallableFunction | string | null;
+  type ApiKey = string | null;
   type CustomIndex = string | null;
   type HeaderObject = { [key: string]: string };
   type Headers = HeaderObject | null;
@@ -35,6 +36,7 @@ export declare namespace Settings {
     | UserFromParams
     | ToolName
     | AuthHeader
+    | ApiKey
     | CustomIndex
     | Headers;
 
@@ -46,6 +48,7 @@ export declare namespace Settings {
 
   export interface Config extends DefaultConfig {
     autostart: boolean;
+    apiKey: ApiKey;
     authHeader: AuthHeader;
     browserSessionId: SessionId;
     custIndex: CustomIndex;
@@ -108,22 +111,12 @@ export declare namespace Events {
     | "drop"
     | "keydown";
   export type IntervalEvents =
-    | "click"
-    | "focus"
-    | "blur"
-    | "input"
-    | "change"
-    | "mouseover"
-    | "submit";
+    "click" | "focus" | "blur" | "input" | "change" | "mouseover" | "submit";
   export type WindowEvents = "load" | "blur" | "focus";
   export type BufferedEvents = "wheel" | "scroll" | "resize";
   export type RefreshEvents = "submit";
   export type AllowedEvents =
-    | RawEvents
-    | IntervalEvents
-    | WindowEvents
-    | BufferedEvents
-    | RefreshEvents;
+    RawEvents | IntervalEvents | WindowEvents | BufferedEvents | RefreshEvents;
 
   export type EventDetailsMap<T extends string> = Partial<{
     [key in T]:
