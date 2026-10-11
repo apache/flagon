@@ -16,7 +16,12 @@
  */
 
 import { defineCustomDetails } from "@/attachHandlers";
-import { registerAuthCallback } from "@/utils";
+import {
+  registerAuthCallback,
+  registerHeadersCallback,
+  resetAuthCallback,
+  resetHeadersCallback,
+} from "@/utils";
 import {
   addCallbacks,
   removeCallbacks,
@@ -24,12 +29,13 @@ import {
   packageCustomLog,
   getSelector,
   buildPath,
+  detectBrowser,
   initPackager,
 } from "@/packageLogs";
 import { version as userAleVersion } from "../package.json";
 import { Configuration } from "@/configure";
 import { attachHandlers } from "@/attachHandlers";
-import { initSender } from "@/sendLogs";
+import { initSender, registerExporter } from "@/sendLogs";
 
 import type { Settings, Logging } from "@/types";
 
@@ -37,16 +43,24 @@ const config = Configuration.getInstance();
 const logs: Array<Logging.Log> = [];
 
 const startLoadTimestamp = Date.now();
-let endLoadTimestamp: number;
-if (typeof self !== "undefined") {
-  self.onload = function () {
+let endLoadTimestamp: number | undefined;
+if (
+  typeof self !== "undefined" &&
+  typeof self.addEventListener === "function"
+) {
+  self.addEventListener("load", function () {
     endLoadTimestamp = Date.now();
-  };
+  });
 }
 
 export let started = false;
 export { defineCustomDetails as details } from "@/attachHandlers";
-export { registerAuthCallback as registerAuthCallback } from "@/utils";
+export {
+  registerAuthCallback,
+  registerHeadersCallback,
+  resetAuthCallback,
+  resetHeadersCallback,
+} from "@/utils";
 export {
   addCallbacks as addCallbacks,
   removeCallbacks as removeCallbacks,
@@ -54,7 +68,9 @@ export {
   packageCustomLog as packageCustomLog,
   getSelector as getSelector,
   buildPath as buildPath,
+  detectBrowser as detectBrowser,
 } from "@/packageLogs";
+export { registerExporter } from "@/sendLogs";
 export {
   buildHeaders,
   buildOtlpResourceAttributes,
@@ -117,10 +133,14 @@ function setup(config: Configuration) {
         initSender(logs, config);
         started = config.on = true;
         if (typeof window !== "undefined" && typeof document !== "undefined") {
+          const loadDuration = Math.max(
+            1,
+            (endLoadTimestamp ?? Date.now()) - startLoadTimestamp,
+          );
           packageCustomLog(
             {
               type: "load",
-              details: { pageLoadTime: endLoadTimestamp - startLoadTimestamp },
+              details: { pageLoadTime: loadDuration },
             },
             () => ({}),
             false,
@@ -200,11 +220,14 @@ if (typeof window !== "undefined") {
     version: userAleVersion,
     details: defineCustomDetails,
     registerAuthCallback,
+    registerHeadersCallback,
+    registerExporter,
     addCallbacks,
     removeCallbacks,
     packageLog,
     packageCustomLog,
     getSelector,
     buildPath,
+    detectBrowser,
   };
 }

@@ -19,7 +19,7 @@
 
 import { defineConfig } from "@playwright/test";
 
-process.env.PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS = '1';
+process.env.PW_EXPERIMENTAL_SERVICE_WORKER_NETWORK_EVENTS = "1";
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -34,7 +34,7 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: "html",
+  reporter: [["html", { open: "never" }], ["list"]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
@@ -77,11 +77,10 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer:
-    {
-      command: "pnpm run example:run",
-      url: "http://127.0.0.1:8000",
-      reuseExistingServer: false,
-      gracefulShutdown: { signal: 'SIGTERM', timeout: 1000 }
-    }
+  webServer: {
+    command: "pnpm run example:run",
+    url: "http://127.0.0.1:8000",
+    reuseExistingServer: false,
+    gracefulShutdown: { signal: "SIGTERM", timeout: 1000 },
+  },
 });

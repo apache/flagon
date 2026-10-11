@@ -39,9 +39,9 @@ describe("verifyCallback", () => {
 
   it("should throw error for non-function callback", () => {
     const nonFunctionCallback = "notAFunction";
-    // @ts-ignore
     // This is a test case to check if the function throws an error when the callback is not a function
     // which should only happen in a Javascript environment
+    // @ts-expect-error testing non-function callback
     expect(() => verifyHeadersCallback(nonFunctionCallback)).toThrow(
       "Userale headers callback must be a function",
     );
@@ -67,6 +67,17 @@ describe("verifyCallback", () => {
     const validCallback = jest.fn().mockReturnValue({});
     expect(() => verifyHeadersCallback(validCallback)).not.toThrow();
   });
+
+  it("should throw error when callback returns null or an array", () => {
+    const nullCallback = jest.fn().mockReturnValue(null);
+    const arrayCallback = jest.fn().mockReturnValue(["a"]);
+    expect(() => verifyHeadersCallback(nullCallback)).toThrow(
+      "Userale headers callback must return an object",
+    );
+    expect(() => verifyHeadersCallback(arrayCallback)).toThrow(
+      "Userale headers callback must return an object",
+    );
+  });
 });
 
 describe("registerHeadersCallback", () => {
@@ -85,9 +96,9 @@ describe("registerHeadersCallback", () => {
 
   it("should not register a non-function callback", () => {
     const nonFunctionCallback = "notAFunction";
-    // @ts-ignore
     // This is a test case to check if the function throws an error when the callback is not a function
     // which should only happen in a Javascript environment
+    // @ts-expect-error testing non-function callback
     expect(registerHeadersCallback(nonFunctionCallback)).toBe(false);
     expect(headersCallback).toBeNull();
   });

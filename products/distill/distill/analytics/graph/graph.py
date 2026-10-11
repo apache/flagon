@@ -210,7 +210,7 @@ def funnel(edges, targets, node_labels=False, *, infer=True):
         targets.extend(path)
     else:
         # Otherwise construct a path literally
-        target_edges = nx.utils.pairwise(targets)
+        target_edges = list(nx.utils.pairwise(targets))
 
     # Get the total outflow of the starting node
     counts = sum(

@@ -52,4 +52,6 @@ def setup(file, date_type):
 
 
 def to_datetime(date):
+    if isinstance(date, str) and date.isdigit():
+        date = int(date)
     return pd.to_datetime(date, unit="ms", origin="unix")

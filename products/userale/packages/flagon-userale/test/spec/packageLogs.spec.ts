@@ -468,4 +468,11 @@ describe("packageLogs", () => {
       "margin-top": "10px",
     });
   });
+
+  test("getSelector handles SVGElement class attributes without [object SVGAnimatedString]", () => {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("id", "icon");
+    svg.setAttribute("class", "nav-icon");
+    expect(getSelector(svg)).toBe("svg#icon.nav-icon");
+  });
 });

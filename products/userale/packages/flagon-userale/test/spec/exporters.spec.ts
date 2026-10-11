@@ -159,6 +159,21 @@ describe("exporters", () => {
       );
       jest.useRealTimers();
     });
+
+    it("supports exporterFormat aliases ('v2-json', 'otlp-json')", () => {
+      config.update({
+        url: "http://localhost:4318",
+        exporterFormat: "otlp-json",
+      });
+      expect(createExporter(config)).toBeInstanceOf(OtlpJsonExporter);
+
+      config.reset();
+      config.update({
+        url: "http://localhost:8000",
+        exporterFormat: "v2-json",
+      });
+      expect(createExporter(config)).toBeInstanceOf(HttpJsonExporter);
+    });
   });
 
   describe("chunkLogsForKeepalive", () => {

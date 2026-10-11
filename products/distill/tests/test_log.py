@@ -252,6 +252,26 @@ def test_log_v2_5_and_wire_formats():
     assert otlp_log.to_dict()["traceId"] == "4bf92f3577b34da6a3ce929d0e0e4736"
 
 
+def test_audit_bug_fixes():
+    from distill.analytics.graph.graph import funnel
+    from distill.schemas.userale import UserAleRawSchema
+    from distill.segmentation.segment import Segment
+
+    data = load_log()
+    log1 = Log(data=data, schema=UserAleRawSchema)
+    assert log1 >= log1
+    assert log1 <= log1
+
+    s1 = Segment("s1", (0, 10))
+    s2 = Segment("s2", (0, 10))
+    s1.uids.append("u1")
+    assert s2.uids == []
+
+    edges = [("a", "b"), ("b", "c"), ("a", "b")]
+    fig = funnel(edges, ["a", "b", "c"], infer=False)
+    assert fig is not None
+
+
 def load_log() -> str:
     with open(os.path.join(DATA_DIR, "log_test_data.json")) as f:
         data = f.readline()

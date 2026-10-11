@@ -21,13 +21,20 @@ import * as userale from "flagon-userale"
 
 import type { PlasmoMessaging } from "@plasmohq/messaging"
 
-import { getAllowListRegExp } from "~/background/messages/config_change"
+import {
+  getAllowListRegExp,
+  shouldLogByFilter
+} from "~/background/messages/config_change"
 
 const handler: PlasmoMessaging.PortHandler = async (req, res) => {
   const log = req.body
   log.browserSessionId = browserSessionId
   const allowListRegExp = getAllowListRegExp()
-  if (allowListRegExp.test(log.pageUrl)) {
+  if (
+    allowListRegExp &&
+    allowListRegExp.test(log.pageUrl) &&
+    shouldLogByFilter(log)
+  ) {
     console.log(log)
     userale.log(log)
   }

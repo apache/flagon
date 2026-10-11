@@ -18,7 +18,13 @@
 import type { Logging } from "@/types";
 
 export type ExporterType =
-  "http-json" | "proto-json" | "otlp" | "websocket" | "custom";
+  | "http-json"
+  | "v2-json"
+  | "proto-json"
+  | "otlp"
+  | "otlp-json"
+  | "websocket"
+  | "custom";
 
 export interface ExportOptions {
   keepalive?: boolean;

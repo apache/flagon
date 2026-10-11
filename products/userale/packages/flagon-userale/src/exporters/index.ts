@@ -85,7 +85,9 @@ export function createExporter(config: Configuration): LogExporter {
     return config.exporter;
   }
 
-  if (config.exporterType === "otlp" || config.otlpEndpoint) {
+  const mode = config.exporterFormat || config.exporterType;
+
+  if (mode === "otlp" || mode === "otlp-json" || config.otlpEndpoint) {
     return new OtlpJsonExporter(config);
   }
 
@@ -94,7 +96,8 @@ export function createExporter(config: Configuration): LogExporter {
     if (
       url.protocol === "ws:" ||
       url.protocol === "wss:" ||
-      config.exporterType === "websocket"
+      mode === "websocket" ||
+      config.websocketsEnabled
     ) {
       return new WebSocketExporter(config);
     }
@@ -102,7 +105,7 @@ export function createExporter(config: Configuration): LogExporter {
     // Fallback to HTTP exporter if config.url is not a full URL (e.g. relative path in tests)
   }
 
-  if (config.exporterType === "proto-json") {
+  if (mode === "proto-json") {
     return new ProtoJsonExporter(config);
   }
 

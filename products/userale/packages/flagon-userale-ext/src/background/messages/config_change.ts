@@ -21,13 +21,30 @@ import * as userale from "flagon-userale"
 
 import type { PlasmoMessaging } from "@plasmohq/messaging"
 
-import { getStoredOptions, type StoredOptions } from "~utils/storage"
+import {
+  DEFAULT_OPTIONS,
+  getStoredOptions,
+  type StoredOptions
+} from "~utils/storage"
 
-let allowListRegExp: RegExp
+let allowListRegExp: RegExp = new RegExp(DEFAULT_OPTIONS.allowList)
+let excludedEventTypes = new Set<string>()
+let excludedLogTypes = new Set<string>()
 
-const handler: PlasmoMessaging.MessageHandler = async (req) => {
+function parseCsvSet(raw?: string): Set<string> {
+  if (!raw) return new Set()
+  return new Set(
+    raw
+      .split(",")
+      .map((s) => s.trim().toLowerCase())
+      .filter(Boolean)
+  )
+}
+
+const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
   const stored = await getStoredOptions()
   setOptions({ ...stored, ...req.body })
+  res.send("Configuration saved!")
 }
 
 export function setOptions(options: StoredOptions) {
@@ -36,6 +53,8 @@ export function setOptions(options: StoredOptions) {
     exporterType: options.exporterType ?? "http-json"
   })
   allowListRegExp = new RegExp(options.allowList)
+  excludedEventTypes = parseCsvSet(options.filterEventTypes)
+  excludedLogTypes = parseCsvSet(options.filterLogTypes)
 
   switch (options.authMode) {
     case "oauth":
@@ -59,6 +78,22 @@ export function setOptions(options: StoredOptions) {
 
 export function getAllowListRegExp() {
   return allowListRegExp
+}
+
+export function shouldLogByFilter(log: Record<string, any>): boolean {
+  if (
+    typeof log.type === "string" &&
+    excludedEventTypes.has(log.type.toLowerCase())
+  ) {
+    return false
+  }
+  if (
+    typeof log.logType === "string" &&
+    excludedLogTypes.has(log.logType.toLowerCase())
+  ) {
+    return false
+  }
+  return true
 }
 
 export default handler

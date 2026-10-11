@@ -68,6 +68,7 @@ export declare namespace Settings {
     browserSessionId: SessionId;
     custIndex: CustomIndex;
     exporter?: CustomExporter;
+    exporterFormat?: ExporterType;
     exporterType?: ExporterType;
     headers: Headers;
     httpSessionId: SessionId;

@@ -31,6 +31,7 @@ export class Configuration {
   public browserSessionId: Settings.SessionId = null;
   public custIndex: Settings.CustomIndex = null;
   public exporter: Settings.CustomExporter = null;
+  public exporterFormat: Settings.ExporterType = "http-json";
   public exporterType: Settings.ExporterType = "http-json";
   public headers: Settings.Headers = null;
   public httpSessionId: Settings.SessionId = null;
@@ -106,6 +107,17 @@ export class Configuration {
       const newOption = newConfig[option];
       if (newOption !== undefined) {
         this[option] = newOption;
+        if (
+          option === "exporterFormat" &&
+          newConfig.exporterType === undefined
+        ) {
+          this.exporterType = newOption as Settings.ExporterType;
+        } else if (
+          option === "exporterType" &&
+          newConfig.exporterFormat === undefined
+        ) {
+          this.exporterFormat = newOption as Settings.ExporterType;
+        }
       }
     });
   }
