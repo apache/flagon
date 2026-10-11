@@ -27,8 +27,10 @@ let httpSessionId: string | null = null;
  */
 export function getInitialSettings(): Settings.Config {
   if (
-    typeof WorkerGlobalScope !== "undefined" &&
-    self instanceof WorkerGlobalScope
+    (typeof WorkerGlobalScope !== "undefined" &&
+      self instanceof WorkerGlobalScope) ||
+    typeof document === "undefined" ||
+    typeof window === "undefined"
   ) {
     const settings: Settings.Config = {
       apiKey: null,

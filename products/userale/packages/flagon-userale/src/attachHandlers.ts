@@ -50,10 +50,21 @@ export function extractMouseDetails(e: MouseEvent) {
   };
 }
 
+function isPasswordInput(target: EventTarget | null): boolean {
+  return (
+    typeof HTMLInputElement !== "undefined" &&
+    target instanceof HTMLInputElement &&
+    target.type?.toLowerCase() === "password"
+  );
+}
+
 /** Maps a KeyboardEvent to an object containing useful infromation
  * @param {KeyboardEvent} e Event to extract data from
  */
 export function extractKeyboardDetails(e: KeyboardEvent) {
+  if (isPasswordInput(e.target)) {
+    return null;
+  }
   return {
     key: e.key,
     code: e.code,
@@ -69,6 +80,9 @@ export function extractKeyboardDetails(e: KeyboardEvent) {
  * @param  {InputEvent} e Event to extract data from
  */
 export function extractInputDetails(e: InputEvent) {
+  if (isPasswordInput(e.target)) {
+    return null;
+  }
   return {
     value: (e.target as HTMLInputElement).value,
   };
@@ -79,6 +93,9 @@ export function extractInputDetails(e: InputEvent) {
  * @param  {Events.ChangeEvent} e Event to extract data from
  */
 export function extractChangeDetails(e: Events.ChangeEvent) {
+  if (isPasswordInput(e.target)) {
+    return null;
+  }
   return {
     value: e.target.value,
   };

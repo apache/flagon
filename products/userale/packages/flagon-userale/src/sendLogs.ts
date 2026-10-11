@@ -33,6 +33,15 @@ export function initSender(logs: Array<Logging.Log>, config: Configuration) {
   }
 
   const url = new URL(config.url);
+  if (
+    (config.apiKey || config.authHeader) &&
+    url.protocol === "http:" &&
+    !["localhost", "127.0.0.1", "[::1]"].includes(url.hostname)
+  ) {
+    console.warn(
+      "[UserALE] Sending credentials over plaintext HTTP. Use HTTPS in production.",
+    );
+  }
   if (url.protocol === "ws:" || url.protocol === "wss:") {
     wsock = new WebSocket(config.url);
   }

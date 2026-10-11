@@ -94,8 +94,8 @@ export declare namespace Logging {
 
   export type DynamicDetailFunction<E extends Event = Event> = (
     e: E,
-  ) => JSONObject;
-  export type StaticDetailFunction = () => JSONObject;
+  ) => JSONObject | null;
+  export type StaticDetailFunction = () => JSONObject | null;
 }
 
 export declare namespace Events {

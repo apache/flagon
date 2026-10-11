@@ -38,9 +38,11 @@ const logs: Array<Logging.Log> = [];
 
 const startLoadTimestamp = Date.now();
 let endLoadTimestamp: number;
-self.onload = function () {
-  endLoadTimestamp = Date.now();
-};
+if (typeof self !== "undefined") {
+  self.onload = function () {
+    endLoadTimestamp = Date.now();
+  };
+}
 
 export let started = false;
 export { defineCustomDetails as details } from "@/attachHandlers";
@@ -53,7 +55,7 @@ export {
   getSelector as getSelector,
   buildPath as buildPath,
 } from "@/packageLogs";
-export type { Logging } from "@/types";
+export type { Logging, Settings } from "@/types";
 
 config.update({
   useraleVersion: userAleVersion,
@@ -112,8 +114,13 @@ export const version = userAleVersion;
  */
 export function start(): void {
   if (!started || config.autostart === false) {
+    const wasStarted = started;
     started = config.on = true;
     config.update({ autostart: true });
+    if (!wasStarted) {
+      attachHandlers(config);
+      initSender(logs, config);
+    }
   }
 }
 

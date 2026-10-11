@@ -178,14 +178,16 @@ export function packageCustomLog(
   }
 
   let details = null;
-  if (detailFcn.length === 0) {
-    // In the case of a union, the type checker will default to the more stringent
-    // type, i.e. the DetailFunction that expects an argument for safety purposes.
-    // To avoid this, we must explicitly check the type by asserting it receives
-    // no arguments (detailFcn.length === 0) and then cast it to the
-    // StaticDetailFunction type.
-    const staticDetailFcn = detailFcn as Logging.StaticDetailFunction;
-    details = staticDetailFcn();
+  if (typeof detailFcn === "function") {
+    if (detailFcn.length === 0) {
+      // In the case of a union, the type checker will default to the more stringent
+      // type, i.e. the DetailFunction that expects an argument for safety purposes.
+      // To avoid this, we must explicitly check the type by asserting it receives
+      // no arguments (detailFcn.length === 0) and then cast it to the
+      // StaticDetailFunction type.
+      const staticDetailFcn = detailFcn as Logging.StaticDetailFunction;
+      details = staticDetailFcn();
+    }
   }
 
   const metaData = {
@@ -324,7 +326,11 @@ export function packageIntervalLog(e: Event) {
     }
 
     // Interval is still occuring, just update counter
-    if (intervalId == target && intervalType == type && intervalCounter) {
+    if (
+      intervalId == target &&
+      intervalType == type &&
+      intervalCounter !== null
+    ) {
       intervalCounter = intervalCounter + 1;
     }
 
@@ -418,6 +424,11 @@ export function selectorizePath(path: EventTarget[]) {
   return pathSelectors;
 }
 
+const attributeBlackList = ["style", "data-api-key", "data-auth"];
+const sensitiveAttributePattern = /^data-(api-key|auth|token|secret|password)/i;
+const jsonValuePattern =
+  /^(?:\{[\s\S]*\}|\[[\s\S]*\]|"(?:[^"\\]|\\.)*"|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?|true|false|null)$/;
+
 /**
  * Builds an object containing attributes of an element.
  * Attempts to parse all attribute values as JSON text.
@@ -426,16 +437,22 @@ export function selectorizePath(path: EventTarget[]) {
  */
 export function buildAttrs(e: Event): Record<string, any> {
   const attributes: Record<string, any> = {};
-  const attributeBlackList = ["style"];
 
   if (e.target && e.target instanceof Element) {
     for (const attr of e.target.attributes) {
-      if (attributeBlackList.includes(attr.name)) continue;
+      if (
+        attributeBlackList.includes(attr.name.toLowerCase()) ||
+        sensitiveAttributePattern.test(attr.name)
+      ) {
+        continue;
+      }
       let val: any = attr.value;
-      try {
-        val = JSON.parse(val);
-      } catch {
-        // Ignore parsing errors, fallback to raw string value
+      if (jsonValuePattern.test(val.trim())) {
+        try {
+          val = JSON.parse(val);
+        } catch {
+          // Ignore parsing errors, fallback to raw string value
+        }
       }
       attributes[attr.name] = val;
     }

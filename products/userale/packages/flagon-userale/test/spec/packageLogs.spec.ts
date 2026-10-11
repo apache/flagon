@@ -30,6 +30,7 @@ import {
   initPackager,
   logs,
   packageLog,
+  packageIntervalLog,
   removeCallbacks,
   selectorizePath,
   buildAttrs,
@@ -234,7 +235,7 @@ describe("packageLogs", () => {
       initPackager([], config);
       packageLog(evt);
 
-      // @ts-ignore
+      // @ts-expect-error -- testing invalid JS runtime argument
       // This is a test case to check if the function throws an error when
       // the callback is not a function. Should only occur in a
       // Javascript environment
@@ -273,7 +274,7 @@ describe("packageLogs", () => {
       ];
 
       stampVariants.forEach((variant) => {
-        // @ts-ignore
+        // @ts-expect-error -- testing invalid JS runtime argument
         // This should only occur in a Javascript environment.
         const ret = extractTimeFields(variant);
         expect(!!ret).toBe(true);
@@ -298,7 +299,7 @@ describe("packageLogs", () => {
       document.body.appendChild(ele);
       ele.addEventListener("click", (e) => {
         // Expect the click location to be the top left corner of the viewport
-        let expectedLocation = { x: window.scrollX, y: window.scrollY };
+        const expectedLocation = { x: window.scrollX, y: window.scrollY };
         expect(getLocation(e)).toEqual(expectedLocation);
       });
       ele.dispatchEvent(evt);
@@ -326,7 +327,7 @@ describe("packageLogs", () => {
     });
 
     it("handles null", () => {
-      // @ts-ignore
+      // @ts-expect-error -- testing invalid JS runtime argument
       // This should only occur in a Javascript environment.
       const location = getLocation(null);
       expect(location).toEqual({ x: null, y: null });
@@ -363,7 +364,7 @@ describe("packageLogs", () => {
     });
 
     it("handles a non-null unknown value", () => {
-      // @ts-ignore
+      // @ts-expect-error -- testing invalid JS runtime argument
       // This should only occur in a Javascript environment.
       expect(getSelector("foo")).toBe("Unknown");
     });
@@ -398,6 +399,11 @@ describe("packageLogs", () => {
     ele.setAttribute("data-json", '{"key": "value"}');
     ele.setAttribute("data-string", "hello");
     ele.setAttribute("style", "color: red;");
+    ele.setAttribute("data-api-key", "secret-api-key");
+    ele.setAttribute("data-auth", "Bearer secret-token");
+    ele.setAttribute("data-token", "my-token");
+    ele.setAttribute("data-secret", "my-secret");
+    ele.setAttribute("data-password", "my-password");
     document.body.appendChild(ele);
     ele.addEventListener("CustomEvent", (e) => (result = buildAttrs(e)));
     ele.dispatchEvent(evt);
@@ -406,6 +412,42 @@ describe("packageLogs", () => {
       "data-string": "hello",
     });
     expect(result).not.toHaveProperty("style");
+    expect(result).not.toHaveProperty("data-api-key");
+    expect(result).not.toHaveProperty("data-auth");
+    expect(result).not.toHaveProperty("data-token");
+    expect(result).not.toHaveProperty("data-secret");
+    expect(result).not.toHaveProperty("data-password");
+  });
+
+  test("packageIntervalLog increments count on repeated events", () => {
+    config.update({ on: true });
+    initPackager([], config);
+    const document = window.document;
+    const btn1 = document.createElement("button");
+    btn1.id = "btn1";
+    const btn2 = document.createElement("button");
+    btn2.id = "btn2";
+    document.body.appendChild(btn1);
+    document.body.appendChild(btn2);
+
+    btn1.addEventListener("click", (e) => packageIntervalLog(e));
+    btn2.addEventListener("click", (e) => packageIntervalLog(e));
+
+    btn1.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+    btn1.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+    btn1.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+    // Transition target to flush the interval log for btn1
+    btn2.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+
+    expect(logs.length).toBe(1);
+    expect(logs[0]).toMatchObject({
+      target: "button#btn1",
+      type: "click",
+      logType: "interval",
+      count: 3,
+      targetChange: true,
+      typeChange: false,
+    });
   });
 
   test("buildCSS", () => {

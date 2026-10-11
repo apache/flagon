@@ -7,8 +7,8 @@
   "types": "build/main.d.ts",
   "exports": {
     ".": {
-      "import": "./build/main.mjs",
-      "types": "./build/main.d.ts"
+      "types": "./build/main.d.ts",
+      "import": "./build/main.mjs"
     }
   },
   "scripts": {
@@ -44,9 +44,6 @@
     "Jason Young"
   ],
   "license": "Apache-2.0",
-  "dependencies": {
-    "@bufbuild/protobuf": "^2.12.1"
-  },
   "bugs": {
     "url": "https://github.com/apache/flagon/issues"
   },
@@ -57,6 +54,7 @@
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.27.1",
+    "@bufbuild/protobuf": "^2.12.1",
     "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.14",
     "@types/jsdom": "^21.1.6",
