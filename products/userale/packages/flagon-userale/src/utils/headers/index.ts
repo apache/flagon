@@ -66,7 +66,7 @@ export function verifyCallback(callback: Callbacks.HeadersCallback) {
     throw new Error("Userale headers callback must be a function");
   }
   const result = callback();
-  if (typeof result !== "object") {
+  if (!result || typeof result !== "object" || Array.isArray(result)) {
     throw new Error("Userale headers callback must return an object");
   }
   for (const [key, value] of Object.entries(result)) {

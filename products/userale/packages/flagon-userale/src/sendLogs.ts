@@ -22,12 +22,33 @@ import { Logging } from "@/types";
 export { buildHeaders };
 
 let sendIntervalId: string | number | NodeJS.Timeout | undefined;
+let pagehideHandler: (() => void) | null = null;
 let activeExporter: LogExporter | null = null;
 let activeExporterKey: string | null = null;
 let activeCustomExporter: LogExporter | null = null;
 
+/**
+ * Registers a custom LogExporter instance on the global Configuration singleton.
+ * @param  {LogExporter | null} exporter Custom exporter instance or null to reset.
+ * @return {boolean}                     Whether registration succeeded.
+ */
+export function registerExporter(exporter: LogExporter | null): boolean {
+  if (exporter !== null && typeof exporter?.export !== "function") {
+    return false;
+  }
+  Configuration.getInstance().update({ exporter });
+  activeExporter = null;
+  return true;
+}
+
 function resolveExporter(config: Configuration): LogExporter {
-  const key = `${config.url}|${config.exporterType ?? "http-json"}`;
+  const key = [
+    config.url,
+    config.otlpEndpoint ?? "",
+    config.exporterFormat ?? "",
+    config.exporterType ?? "http-json",
+    String(Boolean(config.websocketsEnabled)),
+  ].join("|");
   if (
     activeExporter &&
     activeExporterKey === key &&
@@ -70,6 +91,10 @@ export function initSender(logs: Array<Logging.Log>, config: Configuration) {
   resolveExporter(config);
 
   sendIntervalId = sendOnInterval(logs, config);
+  if (pagehideHandler && typeof self.removeEventListener === "function") {
+    self.removeEventListener("pagehide", pagehideHandler);
+    pagehideHandler = null;
+  }
   sendOnClose(logs, config);
 }
 
@@ -105,7 +130,7 @@ export function sendOnClose(
   logs: Array<Logging.Log>,
   config: Configuration,
 ): void {
-  self.addEventListener("pagehide", function () {
+  const listener = function () {
     if (!config.on) {
       return;
     }
@@ -118,7 +143,9 @@ export function sendOnClose(
         console.error(error);
       });
     }
-  });
+  };
+  pagehideHandler = listener;
+  self.addEventListener("pagehide", listener);
 }
 
 /**

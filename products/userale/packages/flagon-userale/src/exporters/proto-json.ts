@@ -22,6 +22,7 @@ const KNOWN_CUSTOM_LOG_KEYS = new Set([
   "pageUrl",
   "pageTitle",
   "pageReferrer",
+  "browser",
   "userAgent",
   "clientTime",
   "scrnRes",

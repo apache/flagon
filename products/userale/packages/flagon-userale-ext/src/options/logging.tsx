@@ -30,12 +30,16 @@ function Logging() {
   const [allowList, setAllowList] = useState("")
   const [exporterType, setExporterType] =
     useState<StoredOptions["exporterType"]>("http-json")
+  const [filterEventTypes, setFilterEventTypes] = useState("")
+  const [filterLogTypes, setFilterLogTypes] = useState("")
 
   useEffect(() => {
     getStoredOptions().then((data) => {
       setLoggingUrl(data.loggingUrl)
       setAllowList(data.allowList)
       setExporterType(data.exporterType)
+      setFilterEventTypes(data.filterEventTypes)
+      setFilterLogTypes(data.filterLogTypes)
     })
   }, [])
 
@@ -44,9 +48,15 @@ function Logging() {
     const resp = await setStoredOptions({
       loggingUrl,
       allowList,
-      exporterType
+      exporterType,
+      filterEventTypes,
+      filterLogTypes
     })
-    alert(resp)
+    if (resp instanceof Error) {
+      alert(resp.message)
+    } else {
+      alert(typeof resp === "string" && resp ? resp : "Configuration saved!")
+    }
   }
 
   return (
@@ -79,6 +89,28 @@ function Logging() {
           id="allowlist"
           value={allowList}
           onChange={(e) => setAllowList(e.target.value)}
+        />
+        <br />
+
+        <label htmlFor="filter-event-types">
+          Excluded Event Types (comma-separated, e.g. mouseover,wheel):
+        </label>
+        <input
+          id="filter-event-types"
+          value={filterEventTypes}
+          placeholder="mouseover,mouseup,mousedown"
+          onChange={(e) => setFilterEventTypes(e.target.value)}
+        />
+        <br />
+
+        <label htmlFor="filter-log-types">
+          Excluded Log Types (comma-separated, e.g. interval,raw,custom):
+        </label>
+        <input
+          id="filter-log-types"
+          value={filterLogTypes}
+          placeholder="interval"
+          onChange={(e) => setFilterLogTypes(e.target.value)}
         />
         <br />
 

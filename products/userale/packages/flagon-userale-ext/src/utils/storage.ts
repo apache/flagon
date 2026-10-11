@@ -27,6 +27,8 @@ export const STORAGE_KEYS = {
   authMode: "authMode",
   allowList: "allowList",
   exporterType: "exporterType",
+  filterEventTypes: "filterEventTypes",
+  filterLogTypes: "filterLogTypes",
   loggingUrl: "loggingUrl"
 } as const
 
@@ -37,16 +39,20 @@ export type StoredOptions = {
   apiKey: string
   authMode: "oauth" | "apikey" | "none"
   allowList: string
-  exporterType: "http-json" | "otlp" | "proto-json"
+  exporterType: "http-json" | "v2-json" | "otlp" | "otlp-json" | "proto-json"
+  filterEventTypes: string
+  filterLogTypes: string
   loggingUrl: string
 }
 
-const DEFAULT_OPTIONS: StoredOptions = {
+export const DEFAULT_OPTIONS: StoredOptions = {
   accessToken: "",
   apiKey: "",
   authMode: "none",
   allowList: "https://flagon.apache.org/",
   exporterType: "http-json",
+  filterEventTypes: "",
+  filterLogTypes: "",
   loggingUrl: "http://localhost:8000"
 }
 
@@ -61,6 +67,9 @@ export async function getStoredOptions(): Promise<StoredOptions> {
     authMode: stored.authMode ?? DEFAULT_OPTIONS.authMode,
     allowList: stored.allowList ?? DEFAULT_OPTIONS.allowList,
     exporterType: stored.exporterType ?? DEFAULT_OPTIONS.exporterType,
+    filterEventTypes:
+      stored.filterEventTypes ?? DEFAULT_OPTIONS.filterEventTypes,
+    filterLogTypes: stored.filterLogTypes ?? DEFAULT_OPTIONS.filterLogTypes,
     loggingUrl: stored.loggingUrl ?? DEFAULT_OPTIONS.loggingUrl
   }
 }

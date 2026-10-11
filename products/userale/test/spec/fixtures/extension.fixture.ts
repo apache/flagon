@@ -17,40 +17,48 @@
  * under the License.
  */
 
-import { test as base, chromium, type BrowserContext, type Page, type Request } from '@playwright/test';
-import path from 'path';
-import os from 'os';
+import {
+  test as base,
+  chromium,
+  type BrowserContext,
+  type Request,
+} from "@playwright/test";
+import path from "path";
+import os from "os";
 
 export const test = base.extend<{
   context: BrowserContext;
   extensionId: string;
   waitForPostRequest: (
-    filterFn?: (req: Request) => boolean
+    filterFn?: (req: Request) => boolean,
   ) => Promise<Request>;
 }>({
-  context: async ({ }, use) => {
+  // eslint-disable-next-line no-empty-pattern
+  context: async ({}, use) => {
     const pathToExtension = path.join(
       __dirname,
-      "../../../packages/flagon-userale-ext/build/chrome-mv3-prod/"
+      "../../../packages/flagon-userale-ext/build/chrome-mv3-prod/",
     );
     const context = await chromium.launchPersistentContext(os.tmpdir(), {
-      channel: 'chromium',
+      channel: "chromium",
       headless: false,
       args: [
         `--disable-extensions-except=${pathToExtension}`,
         `--load-extension=${pathToExtension}`,
       ],
     });
+    if (context.serviceWorkers().length === 0) {
+      await context.waitForEvent("serviceworker");
+    }
     await use(context);
     await context.close();
   },
 
   extensionId: async ({ context }, use) => {
     let [background] = context.serviceWorkers();
-    if (!background)
-      background = await context.waitForEvent('serviceworker');
+    if (!background) background = await context.waitForEvent("serviceworker");
 
-    const extensionId = background.url().split('/')[2];
+    const extensionId = background.url().split("/")[2];
     await use(extensionId);
   },
 
@@ -61,15 +69,16 @@ export const test = base.extend<{
           const url = req.url();
           const method = req.method();
 
-          if (!url.startsWith('http://localhost:8000') || method !== 'POST') return;
+          if (!url.startsWith("http://localhost:8000") || method !== "POST")
+            return;
 
           if (!filterFn || filterFn(req)) {
-            context.off('request', listener); // cleanup
+            context.off("request", listener); // cleanup
             resolve(req);
           }
         };
 
-        context.on('request', listener);
+        context.on("request", listener);
       });
     };
 

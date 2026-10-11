@@ -38,7 +38,7 @@ class Segment:
     Distill's segmentation package. Allows the user to segment User Ale log data.
     """
 
-    def __init__(self, segment_name="", start_end_val=None, num_logs=0, uids=[]):
+    def __init__(self, segment_name="", start_end_val=None, num_logs=0, uids=None):
         """
         Initializes a Segment object.  This object contains\
         metadata for the associated Segment.
@@ -56,7 +56,7 @@ class Segment:
         self.segment_name = segment_name
         self.start_end_val = start_end_val
         self.num_logs = num_logs
-        self.uids = uids
+        self.uids = [] if uids is None else uids
         self.generate_field_name = None
         self.generate_matched_values = None
         self.segment_type = None

@@ -92,6 +92,57 @@ export function initPackager(
 }
 
 /**
+ * Zero-dependency browser metadata detection (#108).
+ * Uses User-Agent Client Hints (navigator.userAgentData) when available,
+ * falling back to lightweight User-Agent string parsing.
+ */
+export function detectBrowser(): {
+  browser: string | null;
+  version: string | null;
+} {
+  try {
+    const nav = typeof self !== "undefined" ? (self.navigator as any) : null;
+    if (!nav) {
+      return { browser: null, version: null };
+    }
+    const brands: Array<{ brand: string; version: string }> | undefined =
+      nav.userAgentData?.brands;
+    if (Array.isArray(brands) && brands.length > 0) {
+      const meaningful =
+        brands.find(
+          (b) => b.brand && !/not.?a.?brand|chromium/i.test(b.brand),
+        ) ?? brands[0];
+      if (meaningful?.brand) {
+        return {
+          browser: meaningful.brand.toLowerCase(),
+          version: meaningful.version || null,
+        };
+      }
+    }
+    const ua: string = typeof nav.userAgent === "string" ? nav.userAgent : "";
+    if (!ua) {
+      return { browser: null, version: null };
+    }
+    const rules: Array<[string, RegExp]> = [
+      ["edge", /Edg(?:e|A|iOS)?\/([\d.]+)/],
+      ["opera", /(?:OPR|Opera)\/([\d.]+)/],
+      ["chrome", /(?:Chrome|CriOS)\/([\d.]+)/],
+      ["firefox", /(?:Firefox|FxiOS)\/([\d.]+)/],
+      ["safari", /Version\/([\d.]+).*Safari/],
+    ];
+    for (const [name, regex] of rules) {
+      const match = ua.match(regex);
+      if (match) {
+        return { browser: name, version: match[1] ?? null };
+      }
+    }
+  } catch {
+    // Ignore errors in non-browser or restricted environments
+  }
+  return { browser: null, version: null };
+}
+
+/**
  * Transforms the provided HTML event into a log and appends it to the log queue.
  * @param  {Event} e         The event to be logged.
  * @param  {Function} detailFcn The function to extract additional log parameters from the event.
@@ -120,6 +171,7 @@ export function packageLog(
     pageUrl: self.location.href,
     pageTitle: document.title,
     pageReferrer: document.referrer,
+    browser: detectBrowser(),
     userAgent: self.navigator.userAgent,
     clientTime: timeFields.milli,
     microTime: timeFields.micro,
@@ -179,21 +231,14 @@ export function packageCustomLog(
 
   let details = null;
   if (typeof detailFcn === "function") {
-    if (detailFcn.length === 0) {
-      // In the case of a union, the type checker will default to the more stringent
-      // type, i.e. the DetailFunction that expects an argument for safety purposes.
-      // To avoid this, we must explicitly check the type by asserting it receives
-      // no arguments (detailFcn.length === 0) and then cast it to the
-      // StaticDetailFunction type.
-      const staticDetailFcn = detailFcn as Logging.StaticDetailFunction;
-      details = staticDetailFcn();
-    }
+    details = (detailFcn as () => Logging.JSONObject | null)();
   }
 
   const metaData = {
     pageUrl: self.location.href,
     pageTitle: document.title,
     pageReferrer: document.referrer,
+    browser: detectBrowser(),
     userAgent: self.navigator.userAgent,
     clientTime: Date.now(),
     scrnRes: getScreenRes(),
@@ -279,6 +324,7 @@ export function packageIntervalLog(e: Event) {
         pageUrl: self.location.href,
         pageTitle: document.title,
         pageReferrer: document.referrer,
+        browser: detectBrowser(),
         userAgent: self.navigator.userAgent,
         count: intervalCounter,
         duration: timestamp - intervalTimer, // microseconds
@@ -376,17 +422,14 @@ export function getScreenRes() {
  */
 export function getSelector(ele: EventTarget) {
   if (ele instanceof HTMLElement || ele instanceof Element) {
-    if (ele.localName) {
+    const rawClass =
+      typeof ele.className === "string"
+        ? ele.className
+        : (ele.getAttribute?.("class") ?? "");
+    const tag = ele.localName || ele.nodeName;
+    if (tag) {
       return (
-        ele.localName +
-        (ele.id ? "#" + ele.id : "") +
-        (ele.className ? "." + ele.className : "")
-      );
-    } else if (ele.nodeName) {
-      return (
-        ele.nodeName +
-        (ele.id ? "#" + ele.id : "") +
-        (ele.className ? "." + ele.className : "")
+        tag + (ele.id ? "#" + ele.id : "") + (rawClass ? "." + rawClass : "")
       );
     }
   } else if (ele instanceof Document) {
@@ -419,7 +462,6 @@ export function selectorizePath(path: EventTarget[]) {
   while ((pathEle = path[i])) {
     pathSelectors.push(getSelector(pathEle));
     ++i;
-    pathEle = path[i];
   }
   return pathSelectors;
 }

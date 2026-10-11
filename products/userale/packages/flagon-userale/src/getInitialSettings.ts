@@ -39,6 +39,7 @@ export function getInitialSettings(): Settings.Config {
       browserSessionId: null,
       custIndex: null,
       exporter: null,
+      exporterFormat: "http-json",
       exporterType: "http-json",
       headers: null,
       httpSessionId: null,
@@ -89,6 +90,7 @@ export function getInitialSettings(): Settings.Config {
   const headers = get("data-headers");
   const otlpEndpoint = get("data-otlp-endpoint") || null;
   const exporterAttr = (get("data-exporter-type") ||
+    get("data-exporter-format") ||
     get("data-exporter") ||
     (otlpEndpoint ? "otlp" : "http-json")) as Settings.ExporterType;
   const settings: Settings.Config = {
@@ -98,6 +100,7 @@ export function getInitialSettings(): Settings.Config {
     browserSessionId: null,
     custIndex: get("data-index") || null,
     exporter: null,
+    exporterFormat: exporterAttr,
     exporterType: exporterAttr,
     headers: headers ? JSON.parse(headers) : null,
     httpSessionId: httpSessionId,

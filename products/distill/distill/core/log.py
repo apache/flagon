@@ -38,7 +38,9 @@ class Log:
     def __init__(self, data: Union[str, JsonDict], schema=None):
         if schema is None:
             schema = UserAleSchema
-        elif issubclass(schema, BaseModel):
+        elif isinstance(schema, type) and issubclass(schema, BaseModel):
+            schema = TypeAdapter(schema)
+        elif not isinstance(schema, TypeAdapter):
             raise TypeError("schema should inherit from pydantic.BaseModel")
 
         if isinstance(data, str):
@@ -82,7 +84,7 @@ class Log:
     
     def __ge__(self, other):
         if isinstance(other, Log):
-            return self.id > other.id
+            return self.id >= other.id
         if isinstance(other, datetime):
             return self.id.get_datetime() >= other
     
