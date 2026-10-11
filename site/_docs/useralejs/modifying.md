@@ -5,139 +5,40 @@ permalink: /docs/useralejs/modifying/
 priority: 3
 ---
 
-[Apache UserALE.js](https://github.com/apache/flagon-useralejs) makes it easy for you to capture *every* user 
-behavior on your webpage or application. But, you might not need all that data. 
+[Apache Flagon UserALE.js](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale) makes it easy to capture and customize behavioral telemetry via the runtime [JavaScript API]({{ '/docs/useralejs/API' | prepend: site.baseurl }}) (`addCallbacks`, `options`, `registerExporter`). When you need deeper changes, the TypeScript source code under `products/userale/packages/flagon-userale/src/` is modular and straightforward to extend.
 
-UserALE.js also makes it easy for your to manage, and curate your logging scheme. 
+---
 
-This guide walks you through how to modify UserALE.js log data and behavior through source code modification.
+## Source Code Architecture (`products/userale/packages/flagon-userale/src/`)
 
-## Modifying UserALE.js Logs via Source Code Modifications
+- [`main.ts`](https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/src/main.ts): Public module entry point exporting lifecycle functions (`start`, `stop`, `options`, `log`), callback helpers, and exporters.
+- [`getInitialSettings.ts`](https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/src/getInitialSettings.ts): Extracts initial settings from `<script data-*>` attributes and browser session storage (with SSR safety guards).
+- [`configure.ts`](https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/src/configure.ts): Singleton `Configuration` class managing runtime options.
+- [`attachHandlers.ts`](https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/src/attachHandlers.ts): Defines captured DOM/window events, interval buffering, and detail extraction (including automatic masking for `<input type="password">`).
+- [`packageLogs.ts`](https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/src/packageLogs.ts): Packages DOM events and custom events into UserALE log objects, executing registered `addCallbacks` functions.
+- [`sendLogs.ts`](https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/src/sendLogs.ts): Manages the batch interval timer and `pagehide` unload flushing, delegating wire serialization and transport to the active `LogExporter`.
+- [`exporters/`](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/src/exporters):
+  - `types.ts`: `LogExporter`, `ExportOptions`, `ExportResult`, and `ExporterType` interfaces.
+  - `headers.ts`: Unified `buildHeaders(config)` and `chunkLogsForKeepalive` (48 KiB chunking for `fetch(..., { keepalive: true })`).
+  - `http-json.ts`: Default `HttpJsonExporter` (`'userale-json'`).
+  - `otlp-json.ts`: Native OpenTelemetry `OtlpJsonExporter` (`'otlp-json'`).
+  - `otel-sdk.ts`: OpenTelemetry JS Logs API bridge (`OtelSdkExporter`).
+  - `proto-json.ts`: Canonical Protobuf v1 JSON exporter (`ProtoJsonExporter`, `'proto-json'`).
+  - `websocket.ts`: Persistent `WebSocketExporter` (`'ws'`).
 
-We're starting with this method because it will give context to others methods, like our script tag and API (below).
+---
 
-UserALE.js src is intuitively abstracted into few different files:
+## Rebuilding & Verifying Modifications
 
- * [attachHandlers](https://github.com/apache/flagon-useralejs/blob/master/src/attachHandlers.js): configure which user behaviors UserALE.js listens for and event handlers here.
- * [configure](https://github.com/apache/flagon-useralejs/blob/master/src/configure.js): set special custom parameters, like passing a unqiue userID into UserALE.js logs.
- * [getInitialSettings](https://github.com/apache/flagon-useralejs/blob/master/src/getInitialSettings.js): modify HTML5 parameters passed through the script tag.
- * [main](https://github.com/apache/flagon-useralejs/blob/master/src/main.js): attaches event handlers and adds logs to queue (probably want to leave alone).
- * [packageLogs](https://github.com/apache/flagon-useralejs/blob/master/src/packageLogs.js): modify to configure how user behaviors are added to data schema, and meta data added from the page.
- * [sendLogs](https://github.com/apache/flagon-useralejs/blob/master/src/sendLogs.js): modify how logs are sent to logging server, etc. (be careful here, too).
+After modifying any file in `products/userale/packages/flagon-userale/src/`, rebuild and run the unit test suite from `products/userale`:
 
-### Usage
- 
-Most modifications can be accomplished through `attachHandlers` and `packageLogs`.
-
-Once you modify source, you'll need to rebuild UserALE.js scripts and webextension (and should probably run unit tests).
-
-### Modifying Event Handlers: Examples
-
-`attachHandlers` controls which behaviors and what kinds of logs are captured
-
-You can modify some of the events UserALE.js by editing vars in `attacheHandlers`.
-
-
-```javascript
-var events;
-var bufferBools;
-var bufferedEvents;
-/* modify which events are abstracted into interval logs by editing the array below*/
-var intervalEvents = ['click', 'focus', 'blur', 'input', 'change', 'mouseover', 'submit'];
-/* modify which events are pulled from window*/
-var windowEvents = ['load', 'blur', 'focus'];
+```bash
+pnpm build
+pnpm --dir packages/flagon-userale test
 ```
 
-
-You can modify which events UserALE.js captures in it's 'raw' log stream, by modifying the var `events`:
-
-
- 
-```javascript
-/* Comment out event types in the `events` var for granular modification of UserALE.js behavior */
-export function defineDetails(config) {
-  // Events list
-  // Keys are event types
-  // Values are functions that return details object if applicable
-  events = {
-    'click' : extractMouseEvent,
-    'dblclick' : extractMouseEvent,
-    'mousedown' : extractMouseEvent,
-    'mouseup' : extractMouseEvent,
-    'focus' : null,
-    'blur' : null,
-    'input' : config.logDetails ? function(e) { return { 'value' : e.target.value }; } : null,
-    'change' : config.logDetails ? function(e) { return { 'value' : e.target.value }; } : null,
-    'dragstart' : null,
-    'dragend' : null,
-    'drag' : null,
-    'drop' : null,
-    'keydown' : config.logDetails ? function(e) { return ...,
-    /*'mouseover' : null,*/ #Aliasing the "events" list removes that class from your event stream.
-    'submit' : null
-```
-
-
-You can eliminate the `interval` log stream altogether by modifying the `attachHandlers` configs:
-
-
-```javascript
-export function attachHandlers(config) {
-  defineDetails(config);
-
-  Object.keys(events).forEach(function(ev) {
-    document.addEventListener(ev, function(e) {
-      packageLog(e, events[ev]);
-    }, true);
-  });
-/*Comment out configs for intervalEvents to remove them from your log stream */
-  intervalEvents.forEach(function(ev) {
-    document.addEventListener(ev, function(e) {
-        packageIntervalLog(e);
-    }, true);
-  });
-```
-
-### Modifying Meta Data Packaged in Logs: Examples
-
-`packageLogs` pulls parameters from the script tag, API, and from window or document and adds them to event logs.
-
-The easiest way to make these changes is by modifying the var `log`:
-
-
-```javascript
-  /* Comment or add fields to be included in your logs*/
-  var log = {
-    'target' : getSelector(e.target),
-    'path' : buildPath(e),
-    'pageUrl': window.location.href,
-    'pageTitle': document.title,
-    'pageReferrer': document.referrer,
-    'clientTime' : timeFields.milli,
-    'microTime' : timeFields.micro,
-    'location' : getLocation(e),
-    'type' : e.type,
-    'logType': 'raw',
-    'userAction' : true,
-    'details' : details,
-    'userId' : config.userId,
-    'toolVersion' : config.version,
-    'toolName' : config.toolName,
-    'useraleVersion': config.useraleVersion,
-    'sessionID': config.sessionID
-  };
-```
-
-### Benefits Modifying UserALE.js Logs via src:
- * Full control of your log streams
- * With simple modification to src you can package and build multiple UserALE.js scripts for page-to-page modification 
- of log streams.
- * Modify the behavior of our webExtension
- * Ideal in cases where you don't want to integrate UserALE.js into your CD pipeline, just pass around pre-built scripts 
- that suite your needs.
+---
 
 ## Contributing
 
-Contributions are welcome!  Simply [submit an issue](https://github.com/apache/flagon-useralejs/issues) for problems 
-you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
-incorporate it into UserALE.js. We also love Pull Requests!
+Contributions are welcome! See our [Contributing Guide]({{ '/docs/contributing' | prepend: site.baseurl }}) or open an issue on [GitHub](https://github.com/apache/flagon/issues).
