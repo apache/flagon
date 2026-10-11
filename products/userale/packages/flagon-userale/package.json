@@ -1,6 +1,6 @@
 {
   "name": "flagon-userale",
-  "version": "2.5.0",
+  "version": "2.4.0",
   "description": "UserALE is the UserALE client for DOM and JavaScript-based applications. It automatically attaches event handlers to log every user interaction on a web page, including rich JS single-page apps.",
   "main": "build/main.mjs",
   "module": "build/main.mjs",

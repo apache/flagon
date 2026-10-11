@@ -20,10 +20,9 @@
 Changelog
 =========
 
-Apache Flagon UserALE.js 2.5.0 (2026-10-11)
+Apache Flagon UserALE.js (Unreleased)
 -------------------------------
 
-- Release Notes - Flagon - Version UserALE.js 2.5.0
 - [Closed Tickets](https://github.com/apache/flagon/issues)
   - Pluggable `LogExporter` interface (`registerExporter`, `exporter`, `exporterFormat`) supporting `'userale-json'`, `'otlp-json'`, `'proto-json'`, and `'ws'` formats (#139)
   - Native OpenTelemetry OTLP/JSON log exporter (`OtlpJsonExporter`, `toOtlpExportLogsServiceRequest`) with `Resource` attribute hoisting, nanosecond `BigInt` timestamps, OTel Event semantic naming (`eventName` / `event.name`), structured `kvlistValue` body, and W3C TraceContext (`traceId`, `spanId`) correlation (#140)

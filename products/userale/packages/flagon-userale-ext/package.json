@@ -2,7 +2,7 @@
   "name": "flagon-userale-ext",
   "private": true,
   "displayName": "Flagon Userale extension",
-  "version": "2.5.0",
+  "version": "0.0.1",
   "description": "A basic Plasmo extension.",
   "author": "Jason Young",
   "scripts": {
