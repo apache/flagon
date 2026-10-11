@@ -20,7 +20,12 @@
 import "whatwg-fetch";
 import { Configuration } from "@/configure";
 import { initSender, sendOnInterval, sendOnClose } from "@/sendLogs";
-import { registerAuthCallback, registerHeadersCallback } from "@/utils";
+import {
+  registerAuthCallback,
+  registerHeadersCallback,
+  resetAuthCallback,
+  resetHeadersCallback,
+} from "@/utils";
 
 import type { Logging } from "@/types";
 
@@ -30,6 +35,8 @@ let xhrMock: Partial<XMLHttpRequest>;
 describe("sendLogs", () => {
   beforeEach(() => {
     config.reset();
+    resetAuthCallback();
+    resetHeadersCallback();
     xhrMock = {
       open: jest.fn(),
       send: jest.fn(),
@@ -299,5 +306,37 @@ describe("sendLogs", () => {
     expect(warnSpy).not.toHaveBeenCalled();
 
     warnSpy.mockRestore();
+  });
+
+  it("includes callback authHeader and custom headers on pagehide (#133)", () => {
+    const fetchSpy = jest
+      .spyOn(global, "fetch")
+      .mockResolvedValue(new Response());
+
+    const authCallback = jest.fn().mockReturnValue("Bearer callback-token");
+    const headersCallback = jest.fn().mockReturnValue({
+      "x-custom-header": "custom-val",
+    });
+    registerAuthCallback(authCallback);
+    registerHeadersCallback(headersCallback);
+
+    config.update({
+      on: true,
+      url: "http://test.com",
+      apiKey: "key-123",
+    });
+
+    sendOnClose([{ foo: "bar" }], config);
+    global.window.dispatchEvent(new window.CustomEvent("pagehide"));
+
+    expect(fetchSpy).toHaveBeenCalled();
+    const lastCall = fetchSpy.mock.calls[fetchSpy.mock.calls.length - 1]!;
+    const callHeaders = lastCall[1]!.headers as Headers;
+    expect(callHeaders.get("Authorization")).toBe("Bearer callback-token");
+    expect(callHeaders.get("x-custom-header")).toBe("custom-val");
+    expect(callHeaders.get("x-api-key")).toBe("key-123");
+    expect(lastCall[1]!.keepalive).toBe(true);
+
+    fetchSpy.mockRestore();
   });
 });
