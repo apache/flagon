@@ -30,6 +30,8 @@ export class Configuration {
   public authHeader: Settings.AuthHeader = null;
   public browserSessionId: Settings.SessionId = null;
   public custIndex: Settings.CustomIndex = null;
+  public exporter: Settings.CustomExporter = null;
+  public exporterType: Settings.ExporterType = "http-json";
   public headers: Settings.Headers = null;
   public httpSessionId: Settings.SessionId = null;
   public logCountThreshold: number = 0;

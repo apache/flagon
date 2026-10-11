@@ -14,6 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type {
+  ExporterType as ExporterMode,
+  LogExporter,
+} from "@/exporters/types";
+
 export declare namespace Settings {
   type Version = string | null;
   type UserId = string | null;
@@ -25,11 +30,14 @@ export declare namespace Settings {
   type CustomIndex = string | null;
   type HeaderObject = { [key: string]: string };
   type Headers = HeaderObject | null;
+  type ExporterType = ExporterMode;
+  type CustomExporter = LogExporter | null;
   type ConfigValueTypes =
     | string
     | number
     | boolean
     | null
+    | undefined
     | Version
     | UserId
     | SessionId
@@ -38,7 +46,9 @@ export declare namespace Settings {
     | AuthHeader
     | ApiKey
     | CustomIndex
-    | Headers;
+    | Headers
+    | ExporterType
+    | CustomExporter;
 
   type TimeFunction = (() => number) | ((ts: number) => number);
 
@@ -52,6 +62,8 @@ export declare namespace Settings {
     authHeader: AuthHeader;
     browserSessionId: SessionId;
     custIndex: CustomIndex;
+    exporter?: CustomExporter;
+    exporterType?: ExporterType;
     headers: Headers;
     httpSessionId: SessionId;
     logCountThreshold: number;

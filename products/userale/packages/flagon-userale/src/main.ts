@@ -55,6 +55,21 @@ export {
   getSelector as getSelector,
   buildPath as buildPath,
 } from "@/packageLogs";
+export {
+  buildHeaders,
+  createExporter,
+  HttpJsonExporter,
+  ProtoJsonExporter,
+  toProtoLogBatch,
+  toProtoUserALELog,
+  WebSocketExporter,
+} from "@/exporters";
+export type {
+  ExportOptions,
+  ExportResult,
+  ExporterType,
+  LogExporter,
+} from "@/exporters";
 export type { Logging, Settings } from "@/types";
 
 config.update({

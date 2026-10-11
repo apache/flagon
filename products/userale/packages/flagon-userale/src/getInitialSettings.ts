@@ -38,6 +38,8 @@ export function getInitialSettings(): Settings.Config {
       autostart: true,
       browserSessionId: null,
       custIndex: null,
+      exporter: null,
+      exporterType: "http-json",
       headers: null,
       httpSessionId: null,
       logCountThreshold: +5,
@@ -83,12 +85,17 @@ export function getInitialSettings(): Settings.Config {
         return null;
       };
   const headers = get("data-headers");
+  const exporterAttr = (get("data-exporter-type") ||
+    get("data-exporter") ||
+    "http-json") as Settings.ExporterType;
   const settings: Settings.Config = {
     apiKey: get("data-api-key") || null,
     authHeader: get("data-auth") || null,
     autostart: get("data-autostart") === "false" ? false : true,
     browserSessionId: null,
     custIndex: get("data-index") || null,
+    exporter: null,
+    exporterType: exporterAttr,
     headers: headers ? JSON.parse(headers) : null,
     httpSessionId: httpSessionId,
     logCountThreshold: +(get("data-threshold") || 5),
