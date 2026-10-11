@@ -74,6 +74,7 @@ export declare namespace Settings {
     httpSessionId: SessionId;
     logCountThreshold: number;
     logDetails: boolean;
+    observeMutations?: boolean;
     on?: boolean;
     otlpEndpoint?: OtlpEndpoint;
     resolution: number;

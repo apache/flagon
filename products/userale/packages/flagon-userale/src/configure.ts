@@ -37,6 +37,7 @@ export class Configuration {
   public httpSessionId: Settings.SessionId = null;
   public logCountThreshold: number = 0;
   public logDetails: boolean = false;
+  public observeMutations: boolean = false;
   public on: boolean = false;
   public otlpEndpoint: Settings.OtlpEndpoint = null;
   public resolution: number = 0;
