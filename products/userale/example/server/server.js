@@ -62,7 +62,8 @@ app.use((req, res, next) => {
   res.set({
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization, Content-Length, X-Requested-With",
+    "Access-Control-Allow-Headers":
+      "Content-Type, Authorization, Content-Length, X-Requested-With, x-api-key, traceparent, tracestate",
   });
 
   if (req.method === "OPTIONS") return res.sendStatus(200);
@@ -73,25 +74,40 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "100mb" }));
 app.use(bodyParser.json({ limit: "100mb" }));
 app.use(bodyParser.text());
 
-app.use("/build", express.static(path.join(__dirname, "../../packages/flagon-userale/build"))); 
+app.use(
+  "/build",
+  express.static(path.join(__dirname, "../../packages/flagon-userale/build")),
+);
 app.use("/", express.static(__dirname));
 
 app.get("/", (req, res) => res.sendFile("index.html", { root: __dirname }));
-app.get("/ws", (req, res) => res.sendFile("ws-index.html", { root: __dirname }));
-app.get("/no-logging", (req, res) => res.sendFile("no-logging.html", { root: __dirname }));
+app.get("/ws", (req, res) =>
+  res.sendFile("ws-index.html", { root: __dirname }),
+);
+app.get("/no-logging", (req, res) =>
+  res.sendFile("no-logging.html", { root: __dirname }),
+);
 
-app.post("/", (req, res) => {
+app.post(["/", "/v1/logs"], (req, res) => {
   const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
 
   if (
     (Array.isArray(body) && body.length === 0) ||
-    (typeof body === "object" && body !== null && Object.keys(body).length === 0)
+    (typeof body === "object" &&
+      body !== null &&
+      Object.keys(body).length === 0)
   ) {
     return res.sendStatus(200);
   }
 
   console.log("HTTP POST:", body);
-  writeLogs(body);
+  if (Array.isArray(body)) {
+    writeLogs(body);
+  } else if (body && Array.isArray(body.logs)) {
+    writeLogs(body.logs);
+  } else if (body && Array.isArray(body.resourceLogs)) {
+    writeLogs([body]);
+  }
   res.sendStatus(200);
 });
 
@@ -124,7 +140,9 @@ wss.on("connection", (socket) => {
 
     if (
       (Array.isArray(body) && body.length === 0) ||
-      (typeof body === "object" && body !== null && Object.keys(body).length === 0)
+      (typeof body === "object" &&
+        body !== null &&
+        Object.keys(body).length === 0)
     ) {
       return;
     }

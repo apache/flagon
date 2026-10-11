@@ -41,6 +41,7 @@ Additional documentation and a demonstration can be found at the [Apache Flagon 
 1. Visualize and analyze your logs. See our sample [kibana dahsboards](https://github.com/apache/flagon/tree/master/examples/elk/docker) for behavioral analytics.
 
 ## Table of Contents
+
 [What's New](#whats-new-in-version-210)
 [Installation](#installation)
 [Configure](#configure)
@@ -65,23 +66,17 @@ See our [CHANGELOG](https://github.com/apache/flagon/blob/master/products/useral
 Either through cloning our [source repo](https://github.com/apache/flagon) or by using npm:
 
 ```html
-npm install flagon-userale
-
-or
-
-npm install flagon-userale --engine-strict (enforces supported Node.js versions)
-
+npm install flagon-userale or npm install flagon-userale --engine-strict
+(enforces supported Node.js versions)
 ```
 
 To include UserALE as an object in your project, include as a `module`:
 
 ```html
-import * as userale from 'flagon-userale';
-
-or
-
-const userale = require('flagon-userale');
+import * as userale from 'flagon-userale'; or const userale =
+require('flagon-userale');
 ```
+
 Our [webpack example](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example/webpackUserAleExample) illustrates this use-case.
 
 You can also include UserALE as a `script-tag`. A pre-built version of the userale script is included in our package and
@@ -90,6 +85,7 @@ repositories:
 ```html
 <script src="./node_modules/flagon-userale/build/userale-2.4.0.min.js"></script>
 ```
+
 Our [script tag example](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example) illustrates this use-case
 
 If you include UserALE as a `script-tag`, consider installing via npm as a development dependency:
@@ -121,74 +117,132 @@ Configuration details follow:
 
 If you have included UserALE in your project as a `module`, you will need to use our `userale.options()` function, which exposes library configuration options through our API.
 
-For example, if you do *not* want UserALE to start logging automatically, you can modify this behavior through the `userale.options()` API (`autostart` config).
+For example, if you do _not_ want UserALE to start logging automatically, you can modify this behavior through the `userale.options()` API (`autostart` config).
 
 Then, you can use the `userale.start()` API export to begin logging at the appropriate time during page load or triggered from an event:
 
 ```html
-const changeMe = "me";
-userale.options({
-    "userId": changeMe,
-    "autostart": false,
-    "url": "http://localhost:8000/",
-    "version": "next",
-    "logDetails": false,
-    "sessionId": "this one"
-});
-
-userale.start();
-
+const changeMe = "me"; userale.options({ "userId": changeMe, "autostart": false,
+"url": "http://localhost:8000/", "version": "next", "logDetails": false,
+"sessionId": "this one" }); userale.start();
 ```
 
 Additional examples of `userale.options()` can be found in our [example directory](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example).
 
 The complete list of configurable parameters that can be configured via `userale.options()` is:
 
-| Param | Description | Default |
-|---|---|---|
-| url | Logging URL | http://localhost:8000 |
-| autostart | Should UserALE start on page load | true |
-| transmitInterval | Delay between transmit checks | 5000 (ms) |
-| logCountThreshold | Minimum number of logs to send | 5 |
-| userId | User identifier | null |
-| sessionId | Session identifier | null |
-| version | Application version identifier | null |
-| logDetails | Toggle detailed logs (keys pressed and input/change values) | false |
-| resolution | Delay between instances of high frequency logs (mouseover, scroll, etc.) | 500 (ms) |
-| userFromParams | Query param in the page URL to fetch userId from | null |
-| toolName | Name of tool being logged | null |
-| authHeader | Authorization header to be passed to logging endpoint | null |
+| Param             | Description                                                                             | Default               |
+| ----------------- | --------------------------------------------------------------------------------------- | --------------------- |
+| url               | Logging URL (`http://`, `https://`, `ws://`, or `wss://`)                               | http://localhost:8000 |
+| autostart         | Should UserALE start on page load                                                       | true                  |
+| transmitInterval  | Delay between transmit checks                                                           | 5000 (ms)             |
+| logCountThreshold | Minimum number of logs to send                                                          | 5                     |
+| userId            | User identifier                                                                         | null                  |
+| sessionId         | Session identifier                                                                      | null                  |
+| version           | Application version identifier                                                          | null                  |
+| logDetails        | Toggle detailed logs (keys pressed and input/change values)                             | false                 |
+| resolution        | Delay between instances of high frequency logs (mouseover, scroll, etc.)                | 500 (ms)              |
+| userFromParams    | Query param in the page URL to fetch userId from                                        | null                  |
+| toolName          | Name of tool being logged (`service.name` in OTLP)                                      | null                  |
+| authHeader        | `Authorization` header string or callback function                                      | null                  |
+| apiKey            | API key sent via the `x-api-key` HTTP request header                                    | null                  |
+| headers           | Custom HTTP headers object (`Record<string, string>`)                                   | null                  |
+| exporterType      | Wire format / transport (`'http-json'`, `'otlp'`, `'proto-json'`, `'websocket'`)        | `'http-json'`         |
+| otlpEndpoint      | OpenTelemetry Collector HTTP endpoint (auto-appends `/v1/logs` when path is empty/root) | null                  |
+| exporter          | Custom `LogExporter` instance overriding built-in exporters                             | null                  |
+| traceContext      | Callback returning active W3C `{ traceId, spanId }` for OTLP correlation                | null                  |
 
 If you have included UserALE as a `script-tag` in your project, you can use HTML data parameters to pass configuration options to the library through the script tag. For example:
 
 ```html
-  <script
-          src="./node_modules/flagon-userale/build/userale-2.4.0.min.js"
-          data-url="http://localhost:8000/"
-          data-user="example-user"
-          data-version="2.4.0"
-          data-tool="Apache UserALE Example"
-  ></script>
+<script
+  src="./node_modules/flagon-userale/build/main.global.js"
+  data-url="http://localhost:8000/"
+  data-user="example-user"
+  data-version="2.5.0"
+  data-tool="Apache UserALE Example"
+></script>
 ```
 
 You have access to the same parameters listed above, however, naming conventions vary slightly for use in HTML:
 
-| Param | Description | Default |
-|---|---|---|
-| data-url | Logging URL | http://localhost:8000 |
-| data-autostart | Should UserALE start on page load | true |
-| data-interval | Delay between transmit checks | 5000 (ms) |
-| data-threshold | Minimum number of logs to send | 5 |
-| data-user | User identifier | null |
-| data-version | Application version identifier | null |
-| data-log-details | Toggle detailed logs (keys pressed and input/change values) | false |
-| data-resolution | Delay between instances of high frequency logs (mouseover, scroll, etc.) | 500 (ms) |
-| data-user-from-params | Query param in the page URL to fetch userId from | null |
-| data-tool | Name of tool being logged | null |
-| data-auth | Authorization header to be passed to logging endpoint | null |
+| Param                 | Description                                                              | Default               |
+| --------------------- | ------------------------------------------------------------------------ | --------------------- |
+| data-url              | Logging URL                                                              | http://localhost:8000 |
+| data-autostart        | Should UserALE start on page load                                        | true                  |
+| data-interval         | Delay between transmit checks                                            | 5000 (ms)             |
+| data-threshold        | Minimum number of logs to send                                           | 5                     |
+| data-user             | User identifier                                                          | null                  |
+| data-version          | Application version identifier                                           | null                  |
+| data-log-details      | Toggle detailed logs (keys pressed and input/change values)              | false                 |
+| data-resolution       | Delay between instances of high frequency logs (mouseover, scroll, etc.) | 500 (ms)              |
+| data-user-from-params | Query param in the page URL to fetch userId from                         | null                  |
+| data-tool             | Name of tool being logged                                                | null                  |
+| data-auth             | `Authorization` header value                                             | null                  |
+| data-api-key          | `x-api-key` header value                                                 | null                  |
+| data-headers          | JSON-encoded object of custom HTTP headers                               | null                  |
+| data-exporter         | Exporter format (`http-json`, `otlp`, `proto-json`, `websocket`)         | `http-json`           |
+| data-otlp-endpoint    | OpenTelemetry Collector HTTP endpoint                                    | null                  |
 
 If you are using our [WebExtension](https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale-ext/),
-you can modify some of these parameters via the extensions' `options` page.
+you can modify these parameters (including OAuth/API Key authentication and Exporter Format) via the extension's `Options` page.
+
+### Authentication, Custom Headers, CORS & WebSocket Limitations
+
+UserALE supports static and dynamic HTTP authentication headers across both interval transmissions and `pagehide` (`keepalive: true`) flushes:
+
+```js
+import * as userale from "flagon-userale";
+
+// 1. Static API key (sent as x-api-key header) or Authorization header
+userale.options({
+  url: "https://logs.example.com/ingest",
+  apiKey: "my-api-key",
+  authHeader: "Bearer my-jwt-token",
+});
+
+// 2. Dynamic token rotation via callback
+userale.registerAuthCallback(() => `Bearer ${getCurrentAccessToken()}`);
+```
+
+- **HTTPS Security**: Always use `https://` endpoints in production when `apiKey` or `authHeader` is configured. UserALE logs a console warning if credentials are configured over plaintext `http://` to a non-localhost host, and automatically strips sensitive `data-api-key`, `data-auth`, `data-token`, `data-secret`, and `data-password` attributes from captured DOM element logs.
+- **CORS Preflight Requirements**: Sending `Content-Type: application/json`, `Authorization`, or `x-api-key` from a browser triggers a CORS `OPTIONS` preflight request. Your ingestion server or OpenTelemetry Collector must include `Content-Type`, `Authorization`, and `x-api-key` in `Access-Control-Allow-Headers`.
+- **WebSocket (`ws://` / `wss://`) Limitation**: The standard browser `WebSocket` API does not allow setting custom HTTP headers (`Authorization` or `x-api-key`) during the WebSocket handshake. When streaming over WebSockets, authenticate via short-lived query parameters in `url` (`wss://logs.example.com/ws?token=...`) or same-site HTTP-only cookies.
+
+### OpenTelemetry (OTLP/JSON & OTel JS SDK) and Pluggable Exporters
+
+UserALE.js natively exports behavioral logs in **OpenTelemetry OTLP/JSON** (`ExportLogsServiceRequest`) or **Apache Flagon Protobuf v1 JSON** (`apache.flagon.userale.v1.LogBatch`) with zero external runtime dependencies:
+
+```js
+import * as userale from "flagon-userale";
+
+// Export directly to an OpenTelemetry Collector (/v1/logs is appended automatically)
+userale.options({
+  exporterType: "otlp",
+  otlpEndpoint: "http://localhost:4318",
+  toolName: "checkout-web",
+  toolVersion: "1.4.0",
+  // Optional: correlate DOM events with active W3C TraceContext spans
+  traceContext: () => ({
+    traceId: "4bf92f3577b34da6a3ce929d0e0e4736",
+    spanId: "00f067aa0ba902b7",
+  }),
+});
+```
+
+If your application already initializes the OpenTelemetry JS Logs SDK (`@opentelemetry/sdk-logs`), bridge UserALE into your existing `Logger` using `OtelSdkExporter`:
+
+```js
+import * as userale from "flagon-userale";
+import { logs } from "@opentelemetry/api-logs";
+
+const otelLogger = logs.getLogger("userale");
+userale.options({
+  exporter: new userale.OtelSdkExporter(otelLogger),
+});
+```
+
+See [`example/otel-demo`](https://github.com/apache/flagon/tree/master/products/userale/example/otel-demo) for a complete Docker Compose stack with **OpenTelemetry Collector**, **Grafana Loki**, **Grafana Tempo**, and a pre-built **Grafana Dashboard** featuring click-to-trace correlation.
 
 ## Usage
 
@@ -198,21 +252,21 @@ We have exposed a number of functions that assist you in modifying, filtering, a
 
 A complete list of available functions are as follows:
 
-| Function | Description | Notes |
-|---|---|---|
-| userale.options | modify userale's configuration option | see top level README for complete list of options |
-| [DEPRECATED] userale.filter | filters out logs from logging queue by keys or values | filters are callbacks with global scope |
-| [DEPRECATED] userale.map | modify/add log keys or values | mappings are callbacks with global scope |
-| userale.addCallbacks | add one or more callbacks to be executed during log packaging | callbacks have global scope |
-| userale.removeCallbacks | remove one or more callbacks by name | Removes callbacks added from userale.addCallbacks |
-| userale.log | appends a custom log to the log queue | the custom log object is an object key:value pairs |
-| userale.packageLog | transforms the provided event into a log and appends it to the log queue | designed for HTML events |
-| userale.packageCustomLog | packages the provided customLog to include standard meta data and appends it to the log queue | designed for non HTML events|
-| userale.details | defines the way information is extracted from various events | supports packageLog/packageCustomLog 'details' |
-| userale.getSelector | builds a string CSS selector from the provided HTML element id | populates 'target' field in packaged logs |
-| userale.buildPath| builds an array of elements from the provided event target, to the root element (DOM path) | populates the 'path' field in packaged logs |
-| userale.start | used to start the logging process if | unecessary if 'autostart' is set to true in initial setting (default) |
-| userale.stop | halts the logging process. Logs will no longer be sent | will need to invoke userale.start to restart logging |
+| Function                    | Description                                                                                   | Notes                                                                 |
+| --------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| userale.options             | modify userale's configuration option                                                         | see top level README for complete list of options                     |
+| [DEPRECATED] userale.filter | filters out logs from logging queue by keys or values                                         | filters are callbacks with global scope                               |
+| [DEPRECATED] userale.map    | modify/add log keys or values                                                                 | mappings are callbacks with global scope                              |
+| userale.addCallbacks        | add one or more callbacks to be executed during log packaging                                 | callbacks have global scope                                           |
+| userale.removeCallbacks     | remove one or more callbacks by name                                                          | Removes callbacks added from userale.addCallbacks                     |
+| userale.log                 | appends a custom log to the log queue                                                         | the custom log object is an object key:value pairs                    |
+| userale.packageLog          | transforms the provided event into a log and appends it to the log queue                      | designed for HTML events                                              |
+| userale.packageCustomLog    | packages the provided customLog to include standard meta data and appends it to the log queue | designed for non HTML events                                          |
+| userale.details             | defines the way information is extracted from various events                                  | supports packageLog/packageCustomLog 'details'                        |
+| userale.getSelector         | builds a string CSS selector from the provided HTML element id                                | populates 'target' field in packaged logs                             |
+| userale.buildPath           | builds an array of elements from the provided event target, to the root element (DOM path)    | populates the 'path' field in packaged logs                           |
+| userale.start               | used to start the logging process if                                                          | unecessary if 'autostart' is set to true in initial setting (default) |
+| userale.stop                | halts the logging process. Logs will no longer be sent                                        | will need to invoke userale.start to restart logging                  |
 
 Including UserALE as a `script-tag` provides you access to the same functions listed above. However, UserALE essentially
 becomes a property of the DOM. As such, you'll need to call functions as a window property:
@@ -231,24 +285,18 @@ Select examples are below:
 Filter your logs with `userale.filter`:
 
 ```html
-userale.filter(function (log) {
-    var type_array = ['mouseup', 'mouseover', 'mousedown', 'keydown', 'dblclick', 'blur', 'focus', 'input', 'wheel'];
-    var logType_array = ['interval'];
-    return !type_array.includes(log.type) && !logType_array.includes(log.logType);
-});
+userale.filter(function (log) { var type_array = ['mouseup', 'mouseover',
+'mousedown', 'keydown', 'dblclick', 'blur', 'focus', 'input', 'wheel']; var
+logType_array = ['interval']; return !type_array.includes(log.type) &&
+!logType_array.includes(log.logType); });
 ```
 
 Modify (add/remove) log fields with surgical precision using `userale.map`:
 
 ```html
-userale.map(function (log) {
-        var targetsForLabels = ["button#test_button"];
-        if (targetsForLabels.includes(log.target)) {
-            return Object.assign({}, log, { CustomLabel: "Click me!" });
-        } else {
-            return log;
-        }
-      });
+userale.map(function (log) { var targetsForLabels = ["button#test_button"]; if
+(targetsForLabels.includes(log.target)) { return Object.assign({}, log, {
+CustomLabel: "Click me!" }); } else { return log; } });
 ```
 
 (Additional examples illustrate [precision custom labeling](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example/log-label-example), using a variety of functions.)
@@ -256,48 +304,27 @@ userale.map(function (log) {
 Generate custom logs with `userale.log`:
 
 ```html
-document.addEventListener('change', function(e) {
-    if (e.target.value === 'log') {
-        userale.log({
-            target: userale.getSelector(e.target),
-            path: userale.buildPath(e),
-            type: e.type,
-            logType: 'custom',
-            userAction: false,
-            details: 'I can make this log look like anything I want',
-            customField1: 'foo',
-            customField2: 'bar',
-            userId: userale.options().userId,
-            toolVersion: userale.options().version,
-            toolName: userale.options().toolName,
-            useraleVersion: userale.options().useraleVersion,
-            sessionId: userale.options().sessionId,
-            customLabel: "(custom) Log Example"
-        });
-    }
-});
+document.addEventListener('change', function(e) { if (e.target.value === 'log')
+{ userale.log({ target: userale.getSelector(e.target), path:
+userale.buildPath(e), type: e.type, logType: 'custom', userAction: false,
+details: 'I can make this log look like anything I want', customField1: 'foo',
+customField2: 'bar', userId: userale.options().userId, toolVersion:
+userale.options().version, toolName: userale.options().toolName, useraleVersion:
+userale.options().useraleVersion, sessionId: userale.options().sessionId,
+customLabel: "(custom) Log Example" }); } });
 ```
 
 User our own log packaging pipeline to streamline custom HTML event logging with `userale.packageLog`:
 
 ```html
-document.addEventListener('change', function(e){
-    if (e.target.value === 'packageLog') {
-        /**You can then use the 'Mapping' API function to modify custom logs created with the packageLog function*/
-        userale.map(function (log) {
-            var targetsForLabels = ['change'];
-            if (targetsForLabels.includes(log.type)) {
-                return Object.assign({}, log, { logType: 'custom', customLabel: 'packageLog Example' });
-            } else {
-                return log;
-            }
-        });
-        /**You can also use the details function to package additional log meta data, or add custom details*/
-        userale.packageLog(e, userale.details(userale.options(),'change'));
-    } else {
-        return false
-    }
-});
+document.addEventListener('change', function(e){ if (e.target.value ===
+'packageLog') { /**You can then use the 'Mapping' API function to modify custom
+logs created with the packageLog function*/ userale.map(function (log) { var
+targetsForLabels = ['change']; if (targetsForLabels.includes(log.type)) { return
+Object.assign({}, log, { logType: 'custom', customLabel: 'packageLog Example'
+}); } else { return log; } }); /**You can also use the details function to
+package additional log meta data, or add custom details*/ userale.packageLog(e,
+userale.details(userale.options(),'change')); } else { return false } });
 ```
 
 Again, see [Usage](#usage) for differences in invoking these functions with `module` and `script-tag` includes.
@@ -322,11 +349,13 @@ npm run build
 ```
 
 To run UserALE unit tests:
+
 ```
 npm run test
 ```
 
 We use gulp-mocha for unit tests. The results will print to your terminal:
+
 ```
 ...
     attachHandlers
@@ -339,13 +368,14 @@ We use gulp-mocha for unit tests. The results will print to your terminal:
   45 passing (954ms)
   1 pending
 ```
+
 Any failing tests will also be logged in the terminal. If there are failing tests, please consider [submitting an issue report](https://github.com/apache/flagon/issues).
 
 For more guidance on modifying Flagon UserALE src code, check out [the guide on our website](http://flagon.apache.org/docs/useralejs/modifying/).
 
 ## Contributing
 
-Contributions are welcome!  Simply [submit an issue](https://github.com/apache/flagon/issues). Pull requests are welcome.  The core team will review it and work with you to incorporate it into UserALE. If you want to become a contributor to the project, see our [contribution guide](http://flagon.apache.org/docs/contributing/).
+Contributions are welcome! Simply [submit an issue](https://github.com/apache/flagon/issues). Pull requests are welcome. The core team will review it and work with you to incorporate it into UserALE. If you want to become a contributor to the project, see our [contribution guide](http://flagon.apache.org/docs/contributing/).
 
 Join the conversation: tell us your needs, wishes, and interests by joining our [mailing list](dev-subscribe@flagon.apache.org)!
 
