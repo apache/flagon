@@ -1,0 +1,216 @@
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to You under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Apache Flagon UserALE + OpenTelemetry Demo</title>
+    <script
+      src="../../packages/flagon-userale/build/main.global.js"
+      data-otlp-endpoint="http://localhost:4318"
+      data-exporter="otlp"
+      data-tool="flagon-otel-demo"
+      data-version="2.5.0"
+      data-user="demo-user"
+      data-threshold="1"
+      data-interval="1000"
+      data-log-details="true"
+    ></script>
+    <style>
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        max-width: 780px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        line-height: 1.5;
+      }
+      .card {
+        border: 1px solid #d0d7de;
+        border-radius: 8px;
+        padding: 1.25rem;
+        margin-bottom: 1.25rem;
+      }
+      button {
+        padding: 0.6rem 1rem;
+        border-radius: 6px;
+        border: 1px solid #1f883d;
+        background: #1f883d;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        margin-right: 0.5rem;
+      }
+      button.secondary {
+        background: #0969da;
+        border-color: #0969da;
+      }
+      pre {
+        background: #f6f8fa;
+        padding: 0.75rem;
+        border-radius: 6px;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Apache Flagon UserALE.js — OpenTelemetry (OTLP/JSON) Demo</h1>
+    <p>
+      Every interaction on this page is exported directly to the OpenTelemetry
+      Collector at <code>http://localhost:4318/v1/logs</code> and correlated
+      with distributed traces in Grafana Loki &amp; Tempo (<a
+        href="http://localhost:3000"
+        target="_blank"
+        rel="noreferrer"
+        >Open Grafana Dashboard</a
+      >).
+    </p>
+
+    <div class="card">
+      <h2>1. Standard DOM Interactions</h2>
+      <button id="add-to-cart-btn" type="button">Add Item to Cart</button>
+      <button id="Apply-Coupon-Btn" class="secondary" type="button">
+        Apply Discount Code
+      </button>
+      <p>
+        <label for="search-input">Search catalog: </label>
+        <input
+          id="search-input"
+          type="text"
+          placeholder="Type to generate input logs..."
+        />
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>2. W3C Trace Context Correlation (Click-to-Trace)</h2>
+      <p>
+        Click below to generate a W3C <code>traceId</code> &amp;
+        <code>spanId</code>, emit a simulated checkout span to
+        <code>http://localhost:4318/v1/traces</code>, and attach the active
+        <code>traceId</code> to the UserALE behavioral log.
+      </p>
+      <button id="traced-checkout-btn" type="button">
+        Simulate Traced Checkout API Call
+      </button>
+      <pre id="trace-status">No traced action triggered yet.</pre>
+    </div>
+
+    <script>
+      function randomHex(len) {
+        const bytes = new Uint8Array(len / 2);
+        window.crypto.getRandomValues(bytes);
+        return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join(
+          "",
+        );
+      }
+
+      let activeTrace = null;
+      if (window.userale) {
+        window.userale.options({
+          traceContext: () => activeTrace,
+        });
+      }
+
+      document
+        .getElementById("traced-checkout-btn")
+        .addEventListener("click", async () => {
+          const traceId = randomHex(32);
+          const spanId = randomHex(16);
+          activeTrace = { traceId, spanId };
+
+          const nowNano = (BigInt(Date.now()) * BigInt(1000000)).toString(10);
+          const endNano = (BigInt(Date.now() + 45) * BigInt(1000000)).toString(
+            10,
+          );
+
+          // Emit a custom UserALE event correlated with the active W3C traceId/spanId
+          if (window.userale) {
+            window.userale.packageCustomLog(
+              {
+                type: "checkout",
+                traceId,
+                spanId,
+              },
+              () => ({ cartTotal: 149.99, currency: "USD" }),
+              true,
+            );
+          }
+
+          // Emit a matching OTLP trace span to the OpenTelemetry Collector (/v1/traces)
+          const tracePayload = {
+            resourceSpans: [
+              {
+                resource: {
+                  attributes: [
+                    {
+                      key: "service.name",
+                      value: { stringValue: "flagon-otel-demo" },
+                    },
+                  ],
+                },
+                scopeSpans: [
+                  {
+                    scope: { name: "checkout-service", version: "1.0.0" },
+                    spans: [
+                      {
+                        traceId,
+                        spanId,
+                        name: "POST /api/checkout",
+                        kind: 3,
+                        startTimeUnixNano: nowNano,
+                        endTimeUnixNano: endNano,
+                        attributes: [
+                          {
+                            key: "http.method",
+                            value: { stringValue: "POST" },
+                          },
+                          {
+                            key: "http.route",
+                            value: { stringValue: "/api/checkout" },
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          };
+
+          try {
+            await fetch("http://localhost:4318/v1/traces", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(tracePayload),
+            });
+            document.getElementById("trace-status").textContent =
+              `Sent correlated UserALE log + OTLP span!\ntraceId: ${traceId}\nspanId:  ${spanId}`;
+          } catch (err) {
+            document.getElementById("trace-status").textContent =
+              `Generated traceId: ${traceId} (start docker compose to send to collector: ${err.message})`;
+          } finally {
+            setTimeout(() => {
+              activeTrace = null;
+            }, 250);
+          }
+        });
+    </script>
+  </body>
+</html>
