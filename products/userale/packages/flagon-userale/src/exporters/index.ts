@@ -18,6 +18,23 @@
 import type { Configuration } from "@/configure";
 import { buildHeaders } from "./headers";
 import { HttpJsonExporter, chunkLogsForKeepalive } from "./http-json";
+import { OtelSdkExporter } from "./otel-sdk";
+import type { OtelLogsApiLogger } from "./otel-sdk";
+import {
+  OtlpJsonExporter,
+  buildOtlpResourceAttributes,
+  resolveOtlpLogsEndpoint,
+  toOtlpAnyValue,
+  toOtlpExportLogsServiceRequest,
+  toOtlpLogRecord,
+  toUnixNanoString,
+} from "./otlp-json";
+import type {
+  OtlpAnyValue,
+  OtlpExportLogsServiceRequest,
+  OtlpKeyValue,
+  OtlpLogRecord,
+} from "./otlp-json";
 import {
   ProtoJsonExporter,
   toProtoLogBatch,
@@ -33,14 +50,32 @@ import { WebSocketExporter } from "./websocket";
 
 export {
   buildHeaders,
+  buildOtlpResourceAttributes,
   chunkLogsForKeepalive,
   HttpJsonExporter,
+  OtelSdkExporter,
+  OtlpJsonExporter,
   ProtoJsonExporter,
+  resolveOtlpLogsEndpoint,
+  toOtlpAnyValue,
+  toOtlpExportLogsServiceRequest,
+  toOtlpLogRecord,
   toProtoLogBatch,
   toProtoUserALELog,
+  toUnixNanoString,
   WebSocketExporter,
 };
-export type { ExportOptions, ExportResult, ExporterType, LogExporter };
+export type {
+  ExportOptions,
+  ExportResult,
+  ExporterType,
+  LogExporter,
+  OtelLogsApiLogger,
+  OtlpAnyValue,
+  OtlpExportLogsServiceRequest,
+  OtlpKeyValue,
+  OtlpLogRecord,
+};
 
 /**
  * Factory that creates the appropriate LogExporter for the given configuration.
@@ -48,6 +83,10 @@ export type { ExportOptions, ExportResult, ExporterType, LogExporter };
 export function createExporter(config: Configuration): LogExporter {
   if (config.exporter) {
     return config.exporter;
+  }
+
+  if (config.exporterType === "otlp" || config.otlpEndpoint) {
+    return new OtlpJsonExporter(config);
   }
 
   try {

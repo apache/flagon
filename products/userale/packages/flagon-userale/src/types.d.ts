@@ -32,6 +32,9 @@ export declare namespace Settings {
   type Headers = HeaderObject | null;
   type ExporterType = ExporterMode;
   type CustomExporter = LogExporter | null;
+  type OtlpEndpoint = string | null;
+  type TraceContextCallback =
+    (() => { traceId?: string; spanId?: string } | null) | null;
   type ConfigValueTypes =
     | string
     | number
@@ -48,7 +51,9 @@ export declare namespace Settings {
     | CustomIndex
     | Headers
     | ExporterType
-    | CustomExporter;
+    | CustomExporter
+    | OtlpEndpoint
+    | TraceContextCallback;
 
   type TimeFunction = (() => number) | ((ts: number) => number);
 
@@ -69,11 +74,13 @@ export declare namespace Settings {
     logCountThreshold: number;
     logDetails: boolean;
     on?: boolean;
+    otlpEndpoint?: OtlpEndpoint;
     resolution: number;
     sessionId: SessionId;
     time: TimeFunction;
     toolName: ToolName;
     toolVersion?: Version;
+    traceContext?: TraceContextCallback;
     transmitInterval: number;
     url: string;
     userFromParams: UserFromParams;
