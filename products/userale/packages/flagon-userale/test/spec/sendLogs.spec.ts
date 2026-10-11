@@ -266,4 +266,38 @@ describe("sendLogs", () => {
     jest.useRealTimers();
     done();
   });
+
+  it("warns when sending credentials over plaintext HTTP to non-localhost", () => {
+    const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    config.update({
+      on: true,
+      url: "http://logs.example.com/ingest",
+      apiKey: "my-api-key",
+    });
+    initSender([], config);
+    expect(warnSpy).toHaveBeenCalledWith(
+      "[UserALE] Sending credentials over plaintext HTTP. Use HTTPS in production.",
+    );
+
+    warnSpy.mockClear();
+    config.update({
+      on: true,
+      url: "http://localhost:8000",
+      apiKey: "my-api-key",
+    });
+    initSender([], config);
+    expect(warnSpy).not.toHaveBeenCalled();
+
+    warnSpy.mockClear();
+    config.update({
+      on: true,
+      url: "https://logs.example.com/ingest",
+      apiKey: "my-api-key",
+    });
+    initSender([], config);
+    expect(warnSpy).not.toHaveBeenCalled();
+
+    warnSpy.mockRestore();
+  });
 });

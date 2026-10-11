@@ -57,7 +57,8 @@ function Auth() {
     setMessage("API key saved.")
   }
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
     try {
       // Generate the PKCE challenge pair (code_verifier and code_challenge)
       const { code_verifier, code_challenge } = await pkceChallenge()
@@ -67,7 +68,7 @@ function Auth() {
       // Construct the OAuth authorization URL
       const authUrl =
         `${issuerUrl}/protocol/openid-connect/auth?` +
-        `client_id=${clientId}` +
+        `client_id=${encodeURIComponent(clientId)}` +
         `&response_type=code` +
         `&redirect_uri=${encodeURIComponent(redirectUri)}` +
         `&scope=openid profile` +

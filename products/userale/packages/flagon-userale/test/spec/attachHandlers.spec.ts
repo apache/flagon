@@ -23,7 +23,12 @@ jest.unstable_mockModule("@/packageLogs", () => ({
   packageLog: jest.fn(),
 }));
 
-import { attachHandlers } from "@/attachHandlers";
+import {
+  attachHandlers,
+  extractKeyboardDetails,
+  extractInputDetails,
+  extractChangeDetails,
+} from "@/attachHandlers";
 import { Events } from "@/types";
 import { Configuration } from "@/configure";
 import { packageLog } from "@/packageLogs";
@@ -136,5 +141,33 @@ describe("attachHandlers", () => {
   describe("defineDetails", () => {
     // TODO: clarify what constitutes "high detail events" and what is "correct"
     it.skip("configures high detail events correctly", () => {});
+
+    it("redacts details on password inputs", () => {
+      const pwInput = document.createElement("input");
+      pwInput.type = "password";
+      pwInput.value = "super-secret";
+
+      const textInput = document.createElement("input");
+      textInput.type = "text";
+      textInput.value = "hello";
+
+      const keyEvt = new KeyboardEvent("keydown", { key: "s", code: "KeyS" });
+      Object.defineProperty(keyEvt, "target", { value: pwInput });
+      expect(extractKeyboardDetails(keyEvt)).toBeNull();
+
+      const inputEvt = new Event("input") as InputEvent;
+      Object.defineProperty(inputEvt, "target", { value: pwInput });
+      expect(extractInputDetails(inputEvt)).toBeNull();
+
+      const changeEvt = new Event("change") as unknown as Events.ChangeEvent;
+      Object.defineProperty(changeEvt, "target", { value: pwInput });
+      expect(extractChangeDetails(changeEvt)).toBeNull();
+
+      const normalChangeEvt = new Event(
+        "change",
+      ) as unknown as Events.ChangeEvent;
+      Object.defineProperty(normalChangeEvt, "target", { value: textInput });
+      expect(extractChangeDetails(normalChangeEvt)).toEqual({ value: "hello" });
+    });
   });
 });
