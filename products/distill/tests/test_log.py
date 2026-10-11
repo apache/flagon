@@ -21,6 +21,7 @@ from datetime import datetime
 from pydantic import ValidationError
 
 from distill.core.log import Log
+from distill.schemas.userale import extract_logs
 from tests.data_config import DATA_DIR
 
 
@@ -91,6 +92,7 @@ def test_log_normalize_timestamp():
     assert test_log.data.client_time == correct_dt
     assert test_log.to_dict()["clientTime"] == correct_ms
 
+
 def test_log_comparison():
     data = load_log()
     test_log = Log(data=data)
@@ -104,7 +106,152 @@ def test_log_comparison():
 
     assert test_log == test_log_equal
     assert test_log < test_other < datetime.now()
-    
+
+
+def test_log_v2_5_and_wire_formats():
+    # 1. Modern UserALE v2.4/v2.5 raw log with float microTime, click details, userAgent, attributes, style
+    v25_raw = {
+        "target": "button#buy",
+        "path": ["button#buy", "body"],
+        "pageUrl": "https://shop.example.com",
+        "pageTitle": "Shop",
+        "pageReferrer": "",
+        "browser": {"browser": "chrome", "version": "125.0"},
+        "userAgent": "Mozilla/5.0 Chrome/125.0",
+        "clientTime": 1719530111079,
+        "microTime": 145.67,
+        "location": {"x": 100, "y": 200},
+        "scrnRes": {"width": 1920, "height": 1080},
+        "type": "click",
+        "logType": "raw",
+        "userAction": True,
+        "details": {"button": 0, "ctrl": False},
+        "userId": None,
+        "toolVersion": "1.0.0",
+        "toolName": "shop",
+        "useraleVersion": "2.5.0",
+        "sessionId": "session_1",
+        "httpSessionId": "http_1",
+        "browserSessionId": None,
+        "attributes": {"id": "buy"},
+        "style": {"display": "block"},
+    }
+    parsed_v25 = Log(data=v25_raw)
+    assert parsed_v25.data.micro_time == 145.67
+    assert parsed_v25.data.details == {"button": 0, "ctrl": False}
+    assert parsed_v25.to_dict()["userAgent"] == "Mozilla/5.0 Chrome/125.0"
+
+    # 2. Protobuf v1 JSON LogBatch
+    proto_batch = {
+        "logs": [
+            {
+                "logType": "LOG_TYPE_RAW",
+                "raw": {
+                    "metadata": {
+                        "pageUrl": "https://shop.example.com",
+                        "pageTitle": "Shop",
+                        "pageReferrer": "",
+                        "userAgent": "Mozilla/5.0",
+                        "clientTime": "1719530111079",
+                        "screenResolution": {"width": 1920, "height": 1080},
+                        "sessionId": "sess-1",
+                    },
+                    "target": "a#link",
+                    "path": ["a#link", "body"],
+                    "eventType": "click",
+                    "location": {"x": 10, "y": 20},
+                    "microTime": 12.5,
+                    "userAction": True,
+                    "details": {"button": 0},
+                },
+            }
+        ]
+    }
+    extracted_proto = extract_logs(proto_batch)
+    assert len(extracted_proto) == 1
+    proto_log = Log(data=extracted_proto[0])
+    assert proto_log.data.target == "a#link"
+    assert proto_log.data.page_url == "https://shop.example.com"
+
+    # 3. OpenTelemetry OTLP/JSON ExportLogsServiceRequest
+    otlp_payload = {
+        "resourceLogs": [
+            {
+                "resource": {
+                    "attributes": [
+                        {
+                            "key": "service.name",
+                            "value": {"stringValue": "shop"},
+                        },
+                        {
+                            "key": "session.id",
+                            "value": {"stringValue": "sess-otlp"},
+                        },
+                        {"key": "screen.width", "value": {"intValue": "1440"}},
+                        {"key": "screen.height", "value": {"intValue": "900"}},
+                    ]
+                },
+                "scopeLogs": [
+                    {
+                        "scope": {
+                            "name": "org.apache.flagon.userale",
+                            "version": "2.5.0",
+                        },
+                        "logRecords": [
+                            {
+                                "timeUnixNano": "1719530111079000000",
+                                "observedTimeUnixNano": "1719530111079000000",
+                                "severityNumber": 9,
+                                "severityText": "INFO",
+                                "eventName": "userale.raw.click",
+                                "body": {
+                                    "kvlistValue": {
+                                        "values": [
+                                            {
+                                                "key": "button",
+                                                "value": {"intValue": "0"},
+                                            }
+                                        ]
+                                    }
+                                },
+                                "attributes": [
+                                    {
+                                        "key": "flagon.log_type",
+                                        "value": {"stringValue": "raw"},
+                                    },
+                                    {
+                                        "key": "flagon.event_type",
+                                        "value": {"stringValue": "click"},
+                                    },
+                                    {
+                                        "key": "flagon.target",
+                                        "value": {"stringValue": "button#pay"},
+                                    },
+                                    {
+                                        "key": "url.full",
+                                        "value": {
+                                            "stringValue": "https://shop.example.com/pay"
+                                        },
+                                    },
+                                ],
+                                "traceId": "4bf92f3577b34da6a3ce929d0e0e4736",
+                                "spanId": "00f067aa0ba902b7",
+                            }
+                        ],
+                    }
+                ],
+            }
+        ]
+    }
+    extracted_otlp = extract_logs(otlp_payload)
+    assert len(extracted_otlp) == 1
+    otlp_log = Log(data=extracted_otlp[0])
+    assert otlp_log.data.target == "button#pay"
+    assert otlp_log.data.page_url == "https://shop.example.com/pay"
+    assert otlp_log.data.details == {"button": 0}
+    assert otlp_log.to_dict()["traceId"] == "4bf92f3577b34da6a3ce929d0e0e4736"
+
+
 def load_log() -> str:
     with open(os.path.join(DATA_DIR, "log_test_data.json")) as f:
         data = f.readline()
@@ -115,3 +262,4 @@ def load_interval_log() -> str:
     with open(os.path.join(DATA_DIR, "log_interval_data.json")) as f:
         data = f.readline()
     return data
+
