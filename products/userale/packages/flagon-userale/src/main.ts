@@ -57,11 +57,19 @@ export {
 } from "@/packageLogs";
 export {
   buildHeaders,
+  buildOtlpResourceAttributes,
   createExporter,
   HttpJsonExporter,
+  OtelSdkExporter,
+  OtlpJsonExporter,
   ProtoJsonExporter,
+  resolveOtlpLogsEndpoint,
+  toOtlpAnyValue,
+  toOtlpExportLogsServiceRequest,
+  toOtlpLogRecord,
   toProtoLogBatch,
   toProtoUserALELog,
+  toUnixNanoString,
   WebSocketExporter,
 } from "@/exporters";
 export type {
@@ -69,6 +77,11 @@ export type {
   ExportResult,
   ExporterType,
   LogExporter,
+  OtelLogsApiLogger,
+  OtlpAnyValue,
+  OtlpExportLogsServiceRequest,
+  OtlpKeyValue,
+  OtlpLogRecord,
 } from "@/exporters";
 export type { Logging, Settings } from "@/types";
 

@@ -37,11 +37,13 @@ export class Configuration {
   public logCountThreshold: number = 0;
   public logDetails: boolean = false;
   public on: boolean = false;
+  public otlpEndpoint: Settings.OtlpEndpoint = null;
   public resolution: number = 0;
   public sessionId: Settings.SessionId = null;
   public time: Settings.TimeFunction = () => Date.now();
   public toolName: Settings.ToolName = null;
   public toolVersion: Settings.Version = null;
+  public traceContext: Settings.TraceContextCallback = null;
   public transmitInterval: number = 0;
   public url: string = "";
   public userFromParams: Settings.UserFromParams = null;

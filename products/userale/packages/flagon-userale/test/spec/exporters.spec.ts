@@ -24,8 +24,13 @@ import {
   chunkLogsForKeepalive,
   createExporter,
   HttpJsonExporter,
+  OtelSdkExporter,
+  OtlpJsonExporter,
   ProtoJsonExporter,
+  resolveOtlpLogsEndpoint,
+  toOtlpExportLogsServiceRequest,
   toProtoLogBatch,
+  toUnixNanoString,
   WebSocketExporter,
 } from "@/exporters";
 import { LogBatchSchema, LogType } from "@/gen/apache/flagon/userale/v1/log_pb";
@@ -38,7 +43,7 @@ import {
 } from "@/utils";
 import { fromJson } from "@bufbuild/protobuf";
 
-import type { LogExporter } from "@/exporters";
+import type { LogExporter, OtlpKeyValue } from "@/exporters";
 import type { Logging } from "@/types";
 import type { JsonValue } from "@bufbuild/protobuf";
 
@@ -106,6 +111,20 @@ describe("exporters", () => {
       });
       const exporter = createExporter(config);
       expect(exporter).toBeInstanceOf(ProtoJsonExporter);
+    });
+
+    it("creates OtlpJsonExporter when exporterType is 'otlp' or otlpEndpoint is set", () => {
+      config.update({
+        url: "http://localhost:4318",
+        exporterType: "otlp",
+      });
+      expect(createExporter(config)).toBeInstanceOf(OtlpJsonExporter);
+
+      config.reset();
+      config.update({
+        otlpEndpoint: "http://localhost:4318",
+      });
+      expect(createExporter(config)).toBeInstanceOf(OtlpJsonExporter);
     });
 
     it("returns custom config.exporter when provided", () => {
@@ -344,6 +363,230 @@ describe("exporters", () => {
       expect(decoded.logs[0]!.logType).toBe(LogType.RAW);
 
       fetchSpy.mockRestore();
+    });
+  });
+
+  describe("OtlpJsonExporter & OTLP/JSON mapping (#140)", () => {
+    function getAttrMap(
+      attrs: Array<OtlpKeyValue>,
+    ): Record<string, OtlpKeyValue["value"]> {
+      return Object.fromEntries(attrs.map((a) => [a.key, a.value]));
+    }
+
+    it("normalizes OTLP endpoints by appending /v1/logs only when path is empty or root", () => {
+      expect(resolveOtlpLogsEndpoint("http://localhost:4318")).toBe(
+        "http://localhost:4318/v1/logs",
+      );
+      expect(resolveOtlpLogsEndpoint("http://localhost:4318/")).toBe(
+        "http://localhost:4318/v1/logs",
+      );
+      expect(
+        resolveOtlpLogsEndpoint("https://collector.example.com/otel/v1/logs"),
+      ).toBe("https://collector.example.com/otel/v1/logs");
+    });
+
+    it("computes nanosecond timestamps using BigInt without float precision loss", () => {
+      expect(toUnixNanoString(1712000000000, 123.456)).toBe(
+        "1712000000000456000",
+      );
+      expect(toUnixNanoString(1712000000000)).toBe("1712000000000000000");
+    });
+
+    it("hoists constant device/session fields to Resource and maps LogRecord with structured kvlistValue body", () => {
+      config.update({
+        toolName: "checkout-ui",
+        toolVersion: "3.1.0",
+        useraleVersion: "2.5.0",
+      });
+
+      const rawLog: Logging.Log = {
+        target: "button#pay",
+        path: ["button#pay", "form#checkout", "body"],
+        pageUrl: "https://shop.example.com/pay",
+        pageTitle: "Checkout",
+        pageReferrer: "https://shop.example.com/cart",
+        browser: { browser: "chrome", version: "125.0" },
+        userAgent: "Mozilla/5.0 Chrome/125.0",
+        clientTime: 1712000000000,
+        microTime: 10.25,
+        scrnRes: { width: 1440, height: 900 },
+        location: { x: 42, y: 84 },
+        type: "click",
+        logType: "raw",
+        userAction: true,
+        details: { button: 0, ctrl: false, nested: { ok: true } },
+        userId: "user-99",
+        sessionId: "sess-xyz",
+        httpSessionId: "http-xyz",
+        browserSessionId: "browser-xyz",
+        attributes: { "data-testid": "pay-btn" },
+        style: { display: "inline-block" },
+        traceId: "4bf92f3577b34da6a3ce929d0e0e4736",
+        spanId: "00f067aa0ba902b7",
+      };
+
+      const payload = toOtlpExportLogsServiceRequest([rawLog], config);
+      expect(payload.resourceLogs).toHaveLength(1);
+
+      const resourceLog = payload.resourceLogs[0]!;
+      const resAttrs = getAttrMap(resourceLog.resource.attributes);
+      expect(resAttrs["service.name"]).toEqual({ stringValue: "checkout-ui" });
+      expect(resAttrs["service.version"]).toEqual({ stringValue: "3.1.0" });
+      expect(resAttrs["telemetry.sdk.name"]).toEqual({
+        stringValue: "apache-flagon-userale",
+      });
+      expect(resAttrs["telemetry.sdk.language"]).toEqual({
+        stringValue: "webjs",
+      });
+      expect(resAttrs["user_agent.original"]).toEqual({
+        stringValue: "Mozilla/5.0 Chrome/125.0",
+      });
+      expect(resAttrs["session.id"]).toEqual({ stringValue: "sess-xyz" });
+      expect(resAttrs["screen.width"]).toEqual({ intValue: "1440" });
+      expect(resAttrs["screen.height"]).toEqual({ intValue: "900" });
+
+      const scopeLog = resourceLog.scopeLogs[0]!;
+      expect(scopeLog.scope.name).toBe("org.apache.flagon.userale");
+      expect(scopeLog.logRecords).toHaveLength(1);
+
+      const record = scopeLog.logRecords[0]!;
+      expect(record.timeUnixNano).toBe("1712000000000250000");
+      expect(record.severityNumber).toBe(9);
+      expect(record.severityText).toBe("INFO");
+      expect(record.eventName).toBe("userale.raw.click");
+      expect(record.traceId).toBe("4bf92f3577b34da6a3ce929d0e0e4736");
+      expect(record.spanId).toBe("00f067aa0ba902b7");
+
+      // Structured kvlistValue body instead of double-encoded JSON string
+      expect(record.body?.kvlistValue).toBeDefined();
+      const bodyMap = getAttrMap(record.body!.kvlistValue!.values);
+      expect(bodyMap.button).toEqual({ intValue: "0" });
+      expect(bodyMap.ctrl).toEqual({ boolValue: false });
+      expect(bodyMap.nested?.kvlistValue?.values).toEqual([
+        { key: "ok", value: { boolValue: true } },
+      ]);
+
+      const logAttrs = getAttrMap(record.attributes);
+      expect(logAttrs["event.name"]).toEqual({
+        stringValue: "userale.raw.click",
+      });
+      expect(logAttrs["url.full"]).toEqual({
+        stringValue: "https://shop.example.com/pay",
+      });
+      expect(logAttrs["user.id"]).toEqual({ stringValue: "user-99" });
+      expect(logAttrs["flagon.target"]).toEqual({ stringValue: "button#pay" });
+      expect(logAttrs["flagon.user_action"]).toEqual({ boolValue: true });
+      expect(logAttrs["flagon.location.x"]).toEqual({ doubleValue: 42 });
+      expect(logAttrs["flagon.location.y"]).toEqual({ doubleValue: 84 });
+      expect(logAttrs["flagon.path"]).toEqual({
+        arrayValue: {
+          values: [
+            { stringValue: "button#pay" },
+            { stringValue: "form#checkout" },
+            { stringValue: "body" },
+          ],
+        },
+      });
+    });
+
+    it("supports config.traceContext callback and ignores invalid/all-zero trace IDs", () => {
+      config.update({
+        traceContext: () => ({
+          traceId: "ABCD2f3577b34da6a3ce929d0e0e4736",
+          spanId: "0000000000000000", // all-zero spanId should be ignored
+        }),
+      });
+
+      const payload = toOtlpExportLogsServiceRequest(
+        [
+          {
+            target: "div",
+            type: "click",
+            logType: "raw",
+            clientTime: 1712000000000,
+          },
+        ],
+        config,
+      );
+      const record = payload.resourceLogs[0]!.scopeLogs[0]!.logRecords[0]!;
+      expect(record.traceId).toBe("abcd2f3577b34da6a3ce929d0e0e4736");
+      expect(record.spanId).toBeUndefined();
+    });
+
+    it("POSTs OTLP/JSON payload to normalized /v1/logs endpoint", async () => {
+      const fetchSpy = jest
+        .spyOn(global, "fetch")
+        .mockResolvedValue(new Response(null, { status: 200 }));
+
+      config.update({
+        otlpEndpoint: "http://localhost:4318",
+        exporterType: "otlp",
+        apiKey: "otlp-secret",
+      });
+
+      const exporter = new OtlpJsonExporter(config);
+      const result = await exporter.export([
+        {
+          target: "button#save",
+          type: "click",
+          logType: "raw",
+          clientTime: 1712000000000,
+        },
+      ]);
+
+      expect(result.success).toBe(true);
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+      expect(fetchSpy.mock.calls[0]![0]).toBe("http://localhost:4318/v1/logs");
+      const headers = fetchSpy.mock.calls[0]![1]!.headers as Headers;
+      expect(headers.get("x-api-key")).toBe("otlp-secret");
+
+      const sentBody = JSON.parse(
+        fetchSpy.mock.calls[0]![1]!.body as string,
+      ) as ReturnType<typeof toOtlpExportLogsServiceRequest>;
+      expect(
+        sentBody.resourceLogs[0]!.scopeLogs[0]!.logRecords[0]!.eventName,
+      ).toBe("userale.raw.click");
+
+      fetchSpy.mockRestore();
+    });
+  });
+
+  describe("OtelSdkExporter", () => {
+    it("emits logs to a duck-typed OpenTelemetry JS Logs API Logger", async () => {
+      const mockLogger = {
+        emit: jest.fn(),
+      };
+
+      const exporter = new OtelSdkExporter(mockLogger);
+      const result = await exporter.export([
+        {
+          target: "input#search",
+          path: ["input#search", "body"],
+          pageUrl: "https://example.com",
+          type: "input",
+          logType: "raw",
+          clientTime: 1712000000000,
+          userAction: true,
+          details: { value: "flagon" },
+        },
+      ]);
+
+      expect(result.success).toBe(true);
+      expect(mockLogger.emit).toHaveBeenCalledTimes(1);
+      expect(mockLogger.emit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          timestamp: 1712000000000,
+          severityNumber: 9,
+          severityText: "INFO",
+          eventName: "userale.raw.input",
+          body: { value: "flagon" },
+          attributes: expect.objectContaining({
+            "event.name": "userale.raw.input",
+            "url.full": "https://example.com",
+            "flagon.target": "input#search",
+          }),
+        }),
+      );
     });
   });
 });

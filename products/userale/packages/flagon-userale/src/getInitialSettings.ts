@@ -44,11 +44,13 @@ export function getInitialSettings(): Settings.Config {
       httpSessionId: null,
       logCountThreshold: +5,
       logDetails: false,
+      otlpEndpoint: null,
       resolution: +500,
       sessionId: sessionId,
       time: (ts?: number) => (ts !== undefined ? ts : Date.now()),
       toolName: null,
       toolVersion: null,
+      traceContext: null,
       transmitInterval: +5000,
       url: "http://localhost:8000",
       useraleVersion: null,
@@ -85,9 +87,10 @@ export function getInitialSettings(): Settings.Config {
         return null;
       };
   const headers = get("data-headers");
+  const otlpEndpoint = get("data-otlp-endpoint") || null;
   const exporterAttr = (get("data-exporter-type") ||
     get("data-exporter") ||
-    "http-json") as Settings.ExporterType;
+    (otlpEndpoint ? "otlp" : "http-json")) as Settings.ExporterType;
   const settings: Settings.Config = {
     apiKey: get("data-api-key") || null,
     authHeader: get("data-auth") || null,
@@ -100,11 +103,13 @@ export function getInitialSettings(): Settings.Config {
     httpSessionId: httpSessionId,
     logCountThreshold: +(get("data-threshold") || 5),
     logDetails: get("data-log-details") === "true" ? true : false,
+    otlpEndpoint: otlpEndpoint,
     resolution: +(get("data-resolution") || 500),
     sessionId: get("data-session") || sessionId,
     time: timeStampScale(document.createEvent("CustomEvent")),
     toolName: get("data-tool") || null,
     toolVersion: get("data-version") || null,
+    traceContext: null,
     transmitInterval: +(get("data-interval") || 5000),
     url: get("data-url") || "http://localhost:8000",
     useraleVersion: get("data-userale-version") || null,

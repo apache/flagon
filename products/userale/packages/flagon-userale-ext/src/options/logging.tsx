@@ -19,22 +19,33 @@
 
 import { useEffect, useState } from "react"
 
-import { getStoredOptions, setStoredOptions } from "~/utils/storage"
+import {
+  getStoredOptions,
+  setStoredOptions,
+  type StoredOptions
+} from "~/utils/storage"
 
 function Logging() {
   const [loggingUrl, setLoggingUrl] = useState("")
   const [allowList, setAllowList] = useState("")
+  const [exporterType, setExporterType] =
+    useState<StoredOptions["exporterType"]>("http-json")
 
   useEffect(() => {
     getStoredOptions().then((data) => {
       setLoggingUrl(data.loggingUrl)
       setAllowList(data.allowList)
+      setExporterType(data.exporterType)
     })
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const resp = await setStoredOptions({ loggingUrl, allowList })
+    const resp = await setStoredOptions({
+      loggingUrl,
+      allowList,
+      exporterType
+    })
     alert(resp)
   }
 
@@ -48,6 +59,19 @@ function Logging() {
           value={loggingUrl}
           onChange={(e) => setLoggingUrl(e.target.value)}
         />
+        <br />
+
+        <label htmlFor="exporter-type">Exporter Format:</label>
+        <select
+          id="exporter-type"
+          value={exporterType}
+          onChange={(e) =>
+            setExporterType(e.target.value as StoredOptions["exporterType"])
+          }>
+          <option value="http-json">UserALE JSON (Default)</option>
+          <option value="otlp">OpenTelemetry (OTLP/JSON)</option>
+          <option value="proto-json">Protobuf v1 JSON</option>
+        </select>
         <br />
 
         <label htmlFor="allowlist">URL allowlist regex:</label>

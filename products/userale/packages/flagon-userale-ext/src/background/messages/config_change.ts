@@ -21,16 +21,20 @@ import * as userale from "flagon-userale"
 
 import type { PlasmoMessaging } from "@plasmohq/messaging"
 
-import type { StoredOptions } from "~utils/storage"
+import { getStoredOptions, type StoredOptions } from "~utils/storage"
 
 let allowListRegExp: RegExp
 
-const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
-  setOptions(req.body)
+const handler: PlasmoMessaging.MessageHandler = async (req) => {
+  const stored = await getStoredOptions()
+  setOptions({ ...stored, ...req.body })
 }
 
 export function setOptions(options: StoredOptions) {
-  userale.options({ url: options.loggingUrl })
+  userale.options({
+    url: options.loggingUrl,
+    exporterType: options.exporterType ?? "http-json"
+  })
   allowListRegExp = new RegExp(options.allowList)
 
   switch (options.authMode) {
