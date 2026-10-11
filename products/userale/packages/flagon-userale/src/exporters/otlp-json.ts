@@ -329,7 +329,7 @@ export function buildOtlpResourceAttributes(
   const sdkVersion =
     (typeof first.useraleVersion === "string" && first.useraleVersion) ||
     config?.useraleVersion ||
-    "2.4.0";
+    "2.5.0";
   pushStringAttr(attrs, "telemetry.sdk.version", sdkVersion);
 
   pushStringAttr(attrs, "user_agent.original", first.userAgent);
@@ -516,7 +516,7 @@ export function toOtlpExportLogsServiceRequest(
   const scopeVersion =
     (typeof first.useraleVersion === "string" && first.useraleVersion) ||
     config?.useraleVersion ||
-    "2.4.0";
+    "2.5.0";
 
   return {
     resourceLogs: [
