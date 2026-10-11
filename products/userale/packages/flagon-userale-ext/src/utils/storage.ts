@@ -23,6 +23,8 @@ import { sendToBackground } from "@plasmohq/messaging"
 
 export const STORAGE_KEYS = {
   accessToken: "accessToken",
+  apiKey: "apiKey",
+  authMode: "authMode",
   allowList: "allowList",
   loggingUrl: "loggingUrl"
 } as const
@@ -31,12 +33,16 @@ export type StorageKeys = keyof typeof STORAGE_KEYS
 
 export type StoredOptions = {
   accessToken: string
+  apiKey: string
+  authMode: "oauth" | "apikey" | "none"
   allowList: string
   loggingUrl: string
 }
 
 const DEFAULT_OPTIONS: StoredOptions = {
   accessToken: "",
+  apiKey: "",
+  authMode: "none",
   allowList: "https://flagon.apache.org/",
   loggingUrl: "http://localhost:8000"
 }
@@ -48,6 +54,8 @@ export async function getStoredOptions(): Promise<StoredOptions> {
 
   return {
     accessToken: stored.accessToken ?? DEFAULT_OPTIONS.accessToken,
+    apiKey: stored.apiKey ?? DEFAULT_OPTIONS.apiKey,
+    authMode: stored.authMode ?? DEFAULT_OPTIONS.authMode,
     allowList: stored.allowList ?? DEFAULT_OPTIONS.allowList,
     loggingUrl: stored.loggingUrl ?? DEFAULT_OPTIONS.loggingUrl
   }
@@ -57,8 +65,8 @@ export async function getStoredOptions(): Promise<StoredOptions> {
 export async function setStoredOptions(values: Partial<StoredOptions>) {
   // Validate the new options
   try {
-    new RegExp(values.allowList)
-    new URL(values.loggingUrl)
+    if (values.allowList !== undefined) new RegExp(values.allowList)
+    if (values.loggingUrl !== undefined) new URL(values.loggingUrl)
   } catch (error) {
     return error
   }

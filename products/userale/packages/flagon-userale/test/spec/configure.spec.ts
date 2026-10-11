@@ -63,6 +63,15 @@ describe("configure", () => {
     done();
   });
 
+  it("allows apiKey to be set via config.update()", (done) => {
+    config.update({ apiKey: "test-api-key-123" });
+    expect(config.apiKey).toBe("test-api-key-123");
+
+    config.update({ apiKey: null });
+    expect(config.apiKey).toBeNull();
+    done();
+  });
+
   describe("getUserIdFromParams", () => {
     it("fetches userId from URL params", (done) => {
       Object.defineProperty(global.window, "location", {
