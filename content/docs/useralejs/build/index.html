@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>UserALE.js Build and Test</title>
-  <meta name="description" content="To build Apache UserALE.js, you will need to clone our repo and install NPM and Node.js and Go.">
+  <meta name="description" content="To build and test Apache Flagon UserALE.js, clone the apache/flagon monorepo and ensure you have Node.js (&amp;gt;= 20.x) and pnpm (&amp;gt;= 10.x) installed (or run...">
 
   <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
   <script src="/assets/jquery.min.js"></script>
@@ -119,7 +119,7 @@
   
     <div class="ui inverted bulleted list docs-list">
       
-        <a class="item" href="/docs/distill/">Installation</a>
+        <a class="item" href="/docs/distill/">Getting Started & API Reference</a>
       
     </div>
   </div>
@@ -129,115 +129,81 @@
   </div>
   <div class="docs-content">
     <h2 class="ui header">UserALE.js Build and Test</h2>
-    <p>To build <a href="https://github.com/apache/flagon-useralejs/tree/master">Apache UserALE.js</a>, you will need to clone our repo and install <a href="https://nodejs.org/">NPM and Node.js</a> and <a href="https://go.dev/doc/install">Go</a>.</p>
+    <p>To build and test <a href="https://github.com/apache/flagon/tree/master/products/userale">Apache Flagon UserALE.js</a>, clone the <code class="language-plaintext highlighter-rouge">apache/flagon</code> monorepo and ensure you have <strong>Node.js (<code class="language-plaintext highlighter-rouge">&gt;= 20.x</code>)</strong> and <strong><code class="language-plaintext highlighter-rouge">pnpm</code> (<code class="language-plaintext highlighter-rouge">&gt;= 10.x</code>)</strong> installed (or run <code class="language-plaintext highlighter-rouge">nix develop</code> at the repository root).</p>
 
-<p>UserALE.js utilizes NPM for package and dependency management. Execute the following to install dependencies.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#install required packages
-npm install
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/apache/flagon.git
+<span class="nb">cd </span>flagon/products/userale
 
-#review major dependencies
-npm ls --depth=0
+<span class="c"># Install workspace dependencies</span>
+pnpm <span class="nb">install</span>
 </code></pre></div></div>
+
+<hr />
 
 <h2 id="build">Build</h2>
 
-<p>UserALE.js uses Rollup to manage build tasking. These tasks are executed through our build script; use the following to execute:</p>
+<p>UserALE.js is written in TypeScript and bundled with <a href="https://tsup.egoist.dev/"><code class="language-plaintext highlighter-rouge">tsup</code></a> (producing both ES module <code class="language-plaintext highlighter-rouge">build/main.mjs</code> and script-tag IIFE <code class="language-plaintext highlighter-rouge">build/main.global.js</code> bundles alongside TypeScript declarations <code class="language-plaintext highlighter-rouge">build/main.d.ts</code>), while the browser extension (<code class="language-plaintext highlighter-rouge">flagon-userale-ext</code>) is built with <a href="https://docs.plasmo.com/">Plasmo</a>.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#Build UserALE.js
-npm run build
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Build all workspace packages (flagon-userale and flagon-userale-ext)</span>
+pnpm build
+
+<span class="c"># Or build only flagon-userale</span>
+pnpm <span class="nt">--dir</span> packages/flagon-userale build
 </code></pre></div></div>
+
+<p>If you modify <a href="https://github.com/apache/flagon/blob/master/proto/apache/flagon/userale/v1/log.proto"><code class="language-plaintext highlighter-rouge">proto/apache/flagon/userale/v1/log.proto</code></a>, regenerate the TypeScript Protobuf contract definitions from the repository root:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>buf lint
+buf generate
+</code></pre></div></div>
+
+<hr />
 
 <h2 id="test">Test</h2>
 
-<p>UserALE.js uses Jest and Playwright to execute tests, which are integrated into our build pipeline. See <code class="language-plaintext highlighter-rouge">package.json</code> for full script options.</p>
+<p>UserALE.js uses <strong>Jest</strong> (with <code class="language-plaintext highlighter-rouge">jsdom</code> and <code class="language-plaintext highlighter-rouge">@bufbuild/protobuf</code> contract tests) for unit testing and <strong>Playwright</strong> for end-to-end browser and extension testing.</p>
 
-<p>To run tests:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm run test
-</code></pre></div></div>
-<p>… you’ll see something like:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
-    attachHandlers
-    ✓ attaches all the event handlers without duplicates
-    ✓ debounces bufferedEvents (505ms)
-    defineDetails
-      - configures high detail events correctly
+<h3 id="run-unit--schema-contract-tests-jest">Run Unit &amp; Schema Contract Tests (<code class="language-plaintext highlighter-rouge">Jest</code>)</h3>
 
-  configure
-    ✓ merges new configs into main config object
-    ✓ includes a userid if present in the window.location
-    getUserIdFromParams
-      ✓ fetches userId from URL params
-      ✓ returns null if no matching param
-
-  getInitialSettings
-    timeStampScale
-      ✓ no event.timestamp
-      ✓ zero
-      ✓ epoch milliseconds
-      ✓ epoch microseconds
-      ✓ performance navigation time
-    getInitialSettings
-      ✓ fetches all settings from a script tag (122ms)
-      ✓ grabs user id from params
-
-  Userale API
-    ✓ provides configs
-    ✓ edits configs
-    ✓ starts + stops (214ms)
-    ✓ sends custom logs
-
-  packageLogs
-    setLogFilter
-      ✓ assigns the handler to the provided value
-      ✓ allows the handler to be nulled
-    setLogMapper
-      ✓ assigns the handler to the provided value
-      ✓ allows the handler to be nulled
-    packageLog
-      ✓ only executes if on
-      ✓ calls detailFcn with the event as an argument if provided
-      ✓ packages logs
-      ✓ filters logs when a handler is assigned and returns false
-      ✓ assigns logs to the mapper's return value if a handler is assigned
-      ✓ does not call the map handler if the log is filtered out
-      ✓ does not attempt to call a non-function filter/mapper
-    extractTimeFields
-      ✓ returns the millisecond and microsecond portions of a timestamp
-      ✓ sets micro to 0 when no decimal is present
-      ✓ always returns an object
-    getLocation
-      ✓ returns event page location
-      ✓ calculates page location if unavailable
-      ✓ fails to null
-    selectorizePath
-      ✓ returns a new array of the same length provided
-    getSelector
-      ✓ builds a selector
-      ✓ identifies window
-      ✓ handles a non-null unknown value
-    buildPath
-      ✓ builds a path
-      ✓ defaults to path if available
-
-  sendLogs
-    ✓ sends logs on an interval
-    ✓ does not send logs if the config is off
-    ✓ sends logs on page exit with navigator
-    ✓ sends logs on page exit without navigator
-    ✓ does not send logs on page exit if config is off
-
-
-  45 passing (954ms)
-  1 pending
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pnpm <span class="nt">--dir</span> packages/flagon-userale <span class="nb">test</span>
 </code></pre></div></div>
 
-<p>Followed by e2e tests via playwright that runs in a headed browser. Note that interacting with the headed browser may contaminate test results. Unfortanutely, the browser plugin requires playwright to run with a headed browser at this time. Any failing tests will also be logged in the terminal. If there are failing tests, please consider <a href="https://github.com/apache/flagon-useralejs/issues">opening an issue in Github</a>.</p>
+<p>Example output:</p>
 
-<p>Further instructions can be found in our <a href="https://github.com/apache/flagon-useralejs/blob/master/README.md">README</a></p>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PASS test/spec/auth.spec.ts
+PASS test/spec/headers.spec.ts
+PASS test/spec/getInitialSettings.spec.ts
+PASS test/spec/configure.spec.ts
+PASS test/spec/attachHandlers.spec.ts
+PASS test/spec/sendLogs.spec.ts
+PASS test/spec/exporters.spec.ts
+PASS test/spec/packageLogs.spec.ts
+PASS test/spec/main.spec.ts
+
+Test Suites: 9 passed, 9 total
+Tests:       1 skipped, 103 passed, 104 total
+</code></pre></div></div>
+
+<h3 id="run-end-to-end-tests-playwright">Run End-to-End Tests (<code class="language-plaintext highlighter-rouge">Playwright</code>)</h3>
+
+<p>From <code class="language-plaintext highlighter-rouge">products/userale</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pnpm <span class="nb">test</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="code-formatting--linting">Code Formatting &amp; Linting</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pnpm format
+pnpm lint
+</code></pre></div></div>
+
+<hr />
 
 <h2 id="contributing">Contributing</h2>
 
-<p>Contributions are welcome!  See the <a href="https://github.com/apache/flagon-useralejs/blob/master/CONTRIBUTING.md">contribution guide</a> for more information.</p>
+<p>Contributions are welcome! See the <a href="/docs/contributing">Contributing Guide</a> for more information.</p>
 
   </div>
 </div>

@@ -119,7 +119,7 @@
   
     <div class="ui inverted bulleted list docs-list">
       
-        <a class="item" href="/docs/distill/">Installation</a>
+        <a class="item" href="/docs/distill/">Getting Started & API Reference</a>
       
     </div>
   </div>
@@ -129,30 +129,75 @@
   </div>
   <div class="docs-content">
     <h2 class="ui header">Contributing</h2>
-    <p>First, thank you for contributing to Apache Flagon!</p>
+    <p>First, thank you for contributing to <strong>Apache Flagon</strong>!</p>
 
-<p>There are certain procedures that must be followed for all contributions. These procedures are necessary to allow us to allocate resources for reviewing and testing your contribution, as well as to communicate effectively with you during the review process.</p>
+<p>All Apache Flagon components (<strong>UserALE.js</strong>, <strong>UserALE Browser Extension</strong>, <strong>Distill</strong>, <strong>Protobuf schemas</strong>, and the <strong>Project Website</strong>) are maintained in the unified <a href="https://github.com/apache/flagon"><code class="language-plaintext highlighter-rouge">apache/flagon</code></a> monorepo.</p>
 
-<p>See individual product guides for product-specific information on getting started as a contributor, setup and testing, code style, etc.</p>
+<hr />
 
-<p>To report a bug or other issue, simply create an issue in Giithub, as described in Step 1 below.</p>
+<h3 id="1-open-or-claim-an-issue-on-github">1. Open or Claim an Issue on GitHub</h3>
 
-<h4 id="1-create-an-issue-in-github">1. Create an issue in Github</h4>
+<p>All changes to Apache Flagon should correspond to a <a href="https://github.com/apache/flagon/issues">GitHub Issue</a> so work can be discussed and tracked transparently.</p>
 
-<p>All changes to Apache Flagon must have a corresponding issue in <a href="https://github.com/apache?q=flagon">GitHub</a> so the change can be properly tracked.  If you do not already have an account on Github, you will need to create one before creating your new issue.</p>
+<hr />
 
-<h4 id="2-make-and-test-your-changes-locally">2. Make and test your changes locally</h4>
+<h3 id="2-set-up-your-local-development-environment">2. Set Up Your Local Development Environment</h3>
 
-<p>The Apache Flagon source code is maintained in <a href="https://gitbox.apache.org/repos/asf?s=flagon">several git repositories</a> hosted by Apache.  These repositories are mirrored and more easily available <a href="https://github.com/apache?q=flagon">on GitHub</a>.  To make your changes, fork the appropriate GitHub repository and make commits to a topic branch in your fork.  Commits should be made in logical units:</p>
-<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   git commit <span class="nt">-S</span> <span class="nt">-m</span> <span class="s2">"[FLAGON-123] High-level message describing the changes."</span>
+<p>Clone the repository and create a topic branch from <code class="language-plaintext highlighter-rouge">master</code>:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/apache/flagon.git
+<span class="nb">cd </span>flagon
+git checkout <span class="nt">-b</span> feat/your-feature-name
 </code></pre></div></div>
-<p>Note that your commits should be verifiable; each commit should be verified with a PGP certificate. The easiest way to do this is to create a PGP signature with <a href="https://www.gnupg.org/">GnuPG</a>, register it with you GitHub account and <a href="https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work">configure git</a> to use this signature when committing.</p>
 
-<p>Avoid commits which cover multiple, distinct goals that could (and should) be handled separately.  If you do not already have an account on JIRA, you will need to create one to claim an issue, discuss development, or report results.</p>
+<h4 id="option-a-nix-flake-recommended">Option A: Nix Flake (Recommended)</h4>
+<p>If you use <a href="https://nixos.org/">Nix</a> with flakes enabled, run:</p>
 
-<h4 id="3-submit-your-changes-via-a-pull-request-on-github">3. Submit your changes via a pull request on GitHub</h4>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nix develop
+</code></pre></div></div>
 
-<p>Once your changes are ready, submit them by creating a pull request for the corresponding topic branch you created when you began working on your changes.  The core team will then review your changes and, if they pass review, your changes will be merged into the primary Apache-hosted repos.</p>
+<p>This provides Node.js, <code class="language-plaintext highlighter-rouge">pnpm</code>, TypeScript, Python 3, <code class="language-plaintext highlighter-rouge">buf</code>, and <code class="language-plaintext highlighter-rouge">lefthook</code> git hooks automatically.</p>
+
+<h4 id="option-b-manual-toolchain-setup">Option B: Manual Toolchain Setup</h4>
+<ul>
+  <li><strong>UserALE (<code class="language-plaintext highlighter-rouge">products/userale</code>)</strong>: Node.js <code class="language-plaintext highlighter-rouge">&gt;= 20.x</code> and <code class="language-plaintext highlighter-rouge">pnpm &gt;= 10.x</code></li>
+  <li><strong>Distill (<code class="language-plaintext highlighter-rouge">products/distill</code>)</strong>: Python <code class="language-plaintext highlighter-rouge">&gt;= 3.8</code> and <code class="language-plaintext highlighter-rouge">poetry</code> (or <code class="language-plaintext highlighter-rouge">uv</code>)</li>
+  <li><strong>Protobuf (<code class="language-plaintext highlighter-rouge">proto/</code>)</strong>: <a href="https://buf.build/docs/installation"><code class="language-plaintext highlighter-rouge">buf</code> CLI</a></li>
+</ul>
+
+<hr />
+
+<h3 id="3-build--test-your-changes">3. Build &amp; Test Your Changes</h3>
+
+<h4 id="useralejs--browser-extension-productsuserale">UserALE.js &amp; Browser Extension (<code class="language-plaintext highlighter-rouge">products/userale</code>)</h4>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>products/userale
+pnpm <span class="nb">install
+</span>pnpm build
+pnpm <span class="nt">--dir</span> packages/flagon-userale <span class="nb">test
+</span>pnpm format
+pnpm lint
+</code></pre></div></div>
+
+<h4 id="distill-productsdistill">Distill (<code class="language-plaintext highlighter-rouge">products/distill</code>)</h4>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>products/distill
+poetry <span class="nb">install</span> <span class="nt">--all-groups</span>
+poetry run pytest
+</code></pre></div></div>
+
+<h4 id="protobuf-schemas-proto">Protobuf Schemas (<code class="language-plaintext highlighter-rouge">proto/</code>)</h4>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>buf lint
+buf generate
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="4-submit-a-pull-request-on-github">4. Submit a Pull Request on GitHub</h3>
+
+<ol>
+  <li>Ensure every new source file includes the standard Apache-2.0 license header.</li>
+  <li>Commit your changes in logical units with pre-commit hooks enabled (do not pass <code class="language-plaintext highlighter-rouge">--no-verify</code>).</li>
+  <li>Open a Pull Request against <a href="https://github.com/apache/flagon/pulls"><code class="language-plaintext highlighter-rouge">apache/flagon</code></a> referencing the issue number (e.g. <code class="language-plaintext highlighter-rouge">Closes #123</code>).</li>
+</ol>
 
   </div>
 </div>

@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Getting Started</title>
-  <meta name="description" content="Apache UserALE.js is the UserALE client for DOM and JavaScript-based applications. It automatically attaches event handlers, is configurable through HTML5 da...">
+  <meta name="description" content="Apache Flagon UserALE.js is the client-side instrumentation library for DOM and JavaScript applications. It automatically attaches event handlers, is configu...">
 
   <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
   <script src="/assets/jquery.min.js"></script>
@@ -119,7 +119,7 @@
   
     <div class="ui inverted bulleted list docs-list">
       
-        <a class="item" href="/docs/distill/">Installation</a>
+        <a class="item" href="/docs/distill/">Getting Started & API Reference</a>
       
     </div>
   </div>
@@ -129,183 +129,210 @@
   </div>
   <div class="docs-content">
     <h2 class="ui header">Getting Started</h2>
-    <p><a href="https://github.com/apache/flagon-useralejs">Apache UserALE.js</a> is the UserALE client for DOM and JavaScript-based applications.  It automatically attaches event handlers, is configurable through HTML5 data parameters or a JS API, and logs every user interaction on a web page, including rich JS single-page apps. You can choose to include UserALE.js directly in your project to track how users engage with it, or if you’re interested in generating logs from any webpage, you can try out our web extension that injects UserALE.js into every webpage.</p>
+    <p><a href="https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale">Apache Flagon UserALE.js</a> is the client-side instrumentation library for DOM and JavaScript applications. It automatically attaches event handlers, is configurable through HTML5 <code class="language-plaintext highlighter-rouge">data-*</code> attributes or a JavaScript/TypeScript API, and logs user interactions across web pages and single-page applications (SPAs) with zero runtime dependencies.</p>
 
-<p><em>Note:</em> Work on UserALE.js’ documentation is ongoing.  Contributions are welcome. To get involved, see our <a href="/docs/contributing">Contributing</a> guide.</p>
-<h2 id="include-useralejs-in-your-project">Include UserALE.js in your project</h2>
+<hr />
 
-<p>To start logging with Apache UserALE.js, you can include our script directly in your project. More details can be found in our <a href="https://github.com/apache/flagon-useralejs/blob/master/README.md">README</a>. You can use our <a href="/docs/useralejs/build">build process</a> to create our script, use a sample in our <a href="https://github.com/apache/flagon-useralejs/tree/master/build">repos</a>, or pull our scripts from <a href="https://www.npmjs.com/package/flagon-userale">npm</a>.</p>
+<h2 id="include-useralejs-in-your-project">Include UserALE.js in Your Project</h2>
 
-<p>To include UserALE.js in a specific project, you’ll need to deploy a version of our minified UserALE.js script in an accessible location into your project:</p>
+<p>Install <code class="language-plaintext highlighter-rouge">flagon-userale</code> from <a href="https://www.npmjs.com/package/flagon-userale">npm</a>:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install flagon-userale
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install </span>flagon-userale
+<span class="c"># or</span>
+pnpm add flagon-userale
 </code></pre></div></div>
 
-<h3 id="include-useralejs-as-a-module">Include UserALE.js as a <code class="language-plaintext highlighter-rouge">module</code>:</h3>
+<h3 id="1-es-module--bundler-import-esm">1. ES Module / Bundler Import (<code class="language-plaintext highlighter-rouge">ESM</code>)</h3>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import * as userale from 'flagon-userale';
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">userale</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">flagon-userale</span><span class="dl">'</span><span class="p">;</span>
 
-or
-
-const userale = require('flagon-userale');
+<span class="nx">userale</span><span class="p">.</span><span class="nx">options</span><span class="p">({</span>
+  <span class="na">url</span><span class="p">:</span> <span class="dl">'</span><span class="s1">http://localhost:8000</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">toolName</span><span class="p">:</span> <span class="dl">'</span><span class="s1">my-web-app</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">toolVersion</span><span class="p">:</span> <span class="dl">'</span><span class="s1">1.0.0</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">logDetails</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+<span class="p">});</span>
 </code></pre></div></div>
 
-<p>Our <a href="https://github.com/apache/flagon-useralejs/tree/master/example/webpackUserAleExample">webpack example</a> illustrates this use-case.</p>
+<h3 id="2-script-tag-iife">2. Script Tag (<code class="language-plaintext highlighter-rouge">IIFE</code>)</h3>
 
-<h3 id="include-useralejs-as-a-script-tag">Include UserALE.js as a <code class="language-plaintext highlighter-rouge">script-tag</code>:</h3>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"./node_modules/flagon-userale/build/userale-2.4.0.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script
+  </span><span class="na">src=</span><span class="s">"./node_modules/flagon-userale/build/main.global.js"</span>
+  <span class="na">data-url=</span><span class="s">"http://localhost:8000/"</span>
+  <span class="na">data-tool=</span><span class="s">"my-web-app"</span>
+  <span class="na">data-version=</span><span class="s">"1.0.0"</span>
+<span class="nt">&gt;&lt;/script&gt;</span>
 </code></pre></div></div>
 
-<p>Our <a href="https://github.com/apache/flagon-useralejs/tree/master/example">script tag example</a> illustrates this use-case</p>
+<h3 id="3-opentelemetry-collector-otlpjson">3. OpenTelemetry Collector (<code class="language-plaintext highlighter-rouge">OTLP/JSON</code>)</h3>
 
-<p>If you include UserALE.js as a <code class="language-plaintext highlighter-rouge">script-tag</code>, consider installing via npm as a development dependency:</p>
+<p>UserALE.js natively exports OpenTelemetry Logs (<code class="language-plaintext highlighter-rouge">ExportLogsServiceRequest</code> over HTTP/JSON) without requiring <code class="language-plaintext highlighter-rouge">@opentelemetry/*</code> packages:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install --save-dev flagon-userale
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script
+  </span><span class="na">src=</span><span class="s">"./node_modules/flagon-userale/build/main.global.js"</span>
+  <span class="na">data-exporter=</span><span class="s">"otlp"</span>
+  <span class="na">data-otlp-endpoint=</span><span class="s">"http://localhost:4318/v1/logs"</span>
+  <span class="na">data-tool=</span><span class="s">"checkout-web"</span>
+<span class="nt">&gt;&lt;/script&gt;</span>
 </code></pre></div></div>
 
-<h3 id="include-useralejs-via-a-cdn">Include UserALE.js via a CDN:</h3>
+<p>Try the full-stack <a href="https://github.com/apache/flagon/tree/master/products/userale/example/otel-demo">OpenTelemetry + Grafana + Loki + Tempo Demo</a> with <code class="language-plaintext highlighter-rouge">docker compose up -d</code>!</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://cdn.jsdelivr.net/npm/flagon-userale@2.4.0/build/userale-2.4.0.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
-</code></pre></div></div>
+<hr />
 
-<p>We also support a <a href="https://github.com/apache/flagon-useralejs/tree/master/src/UserALEWebExtension">WebExtension</a> that can be added to your browser in developer mode. Follow the link for instructions.</p>
+<h2 id="configuration-options">Configuration Options</h2>
 
-<p>Once UserALE.js is installed in your project, your application will start generating logs automatically.</p>
-
-<h2 id="configure-useralejs">Configure UserALE.js</h2>
-
-<p>UserALE.js is designed to be easily configured to fit your use case. In <code class="language-plaintext highlighter-rouge">script-tag</code> deployment, use HTML data parameters to pass configuration options to the library.</p>
-
-<p>For example, one thing you’ll need to do is set the URL (location) of your minified UserALE.js script:</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/path/to/userale-2.4.0.min.js"</span> <span class="na">data-url=</span><span class="s">"http://yourLoggingUrl"</span><span class="nt">&gt;&lt;/script&gt;</span>
-</code></pre></div></div>
-
-<p>The complete list of configurable options is:</p>
+<p>All options can be configured via HTML <code class="language-plaintext highlighter-rouge">data-*</code> attributes on the <code class="language-plaintext highlighter-rouge">&lt;script&gt;</code> tag or programmatically via <code class="language-plaintext highlighter-rouge">userale.options({...})</code>:</p>
 
 <table>
   <thead>
     <tr>
-      <th>Param</th>
+      <th>JS Option</th>
+      <th>Script <code class="language-plaintext highlighter-rouge">data-*</code> Attribute</th>
       <th>Description</th>
       <th>Default</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>url</td>
-      <td>Logging URL</td>
-      <td>http://localhost:8000</td>
+      <td><code class="language-plaintext highlighter-rouge">url</code></td>
+      <td><code class="language-plaintext highlighter-rouge">data-url</code></td>
+      <td>Logging endpoint URL (<code class="language-plaintext highlighter-rouge">http://</code>, <code class="language-plaintext highlighter-rouge">https://</code>, <code class="language-plaintext highlighter-rouge">ws://</code>, <code class="language-plaintext highlighter-rouge">wss://</code>)</td>
+      <td><code class="language-plaintext highlighter-rouge">'http://localhost:8000'</code></td>
     </tr>
     <tr>
-      <td>autostart</td>
-      <td>Should UserALE start on page load</td>
-      <td>true</td>
+      <td><code class="language-plaintext highlighter-rouge">autostart</code></td>
+      <td><code class="language-plaintext highlighter-rouge">data-autostart</code></td>
+      <td>Start capturing and sending logs automatically on load</td>
+      <td><code class="language-plaintext highlighter-rouge">true</code></td>
     </tr>
     <tr>
-      <td>transmitInterval</td>
-      <td>Delay between transmit checks</td>
-      <td>5000 (ms)</td>
+      <td><code class="language-plaintext highlighter-rouge">transmitInterval</code></td>
+      <td><code class="language-plaintext highlighter-rouge">data-interval</code></td>
+      <td>Interval between batch transmit checks (ms)</td>
+      <td><code class="language-plaintext highlighter-rouge">5000</code></td>
     </tr>
     <tr>
-      <td>logCountThreshold</td>
-      <td>Minimum number of logs to send</td>
-      <td>5</td>
+      <td><code class="language-plaintext highlighter-rouge">logCountThreshold</code></td>
+      <td><code class="language-plaintext highlighter-rouge">data-threshold</code></td>
+      <td>Minimum queued logs required before interval send</td>
+      <td><code class="language-plaintext highlighter-rouge">5</code></td>
     </tr>
     <tr>
-      <td>userId</td>
+      <td><code class="language-plaintext highlighter-rouge">userId</code></td>
+      <td><code class="language-plaintext highlighter-rouge">data-user</code></td>
       <td>User identifier</td>
-      <td>null</td>
+      <td><code class="language-plaintext highlighter-rouge">null</code></td>
     </tr>
     <tr>
-      <td>sessionId</td>
+      <td><code class="language-plaintext highlighter-rouge">sessionId</code></td>
+      <td><code class="language-plaintext highlighter-rouge">data-session</code></td>
       <td>Session identifier</td>
-      <td>null</td>
+      <td>Auto-generated</td>
     </tr>
     <tr>
-      <td>version</td>
-      <td>Application version identifier</td>
-      <td>null</td>
+      <td><code class="language-plaintext highlighter-rouge">toolName</code></td>
+      <td><code class="language-plaintext highlighter-rouge">data-tool</code></td>
+      <td>Application / tool name (<code class="language-plaintext highlighter-rouge">service.name</code> in OTLP)</td>
+      <td><code class="language-plaintext highlighter-rouge">null</code></td>
     </tr>
     <tr>
-      <td>logDetails</td>
-      <td>Toggle detailed logs (keys pressed and input/change values)</td>
-      <td>false</td>
+      <td><code class="language-plaintext highlighter-rouge">toolVersion</code> / <code class="language-plaintext highlighter-rouge">version</code></td>
+      <td><code class="language-plaintext highlighter-rouge">data-version</code></td>
+      <td>Application semantic version (<code class="language-plaintext highlighter-rouge">service.version</code> in OTLP)</td>
+      <td><code class="language-plaintext highlighter-rouge">null</code></td>
     </tr>
     <tr>
-      <td>resolution</td>
-      <td>Delay between instances of high frequency logs (mouseover, scroll, etc.)</td>
-      <td>500 (ms)</td>
+      <td><code class="language-plaintext highlighter-rouge">logDetails</code></td>
+      <td><code class="language-plaintext highlighter-rouge">data-log-details</code></td>
+      <td>Include detailed event payloads (e.g. key codes, input values; password inputs are automatically masked)</td>
+      <td><code class="language-plaintext highlighter-rouge">false</code></td>
     </tr>
     <tr>
-      <td>userFromParams</td>
-      <td>Query param in the page URL to fetch userId from</td>
-      <td>null</td>
+      <td><code class="language-plaintext highlighter-rouge">resolution</code></td>
+      <td><code class="language-plaintext highlighter-rouge">data-resolution</code></td>
+      <td>Aggregation interval for high-frequency events (<code class="language-plaintext highlighter-rouge">mouseover</code>, <code class="language-plaintext highlighter-rouge">scroll</code>, etc.) in ms</td>
+      <td><code class="language-plaintext highlighter-rouge">500</code></td>
     </tr>
     <tr>
-      <td>toolName</td>
-      <td>Name of tool being logged</td>
-      <td>null</td>
+      <td><code class="language-plaintext highlighter-rouge">userFromParams</code></td>
+      <td><code class="language-plaintext highlighter-rouge">data-user-from-params</code></td>
+      <td>URL query parameter to extract <code class="language-plaintext highlighter-rouge">userId</code> from</td>
+      <td><code class="language-plaintext highlighter-rouge">null</code></td>
     </tr>
     <tr>
-      <td>authHeader</td>
-      <td>Authorization header to be passed to logging endpoint</td>
-      <td>null</td>
+      <td><code class="language-plaintext highlighter-rouge">authHeader</code></td>
+      <td><code class="language-plaintext highlighter-rouge">data-auth</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Authorization</code> header string or callback</td>
+      <td><code class="language-plaintext highlighter-rouge">null</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">apiKey</code></td>
+      <td><code class="language-plaintext highlighter-rouge">data-api-key</code></td>
+      <td>Value sent in the <code class="language-plaintext highlighter-rouge">x-api-key</code> HTTP header</td>
+      <td><code class="language-plaintext highlighter-rouge">null</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">exporterFormat</code> / <code class="language-plaintext highlighter-rouge">exporterType</code></td>
+      <td><code class="language-plaintext highlighter-rouge">data-exporter</code></td>
+      <td>Wire format: <code class="language-plaintext highlighter-rouge">'userale-json'</code> (default), <code class="language-plaintext highlighter-rouge">'otlp-json'</code> (<code class="language-plaintext highlighter-rouge">'otlp'</code>), <code class="language-plaintext highlighter-rouge">'proto-json'</code>, or <code class="language-plaintext highlighter-rouge">'ws'</code></td>
+      <td><code class="language-plaintext highlighter-rouge">'userale-json'</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">otlpEndpoint</code></td>
+      <td><code class="language-plaintext highlighter-rouge">data-otlp-endpoint</code></td>
+      <td>OpenTelemetry Collector HTTP logs endpoint (automatically appends <code class="language-plaintext highlighter-rouge">/v1/logs</code> if given a base origin)</td>
+      <td><code class="language-plaintext highlighter-rouge">null</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">headers</code></td>
+      <td>—</td>
+      <td>Custom HTTP headers <code class="language-plaintext highlighter-rouge">Record&lt;string, string&gt;</code> merged into every request</td>
+      <td><code class="language-plaintext highlighter-rouge">null</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">exporter</code></td>
+      <td>—</td>
+      <td>Custom <code class="language-plaintext highlighter-rouge">LogExporter</code> instance implementing <code class="language-plaintext highlighter-rouge">export(logs, options)</code></td>
+      <td><code class="language-plaintext highlighter-rouge">null</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">traceContext</code></td>
+      <td>—</td>
+      <td>Optional <code class="language-plaintext highlighter-rouge">() =&gt; ({ traceId, spanId })</code> callback for W3C TraceContext correlation</td>
+      <td><code class="language-plaintext highlighter-rouge">null</code></td>
     </tr>
   </tbody>
 </table>
 
-<p><strong>NOTE</strong> These options are also available through our <a href="/docs/useralejs/API">API</a>, which support deploying UserALE.js as an NPM <code class="language-plaintext highlighter-rouge">module.</code></p>
+<p>See the <a href="/docs/useralejs/API">UserALE.js API Reference</a> for full method and exporter documentation.</p>
 
-<p>See our page on <a href="/docs/useralejs/build">Build and Test</a> for UserALE.js to learn how to build your own minified version of the UserALE.js script, or you check-out a pre-built script with default parameters in our <a href="https://github.com/apache/flagon-useralejs/tree/master/build">repo</a>.</p>
+<hr />
 
-<p>Use our <a href="https://github.com/apache/flagon-useralejs/tree/master/example">example test utility</a> to experiment with script tag parameters.</p>
+<h2 id="deploying-the-useralejs-browser-extension">Deploying the UserALE.js Browser Extension</h2>
 
-<h2 id="deploying-the-useralejs-webextension">Deploying the UserALE.js WebExtension</h2>
-
-<p>If you’re interested in using our Web Extension to log user activity across all pages they visit, try our web extension, which injects UserALE.js into any web page your client(s) navigate to. This option is perfect for testing and research. The web extension builds through the same <a href="/docs/useralejs/build">build pipeline</a> as UserALE.js. You can also use pre-built extension files in our <a href="https://github.com/apache/flagon-useralejs/tree/master/build">repo</a>.</p>
-
-<p>When you’re ready to deploy the UserALE.js web extension, follow the instructions below:</p>
+<p>The <a href="https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale-ext">UserALE Browser Extension</a> is a Manifest V3 extension built with Plasmo that injects UserALE.js into pages matching a configurable URL allowlist.</p>
 
 <ol>
-  <li>Load the web extension into your browser.
-    <ol>
-      <li>Firefox
-        <ol>
-          <li>Open Firefox</li>
-          <li>Enter about:debugging into the URL bar and press enter</li>
-          <li>Check the box to ‘Enable add-on debugging’</li>
-          <li>Press the ‘Load Temporary Add-on’ button</li>
-          <li>Navigate to the root of the web extension directory (e.g. ‘build/UserAleWebExtension’)</li>
-          <li>Press Open, and confirm that ‘User ALE Extension’ appears in the list</li>
-          <li>You may now navigate to a web page to inject the User ALE script!</li>
-        </ol>
-      </li>
-      <li>Chrome
-        <ol>
-          <li>Open Chrome</li>
-          <li>Enter chrome://extensions into the URL bar and press enter</li>
-          <li>Check the ‘Developer mode’ box</li>
-          <li>Press the ‘Load unpacked extension’ button</li>
-          <li>Navigate to the root of the build directory (e.g. ‘build/UserAleWebExtension’)</li>
-          <li>Press Ok, and confirm that ‘UserALE Extension’ appears in the list</li>
-          <li>You may now navigate to a web page to inject the User ALE script!</li>
-        </ol>
-      </li>
-    </ol>
+  <li>Build the workspace from <code class="language-plaintext highlighter-rouge">products/userale</code>:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pnpm <span class="nb">install
+</span>pnpm build
+</code></pre></div>    </div>
   </li>
+  <li>Load the extension in your browser:
+    <ul>
+      <li><strong>Chrome / Edge</strong>: Open <code class="language-plaintext highlighter-rouge">chrome://extensions/</code>, enable <strong>Developer mode</strong>, click <strong>Load unpacked</strong>, and select <code class="language-plaintext highlighter-rouge">products/userale/packages/flagon-userale-ext/build/chrome-mv3-prod/</code> (or <code class="language-plaintext highlighter-rouge">chrome-mv3-dev/</code> when running <code class="language-plaintext highlighter-rouge">pnpm dev</code>).</li>
+      <li><strong>Firefox</strong>: Open <code class="language-plaintext highlighter-rouge">about:debugging</code>, select <strong>This Firefox</strong>, click <strong>Load Temporary Add-on</strong>, and select <code class="language-plaintext highlighter-rouge">manifest.json</code> in <code class="language-plaintext highlighter-rouge">products/userale/packages/flagon-userale-ext/build/firefox-mv3-prod/</code>.</li>
+    </ul>
+  </li>
+  <li>Open the extension <strong>Options</strong> page to configure the <strong>Logging Endpoint</strong>, <strong>Exporter Format</strong> (<code class="language-plaintext highlighter-rouge">UserALE JSON</code>, <code class="language-plaintext highlighter-rouge">OpenTelemetry (OTLP/JSON)</code>, or <code class="language-plaintext highlighter-rouge">Protobuf v1 JSON</code>), <strong>URL Allowlist</strong>, <strong>HTTP Basic Auth</strong>, <strong>Custom HTTP Headers (JSON)</strong>, or <strong>OAuth PKCE</strong> credentials.</li>
 </ol>
 
-<p>You can set options for the web extension in your browser by opening the extensions page, finding the extension, and choosing either “Preferences” for Firefox, or “Options” for Chrome.</p>
-
-<p>You can also find more instructions in our <a href="https://github.com/apache/flagon-useralejs/tree/master/src/UserALEWebExtension">README</a>.</p>
+<hr />
 
 <h2 id="contributing">Contributing</h2>
 
-<p>Contributions are welcome!  Simply <a href="https://github.com/apache/flagon-useralejs/issues">submit an issue</a> for problems 
-you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
-incorporate it into UserALE.js. We also love Pull Requests!</p>
+<p>Contributions are welcome! See our <a href="/docs/contributing">Contributing Guide</a> or open an issue on <a href="https://github.com/apache/flagon/issues">GitHub</a>.</p>
 
   </div>
 </div>

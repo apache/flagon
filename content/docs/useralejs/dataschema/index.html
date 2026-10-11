@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>UserALE.js&#39; Data Schema</title>
-  <meta name="description" content="This guide describes the structure of content of Apache UserALE.js logs, including: which behaviors UserALE.js listens to; which meta data UserALE.js attache...">
+  <meta name="description" content="This guide describes the structure of Apache Flagon UserALE.js logs, including: The in-memory and default flat JSON schema (&#39;userale-json&#39;) The OpenTelemetry...">
 
   <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
   <script src="/assets/jquery.min.js"></script>
@@ -119,7 +119,7 @@
   
     <div class="ui inverted bulleted list docs-list">
       
-        <a class="item" href="/docs/distill/">Installation</a>
+        <a class="item" href="/docs/distill/">Getting Started & API Reference</a>
       
     </div>
   </div>
@@ -129,232 +129,131 @@
   </div>
   <div class="docs-content">
     <h2 class="ui header">UserALE.js' Data Schema</h2>
-    <p>This guide describes the structure of content of <a href="https://github.com/apache/flagon-useralejs">Apache UserALE.js</a> 
-logs, including:</p>
+    <p>This guide describes the structure of <a href="https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale">Apache Flagon UserALE.js</a> logs, including:</p>
 <ul>
-  <li>which behaviors UserALE.js listens to;</li>
-  <li>which meta data UserALE.js attaches to logs, for context:</li>
-  <li>different types of UserALE.js logs, and their usage.</li>
+  <li>The in-memory and default flat JSON schema (<code class="language-plaintext highlighter-rouge">'userale-json'</code>)</li>
+  <li>The OpenTelemetry OTLP/JSON export schema (<code class="language-plaintext highlighter-rouge">'otlp-json'</code>)</li>
+  <li>The Protobuf v1 canonical JSON export schema (<code class="language-plaintext highlighter-rouge">'proto-json'</code>, <a href="https://github.com/apache/flagon/blob/master/proto/apache/flagon/userale/v1/log.proto"><code class="language-plaintext highlighter-rouge">proto/apache/flagon/userale/v1/log.proto</code></a>)</li>
 </ul>
 
-<h2 id="useralejs-logs">UserALE.js Logs</h2>
+<p>All three formats are natively supported by <strong>Apache Flagon Distill</strong> (<code class="language-plaintext highlighter-rouge">distill.schemas.userale.extract_logs</code> and <code class="language-plaintext highlighter-rouge">UserAleSchema</code>).</p>
 
-<p>UserALE.js logs, by default, contain a lot more data than other business analytics products because it is powerful enough for <em>workflow analysis</em>.</p>
+<hr />
 
-<p>Workflow analysis is about understanding the complex interdependency between elements and behaviors within and across 
-pages. Workflow analysis at this level is really crucial for understanding:</p>
+<h2 id="1-standard-userale-flat-json-schema-exporterformat-userale-json">1. Standard UserALE Flat JSON Schema (<code class="language-plaintext highlighter-rouge">exporterFormat: 'userale-json'</code>)</h2>
+
+<p>By default, UserALE.js packages each interaction as a flat JSON object so <code class="language-plaintext highlighter-rouge">userale.addCallbacks(...)</code> filters and mappers can inspect or transform fields with zero nesting overhead.</p>
+
+<h3 id="raw-interaction-log-logtype-raw">Raw Interaction Log (<code class="language-plaintext highlighter-rouge">logType: 'raw'</code>)</h3>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"target"</span><span class="p">:</span><span class="w"> </span><span class="s2">"button#test_button"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"path"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"button#test_button"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"div.container"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"body"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"html"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"#document"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Window"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"pageUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8000/"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"pageTitle"</span><span class="p">:</span><span class="w"> </span><span class="s2">"UserALE - Example Page"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"pageReferrer"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"browser"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"browser"</span><span class="p">:</span><span class="w"> </span><span class="s2">"firefox"</span><span class="p">,</span><span class="w"> </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"131.0.0"</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"userAgent"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:131.0) Gecko/20100101 Firefox/131.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"clientTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1729658103797</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"microTime"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.42</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">66</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">220</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"scrnRes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"width"</span><span class="p">:</span><span class="w"> </span><span class="mi">1920</span><span class="p">,</span><span class="w"> </span><span class="nl">"height"</span><span class="p">:</span><span class="w"> </span><span class="mi">915</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"click"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"logType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"raw"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"userAction"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"clicks"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nl">"ctrl"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nl">"alt"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nl">"shift"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nl">"meta"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"me"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"toolVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.4.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"toolName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Apache UserALE Example"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"useraleVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.4.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"sessionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"session_1729657762020"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"httpSessionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"057109eed2c0b107476731f201b6d63d"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"browserSessionId"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test_button"</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"style"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="interval-summary-log-logtype-interval">Interval Summary Log (<code class="language-plaintext highlighter-rouge">logType: 'interval'</code>)</h3>
+
+<p>High-frequency events (<code class="language-plaintext highlighter-rouge">mouseover</code>, <code class="language-plaintext highlighter-rouge">scroll</code>, etc.) are aggregated over <code class="language-plaintext highlighter-rouge">resolution</code> ms windows into <code class="language-plaintext highlighter-rouge">interval</code> logs with <code class="language-plaintext highlighter-rouge">startTime</code>, <code class="language-plaintext highlighter-rouge">endTime</code>, <code class="language-plaintext highlighter-rouge">duration</code>, and <code class="language-plaintext highlighter-rouge">count</code>:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"target"</span><span class="p">:</span><span class="w"> </span><span class="s2">"div.feed"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"path"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"div.feed"</span><span class="p">,</span><span class="w"> </span><span class="s2">"body"</span><span class="p">,</span><span class="w"> </span><span class="s2">"html"</span><span class="p">],</span><span class="w">
+  </span><span class="nl">"pageUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://apache.org/"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"pageTitle"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Welcome to The Apache Software Foundation!"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"pageReferrer"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"browser"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"browser"</span><span class="p">:</span><span class="w"> </span><span class="s2">"chrome"</span><span class="p">,</span><span class="w"> </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"125.0.0"</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mi">480</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1729720562000</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"endTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1729720562480</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mouseover"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"logType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"interval"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"targetChange"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"typeChange"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"userAction"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"me"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"toolVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.4.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"toolName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Apache UserALE Example"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"useraleVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.4.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"sessionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"session_1727742067433"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"httpSessionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"298926d0ffe8085dc0f7c421dbad9c3a"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"browserSessionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d43400275c1f4f04f1ce74da7d0cd3c8"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="2-opentelemetry-otlpjson-schema-exporterformat-otlp-json">2. OpenTelemetry OTLP/JSON Schema (<code class="language-plaintext highlighter-rouge">exporterFormat: 'otlp-json'</code>)</h2>
+
+<p>When <code class="language-plaintext highlighter-rouge">exporterFormat: 'otlp-json'</code> (or <code class="language-plaintext highlighter-rouge">data-exporter="otlp"</code>) is enabled, <code class="language-plaintext highlighter-rouge">OtlpJsonExporter</code> serializes each batch into an OpenTelemetry <code class="language-plaintext highlighter-rouge">ExportLogsServiceRequest</code> JSON payload:</p>
+
 <ul>
-  <li>how people think about the information on your site or app</li>
-  <li>understanding efficiency in information discovery</li>
-  <li>and for gauging how novices explore pages compared to experts or superusers.</li>
+  <li><strong>Resource Attributes (<code class="language-plaintext highlighter-rouge">resourceLogs[].resource.attributes</code>)</strong>: Constant session/device metadata is hoisted once per batch:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">service.name</code> $\leftarrow$ <code class="language-plaintext highlighter-rouge">toolName</code> (defaults to <code class="language-plaintext highlighter-rouge">"unknown_service:userale"</code>)</li>
+      <li><code class="language-plaintext highlighter-rouge">service.version</code> $\leftarrow$ <code class="language-plaintext highlighter-rouge">toolVersion</code></li>
+      <li><code class="language-plaintext highlighter-rouge">telemetry.sdk.name</code> $\leftarrow$ <code class="language-plaintext highlighter-rouge">"apache-flagon-userale"</code></li>
+      <li><code class="language-plaintext highlighter-rouge">telemetry.sdk.language</code> $\leftarrow$ <code class="language-plaintext highlighter-rouge">"webjs"</code></li>
+      <li><code class="language-plaintext highlighter-rouge">telemetry.sdk.version</code> $\leftarrow$ <code class="language-plaintext highlighter-rouge">useraleVersion</code></li>
+      <li><code class="language-plaintext highlighter-rouge">user_agent.original</code> $\leftarrow$ <code class="language-plaintext highlighter-rouge">userAgent</code></li>
+      <li><code class="language-plaintext highlighter-rouge">browser.name</code>, <code class="language-plaintext highlighter-rouge">browser.version</code> $\leftarrow$ <code class="language-plaintext highlighter-rouge">browser</code></li>
+      <li><code class="language-plaintext highlighter-rouge">session.id</code> $\leftarrow$ <code class="language-plaintext highlighter-rouge">sessionId</code></li>
+      <li><code class="language-plaintext highlighter-rouge">flagon.http_session_id</code>, <code class="language-plaintext highlighter-rouge">flagon.browser_session_id</code></li>
+      <li><code class="language-plaintext highlighter-rouge">screen.width</code>, <code class="language-plaintext highlighter-rouge">screen.height</code> $\leftarrow$ <code class="language-plaintext highlighter-rouge">scrnRes</code></li>
+    </ul>
+  </li>
+  <li><strong>LogRecord Fields (<code class="language-plaintext highlighter-rouge">scopeLogs[].logRecords[]</code>)</strong>:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">timeUnixNano</code> / <code class="language-plaintext highlighter-rouge">observedTimeUnixNano</code>: 64-bit nanosecond string computed with <code class="language-plaintext highlighter-rouge">BigInt</code> (<code class="language-plaintext highlighter-rouge">clientTime * 1_000_000 + subMsNanos</code>)</li>
+      <li><code class="language-plaintext highlighter-rouge">eventName</code>: <code class="language-plaintext highlighter-rouge">"userale.&lt;logType&gt;.&lt;type&gt;"</code> (e.g. <code class="language-plaintext highlighter-rouge">"userale.raw.click"</code>, <code class="language-plaintext highlighter-rouge">"userale.interval.mouseover"</code>)</li>
+      <li><code class="language-plaintext highlighter-rouge">traceId</code> / <code class="language-plaintext highlighter-rouge">spanId</code>: Populated from <code class="language-plaintext highlighter-rouge">log.traceId</code>/<code class="language-plaintext highlighter-rouge">log.spanId</code> or <code class="language-plaintext highlighter-rouge">config.traceContext()</code></li>
+      <li><code class="language-plaintext highlighter-rouge">body</code>: Structured <code class="language-plaintext highlighter-rouge">kvlistValue</code> representation of <code class="language-plaintext highlighter-rouge">log.details</code></li>
+      <li><code class="language-plaintext highlighter-rouge">attributes</code>: <code class="language-plaintext highlighter-rouge">event.name</code>, <code class="language-plaintext highlighter-rouge">url.full</code>, <code class="language-plaintext highlighter-rouge">user.id</code>, <code class="language-plaintext highlighter-rouge">flagon.log_type</code>, <code class="language-plaintext highlighter-rouge">flagon.event_type</code>, <code class="language-plaintext highlighter-rouge">flagon.target</code>, <code class="language-plaintext highlighter-rouge">flagon.path</code> (<code class="language-plaintext highlighter-rouge">arrayValue</code>), <code class="language-plaintext highlighter-rouge">flagon.page_title</code>, <code class="language-plaintext highlighter-rouge">flagon.page_referrer</code>, <code class="language-plaintext highlighter-rouge">flagon.user_action</code>, <code class="language-plaintext highlighter-rouge">flagon.location.x</code>, <code class="language-plaintext highlighter-rouge">flagon.location.y</code>, <code class="language-plaintext highlighter-rouge">flagon.attributes</code>, <code class="language-plaintext highlighter-rouge">flagon.style</code>, and interval metrics (<code class="language-plaintext highlighter-rouge">flagon.count</code>, <code class="language-plaintext highlighter-rouge">flagon.duration_ms</code>, <code class="language-plaintext highlighter-rouge">flagon.start_time_ms</code>, <code class="language-plaintext highlighter-rouge">flagon.end_time_ms</code>)</li>
+    </ul>
+  </li>
 </ul>
 
-<p>In order to do workflow analysis, UserALE.js generates granular data about interactions with page elements.</p>
+<hr />
 
-<p>This is a standard UserALE.js log from our <a href="https://github.com/apache/flagon-useralejs/blob/master/example/index.html">example test utility</a>:</p>
+<h2 id="3-protobuf-v1-canonical-json-schema-exporterformat-proto-json">3. Protobuf v1 Canonical JSON Schema (<code class="language-plaintext highlighter-rouge">exporterFormat: 'proto-json'</code>)</h2>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
-  target: 'button#test_button',
-  path: [
-    'button#test_button',
-    'div.container',
-    'body',
-    'html',
-    '#document',
-    'Window'
-  ],
-  pageUrl: 'http://localhost:8000/',
-  pageTitle: 'UserALE - Example Page',
-  pageReferrer: '',
-  browser: { browser: 'firefox', version: '131.0.0' },
-  clientTime: 1729658103797,
-  microTime: 0,
-  location: { x: 66, y: 220 },
-  scrnRes: { width: 1920, height: 915 },
-  type: 'click',
-  logType: 'raw',
-  userAction: true,
-  details: { clicks: 1, ctrl: false, alt: false, shift: false, meta: false },
-  userId: 'me',
-  toolVersion: '2.3.0',
-  toolName: 'Apache UserALE Example (Custom)',
-  useraleVersion: '2.4.0',
-  sessionId: 'session_1729657762020',
-  httpSessionId: '057109eed2c0b107476731f201b6d63d',
-  browserSessionId: null,
-  attributes: { id: 'test_button' },
-  style: {}
-}
-</code></pre></div></div>
+<p>When <code class="language-plaintext highlighter-rouge">exporterFormat: 'proto-json'</code> is configured, <code class="language-plaintext highlighter-rouge">ProtoJsonExporter</code> serializes each batch into canonical Proto3 JSON conforming to <a href="https://github.com/apache/flagon/blob/master/proto/apache/flagon/userale/v1/log.proto"><code class="language-plaintext highlighter-rouge">proto/apache/flagon/userale/v1/log.proto</code></a> (<code class="language-plaintext highlighter-rouge">apache.flagon.userale.v1.LogBatch</code>), grouping common context into <code class="language-plaintext highlighter-rouge">metadata</code> (<code class="language-plaintext highlighter-rouge">CommonMetadata</code>) and using the <code class="language-plaintext highlighter-rouge">raw</code>, <code class="language-plaintext highlighter-rouge">interval</code>, or <code class="language-plaintext highlighter-rouge">custom</code> <code class="language-plaintext highlighter-rouge">oneof</code> variant on each <code class="language-plaintext highlighter-rouge">UserALELog</code>.</p>
 
-<p>It’s a lot, but it makes sense in context.</p>
+<hr />
 
-<h3 id="useralejs-event-tracking">UserALE.js Event Tracking</h3>
-
-<p>The fields dentify what users do and what they interact with. UserALE.js gets this information from anywhere on a page/app without using a ton of hooks.</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    type: 'click', [this field documents the kind of user behavior observed]
-    target: 'button#test_button', [this field documents the site/app element a user interacted with]
-    path: [  {this is the DOM path to the "target" element, which is critical for disambiguation between elements}
-      'button#test_button',
-      'div.container',
-      'body',
-      'html',
-      '#document',
-      'Window'
-    ]
-
-</code></pre></div></div>
-
-<p>You may want to specially label some of these fields and important elements that. See our guide on <a href="/docs/useralejs/API">the UserALE.js API</a>.</p>
-
-<p>For more information about the kinds of behaviors (event classes) we collect, check out our guide for 
-<a href="/docs/useralejs/modifying">modifying UserALE.js source code</a>.</p>
-
-<h3 id="temporal-handling-in-useralejs">Temporal Handling in UserALE.js</h3>
-
-<p>Time is a very important concept in UserALE.js. Below are the fields related to temporal data capture:</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    clientTime: 1729658103797,    [UserALE.js collects time from the client when a log is generated]
-    microTime: 0,             [When a log is wrtten, we write microtime too, not every database parses it]
-</code></pre></div></div>
-
-<h3 id="useralejs-meta-data">UserALE.js Meta-Data</h3>
-
-<p>You want context? We have all of the things for all of your events:</p>
-
-<h4 id="event-context">Event Context</h4>
-
-<p>Every event has a little nuance, UserALE.js gets it all.</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    details: {
-      clicks: 1,
-      ctrl: false,
-      alt: false,
-      shift: false,
-      meta: false
-    },
-</code></pre></div></div>
-
-<p>You’ll get location of the cursor two for mouseover and click data, too!</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    location: {
-      x: 66,
-      y: 220
-    }
-</code></pre></div></div>
-
-<p><a href="https://github.com/apache/flagon-useralejs/tree/master/build">UserALE.js’ WebExtension</a> is deployed directly 
-into your browser, as a result you’ll get browser events.</p>
-
-<p>Examples are below,you’ll see our details field has some pretty useful data from the browser.</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    details: {
-      active: true,
-      audible: false,
-      autoDiscardable: true,
-      discarded: false,
-      favIconUrl: 'https://apache.org/favicons/favicon-32x32.png',
-      groupId: -1,
-      height: 914,
-      highlighted: true,
-      id: 1852931762,
-      incognito: false,
-      index: 4,
-      lastAccessed: 1729720562214.495,
-      openerTabId: 1852931752,
-      pinned: false,
-      selected: true,
-      status: 'complete',
-      title: 'Welcome to The Apache Software Foundation!',
-      url: 'https://apache.org/',
-      width: 1912,
-      windowId: 1852931606
-    }
-</code></pre></div></div>
-
-<h4 id="pageapp-context">Page/App Context</h4>
-
-<p>If a user clicks on a thing and you know nothing about that thing, you’re toast!</p>
-
-<p>UserALE.js gives a lot context about your page or app. Some are automatically grabbed from the page, some are 
-configurable through our <a href="/docs/useralejs">script tag</a></p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    "toolVersion": "2.4.0", [you can give a semantic versioning of your page or tool]
-    "pageReferrer": "", [grabbed from the page, from which page did your users find your page/app]
-    "toolName": "Apache UserALE.js Example", [give your tool an alis through our script tag]
-    "pageTitle": "UserAleJS - Example Page", [page title grabbed from page]
-    "pageUrl": "file:///.../Apache_Flagon/test/flagon-useralejs/example/index.html" 
-</code></pre></div></div>
-
-<p>To find out more and how to change the context attached to event logs, check out our 
-<a href="/docs/useralejs/modifying">modifying UserALE.js source code</a> guide.</p>
-
-<h4 id="user-context">User Context</h4>
-
-<p>UserALE.js has its own methods for gathering user context, and it can integrate with other methods you might have 
-(e.g., cookies)</p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  sessionId: 'session_1729657762020', [This session ID is unique to a specific page visit (deprecated)]
-  httpSessionId: '057109eed2c0b107476731f201b6d63d', [This ID is unique to the page session]
-  browserSessionId: null, [This ID is unique to the browser session when using the plugin]
-  userId: 'me', [You can also pass a unique userId]
-</code></pre></div></div>
-
-<p>To see how to pass in a userId from a url, check out our <a href="/docs/useralejs">script tag docs</a>.</p>
-
-<p>Other things you might want to do (e.g., cookies) can also be passed to userId via <a href="/docs/useralejs/API">the UserALE.js API</a>.</p>
-
-<h2 id="useralejs-log-types">UserALE.js Log Types</h2>
-
-<p>For the most part, UserALE.js logs are uniform. However, there are some variations based on the type of log.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-### Interval Logs
-
-Interval logs are a experimental feature, that write long sequences of the same event to windows. They capture high resolution data like 'mouseovers' in time-boxed summary windows. 
- 
-Interval logs have a start- and end-time instead of a single, discrete time-stamp.
-
-```html
-{
-    target: 'img.img-responsive center-block visible-home', [where were mouseovers observed within the interval]
-    path: [
-      'img.img-responsive center-block visible-home',
-      'div.main',
-      'header#main-header.container',
-      'body#home',
-      'html',
-      '#document',
-      'Window'
-    ],
-    pageUrl: 'https://apache.org/',
-    pageTitle: 'Welcome to The Apache Software Foundation!',
-    pageReferrer: 'https://www.bing.com/',
-    browser: { browser: 'edge-chromium', version: '130.0.0' },
-    count: 0, [count of disrcete events within the interval] 
-    duration: 67, [duration of interval in ms]
-    startTime: 1729720562466, [begin interval]
-    endTime: 1729720562533, [end interval]
-    type: 'mouseover',
-    logType: 'interval', [as compared to "raw"]
-    targetChange: true,
-    typeChange: false, [were there any other events during the interval?]
-    userAction: false,
-    userId: 'pluginUser',
-    toolVersion: '2.4.0',
-    toolName: 'useralePlugin',
-    useraleVersion: '2.4.0',
-    sessionId: 'session_1727742067433',
-    httpSessionId: '298926d0ffe8085dc0f7c421dbad9c3a',
-    browserSessionId: 'd43400275c1f4f04f1ce74da7d0cd3c8'
-  }
-</code></pre></div></div>
 <h2 id="contributing">Contributing</h2>
 
-<p>Contributions are welcome!  Simply <a href="https://github.com/apache/flagon-useralejs/issues">submit an issue</a> for problems 
-you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
-incorporate it into UserALE.js. We also love Pull Requests!</p>
+<p>Contributions are welcome! See our <a href="/docs/contributing">Contributing Guide</a> or open an issue on <a href="https://github.com/apache/flagon/issues">GitHub</a>.</p>
 
   </div>
 </div>

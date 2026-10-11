@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Modifying UserALE.js Source Code</title>
-  <meta name="description" content="Apache UserALE.js makes it easy for you to capture every user behavior on your webpage or application. But, you might not need all that data.">
+  <meta name="description" content="Apache Flagon UserALE.js makes it easy to capture and customize behavioral telemetry via the runtime JavaScript API (addCallbacks, options, registerExporter)...">
 
   <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
   <script src="/assets/jquery.min.js"></script>
@@ -119,7 +119,7 @@
   
     <div class="ui inverted bulleted list docs-list">
       
-        <a class="item" href="/docs/distill/">Installation</a>
+        <a class="item" href="/docs/distill/">Getting Started & API Reference</a>
       
     </div>
   </div>
@@ -129,135 +129,47 @@
   </div>
   <div class="docs-content">
     <h2 class="ui header">Modifying UserALE.js Source Code</h2>
-    <p><a href="https://github.com/apache/flagon-useralejs">Apache UserALE.js</a> makes it easy for you to capture <em>every</em> user 
-behavior on your webpage or application. But, you might not need all that data.</p>
+    <p><a href="https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale">Apache Flagon UserALE.js</a> makes it easy to capture and customize behavioral telemetry via the runtime <a href="/docs/useralejs/API">JavaScript API</a> (<code class="language-plaintext highlighter-rouge">addCallbacks</code>, <code class="language-plaintext highlighter-rouge">options</code>, <code class="language-plaintext highlighter-rouge">registerExporter</code>). When you need deeper changes, the TypeScript source code under <code class="language-plaintext highlighter-rouge">products/userale/packages/flagon-userale/src/</code> is modular and straightforward to extend.</p>
 
-<p>UserALE.js also makes it easy for your to manage, and curate your logging scheme.</p>
+<hr />
 
-<p>This guide walks you through how to modify UserALE.js log data and behavior through source code modification.</p>
-
-<h2 id="modifying-useralejs-logs-via-source-code-modifications">Modifying UserALE.js Logs via Source Code Modifications</h2>
-
-<p>We’re starting with this method because it will give context to others methods, like our script tag and API (below).</p>
-
-<p>UserALE.js src is intuitively abstracted into few different files:</p>
+<h2 id="source-code-architecture-productsuseralepackagesflagon-useralesrc">Source Code Architecture (<code class="language-plaintext highlighter-rouge">products/userale/packages/flagon-userale/src/</code>)</h2>
 
 <ul>
-  <li><a href="https://github.com/apache/flagon-useralejs/blob/master/src/attachHandlers.js">attachHandlers</a>: configure which user behaviors UserALE.js listens for and event handlers here.</li>
-  <li><a href="https://github.com/apache/flagon-useralejs/blob/master/src/configure.js">configure</a>: set special custom parameters, like passing a unqiue userID into UserALE.js logs.</li>
-  <li><a href="https://github.com/apache/flagon-useralejs/blob/master/src/getInitialSettings.js">getInitialSettings</a>: modify HTML5 parameters passed through the script tag.</li>
-  <li><a href="https://github.com/apache/flagon-useralejs/blob/master/src/main.js">main</a>: attaches event handlers and adds logs to queue (probably want to leave alone).</li>
-  <li><a href="https://github.com/apache/flagon-useralejs/blob/master/src/packageLogs.js">packageLogs</a>: modify to configure how user behaviors are added to data schema, and meta data added from the page.</li>
-  <li><a href="https://github.com/apache/flagon-useralejs/blob/master/src/sendLogs.js">sendLogs</a>: modify how logs are sent to logging server, etc. (be careful here, too).</li>
+  <li><a href="https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/src/main.ts"><code class="language-plaintext highlighter-rouge">main.ts</code></a>: Public module entry point exporting lifecycle functions (<code class="language-plaintext highlighter-rouge">start</code>, <code class="language-plaintext highlighter-rouge">stop</code>, <code class="language-plaintext highlighter-rouge">options</code>, <code class="language-plaintext highlighter-rouge">log</code>), callback helpers, and exporters.</li>
+  <li><a href="https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/src/getInitialSettings.ts"><code class="language-plaintext highlighter-rouge">getInitialSettings.ts</code></a>: Extracts initial settings from <code class="language-plaintext highlighter-rouge">&lt;script data-*&gt;</code> attributes and browser session storage (with SSR safety guards).</li>
+  <li><a href="https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/src/configure.ts"><code class="language-plaintext highlighter-rouge">configure.ts</code></a>: Singleton <code class="language-plaintext highlighter-rouge">Configuration</code> class managing runtime options.</li>
+  <li><a href="https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/src/attachHandlers.ts"><code class="language-plaintext highlighter-rouge">attachHandlers.ts</code></a>: Defines captured DOM/window events, interval buffering, and detail extraction (including automatic masking for <code class="language-plaintext highlighter-rouge">&lt;input type="password"&gt;</code>).</li>
+  <li><a href="https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/src/packageLogs.ts"><code class="language-plaintext highlighter-rouge">packageLogs.ts</code></a>: Packages DOM events and custom events into UserALE log objects, executing registered <code class="language-plaintext highlighter-rouge">addCallbacks</code> functions.</li>
+  <li><a href="https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/src/sendLogs.ts"><code class="language-plaintext highlighter-rouge">sendLogs.ts</code></a>: Manages the batch interval timer and <code class="language-plaintext highlighter-rouge">pagehide</code> unload flushing, delegating wire serialization and transport to the active <code class="language-plaintext highlighter-rouge">LogExporter</code>.</li>
+  <li><a href="https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/src/exporters"><code class="language-plaintext highlighter-rouge">exporters/</code></a>:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">types.ts</code>: <code class="language-plaintext highlighter-rouge">LogExporter</code>, <code class="language-plaintext highlighter-rouge">ExportOptions</code>, <code class="language-plaintext highlighter-rouge">ExportResult</code>, and <code class="language-plaintext highlighter-rouge">ExporterType</code> interfaces.</li>
+      <li><code class="language-plaintext highlighter-rouge">headers.ts</code>: Unified <code class="language-plaintext highlighter-rouge">buildHeaders(config)</code> and <code class="language-plaintext highlighter-rouge">chunkLogsForKeepalive</code> (48 KiB chunking for <code class="language-plaintext highlighter-rouge">fetch(..., { keepalive: true })</code>).</li>
+      <li><code class="language-plaintext highlighter-rouge">http-json.ts</code>: Default <code class="language-plaintext highlighter-rouge">HttpJsonExporter</code> (<code class="language-plaintext highlighter-rouge">'userale-json'</code>).</li>
+      <li><code class="language-plaintext highlighter-rouge">otlp-json.ts</code>: Native OpenTelemetry <code class="language-plaintext highlighter-rouge">OtlpJsonExporter</code> (<code class="language-plaintext highlighter-rouge">'otlp-json'</code>).</li>
+      <li><code class="language-plaintext highlighter-rouge">otel-sdk.ts</code>: OpenTelemetry JS Logs API bridge (<code class="language-plaintext highlighter-rouge">OtelSdkExporter</code>).</li>
+      <li><code class="language-plaintext highlighter-rouge">proto-json.ts</code>: Canonical Protobuf v1 JSON exporter (<code class="language-plaintext highlighter-rouge">ProtoJsonExporter</code>, <code class="language-plaintext highlighter-rouge">'proto-json'</code>).</li>
+      <li><code class="language-plaintext highlighter-rouge">websocket.ts</code>: Persistent <code class="language-plaintext highlighter-rouge">WebSocketExporter</code> (<code class="language-plaintext highlighter-rouge">'ws'</code>).</li>
+    </ul>
+  </li>
 </ul>
 
-<h3 id="usage">Usage</h3>
+<hr />
 
-<p>Most modifications can be accomplished through <code class="language-plaintext highlighter-rouge">attachHandlers</code> and <code class="language-plaintext highlighter-rouge">packageLogs</code>.</p>
+<h2 id="rebuilding--verifying-modifications">Rebuilding &amp; Verifying Modifications</h2>
 
-<p>Once you modify source, you’ll need to rebuild UserALE.js scripts and webextension (and should probably run unit tests).</p>
+<p>After modifying any file in <code class="language-plaintext highlighter-rouge">products/userale/packages/flagon-userale/src/</code>, rebuild and run the unit test suite from <code class="language-plaintext highlighter-rouge">products/userale</code>:</p>
 
-<h3 id="modifying-event-handlers-examples">Modifying Event Handlers: Examples</h3>
-
-<p><code class="language-plaintext highlighter-rouge">attachHandlers</code> controls which behaviors and what kinds of logs are captured</p>
-
-<p>You can modify some of the events UserALE.js by editing vars in <code class="language-plaintext highlighter-rouge">attacheHandlers</code>.</p>
-
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">events</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">bufferBools</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">bufferedEvents</span><span class="p">;</span>
-<span class="cm">/* modify which events are abstracted into interval logs by editing the array below*/</span>
-<span class="kd">var</span> <span class="nx">intervalEvents</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">focus</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">blur</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">input</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">change</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">mouseover</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">submit</span><span class="dl">'</span><span class="p">];</span>
-<span class="cm">/* modify which events are pulled from window*/</span>
-<span class="kd">var</span> <span class="nx">windowEvents</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">load</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">blur</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">focus</span><span class="dl">'</span><span class="p">];</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pnpm build
+pnpm <span class="nt">--dir</span> packages/flagon-userale <span class="nb">test</span>
 </code></pre></div></div>
 
-<p>You can modify which events UserALE.js captures in it’s ‘raw’ log stream, by modifying the var <code class="language-plaintext highlighter-rouge">events</code>:</p>
-
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* Comment out event types in the `events` var for granular modification of UserALE.js behavior */</span>
-<span class="k">export</span> <span class="kd">function</span> <span class="nx">defineDetails</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
-  <span class="c1">// Events list</span>
-  <span class="c1">// Keys are event types</span>
-  <span class="c1">// Values are functions that return details object if applicable</span>
-  <span class="nx">events</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="dl">'</span><span class="s1">click</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">extractMouseEvent</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">dblclick</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">extractMouseEvent</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">mousedown</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">extractMouseEvent</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">mouseup</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">extractMouseEvent</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">focus</span><span class="dl">'</span> <span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">blur</span><span class="dl">'</span> <span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">input</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">logDetails</span> <span class="p">?</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">{</span> <span class="dl">'</span><span class="s1">value</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span> <span class="p">};</span> <span class="p">}</span> <span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">change</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">logDetails</span> <span class="p">?</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">{</span> <span class="dl">'</span><span class="s1">value</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span> <span class="p">};</span> <span class="p">}</span> <span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">dragstart</span><span class="dl">'</span> <span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">dragend</span><span class="dl">'</span> <span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">drag</span><span class="dl">'</span> <span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">drop</span><span class="dl">'</span> <span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">keydown</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">logDetails</span> <span class="p">?</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">...,</span>
-    <span class="cm">/*'mouseover' : null,*/</span> <span class="err">#</span><span class="nx">Aliasing</span> <span class="nx">the</span> <span class="dl">"</span><span class="s2">events</span><span class="dl">"</span> <span class="nx">list</span> <span class="nx">removes</span> <span class="nx">that</span> <span class="kd">class</span> <span class="k">from</span> <span class="nx">your</span> <span class="nx">event</span> <span class="nx">stream</span><span class="p">.</span>
-    <span class="dl">'</span><span class="s1">submit</span><span class="dl">'</span> <span class="p">:</span> <span class="kc">null</span>
-</code></pre></div></div>
-
-<p>You can eliminate the <code class="language-plaintext highlighter-rouge">interval</code> log stream altogether by modifying the <code class="language-plaintext highlighter-rouge">attachHandlers</code> configs:</p>
-
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">function</span> <span class="nx">attachHandlers</span><span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">defineDetails</span><span class="p">(</span><span class="nx">config</span><span class="p">);</span>
-
-  <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">events</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">ev</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="nx">ev</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">packageLog</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">events</span><span class="p">[</span><span class="nx">ev</span><span class="p">]);</span>
-    <span class="p">},</span> <span class="kc">true</span><span class="p">);</span>
-  <span class="p">});</span>
-<span class="cm">/*Comment out configs for intervalEvents to remove them from your log stream */</span>
-  <span class="nx">intervalEvents</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">ev</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="nx">ev</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">packageIntervalLog</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
-    <span class="p">},</span> <span class="kc">true</span><span class="p">);</span>
-  <span class="p">});</span>
-</code></pre></div></div>
-
-<h3 id="modifying-meta-data-packaged-in-logs-examples">Modifying Meta Data Packaged in Logs: Examples</h3>
-
-<p><code class="language-plaintext highlighter-rouge">packageLogs</code> pulls parameters from the script tag, API, and from window or document and adds them to event logs.</p>
-
-<p>The easiest way to make these changes is by modifying the var <code class="language-plaintext highlighter-rouge">log</code>:</p>
-
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="cm">/* Comment or add fields to be included in your logs*/</span>
-  <span class="kd">var</span> <span class="nx">log</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="dl">'</span><span class="s1">target</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">getSelector</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">),</span>
-    <span class="dl">'</span><span class="s1">path</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">buildPath</span><span class="p">(</span><span class="nx">e</span><span class="p">),</span>
-    <span class="dl">'</span><span class="s1">pageUrl</span><span class="dl">'</span><span class="p">:</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">pageTitle</span><span class="dl">'</span><span class="p">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">title</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">pageReferrer</span><span class="dl">'</span><span class="p">:</span> <span class="nb">document</span><span class="p">.</span><span class="nx">referrer</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">clientTime</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">timeFields</span><span class="p">.</span><span class="nx">milli</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">microTime</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">timeFields</span><span class="p">.</span><span class="nx">micro</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">location</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">getLocation</span><span class="p">(</span><span class="nx">e</span><span class="p">),</span>
-    <span class="dl">'</span><span class="s1">type</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">type</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">logType</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">raw</span><span class="dl">'</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">userAction</span><span class="dl">'</span> <span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">details</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">details</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">userId</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">userId</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">toolVersion</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">version</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">toolName</span><span class="dl">'</span> <span class="p">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">toolName</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">useraleVersion</span><span class="dl">'</span><span class="p">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">useraleVersion</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">sessionID</span><span class="dl">'</span><span class="p">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">sessionID</span>
-  <span class="p">};</span>
-</code></pre></div></div>
-
-<h3 id="benefits-modifying-useralejs-logs-via-src">Benefits Modifying UserALE.js Logs via src:</h3>
-<ul>
-  <li>Full control of your log streams</li>
-  <li>With simple modification to src you can package and build multiple UserALE.js scripts for page-to-page modification 
- of log streams.</li>
-  <li>Modify the behavior of our webExtension</li>
-  <li>Ideal in cases where you don’t want to integrate UserALE.js into your CD pipeline, just pass around pre-built scripts 
- that suite your needs.</li>
-</ul>
+<hr />
 
 <h2 id="contributing">Contributing</h2>
 
-<p>Contributions are welcome!  Simply <a href="https://github.com/apache/flagon-useralejs/issues">submit an issue</a> for problems 
-you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
-incorporate it into UserALE.js. We also love Pull Requests!</p>
+<p>Contributions are welcome! See our <a href="/docs/contributing">Contributing Guide</a> or open an issue on <a href="https://github.com/apache/flagon/issues">GitHub</a>.</p>
 
   </div>
 </div>
