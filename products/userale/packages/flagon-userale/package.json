@@ -5,6 +5,13 @@
   "main": "build/main.mjs",
   "module": "build/main.mjs",
   "types": "build/main.d.ts",
+  "files": [
+    "build",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "NOTICE"
+  ],
   "exports": {
     ".": {
       "types": "./build/main.d.ts",
@@ -12,8 +19,8 @@
     }
   },
   "scripts": {
-    "build": "tsup --onSuccess 'tsc --emitDeclarationOnly --declaration'",
-    "clean": "rm -rf ./build && rm tsconfig.tsbuildinfo",
+    "build": "rm -f tsconfig.tsbuildinfo && tsup --onSuccess 'tsc --emitDeclarationOnly --declaration && cp src/types.d.ts build/types.d.ts'",
+    "clean": "rm -rf ./build tsconfig.tsbuildinfo",
     "test": "jest -c ./test/jest.config.ts",
     "commit": "cz"
   },
@@ -75,7 +82,7 @@
     "jsonschema": "^1.4.1",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
-    "tsup": "^5.10.0",
+    "tsup": "^8.5.1",
     "typescript": "^5.8.3",
     "whatwg-fetch": "^3.6.20",
     "ws": "^8.18.0"
