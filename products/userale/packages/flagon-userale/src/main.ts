@@ -36,6 +36,15 @@ import { version as userAleVersion } from "../package.json";
 import { Configuration } from "@/configure";
 import { attachHandlers } from "@/attachHandlers";
 import { initSender, registerExporter } from "@/sendLogs";
+import {
+  flushSessionReplay,
+  getActiveReplayRingBuffer,
+  getTargetRect,
+  RageClickDetector,
+  ReplayRingBuffer,
+  startSessionReplay,
+  stopSessionReplay,
+} from "@/replay";
 
 import type { Settings, Logging } from "@/types";
 
@@ -71,6 +80,22 @@ export {
   detectBrowser as detectBrowser,
 } from "@/packageLogs";
 export { registerExporter } from "@/sendLogs";
+export {
+  flushSessionReplay,
+  getActiveReplayRingBuffer,
+  getTargetRect,
+  RageClickDetector,
+  ReplayRingBuffer,
+  startSessionReplay,
+  stopSessionReplay,
+} from "@/replay";
+export type {
+  ReplayEnvelope,
+  ReplayFrame,
+  ReplayRecorderFn,
+  SessionReplayOptions,
+  TargetRect,
+} from "@/replay";
 export {
   buildHeaders,
   buildOtlpResourceAttributes,
@@ -132,6 +157,9 @@ function setup(config: Configuration) {
         attachHandlers(config);
         initSender(logs, config);
         started = config.on = true;
+        if (config.observeMutations) {
+          startSessionReplay({ observeMutations: true }, config);
+        }
         if (typeof window !== "undefined" && typeof document !== "undefined") {
           const loadDuration = Math.max(
             1,
@@ -168,6 +196,9 @@ export function start(): void {
     if (!wasStarted) {
       attachHandlers(config);
       initSender(logs, config);
+      if (config.observeMutations) {
+        startSessionReplay({ observeMutations: true }, config);
+      }
     }
   }
 }
@@ -178,6 +209,7 @@ export function start(): void {
 export function stop(): void {
   started = config.on = false;
   config.update({ autostart: false });
+  stopSessionReplay();
 }
 
 /**
@@ -222,6 +254,10 @@ if (typeof window !== "undefined") {
     registerAuthCallback,
     registerHeadersCallback,
     registerExporter,
+    startSessionReplay,
+    stopSessionReplay,
+    flushSessionReplay,
+    getTargetRect,
     addCallbacks,
     removeCallbacks,
     packageLog,

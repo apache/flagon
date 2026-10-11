@@ -151,6 +151,7 @@ The complete list of configurable parameters that can be configured via `userale
 | otlpEndpoint      | OpenTelemetry Collector HTTP endpoint (auto-appends `/v1/logs` when path is empty/root) | null                  |
 | exporter          | Custom `LogExporter` instance overriding built-in exporters                             | null                  |
 | traceContext      | Callback returning active W3C `{ traceId, spanId }` for OTLP correlation                | null                  |
+| observeMutations  | Enable throttled `MutationObserver` structural DOM telemetry (`#104`)                   | false                 |
 
 If you have included UserALE as a `script-tag` in your project, you can use HTML data parameters to pass configuration options to the library through the script tag. For example:
 
@@ -166,26 +167,27 @@ If you have included UserALE as a `script-tag` in your project, you can use HTML
 
 You have access to the same parameters listed above, however, naming conventions vary slightly for use in HTML:
 
-| Param                 | Description                                                              | Default               |
-| --------------------- | ------------------------------------------------------------------------ | --------------------- |
-| data-url              | Logging URL                                                              | http://localhost:8000 |
-| data-autostart        | Should UserALE start on page load                                        | true                  |
-| data-interval         | Delay between transmit checks                                            | 5000 (ms)             |
-| data-threshold        | Minimum number of logs to send                                           | 5                     |
-| data-user             | User identifier                                                          | null                  |
-| data-version          | Application version identifier                                           | null                  |
-| data-log-details      | Toggle detailed logs (keys pressed and input/change values)              | false                 |
-| data-resolution       | Delay between instances of high frequency logs (mouseover, scroll, etc.) | 500 (ms)              |
-| data-user-from-params | Query param in the page URL to fetch userId from                         | null                  |
-| data-tool             | Name of tool being logged                                                | null                  |
-| data-auth             | `Authorization` header value                                             | null                  |
-| data-api-key          | `x-api-key` header value                                                 | null                  |
-| data-headers          | JSON-encoded object of custom HTTP headers                               | null                  |
-| data-exporter         | Exporter format (`http-json`, `otlp`, `proto-json`, `websocket`)         | `http-json`           |
-| data-otlp-endpoint    | OpenTelemetry Collector HTTP endpoint                                    | null                  |
+| Param                  | Description                                                              | Default               |
+| ---------------------- | ------------------------------------------------------------------------ | --------------------- |
+| data-url               | Logging URL                                                              | http://localhost:8000 |
+| data-autostart         | Should UserALE start on page load                                        | true                  |
+| data-interval          | Delay between transmit checks                                            | 5000 (ms)             |
+| data-threshold         | Minimum number of logs to send                                           | 5                     |
+| data-user              | User identifier                                                          | null                  |
+| data-version           | Application version identifier                                           | null                  |
+| data-log-details       | Toggle detailed logs (keys pressed and input/change values)              | false                 |
+| data-resolution        | Delay between instances of high frequency logs (mouseover, scroll, etc.) | 500 (ms)              |
+| data-user-from-params  | Query param in the page URL to fetch userId from                         | null                  |
+| data-tool              | Name of tool being logged                                                | null                  |
+| data-auth              | `Authorization` header value                                             | null                  |
+| data-api-key           | `x-api-key` header value                                                 | null                  |
+| data-headers           | JSON-encoded object of custom HTTP headers                               | null                  |
+| data-exporter          | Exporter format (`http-json`, `otlp`, `proto-json`, `websocket`)         | `http-json`           |
+| data-otlp-endpoint     | OpenTelemetry Collector HTTP endpoint                                    | null                  |
+| data-observe-mutations | Enable throttled `MutationObserver` structural DOM telemetry (`#104`)    | `false`               |
 
 If you are using our [WebExtension](https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale-ext/),
-you can modify these parameters (including OAuth/API Key authentication and Exporter Format) via the extension's `Options` page.
+you can modify these parameters (including OAuth/API Key authentication, Exporter Format, and Event/Log Type filters) via the extension's `Options` page.
 
 ### Authentication, Custom Headers, CORS & WebSocket Limitations
 
@@ -243,6 +245,30 @@ userale.options({
 ```
 
 See [`example/otel-demo`](https://github.com/apache/flagon/tree/master/products/userale/example/otel-demo) for a complete Docker Compose stack with **OpenTelemetry Collector**, **Grafana Loki**, **Grafana Tempo**, and a pre-built **Grafana Dashboard** featuring click-to-trace correlation.
+
+### Session Replay & Behavioral DOM Telemetry (`#104`)
+
+UserALE provides a two-layer session replay architecture (`startSessionReplay`, `flushSessionReplay`, `stopSessionReplay`) that keeps the core bundle dependency-free while supporting both structural DOM telemetry and `rrweb`-compatible visual playback:
+
+1. **Layer 1 (Built-in `MutationObserver`, Bounding-Box Geometry, & Rage-Click Detection)**:
+   - Aggregates structural DOM mutations (`addedCount`, `removedCount`, `attributeCount`, `targets`) without capturing PII text content, while automatically ignoring subtrees marked with `data-userale-ignore`.
+   - Detects **Rage Clicks** (3+ rapid clicks on the same target selector within `1000ms` and `30px` radius), emitting `logType: "custom", type: "rage_click"` with element bounding-box geometry (`targetRect`).
+2. **Layer 2 (`rrweb` Ring-Buffer Visual Replay Bridge)**:
+   - Pass `rrweb.record` as `recorder` to maintain a rolling in-memory ring buffer (`maxDurationMs: 30000`) that preserves `Meta` (`type: 4`) and `FullSnapshot` (`type: 2`) anchor frames.
+   - Automatically flushes the visual replay tagged with `sessionId` and active OpenTelemetry `traceId` / `spanId` whenever a rage-click, runtime `error`, or manual `flushSessionReplay()` occurs.
+
+```js
+import * as userale from "flagon-userale";
+import * as rrweb from "rrweb";
+
+userale.startSessionReplay({
+  recorder: rrweb.record,
+  maxDurationMs: 30_000,
+  observeMutations: true,
+  detectRageClicks: true,
+  flushOnError: true,
+});
+```
 
 ## Usage
 
