@@ -34,3 +34,6 @@ pnpm-lock.yaml
 # Nix / direnv
 result
 .direnv/
+
+# Graphify local knowledge graph
+graphify-out/

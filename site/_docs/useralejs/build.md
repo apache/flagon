@@ -5,116 +5,85 @@ permalink: /docs/useralejs/build/
 priority: 1
 ---
 
-To build [Apache UserALE.js](https://github.com/apache/flagon-useralejs/tree/master), you will need to clone our repo and install [NPM and Node.js](https://nodejs.org/) and [Go](https://go.dev/doc/install).
+To build and test [Apache Flagon UserALE.js](https://github.com/apache/flagon/tree/master/products/userale), clone the `apache/flagon` monorepo and ensure you have **Node.js (`>= 20.x`)** and **`pnpm` (`>= 10.x`)** installed (or run `nix develop` at the repository root).
 
-UserALE.js utilizes NPM for package and dependency management. Execute the following to install dependencies.
-```
-#install required packages
-npm install
+```bash
+git clone https://github.com/apache/flagon.git
+cd flagon/products/userale
 
-#review major dependencies
-npm ls --depth=0
+# Install workspace dependencies
+pnpm install
 ```
+
+---
 
 ## Build
 
-UserALE.js uses Rollup to manage build tasking. These tasks are executed through our build script; use the following to execute:
+UserALE.js is written in TypeScript and bundled with [`tsup`](https://tsup.egoist.dev/) (producing both ES module `build/main.mjs` and script-tag IIFE `build/main.global.js` bundles alongside TypeScript declarations `build/main.d.ts`), while the browser extension (`flagon-userale-ext`) is built with [Plasmo](https://docs.plasmo.com/).
 
+```bash
+# Build all workspace packages (flagon-userale and flagon-userale-ext)
+pnpm build
+
+# Or build only flagon-userale
+pnpm --dir packages/flagon-userale build
 ```
-#Build UserALE.js
-npm run build
+
+If you modify [`proto/apache/flagon/userale/v1/log.proto`](https://github.com/apache/flagon/blob/master/proto/apache/flagon/userale/v1/log.proto), regenerate the TypeScript Protobuf contract definitions from the repository root:
+
+```bash
+buf lint
+buf generate
 ```
+
+---
 
 ## Test
 
-UserALE.js uses Jest and Playwright to execute tests, which are integrated into our build pipeline. See ``package.json`` for full script options. 
+UserALE.js uses **Jest** (with `jsdom` and `@bufbuild/protobuf` contract tests) for unit testing and **Playwright** for end-to-end browser and extension testing.
 
-To run tests:
-```
-npm run test
-```
-... you'll see something like:
-```
-...
-    attachHandlers
-    ✓ attaches all the event handlers without duplicates
-    ✓ debounces bufferedEvents (505ms)
-    defineDetails
-      - configures high detail events correctly
+### Run Unit & Schema Contract Tests (`Jest`)
 
-  configure
-    ✓ merges new configs into main config object
-    ✓ includes a userid if present in the window.location
-    getUserIdFromParams
-      ✓ fetches userId from URL params
-      ✓ returns null if no matching param
-
-  getInitialSettings
-    timeStampScale
-      ✓ no event.timestamp
-      ✓ zero
-      ✓ epoch milliseconds
-      ✓ epoch microseconds
-      ✓ performance navigation time
-    getInitialSettings
-      ✓ fetches all settings from a script tag (122ms)
-      ✓ grabs user id from params
-
-  Userale API
-    ✓ provides configs
-    ✓ edits configs
-    ✓ starts + stops (214ms)
-    ✓ sends custom logs
-
-  packageLogs
-    setLogFilter
-      ✓ assigns the handler to the provided value
-      ✓ allows the handler to be nulled
-    setLogMapper
-      ✓ assigns the handler to the provided value
-      ✓ allows the handler to be nulled
-    packageLog
-      ✓ only executes if on
-      ✓ calls detailFcn with the event as an argument if provided
-      ✓ packages logs
-      ✓ filters logs when a handler is assigned and returns false
-      ✓ assigns logs to the mapper's return value if a handler is assigned
-      ✓ does not call the map handler if the log is filtered out
-      ✓ does not attempt to call a non-function filter/mapper
-    extractTimeFields
-      ✓ returns the millisecond and microsecond portions of a timestamp
-      ✓ sets micro to 0 when no decimal is present
-      ✓ always returns an object
-    getLocation
-      ✓ returns event page location
-      ✓ calculates page location if unavailable
-      ✓ fails to null
-    selectorizePath
-      ✓ returns a new array of the same length provided
-    getSelector
-      ✓ builds a selector
-      ✓ identifies window
-      ✓ handles a non-null unknown value
-    buildPath
-      ✓ builds a path
-      ✓ defaults to path if available
-
-  sendLogs
-    ✓ sends logs on an interval
-    ✓ does not send logs if the config is off
-    ✓ sends logs on page exit with navigator
-    ✓ sends logs on page exit without navigator
-    ✓ does not send logs on page exit if config is off
-
-
-  45 passing (954ms)
-  1 pending
+```bash
+pnpm --dir packages/flagon-userale test
 ```
 
-Followed by e2e tests via playwright that runs in a headed browser. Note that interacting with the headed browser may contaminate test results. Unfortanutely, the browser plugin requires playwright to run with a headed browser at this time. Any failing tests will also be logged in the terminal. If there are failing tests, please consider [opening an issue in Github](https://github.com/apache/flagon-useralejs/issues).
+Example output:
 
-Further instructions can be found in our [README](https://github.com/apache/flagon-useralejs/blob/master/README.md)
+```text
+PASS test/spec/auth.spec.ts
+PASS test/spec/headers.spec.ts
+PASS test/spec/getInitialSettings.spec.ts
+PASS test/spec/configure.spec.ts
+PASS test/spec/attachHandlers.spec.ts
+PASS test/spec/sendLogs.spec.ts
+PASS test/spec/exporters.spec.ts
+PASS test/spec/packageLogs.spec.ts
+PASS test/spec/main.spec.ts
+
+Test Suites: 9 passed, 9 total
+Tests:       1 skipped, 103 passed, 104 total
+```
+
+### Run End-to-End Tests (`Playwright`)
+
+From `products/userale`:
+
+```bash
+pnpm test
+```
+
+---
+
+## Code Formatting & Linting
+
+```bash
+pnpm format
+pnpm lint
+```
+
+---
 
 ## Contributing
 
-Contributions are welcome!  See the [contribution guide](https://github.com/apache/flagon-useralejs/blob/master/CONTRIBUTING.md) for more information.
+Contributions are welcome! See the [Contributing Guide]({{ '/docs/contributing' | prepend: site.baseurl }}) for more information.

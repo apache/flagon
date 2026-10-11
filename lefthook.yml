@@ -35,7 +35,8 @@ pre-push:
   commands:
     userale-build:
       root: "products/userale/packages/flagon-userale/"
-      run: npx tsup --onSuccess 'tsc --emitDeclarationOnly --declaration'
+      run: pnpm build
     userale-test:
       root: "products/userale/packages/flagon-userale/"
       run: npx jest -c ./test/jest.config.ts
+

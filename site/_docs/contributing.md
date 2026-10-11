@@ -4,28 +4,73 @@ component: flagon
 permalink: /docs/contributing/
 ---
 
-First, thank you for contributing to Apache Flagon!
+First, thank you for contributing to **Apache Flagon**!
 
-There are certain procedures that must be followed for all contributions. These procedures are necessary to allow us to allocate resources for reviewing and testing your contribution, as well as to communicate effectively with you during the review process.
+All Apache Flagon components (**UserALE.js**, **UserALE Browser Extension**, **Distill**, **Protobuf schemas**, and the **Project Website**) are maintained in the unified [`apache/flagon`](https://github.com/apache/flagon) monorepo.
 
-See individual product guides for product-specific information on getting started as a contributor, setup and testing, code style, etc.
+---
 
-To report a bug or other issue, simply create an issue in Giithub, as described in Step 1 below.
+### 1. Open or Claim an Issue on GitHub
 
-#### 1. Create an issue in Github
+All changes to Apache Flagon should correspond to a [GitHub Issue](https://github.com/apache/flagon/issues) so work can be discussed and tracked transparently.
 
-   All changes to Apache Flagon must have a corresponding issue in [GitHub](https://github.com/apache?q=flagon) so the change can be properly tracked.  If you do not already have an account on Github, you will need to create one before creating your new issue.
+---
 
-#### 2. Make and test your changes locally
+### 2. Set Up Your Local Development Environment
 
-   The Apache Flagon source code is maintained in [several git repositories](https://gitbox.apache.org/repos/asf?s=flagon) hosted by Apache.  These repositories are mirrored and more easily available [on GitHub](https://github.com/apache?q=flagon).  To make your changes, fork the appropriate GitHub repository and make commits to a topic branch in your fork.  Commits should be made in logical units:
-   ```shell
-   git commit -S -m "[FLAGON-123] High-level message describing the changes."
-   ```
-   Note that your commits should be verifiable; each commit should be verified with a PGP certificate. The easiest way to do this is to create a PGP signature with [GnuPG](https://www.gnupg.org/), register it with you GitHub account and [configure git](https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work) to use this signature when committing. 
-   
-   Avoid commits which cover multiple, distinct goals that could (and should) be handled separately.  If you do not already have an account on JIRA, you will need to create one to claim an issue, discuss development, or report results.
+Clone the repository and create a topic branch from `master`:
 
-#### 3. Submit your changes via a pull request on GitHub
+```shell
+git clone https://github.com/apache/flagon.git
+cd flagon
+git checkout -b feat/your-feature-name
+```
 
-   Once your changes are ready, submit them by creating a pull request for the corresponding topic branch you created when you began working on your changes.  The core team will then review your changes and, if they pass review, your changes will be merged into the primary Apache-hosted repos.
+#### Option A: Nix Flake (Recommended)
+If you use [Nix](https://nixos.org/) with flakes enabled, run:
+
+```shell
+nix develop
+```
+
+This provides Node.js, `pnpm`, TypeScript, Python 3, `buf`, and `lefthook` git hooks automatically.
+
+#### Option B: Manual Toolchain Setup
+- **UserALE (`products/userale`)**: Node.js `>= 20.x` and `pnpm >= 10.x`
+- **Distill (`products/distill`)**: Python `>= 3.8` and `poetry` (or `uv`)
+- **Protobuf (`proto/`)**: [`buf` CLI](https://buf.build/docs/installation)
+
+---
+
+### 3. Build & Test Your Changes
+
+#### UserALE.js & Browser Extension (`products/userale`)
+```shell
+cd products/userale
+pnpm install
+pnpm build
+pnpm --dir packages/flagon-userale test
+pnpm format
+pnpm lint
+```
+
+#### Distill (`products/distill`)
+```shell
+cd products/distill
+poetry install --all-groups
+poetry run pytest
+```
+
+#### Protobuf Schemas (`proto/`)
+```shell
+buf lint
+buf generate
+```
+
+---
+
+### 4. Submit a Pull Request on GitHub
+
+1. Ensure every new source file includes the standard Apache-2.0 license header.
+2. Commit your changes in logical units with pre-commit hooks enabled (do not pass `--no-verify`).
+3. Open a Pull Request against [`apache/flagon`](https://github.com/apache/flagon/pulls) referencing the issue number (e.g. `Closes #123`).

@@ -18,63 +18,70 @@
 
 # Flagon UserALE Browser Extension
 
-This package provides a browser extension for [Flagon UserALE](https://flagon.apache.org/userale/), enabling effortless, no-code instrumentation of websites. It captures user interactions and sends behavioral logs to a logging endpoint.
+This package provides a Manifest V3 browser extension for [Apache Flagon UserALE](https://flagon.apache.org/userale/), enabling zero-code behavioral instrumentation of websites. It captures DOM and browser tab interactions and exports logs to your configured collector endpoint.
 
-The extension is built with [Plasmo](https://docs.plasmo.com/) and supports modern browser environments like Chrome and Firefox.
+The extension is built with [Plasmo](https://docs.plasmo.com/) and supports Chrome, Edge, and Firefox.
 
 ---
 
 ## Features
 
-✅ Passive user interaction logging  
-✅ No code changes required on instrumented pages  
-✅ Configurable via extension options (logging endpoint, user ID, tool metadata)  
-✅ Supports local development and custom deployments
+- Passive DOM and browser tab interaction logging across allowlisted URLs
+- Zero code changes required on instrumented web pages
+- Configurable **Exporter Format**:
+  - **UserALE JSON (Default)** (`userale-json`)
+  - **OpenTelemetry (OTLP/JSON)** (`otlp-json` — automatically normalizes `/v1/logs` endpoints)
+  - **Protobuf v1 JSON (`LogBatch`)** (`proto-json`)
+- Built-in support for **HTTP Basic Auth**, **OAuth 2.0 PKCE**, and **Custom HTTP Headers (JSON)**
 
 ---
 
 ## Getting Started (Development)
 
-1. Install dependencies:
+From `products/userale`:
+
+1. Install workspace dependencies and build `flagon-userale`:
 
 ```bash
 pnpm install
+pnpm --dir packages/flagon-userale build
 ```
 
-2. Start the development build:
+2. Start the extension development build:
 
 ```bash
-pnpm dev
+pnpm --dir packages/flagon-userale-ext dev
 ```
 
 3. Load the extension in your browser:
-   - **Chrome**: Visit `chrome://extensions/`, enable Developer Mode, click "Load unpacked", and select the `build/chrome-mv3-dev/` directory.
-   - **Firefox**: Visit `about:debugging`, "This Firefox", "Load Temporary Add-on", and select the `manifest.json` file in `build/firefox-mv3-dev/`.
+   - **Chrome / Edge**: Visit `chrome://extensions/`, enable **Developer mode**, click **Load unpacked**, and select `packages/flagon-userale-ext/build/chrome-mv3-dev/`.
+   - **Firefox**: Visit `about:debugging`, select **This Firefox**, click **Load Temporary Add-on**, and select `manifest.json` in `packages/flagon-userale-ext/build/firefox-mv3-dev/`.
 
 ---
 
 ## Building for Production
 
-To create a production build:
-
 ```bash
-pnpm build
+pnpm --dir packages/flagon-userale-ext build
 ```
-
-This outputs a zipped production bundle.
 
 ---
 
 ## Extension Options
 
-After installing the extension, click the icon in your browser toolbar to open the **Options** page. From here you can configure:
-- **Logging Endpoint** – Where logs will be sent
-- **URL allowlist** – A regex of URL's to allow logging on
-- **OAuth Credentials** – Details of an OAuth login to authenticate with the logging endpoint.
+Click the UserALE icon in your browser toolbar (or open the extension **Options** page) to configure:
+
+- **Logging Endpoint URL**: Target HTTP(S), WebSocket (`ws://` / `wss://`), or OpenTelemetry Collector (`http://localhost:4318/v1/logs`) URL.
+- **Exporter Format**: Choose between `UserALE JSON (Default)`, `OpenTelemetry (OTLP/JSON)`, or `Protobuf v1 JSON (LogBatch)`.
+- **URL Allowlist**: Regular expression controlling which pages are instrumented.
+- **User ID & Tool Metadata**: Optional user identifier, tool name, and version.
+- **HTTP Basic Auth**: Optional username and password encoded as a `Basic` `Authorization` header.
+- **Custom HTTP Headers (JSON)**: Optional JSON object of custom headers (e.g. `{"x-api-key": "..."}`) attached to every export request.
+- **OAuth 2.0 PKCE Credentials**: Optional OAuth provider configuration for token-authenticated endpoints.
 
 ---
 
 ## Resources
 
-- 📚 [UserALE Documentation](https://flagon.apache.org/userale/)
-
+- 📚 [UserALE Documentation](https://flagon.apache.org/docs/useralejs/)
+- 🔭 [OpenTelemetry Demo Stack](../../example/otel-demo/README.md)

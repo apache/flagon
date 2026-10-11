@@ -5,99 +5,174 @@ permalink: /docs/useralejs/API/
 priority: 2
 ---
 
-[Apache UserALE.js](https://github.com/apache/flagon-useralejs) features a robust API that allows you 
-customize official Apache Flagon UserALE.js [builds](https://github.com/apache/flagon-useralejs/tree/master/build) page-by-page to suite your needs.
+[Apache Flagon UserALE.js](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale) provides a comprehensive JavaScript and TypeScript API for runtime configuration, custom log enrichment/filtering, header injection, and pluggable wire exporters.
 
+---
 
-# API Usage
+## Core Lifecycle & Configuration API
 
-To invoke the API, simply add additional javascript code blocks under your UserALE.js script tag.
+### `options(newConfig?: Partial<Settings.Config>): Settings.Config`
 
-Don't forget to add UserALE.js to your project!
- 
-It can be deployed as either script-tag, NPM module, or via CDN! For in-depth example, see our [Getting Started Guide]({{ '/docs/useralejs' | prepend: site.baseurl }}) or source [README.md](https://github.com/apache/flagon-useralejs#usage).
+Reads or shallow-merges runtime configuration options. Calling `options()` with no arguments returns the current configuration object.
 
-Also, check out our[example test utility](https://github.com/apache/flagon-useralejs/tree/master/example) so that you can experiment with logs in your terminal!
+```typescript
+import * as userale from 'flagon-userale';
 
-The following API examples use script-tag deployment methods for illustration:
-
-```html
-<head>
-  <title>UserAleJS - Example Page</title>
- <!--
- Add the UserALE.js script tag to the top of your doc
- -->
-   <script src="/path/to/userale-2.4.0.min.js" data-url="http://yourLoggingUrl"></script>
+userale.options({
+  url: 'https://collector.example.com/v1/logs',
+  userId: 'user-42',
+  toolName: 'checkout-ui',
+  toolVersion: '2.5.0',
+  exporterFormat: 'otlp-json',
+});
 ```
 
-## `options()`
+### `start(): void` & `stop(): void`
 
-`options` allows you to modify UserALE.js script tag parameters. This can be particularly useful if need to pass additional data about users from your page into the logging parameters, like username and sessionID. You can build variables constructors that pass data from form data or browser storage to UserALE's paramters. 
+Starts or halts event capturing and log transmission. Particularly useful when `autostart: false` (`data-autostart="false"`) is configured until user consent or authentication completes.
 
-```html
-<script type="text/javascript">
-    const changeMe = "me";
-    window.userale.options({
-      "userId": changeMe,
-      "version": "2.4.0",
-      "sessionID": "4"
-    })
-</script>
+```typescript
+userale.options({ autostart: false });
+// Later, after user consent:
+userale.start();
 ```
 
-## `addCallbacks()`
+### `version: string`
 
-`addCallbacks` allows you to modify UserALE.js logs via callback functions. Callback functions are passed the log to be modifyed, and the corresponding event if one exists. The value returned from the calback is used as the new log, except when a falsey value is returned. In the case of a falsey value, the log is dropped. Callbacks are executed in the order they are submitted. Pass multiple callbacks with an object of functions. The following example shows how to both filter unwanted events and add custom fields.
+Exports the current `flagon-userale` package version string.
 
-```html
-<script type="text/javascript">
-  window.userale.addCallbacks({
-    filter(log) {
-      var type_array = [
-        "mouseup",
-        "mouseover",
-        "mousedown",
-        "keydown",
-        "dblclick",
-        "blur",
-        "focus",
-        "input",
-        "wheel",
-      ];
-      var logType_array = ["interval"];
-      if (type_array.includes(log.type) || logType_array.includes(log.logType)) {
-        return false;
-      }
-      return log;
-    },
-    addCustomFields(log, event) {
-      var targetsForLabels = ["button#test_button"];
-      if (targetsForLabels.includes(log.target)) {
-          return Object.assign({}, log, { CustomLabel: "Click me!" });
-      } else {
-          return log;  
-      }
+---
+
+## Custom Logging & Filtering Callbacks
+
+### `addCallbacks(callbacks: Record<string, CallableFunction>): boolean`
+
+Registers one or more named callback functions executed sequentially on every packaged log (`(log, event) => log | false`). Returning `false` (or any falsy value) drops the log from the queue; returning a modified log object replaces it.
+
+```typescript
+userale.addCallbacks({
+  dropIntervalLogs(log) {
+    if (log.logType === 'interval') {
+      return false;
     }
-  });
-</script>
+    return log;
+  },
+  attachExperimentTag(log, event) {
+    return {
+      ...log,
+      experimentVariant: 'checkout-v2',
+    };
+  },
+});
 ```
 
-## `removeCallbacks()`
+### `removeCallbacks(targetKeys: string[]): void`
 
-`removeCallbacks` removes a list of callback function that was added by addCallbacks() by name. The following example will remove the filter from the addCallbacks() example
+Removes registered callbacks by name:
 
-```html
-<script type="text/javascript">
-  window.userale.removeCallbacks(["filter"]);
-</script>
+```typescript
+userale.removeCallbacks(['dropIntervalLogs']);
 ```
 
-Test these examples out in our UserALE.js [example page](https://github.com/apache/flagon-useralejs/blob/master/example/index.html) test utility!
+### `log(customLog: Logging.CustomLog): boolean`
 
-See more [UserALE.js API Examples]()
+Appends a custom log object directly onto the UserALE queue:
+
+```typescript
+userale.log({
+  target: 'checkout-funnel',
+  type: 'step_complete',
+  logType: 'custom',
+  userAction: false,
+  details: { step: 2, cartTotal: 149.0 },
+});
+```
+
+### `packageLog(e: Event, detailFcn?: Logging.DynamicDetailFunction): boolean` & `packageCustomLog(customLogs: Logging.CustomLog, detailFcn: Logging.DynamicDetailFunction, userAction: boolean): boolean`
+
+Packages a standard DOM `Event` or custom metadata object with full UserALE page/session/browser context and enqueues it.
+
+### `details(config: Configuration, type: Events.AllowedEvents): ((e: Event) => Record<string, unknown>) | null`
+
+Returns the default detail-extractor function for a given DOM event type (`click`, `keydown`, `input`, `change`, `wheel`, etc.). Note that `<input type="password">` values are automatically masked (`"********"`).
+
+### `getSelector(ele: EventTarget): string` & `buildPath(e: Event): string[]`
+
+Utility helpers that compute a CSS-like element selector (`tag#id.class`) and full DOM ancestry path array from a DOM `Event`.
+
+---
+
+## Authentication & Custom HTTP Headers
+
+All HTTP-based exporters (`HttpJsonExporter`, `ProtoJsonExporter`, `OtlpJsonExporter`) construct headers through `buildHeaders(config)`, applying them to both interval `fetch()` requests and `pagehide` (`fetch(..., { keepalive: true })`) flushes.
+
+### `registerAuthCallback(callback: () => string): boolean`
+
+Registers a dynamic provider returning the `Authorization` header value on each batch export:
+
+```typescript
+userale.registerAuthCallback(() => `Bearer ${getCurrentJwtToken()}`);
+```
+
+### `registerHeadersCallback(callback: () => Record<string, string>): boolean`
+
+Registers a dynamic provider returning arbitrary HTTP headers on each batch export:
+
+```typescript
+userale.registerHeadersCallback(() => ({
+  'x-tenant-id': 'acme-corp',
+  'x-request-source': 'userale-web',
+}));
+```
+
+Static headers can also be configured via `userale.options({ authHeader: 'Bearer ...', apiKey: '...', headers: { ... } })`.
+
+---
+
+## Pluggable Wire Exporters (`LogExporter`)
+
+UserALE decouples in-memory event packaging from wire serialization and transport via the `LogExporter` interface:
+
+```typescript
+export interface LogExporter {
+  export(logs: Array<Logging.Log>, options?: ExportOptions): Promise<ExportResult>;
+  flush?(): Promise<void>;
+  shutdown?(): Promise<void>;
+}
+```
+
+### Built-In Exporters & Helpers
+
+| Exported Symbol | Description |
+|---|---|
+| `registerExporter(exporter: LogExporter)` | Registers a custom `LogExporter` instance and switches the active sender to use it immediately. |
+| `createExporter(config)` | Factory returning the active `LogExporter` for a `Configuration` instance. |
+| `HttpJsonExporter` | Default exporter sending flat UserALE JSON arrays over `fetch` (with 48 KiB chunked `keepalive: true` on `pagehide`). |
+| `WebSocketExporter` | Streams log batches over a persistent `WebSocket` (`ws://` / `wss://`). |
+| `ProtoJsonExporter` / `toProtoLogBatch(logs)` | Serializes logs into canonical Protobuf v1 JSON (`apache.flagon.userale.v1.LogBatch`) matching `proto/apache/flagon/userale/v1/log.proto`. |
+| `OtlpJsonExporter` / `toOtlpExportLogsServiceRequest(logs, config)` | Serializes logs into OpenTelemetry `ExportLogsServiceRequest` JSON with `Resource` hoisting, `BigInt` nanosecond timestamps, `eventName`, structured `kvlistValue` body, and W3C `traceId`/`spanId` correlation. |
+| `OtelSdkExporter` | Bridges UserALE logs directly into an existing OpenTelemetry JS `@opentelemetry/api-logs` `Logger` via `logger.emit(...)`. |
+| `resolveOtlpLogsEndpoint(endpoint)` | Normalizes an OTLP base URL by appending `/v1/logs` when the URL path is empty or `/`. |
+| `toUnixNanoString(clientTimeMs, microTime)` | Converts millisecond + sub-millisecond timestamps to a 64-bit nanosecond string using `BigInt`. |
+
+### Example: Correlating UserALE Events with W3C Distributed Traces
+
+```typescript
+import * as userale from 'flagon-userale';
+
+userale.options({
+  exporterFormat: 'otlp-json',
+  otlpEndpoint: 'http://localhost:4318/v1/logs',
+  toolName: 'storefront-web',
+  traceContext: () => ({
+    traceId: currentActiveSpan.traceId, // 32-hex W3C trace-id
+    spanId: currentActiveSpan.spanId,   // 16-hex W3C span-id
+  }),
+});
+```
+
+---
 
 ## Contributing
 
-Contributions are welcome!  Simply [submit an issue](https://github.com/apache/flagon-useralejs/issues) for problems 
-you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
-incorporate it into UserALE.js. We also love Pull Requests!
+Contributions are welcome! See our [Contributing Guide]({{ '/docs/contributing' | prepend: site.baseurl }}) or open an issue on [GitHub](https://github.com/apache/flagon/issues).

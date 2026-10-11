@@ -5,118 +5,106 @@ permalink: /docs/useralejs/
 priority: 0
 ---
 
-[Apache UserALE.js](https://github.com/apache/flagon-useralejs) is the UserALE client for DOM and JavaScript-based applications.  It automatically attaches event handlers, is configurable through HTML5 data parameters or a JS API, and logs every user interaction on a web page, including rich JS single-page apps. You can choose to include UserALE.js directly in your project to track how users engage with it, or if you're interested in generating logs from any webpage, you can try out our web extension that injects UserALE.js into every webpage.
+[Apache Flagon UserALE.js](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale) is the client-side instrumentation library for DOM and JavaScript applications. It automatically attaches event handlers, is configurable through HTML5 `data-*` attributes or a JavaScript/TypeScript API, and logs user interactions across web pages and single-page applications (SPAs) with zero runtime dependencies.
 
-*Note:* Work on UserALE.js' documentation is ongoing.  Contributions are welcome. To get involved, see our [Contributing]({{ '/docs/contributing' | prepend: site.baseurl }}) guide.  
-## Include UserALE.js in your project
+---
 
-To start logging with Apache UserALE.js, you can include our script directly in your project. More details can be found in our [README](https://github.com/apache/flagon-useralejs/blob/master/README.md). You can use our [build process]({{ '/docs/useralejs/build' | prepend: site.baseurl }}) to create our script, use a sample in our [repos](https://github.com/apache/flagon-useralejs/tree/master/build), or pull our scripts from [npm](https://www.npmjs.com/package/flagon-userale).
+## Include UserALE.js in Your Project
 
-To include UserALE.js in a specific project, you'll need to deploy a version of our minified UserALE.js script in an accessible location into your project:
+Install `flagon-userale` from [npm](https://www.npmjs.com/package/flagon-userale):
 
-```html
+```bash
 npm install flagon-userale
+# or
+pnpm add flagon-userale
 ```
 
-### Include UserALE.js as a `module`:
+### 1. ES Module / Bundler Import (`ESM`)
 
-```html
+```typescript
 import * as userale from 'flagon-userale';
 
-or
-
-const userale = require('flagon-userale');
+userale.options({
+  url: 'http://localhost:8000',
+  toolName: 'my-web-app',
+  toolVersion: '1.0.0',
+  logDetails: true,
+});
 ```
 
-Our [webpack example](https://github.com/apache/flagon-useralejs/tree/master/example/webpackUserAleExample) illustrates this use-case.
-
-### Include UserALE.js as a `script-tag`:
+### 2. Script Tag (`IIFE`)
 
 ```html
-<script src="./node_modules/flagon-userale/build/userale-2.4.0.min.js"></script>
+<script
+  src="./node_modules/flagon-userale/build/main.global.js"
+  data-url="http://localhost:8000/"
+  data-tool="my-web-app"
+  data-version="1.0.0"
+></script>
 ```
 
-Our [script tag example](https://github.com/apache/flagon-useralejs/tree/master/example) illustrates this use-case
+### 3. OpenTelemetry Collector (`OTLP/JSON`)
 
-If you include UserALE.js as a `script-tag`, consider installing via npm as a development dependency:
+UserALE.js natively exports OpenTelemetry Logs (`ExportLogsServiceRequest` over HTTP/JSON) without requiring `@opentelemetry/*` packages:
 
 ```html
-npm install --save-dev flagon-userale
+<script
+  src="./node_modules/flagon-userale/build/main.global.js"
+  data-exporter="otlp"
+  data-otlp-endpoint="http://localhost:4318/v1/logs"
+  data-tool="checkout-web"
+></script>
 ```
 
-### Include UserALE.js via a CDN:
+Try the full-stack [OpenTelemetry + Grafana + Loki + Tempo Demo](https://github.com/apache/flagon/tree/master/products/userale/example/otel-demo) with `docker compose up -d`!
 
-```html
-<script src="https://cdn.jsdelivr.net/npm/flagon-userale@2.4.0/build/userale-2.4.0.min.js"></script>
-```
+---
 
-We also support a [WebExtension](https://github.com/apache/flagon-useralejs/tree/master/src/UserALEWebExtension) that can be added to your browser in developer mode. Follow the link for instructions.
+## Configuration Options
 
-Once UserALE.js is installed in your project, your application will start generating logs automatically.
+All options can be configured via HTML `data-*` attributes on the `<script>` tag or programmatically via `userale.options({...})`:
 
-## Configure UserALE.js
+| JS Option | Script `data-*` Attribute | Description | Default |
+|---|---|---|---|
+| `url` | `data-url` | Logging endpoint URL (`http://`, `https://`, `ws://`, `wss://`) | `'http://localhost:8000'` |
+| `autostart` | `data-autostart` | Start capturing and sending logs automatically on load | `true` |
+| `transmitInterval` | `data-interval` | Interval between batch transmit checks (ms) | `5000` |
+| `logCountThreshold` | `data-threshold` | Minimum queued logs required before interval send | `5` |
+| `userId` | `data-user` | User identifier | `null` |
+| `sessionId` | `data-session` | Session identifier | Auto-generated |
+| `toolName` | `data-tool` | Application / tool name (`service.name` in OTLP) | `null` |
+| `toolVersion` / `version` | `data-version` | Application semantic version (`service.version` in OTLP) | `null` |
+| `logDetails` | `data-log-details` | Include detailed event payloads (e.g. key codes, input values; password inputs are automatically masked) | `false` |
+| `resolution` | `data-resolution` | Aggregation interval for high-frequency events (`mouseover`, `scroll`, etc.) in ms | `500` |
+| `userFromParams` | `data-user-from-params` | URL query parameter to extract `userId` from | `null` |
+| `authHeader` | `data-auth` | `Authorization` header string or callback | `null` |
+| `apiKey` | `data-api-key` | Value sent in the `x-api-key` HTTP header | `null` |
+| `exporterFormat` / `exporterType` | `data-exporter` | Wire format: `'userale-json'` (default), `'otlp-json'` (`'otlp'`), `'proto-json'`, or `'ws'` | `'userale-json'` |
+| `otlpEndpoint` | `data-otlp-endpoint` | OpenTelemetry Collector HTTP logs endpoint (automatically appends `/v1/logs` if given a base origin) | `null` |
+| `headers` | — | Custom HTTP headers `Record<string, string>` merged into every request | `null` |
+| `exporter` | — | Custom `LogExporter` instance implementing `export(logs, options)` | `null` |
+| `traceContext` | — | Optional `() => ({ traceId, spanId })` callback for W3C TraceContext correlation | `null` |
 
-UserALE.js is designed to be easily configured to fit your use case. In `script-tag` deployment, use HTML data parameters to pass configuration options to the library. 
+See the [UserALE.js API Reference]({{ '/docs/useralejs/API' | prepend: site.baseurl }}) for full method and exporter documentation.
 
-For example, one thing you'll need to do is set the URL (location) of your minified UserALE.js script:
+---
 
-```html
-<script src="/path/to/userale-2.4.0.min.js" data-url="http://yourLoggingUrl"></script>
-```
+## Deploying the UserALE.js Browser Extension
 
-The complete list of configurable options is:
+The [UserALE Browser Extension](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale-ext) is a Manifest V3 extension built with Plasmo that injects UserALE.js into pages matching a configurable URL allowlist.
 
-| Param | Description | Default |
-|---|---|---|
-| url | Logging URL | http://localhost:8000 |
-| autostart | Should UserALE start on page load | true |
-| transmitInterval | Delay between transmit checks | 5000 (ms) |
-| logCountThreshold | Minimum number of logs to send | 5 |
-| userId | User identifier | null |
-| sessionId | Session identifier | null |
-| version | Application version identifier | null |
-| logDetails | Toggle detailed logs (keys pressed and input/change values) | false |
-| resolution | Delay between instances of high frequency logs (mouseover, scroll, etc.) | 500 (ms) |
-| userFromParams | Query param in the page URL to fetch userId from | null |
-| toolName | Name of tool being logged | null |
-| authHeader | Authorization header to be passed to logging endpoint | null |
+1. Build the workspace from `products/userale`:
+   ```bash
+   pnpm install
+   pnpm build
+   ```
+2. Load the extension in your browser:
+   - **Chrome / Edge**: Open `chrome://extensions/`, enable **Developer mode**, click **Load unpacked**, and select `products/userale/packages/flagon-userale-ext/build/chrome-mv3-prod/` (or `chrome-mv3-dev/` when running `pnpm dev`).
+   - **Firefox**: Open `about:debugging`, select **This Firefox**, click **Load Temporary Add-on**, and select `manifest.json` in `products/userale/packages/flagon-userale-ext/build/firefox-mv3-prod/`.
+3. Open the extension **Options** page to configure the **Logging Endpoint**, **Exporter Format** (`UserALE JSON`, `OpenTelemetry (OTLP/JSON)`, or `Protobuf v1 JSON`), **URL Allowlist**, **HTTP Basic Auth**, **Custom HTTP Headers (JSON)**, or **OAuth PKCE** credentials.
 
-**NOTE** These options are also available through our [API]({{ '/docs/useralejs/API' | prepend: site.baseurl }}), which support deploying UserALE.js as an NPM `module.`
-
-See our page on [Build and Test]({{ '/docs/useralejs/build' | prepend: site.baseurl }}) for UserALE.js to learn how to build your own minified version of the UserALE.js script, or you check-out a pre-built script with default parameters in our [repo](https://github.com/apache/flagon-useralejs/tree/master/build).
-
-Use our [example test utility](https://github.com/apache/flagon-useralejs/tree/master/example) to experiment with script tag parameters.
-
-## Deploying the UserALE.js WebExtension
-
-If you're interested in using our Web Extension to log user activity across all pages they visit, try our web extension, which injects UserALE.js into any web page your client(s) navigate to. This option is perfect for testing and research. The web extension builds through the same [build pipeline]({{ '/docs/useralejs/build' | prepend: site.baseurl }}) as UserALE.js. You can also use pre-built extension files in our [repo](https://github.com/apache/flagon-useralejs/tree/master/build). 
-
-When you're ready to deploy the UserALE.js web extension, follow the instructions below:
-
-1. Load the web extension into your browser.
-    1. Firefox
-        1. Open Firefox
-        1. Enter about:debugging into the URL bar and press enter
-        1. Check the box to 'Enable add-on debugging'
-        1. Press the 'Load Temporary Add-on' button
-        1. Navigate to the root of the web extension directory (e.g. 'build/UserAleWebExtension')
-        1. Press Open, and confirm that 'User ALE Extension' appears in the list
-        1. You may now navigate to a web page to inject the User ALE script! 
-    1. Chrome
-        1. Open Chrome
-        1. Enter chrome://extensions into the URL bar and press enter
-        1. Check the 'Developer mode' box
-        1. Press the 'Load unpacked extension' button
-        1. Navigate to the root of the build directory (e.g. 'build/UserAleWebExtension')
-        1. Press Ok, and confirm that 'UserALE Extension' appears in the list
-        1. You may now navigate to a web page to inject the User ALE script! 
-
-You can set options for the web extension in your browser by opening the extensions page, finding the extension, and choosing either "Preferences" for Firefox, or "Options" for Chrome.
-
-You can also find more instructions in our [README](https://github.com/apache/flagon-useralejs/tree/master/src/UserALEWebExtension).
+---
 
 ## Contributing
 
-Contributions are welcome!  Simply [submit an issue](https://github.com/apache/flagon-useralejs/issues) for problems 
-you encounter or a pull request for your feature or bug fix.  The core team will review it and work with you to 
-incorporate it into UserALE.js. We also love Pull Requests!
+Contributions are welcome! See our [Contributing Guide]({{ '/docs/contributing' | prepend: site.baseurl }}) or open an issue on [GitHub](https://github.com/apache/flagon/issues).
