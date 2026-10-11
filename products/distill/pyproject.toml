@@ -87,7 +87,7 @@ networkx-stubs = "^0.0.1"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-setuptools = "^67.6.1"
+setuptools = ">=67.6.1,<76.0.0"
 pre-commit = "^3.3.3"
 ipykernel = "^6.29.4"
 jupyter = "^1.0.0"
