@@ -1,0 +1,82 @@
+{
+  "index_patterns": ["flagon-userale*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0,
+      "index.mapping.total_fields.limit": 2000
+    },
+    "mappings": {
+      "dynamic_templates": [
+        {
+          "details_strings_as_keywords": {
+            "path_match": "details.*",
+            "match_mapping_type": "string",
+            "mapping": {
+              "type": "keyword",
+              "ignore_above": 1024
+            }
+          }
+        }
+      ],
+      "properties": {
+        "@timestamp": { "type": "date" },
+        "clientTime": { "type": "date", "format": "epoch_millis||strict_date_optional_time" },
+        "startTime": { "type": "date", "format": "epoch_millis||strict_date_optional_time" },
+        "endTime": { "type": "date", "format": "epoch_millis||strict_date_optional_time" },
+        "microTime": { "type": "double" },
+        "target": { "type": "keyword" },
+        "path": { "type": "keyword" },
+        "pageUrl": { "type": "keyword" },
+        "pageTitle": { "type": "text", "fields": { "keyword": { "type": "keyword" } } },
+        "pageReferrer": { "type": "keyword" },
+        "type": { "type": "keyword" },
+        "logType": { "type": "keyword" },
+        "userAction": { "type": "boolean" },
+        "userId": { "type": "keyword" },
+        "sessionId": { "type": "keyword" },
+        "httpSessionId": { "type": "keyword" },
+        "browserSessionId": { "type": "keyword" },
+        "traceId": { "type": "keyword" },
+        "spanId": { "type": "keyword" },
+        "toolName": { "type": "keyword" },
+        "toolVersion": { "type": "keyword" },
+        "useraleVersion": { "type": "keyword" },
+        "count": { "type": "integer" },
+        "duration": { "type": "long" },
+        "targetChange": { "type": "boolean" },
+        "typeChange": { "type": "boolean" },
+        "location": {
+          "properties": {
+            "x": { "type": "float" },
+            "y": { "type": "float" }
+          }
+        },
+        "targetRect": {
+          "properties": {
+            "x": { "type": "float" },
+            "y": { "type": "float" },
+            "width": { "type": "float" },
+            "height": { "type": "float" }
+          }
+        },
+        "scrnRes": {
+          "properties": {
+            "width": { "type": "integer" },
+            "height": { "type": "integer" }
+          }
+        },
+        "browser": {
+          "properties": {
+            "browser": { "type": "keyword" },
+            "version": { "type": "keyword" }
+          }
+        },
+        "frames": {
+          "type": "object",
+          "enabled": false
+        }
+      }
+    }
+  }
+}
