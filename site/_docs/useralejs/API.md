@@ -100,23 +100,28 @@ Returns the default detail-extractor function for a given DOM event type (`click
 
 Utility helpers that compute a CSS-like element selector (`tag#id.class`) and full DOM ancestry path array from a DOM `Event`.
 
+### `getTargetRect(el: EventTarget | null): TargetRect | null` & `detectBrowser(): { browser: string; version: string }`
+
+- `getTargetRect` extracts a rounded bounding box (`{ x, y, width, height, top, right, bottom, left }`) for a DOM element (attached automatically as `targetRect` on `click`, `dblclick`, `change`, and `submit` events).
+- `detectBrowser` detects the browser name and version using `navigator.userAgentData` (User-Agent Client Hints) with a regex fallback and zero external dependencies.
+
 ---
 
 ## Authentication & Custom HTTP Headers
 
 All HTTP-based exporters (`HttpJsonExporter`, `ProtoJsonExporter`, `OtlpJsonExporter`) construct headers through `buildHeaders(config)`, applying them to both interval `fetch()` requests and `pagehide` (`fetch(..., { keepalive: true })`) flushes.
 
-### `registerAuthCallback(callback: () => string): boolean`
+### `registerAuthCallback(callback: () => string): boolean` & `resetAuthCallback(): void`
 
-Registers a dynamic provider returning the `Authorization` header value on each batch export:
+Registers (or resets) a dynamic provider returning the `Authorization` header value on each batch export:
 
 ```typescript
 userale.registerAuthCallback(() => `Bearer ${getCurrentJwtToken()}`);
 ```
 
-### `registerHeadersCallback(callback: () => Record<string, string>): boolean`
+### `registerHeadersCallback(callback: () => Record<string, string>): boolean` & `resetHeadersCallback(): void`
 
-Registers a dynamic provider returning arbitrary HTTP headers on each batch export:
+Registers (or resets) a dynamic provider returning arbitrary HTTP headers on each batch export:
 
 ```typescript
 userale.registerHeadersCallback(() => ({
@@ -149,7 +154,7 @@ export interface LogExporter {
 | `createExporter(config)` | Factory returning the active `LogExporter` for a `Configuration` instance. |
 | `HttpJsonExporter` | Default exporter sending flat UserALE JSON arrays over `fetch` (with 48 KiB chunked `keepalive: true` on `pagehide`). |
 | `WebSocketExporter` | Streams log batches over a persistent `WebSocket` (`ws://` / `wss://`). |
-| `ProtoJsonExporter` / `toProtoLogBatch(logs)` | Serializes logs into canonical Protobuf v1 JSON (`apache.flagon.userale.v1.LogBatch`) matching `proto/apache/flagon/userale/v1/log.proto`. |
+| `ProtoJsonExporter` / `toProtoLogBatch(logs)` / `toProtoUserALELog(log)` | Serializes logs into canonical Protobuf v1 JSON (`apache.flagon.userale.v1.LogBatch`) matching `proto/apache/flagon/userale/v1/log.proto`. |
 | `OtlpJsonExporter` / `toOtlpExportLogsServiceRequest(logs, config)` | Serializes logs into OpenTelemetry `ExportLogsServiceRequest` JSON with `Resource` hoisting, `BigInt` nanosecond timestamps, `eventName`, structured `kvlistValue` body, and W3C `traceId`/`spanId` correlation. |
 | `OtelSdkExporter` | Bridges UserALE logs directly into an existing OpenTelemetry JS `@opentelemetry/api-logs` `Logger` via `logger.emit(...)`. |
 | `resolveOtlpLogsEndpoint(endpoint)` | Normalizes an OTLP base URL by appending `/v1/logs` when the URL path is empty or `/`. |
@@ -161,13 +166,41 @@ export interface LogExporter {
 import * as userale from 'flagon-userale';
 
 userale.options({
-  exporterFormat: 'otlp-json',
+  exporterType: 'otlp',
   otlpEndpoint: 'http://localhost:4318/v1/logs',
   toolName: 'storefront-web',
   traceContext: () => ({
     traceId: currentActiveSpan.traceId, // 32-hex W3C trace-id
     spanId: currentActiveSpan.spanId,   // 16-hex W3C span-id
   }),
+});
+```
+
+---
+
+## Two-Layer Session Replay & Behavioral DOM Telemetry (`#104`)
+
+UserALE provides a two-layer session replay architecture that keeps the core bundle dependency-free while supporting both structural DOM telemetry and `rrweb`-compatible visual playback:
+
+| Exported Symbol | Description |
+|---|---|
+| `startSessionReplay(options?: SessionReplayOptions, config?: Configuration): () => void` | Starts Layer 1 (`MutationObserver` + `RageClickDetector`) and optional Layer 2 (`rrweb` ring-buffer recorder). Returns a stop/cleanup function. |
+| `flushSessionReplay(trigger?: string): Promise<ReplayEnvelope \| null>` | Immediately flushes the rolling `rrweb` ring buffer as a `logType: 'replay', type: 'session_replay'` envelope tagged with `sessionId` and active OpenTelemetry `traceId` / `spanId`. |
+| `stopSessionReplay(): void` | Stops active `MutationObserver` and `rrweb` recording and clears the ring buffer. |
+| `getActiveReplayRingBuffer(): ReplayRingBuffer \| null` | Returns the active `ReplayRingBuffer` instance when session replay is running. |
+| `ReplayRingBuffer` | Rolling in-memory ring buffer (`maxDurationMs`, `maxFrames`) that preserves `rrweb` `Meta` (`type: 4`) and latest `FullSnapshot` (`type: 2`) anchor frames. |
+| `RageClickDetector` | Sliding-window detector that triggers when `threshold` (default `3`) clicks occur on the same target selector within `windowMs` (`1000ms`) and `maxRadiusPx` (`30px`). |
+
+```typescript
+import * as userale from 'flagon-userale';
+import * as rrweb from 'rrweb';
+
+userale.startSessionReplay({
+  recorder: rrweb.record,
+  maxDurationMs: 30_000,
+  observeMutations: true,
+  detectRageClicks: true,
+  flushOnError: true,
 });
 ```
 

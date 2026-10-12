@@ -17,165 +17,28 @@
   ~ under the License.
 -->
 
-> \<!\-\--Licensed to the Apache Software Foundation (ASF) under one or
-> more contributor license agreements. See the NOTICE file distributed
-> with this work for additional information regarding copyright
-> ownership. The ASF licenses this file to You under the Apache License,
-> Version 2.0 (the \"License\"); you may not use this file except in
-> compliance with the License. You may obtain a copy of the License at
->
-> > <http://www.apache.org/licenses/LICENSE-2.0>
->
-> Unless required by applicable law or agreed to in writing, software
-> distributed under the License is distributed on an \"AS IS\" BASIS,
-> WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-> implied. See the License for the specific language governing
-> permissions and limitations under the License. \-\--\>
-
 # Funnel
 
 ## The Funnel Function
 
-``` python
-funnel(edges_segmentN, user_specification, node_labels= False)
+```python
+funnel(edges, targets, node_labels=False, *, infer=True)
 ```
 
-*Creates Funnel Graph from defined edge list and optional user-provided
-labels* **edges_segmentN**: List of Tuples **user_specification**:
-String of Target of interest e.g. #document **node_labels**: Optional
-Dictionary of key default values, value replacements Returns a Funnel
-graph.
+Creates an interactive Plotly Funnel figure (`go.Figure`) from a list of 2-element edge tuples and either a starting target string (3-step inferred funnel) or an explicit sequence of step targets.
 
-**Remove the duplicates**
+- **`edges`**: List of 2-element tuples `(source, target)`
+- **`targets`**: Either:
+  - A single target string (e.g. `'#document'`) to infer the most common 3-step path starting at that target (`infer=True`), or
+  - A sequence of step target strings (e.g. `['#document', 'input', 'button']`) for an explicit multi-step funnel
+- **`node_labels`** *(Optional)*: Dictionary mapping original target strings to display labels
+- **`infer`** *(Optional)*: When `True` and `targets` is a single string (or 1-element list), infers the top 3-step path from `edges`
 
-``` python
-edge_list_temp = []
-for row in edges_segmentN:
-    if row[0] != row[1]:
-        edge_list_temp.append(row)
-edge_list = edge_list_temp
-```
-
-**Convert from list of 2s to list of 1s**
-
-``` python
-edgelist_list = []
-length = len(edge_list) - 1
-for i in edge_list:
-    if edge_list.index(i) != length:
-        edgelist_list.append(i[0])
-    else:
-        edgelist_list.append(i[0])
-        edgelist_list.append(i[1])
-```
-
-**Remove the none values**
-
-``` python
-funnel_targets_temp = []
-for item in edgelist_list:
-    if item != None:
-        funnel_targets_temp.append(item)
-funnel_targets = funnel_targets_temp
-```
-
-**Convert that list into a list of 3s**
-
-``` python
-edge_list = []
-for i in range(len(funnel_targets)):
-    if i == (len(funnel_targets) - 2):
-        break
-    else:
-        edge_list.append((funnel_targets[i], funnel_targets[i + 1], funnel_targets[i + 2]))
-```
-
-**Convert the list of 3s to a counter**
-
-``` python
-edge_list_counter = collections.Counter(edge_list)
-first_rung = user_specification
-new_edge_list = []
-for i in edge_list:
-    if i[0] == user_specification:
-        new_edge_list.append((i[0], i[1], i[2]))
-
-new_edge_list_counter = collections.Counter(new_edge_list)
-new_edge_list_counter.most_common(1)
-
-first_rung = new_edge_list_counter.most_common(1)[0][0][0]
-second_rung = new_edge_list_counter.most_common(1)[0][0][1]
-third_rung = new_edge_list_counter.most_common(1)[0][0][2]
-
-counter1 = 0
-counter2 = 0
-counter3 = 0
-for i in edge_list:
-    if i[0] == first_rung:
-        counter1 += 1
-        if i[1] == second_rung:
-            counter2 += 1
-            if i[2] == third_rung:
-                counter3 += 1
-```
-
-**Numbers are how many times each target occured** **Edges are the
-targets**
-
-``` python
-numbers = [counter1, counter2, counter3]
-edges = [first_rung, second_rung, third_rung]
-```
-
-**If node labels was given as an argument, replaces the targets with the
-provided names**
-
-``` python
-if node_labels:
-    new_edges = []
-    for edge in edges:
-        if edge in node_labels:
-            new_edges.append(node_labels[edge])
-        else:
-            new_edges.append(edge)
-    edges = new_edges
-```
-
-**Plotting labels from the list with the values from the dictionary**
-
-``` python
-data = dict(
-    number=numbers,
-    edge=edges)
-```
-
-**Plotting the figure**
-
-``` python
-fig = go.Figure(go.Funnel(
-    y=edges,
-    x=numbers,
-    textposition="inside",
-    textinfo="value+percent initial",
-    opacity=0.65, marker={"color": ["deepskyblue", "lightsalmon", "tan"],
-                          "line": {"width": [2]}},
-    connector={"line": {"color": "lime", "dash": "dot", "width": 5}})
-)
-
-fig.show()
-```
+Returns a `plotly.graph_objects.Figure` (does not call `fig.show()` automatically, so it works cleanly in both headless pipelines and Jupyter notebooks).
 
 ## Funnel Example
 
-``` python
-funnel(edges_segmentN, user_specification, node_labels=False)
-```
-
-The Funnel Function takes the arguments: edges_segmentN: List of Tuples
-user_specification: A string of target of interest e.g. #document
-node_labels (Optional): Optional Dictionary of key default values with
-value replacements And it will return a Funnel graph. Below is an
-example of a Funnel Diagram:
+Below is an example of a Funnel Diagram:
 
 [![funnelexample.png](https://i.postimg.cc/qvPxbKqT/newplot-2.png)](https://postimg.cc/tsz67YFS)
 Additionally, users have the option to pass a dictionary of node labels

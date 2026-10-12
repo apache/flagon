@@ -37,6 +37,8 @@
 │   │       └── otel-demo/                 # Full-stack OTel Collector + Grafana + Loki + Tempo demo
 │   └── distill/                           # Python behavioral analytics & graph toolkit
 ├── examples/
+│   ├── opensearch/                        # 100% Apache-2.0 OpenSearch + OTel Collector stack
+│   ├── apache-lakehouse/                  # All-Apache Kafka + Iceberg + DataFusion + Distill + Superset
 │   └── elk/                               # Docker Compose & Kubernetes ELK stack examples
 └── site/                                  # Jekyll source for https://flagon.apache.org/
 ```
@@ -46,27 +48,30 @@
 ## Products & Capabilities
 
 ### 1. [Apache Flagon UserALE.js](./products/userale/packages/flagon-userale/README.md)
-Zero-dependency client-side instrumentation library (`ESM` + `IIFE` script tag) that automatically captures DOM interactions, interval summaries, and custom application events.
+Zero-dependency client-side instrumentation library (`ESM` + `IIFE` script tag) that automatically captures DOM interactions, interval summaries, structural DOM mutations, and custom application events.
 
 - **Multiple Wire Exporters**:
-  - **UserALE Flat JSON (`'userale-json'`)**: Default backward-compatible JSON array batch transport over `fetch` (with 48 KiB chunked `keepalive: true` delivery on `pagehide`).
-  - **OpenTelemetry OTLP/JSON (`'otlp-json'`)**: Native `ExportLogsServiceRequest` exporter (`OtlpJsonExporter`) with `Resource` attribute hoisting, nanosecond `BigInt` timestamps, OTel Event naming (`eventName` / `event.name`), structured `kvlistValue` body, and W3C TraceContext (`traceId`, `spanId`) correlation.
+  - **UserALE Flat JSON (`'http-json'`)**: Default backward-compatible JSON array batch transport over `fetch` (with 48 KiB chunked `keepalive: true` delivery on `pagehide`).
+  - **OpenTelemetry OTLP/JSON (`'otlp'`)**: Native `ExportLogsServiceRequest` exporter (`OtlpJsonExporter`) with `Resource` attribute hoisting, nanosecond `BigInt` timestamps, OTel Event naming (`eventName` / `event.name`), structured `kvlistValue` body, and W3C TraceContext (`traceId`, `spanId`) correlation.
   - **OpenTelemetry JS SDK Bridge (`OtelSdkExporter`)**: Routes UserALE logs directly into an existing `@opentelemetry/api-logs` `Logger`.
   - **Protobuf v1 Canonical JSON (`'proto-json'`)**: Serializes batches conforming to [`proto/apache/flagon/userale/v1/log.proto`](./proto/apache/flagon/userale/v1/log.proto) (`apache.flagon.userale.v1.LogBatch`).
-  - **WebSocket (`'ws'`)**: Persistent streaming transport for `ws://` and `wss://` endpoints.
+  - **WebSocket (`'websocket'`)**: Persistent streaming transport for `ws://` and `wss://` endpoints.
+- **Two-Layer Session Replay & Behavioral DOM Telemetry (`startSessionReplay`, `flushSessionReplay`, `stopSessionReplay`)**:
+  - **Layer 1 (Built-in)**: Throttled `MutationObserver` structural DOM telemetry (`logType: 'mutation'`), spatial rage-click detection (`RageClickDetector`), element bounding-box geometry (`targetRect`), and zero-dependency browser detection (`detectBrowser`).
+  - **Layer 2 (`rrweb` Bridge)**: Rolling in-memory ring buffer (`ReplayRingBuffer`) that preserves `Meta` and `FullSnapshot` anchor frames and flushes visual replays correlated with `sessionId` and active OpenTelemetry `traceId` / `spanId` on rage clicks or runtime errors.
 
 ### 2. [UserALE Browser Extension](./products/userale/packages/flagon-userale-ext/README.md)
-Manifest V3 browser extension for Chrome and Firefox that injects UserALE into pages matching a configurable URL allowlist, complete with options for **Exporter Format** (`UserALE JSON`, `OpenTelemetry (OTLP/JSON)`, `Protobuf v1 JSON`), HTTP Basic Auth, OAuth PKCE, and custom JSON headers.
+Manifest V3 browser extension for Chrome and Firefox that injects UserALE into pages matching a configurable URL allowlist, complete with options for **Exporter Format** (`UserALE JSON`, `OpenTelemetry (OTLP/JSON)`, `Protobuf v1 JSON`), OAuth 2.0 PKCE, API Key (`x-api-key`) authentication, and event/log type filtering.
 
 ### 3. [Apache Flagon Distill](./products/distill/README.md)
-Python behavioral analytics package (`flagon-distill`) for session segmentation, funnel conversion analysis, and directed clickstream graph modeling. Seamlessly ingests UserALE flat JSON (`v2.3+`), Protobuf v1 `LogBatch` JSON, and OpenTelemetry OTLP/JSON (`ExportLogsServiceRequest`) payloads.
+Python behavioral analytics package (`flagon-distill`) for session segmentation, UX frustration detection (`detect_rage_clicks`, `detect_dead_clicks`, `detect_dom_thrash`, `frustration_score`), spatial viewport heatmaps (`click_heatmap_data`, `plot_click_heatmap`, `scroll_depth_summary`), OpenTelemetry trace & replay correlation (`correlate_by_trace`, `extract_replay_envelopes`), Markov transition matrices (`transition_matrix`), and directed clickstream graph modeling (`createDiGraph`, `funnel`, `sankey`). Seamlessly ingests UserALE flat JSON (`v2.3+`), Protobuf v1 `LogBatch` JSON, and OpenTelemetry OTLP/JSON (`ExportLogsServiceRequest`) payloads.
 
 ---
 
 ## Quick Start
 
 ### Development Environment (Nix)
-This repository includes a reproducible [`flake.nix`](./flake.nix) providing Node.js, `pnpm`, TypeScript, Python, `buf`, and `lefthook`:
+This repository includes a reproducible [`flake.nix`](./flake.nix) providing Node.js, `pnpm`, TypeScript, Python, `uv`, `buf`, and `lefthook`:
 
 ```bash
 nix develop
@@ -89,11 +94,13 @@ docker compose up -d
 # Open http://localhost:8080 (demo app) and http://localhost:3000 (Grafana)
 ```
 
+See [`examples/README.md`](./examples/README.md) for the **100% Apache-2.0 OpenSearch stack** (`examples/opensearch`) and the **All-Apache Behavioral Lakehouse** (`examples/apache-lakehouse`: Kafka + Iceberg + DataFusion + Distill + Superset).
+
 ### Build & Test Distill (Python)
 ```bash
 cd products/distill
-poetry install --all-groups
-poetry run pytest
+uv sync --all-groups
+uv run pytest
 ```
 
 ---

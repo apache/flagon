@@ -21,95 +21,94 @@
 
 ![Node.js CI](https://github.com/apache/flagon/workflows/userale_ci%20CI/badge.svg)
 [![Known Vulnerabilities](https://snyk.io/test/npm/flagon-userale/badge.svg)](https://snyk.io/test/npm/flagon-userale)
-![Maintenance](https://img.shields.io/maintenance/yes/2025)
+![Maintenance](https://img.shields.io/maintenance/yes/2026)
 ![npm](https://img.shields.io/npm/v/flagon-userale)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-![Node.js](https://img.shields.io/badge/Node.js%20Support-16.x%2C%2018.x-orange)
+![Node.js](https://img.shields.io/badge/Node.js%20Support-20.x%2C%2022.x%2C%2024.x-orange)
 
-Apache UserALE is part of the [Apache Flagon Project](http://flagon.apache.org/). It is a client side instrumentation library written in JavaScript designed for easy deployment and lightweight configuration in gathering logs from your web applications for user behavioral analytics.
+Apache UserALE is part of the [Apache Flagon Project](https://flagon.apache.org/). It is a client-side instrumentation library written in TypeScript/JavaScript designed for easy deployment and lightweight configuration in gathering logs from your web applications for user behavioral analytics.
 
-Once included in your project, Apache UserALE provides a comprehensive behavioral logging capability, capturing every event on every element rendered in your DOM.
+Once included in your project, Apache UserALE provides a comprehensive behavioral logging capability, capturing every event on every element rendered in your DOM with zero runtime dependencies.
 
-Additional documentation and a demonstration can be found at the [Apache Flagon website](http://flagon.apache.org/userale/).
+Additional documentation and demonstrations can be found at the [Apache Flagon website](https://flagon.apache.org/userale/).
 
 ### Quickstart Guide
 
-1. Include UserALE in your project as either a [module or script tag](#installation)
-1. Set up a logging end-point. Try our [example server utility](https://github.com/apache/flagon/tree/master/example#capturing-logs-using-the-logging-server) or try out our [Elasticsearch (ELK) stack example](https://github.com/apache/flagon/tree/master/docker).
-1. Configure [UserALE settings](#configure) using our API, including where to POST logs to (port:8000 for UserALE example or port:8100 of ELK/Logstash)
-1. Further explore the [UserALE API](#usage) to customize your log feed, add filters, custom logs, and modify logs themselves. Explore a few [examples](#examples) here and a wider set in our [example utility](https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/example/webpackUserAleExample/index.js).
-1. Visualize and analyze your logs. See our sample [kibana dahsboards](https://github.com/apache/flagon/tree/master/examples/elk/docker) for behavioral analytics.
+1. Include UserALE in your project as either an [ESM/CJS module or `<script>` tag](#installation).
+2. Set up a logging endpoint. Try our [local example collector server](https://github.com/apache/flagon/tree/master/products/userale/example#capturing-logs-using-the-logging-server), the [OpenTelemetry + Grafana/Loki/Tempo demo](https://github.com/apache/flagon/tree/master/products/userale/example/otel-demo), the [100% Apache-2.0 OpenSearch stack](https://github.com/apache/flagon/tree/master/examples/opensearch), the [All-Apache Behavioral Lakehouse](https://github.com/apache/flagon/tree/master/examples/apache-lakehouse), or the [ELK stack example](https://github.com/apache/flagon/tree/master/examples/elk).
+3. Configure [UserALE settings](#configure) using our API or HTML `data-*` attributes, including where to POST logs (`http://localhost:8000` for the local example server or `http://localhost:4318/v1/logs` for an OpenTelemetry Collector).
+4. Explore the [UserALE API](#usage) to customize your log feed with `addCallbacks`, custom logs, OpenTelemetry trace correlation, and two-layer session replay. Explore a few [examples](#examples) here and in our [example directory](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example).
+5. Visualize and analyze your logs with [Apache Flagon Distill](https://github.com/apache/flagon/tree/master/products/distill) or pre-built dashboards in [`examples/`](https://github.com/apache/flagon/tree/master/examples).
 
 ## Table of Contents
 
-[What's New](#whats-new-in-version-210)
-[Installation](#installation)
-[Configure](#configure)
-[Usage](#usage)
-[Examples](#examples)
-[Indexing, Storing, and Visualizing Logs](#indexing-storing-and-visualizing-logs)
-[Modifying Source](#modifying-source)
-[Contributing](#contributing)
-[License](#license)
+- [What's New](#whats-new)
+- [Installation](#installation)
+- [Configure](#configure)
+- [Usage](#usage)
+- [Examples](#examples)
+- [Indexing, Storing, and Visualizing Logs](#indexing-storing-and-visualizing-logs)
+- [Modifying Source](#modifying-source)
+- [Contributing](#contributing)
+- [License](#license)
 
-## What's New in Version 2.4.0?
+## What's New
 
-- Refactors Map and Filter APIs as generalized callbacks for functionality
-- Adds additional UserALE API examples utilizing generalized callbacks
-- Minor updates to update deprecated downstream dev dependencies
-- Minor changes to documentation, updated examples
+- **Pluggable Wire Exporters (`LogExporter`)**: Built-in zero-dependency exporters for UserALE Flat JSON (`'http-json'`), OpenTelemetry OTLP/JSON (`'otlp'`), OpenTelemetry JS SDK (`OtelSdkExporter`), Protobuf v1 Canonical JSON (`'proto-json'`), and WebSockets (`'websocket'`).
+- **Two-Layer Session Replay & Behavioral DOM Telemetry (`#104`)**:
+  - **Layer 1**: Throttled `MutationObserver` structural DOM telemetry (`logType: 'mutation'`), spatial rage-click detection (`RageClickDetector`), and element bounding-box geometry (`targetRect`).
+  - **Layer 2**: `rrweb`-compatible rolling ring buffer (`ReplayRingBuffer`) that preserves `Meta` and `FullSnapshot` anchor frames and flushes replays correlated with `sessionId` and OpenTelemetry `traceId` / `spanId` on rage clicks or runtime errors.
+- **Security & Reliability Hardening**:
+  - Automatic masking of `<input type="password">` values and sensitive `data-*` attributes (`data-api-key`, `data-auth`, `data-token`, `data-secret`, `data-password`).
+  - 48 KiB chunked `fetch(..., { keepalive: true })` transport on `pagehide` so authentication and custom headers are preserved on tab close.
+  - Zero-dependency browser detection (`detectBrowser`) via User-Agent Client Hints with regex fallback.
 
 See our [CHANGELOG](https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/CHANGELOG.md) for a complete list of changes.
 
 ## Installation
 
-Either through cloning our [source repo](https://github.com/apache/flagon) or by using npm:
+Either through cloning our [source repo](https://github.com/apache/flagon) or by using `npm` / `pnpm`:
 
-```html
-npm install flagon-userale or npm install flagon-userale --engine-strict
-(enforces supported Node.js versions)
+```bash
+npm install flagon-userale
+# or
+pnpm add flagon-userale
 ```
 
-To include UserALE as an object in your project, include as a `module`:
+To include UserALE in your application as an ES module or CommonJS module:
 
-```html
-import * as userale from 'flagon-userale'; or const userale =
-require('flagon-userale');
+```js
+import * as userale from "flagon-userale";
+// or
+const userale = require("flagon-userale");
 ```
 
-Our [webpack example](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example/webpackUserAleExample) illustrates this use-case.
+Our [webpack example](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example/webpackUserAleExample) and [React example](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example/react-app-example) illustrate bundler integration.
 
-You can also include UserALE as a `script-tag`. A pre-built version of the userale script is included in our package and
-repositories:
-
-```html
-<script src="./node_modules/flagon-userale/build/userale-2.4.0.min.js"></script>
-```
-
-Our [script tag example](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example) illustrates this use-case
-
-If you include UserALE as a `script-tag`, consider installing via npm as a development dependency:
+You can also include UserALE via a `<script>` tag using the pre-built IIFE bundle (`build/main.global.js`):
 
 ```html
-npm install --save-dev flagon-userale
+<script src="./node_modules/flagon-userale/build/main.global.js"></script>
 ```
 
-Or if you want to use a CDN, then you can use something like
+Our [script tag example](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example) illustrates this use case.
+
+Or via a CDN such as jsDelivr:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/flagon-userale@2.1.1/build/userale-2.4.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flagon-userale/build/main.global.js"></script>
 ```
 
-We also support a [WebExtension](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale-ext) that can be added to your browser in developer mode. Follow the link for instructions.
+We also support a Manifest V3 [Browser Extension](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale-ext) for Chrome, Edge, and Firefox.
 
-Once UserALE is installed in your project, your application will start generating logs automatically.
+Once UserALE is loaded on your page, your application will start generating logs automatically (unless `autostart: false` is configured).
 
 ## Configure
 
 Some configuration is necessary. At minimum you will need to provide UserALE an end-point to ship logs to; default behavior is to ship logs to `localhost:8000`.
 
-**NOTE**: In order to facilitate testing configuration and usage of UserALE, we have included an [example logging server](https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/example#capturing-logs-using-the-logging-server) in our
-[example directory](https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/example). This is a very helpful utility
+**NOTE**: In order to facilitate testing configuration and usage of UserALE, we have included an [example logging server](https://github.com/apache/flagon/tree/master/products/userale/example#capturing-logs-using-the-logging-server) in our
+[example directory](https://github.com/apache/flagon/tree/master/products/userale/example). This is a very helpful utility
 that works with both included [module examples](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example/webpackUserAleExample)
 and [script-tag examples](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example). We strongly recommend experimenting with it.
 
@@ -121,10 +120,17 @@ For example, if you do _not_ want UserALE to start logging automatically, you ca
 
 Then, you can use the `userale.start()` API export to begin logging at the appropriate time during page load or triggered from an event:
 
-```html
-const changeMe = "me"; userale.options({ "userId": changeMe, "autostart": false,
-"url": "http://localhost:8000/", "version": "next", "logDetails": false,
-"sessionId": "this one" }); userale.start();
+```js
+const changeMe = "me";
+userale.options({
+  userId: changeMe,
+  autostart: false,
+  url: "http://localhost:8000/",
+  version: "next",
+  logDetails: false,
+  sessionId: "this one",
+});
+userale.start();
 ```
 
 Additional examples of `userale.options()` can be found in our [example directory](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example).
@@ -138,16 +144,20 @@ The complete list of configurable parameters that can be configured via `userale
 | transmitInterval  | Delay between transmit checks                                                           | 5000 (ms)             |
 | logCountThreshold | Minimum number of logs to send                                                          | 5                     |
 | userId            | User identifier                                                                         | null                  |
-| sessionId         | Session identifier                                                                      | null                  |
-| version           | Application version identifier                                                          | null                  |
+| sessionId         | Session identifier (persisted in `sessionStorage` when omitted)                         | auto-generated        |
+| httpSessionId     | HTTP session identifier                                                                 | auto-generated        |
+| browserSessionId  | Browser session identifier                                                              | auto-generated        |
+| version           | Application version identifier (also configurable via `toolVersion`)                    | null                  |
 | logDetails        | Toggle detailed logs (keys pressed and input/change values)                             | false                 |
 | resolution        | Delay between instances of high frequency logs (mouseover, scroll, etc.)                | 500 (ms)              |
 | userFromParams    | Query param in the page URL to fetch userId from                                        | null                  |
 | toolName          | Name of tool being logged (`service.name` in OTLP)                                      | null                  |
+| custIndex         | Optional custom Elasticsearch/OpenSearch index prefix                                   | null                  |
 | authHeader        | `Authorization` header string or callback function                                      | null                  |
 | apiKey            | API key sent via the `x-api-key` HTTP request header                                    | null                  |
 | headers           | Custom HTTP headers object (`Record<string, string>`)                                   | null                  |
 | exporterType      | Wire format / transport (`'http-json'`, `'otlp'`, `'proto-json'`, `'websocket'`)        | `'http-json'`         |
+| exporterFormat    | Alias for `exporterType`                                                                | `'http-json'`         |
 | otlpEndpoint      | OpenTelemetry Collector HTTP endpoint (auto-appends `/v1/logs` when path is empty/root) | null                  |
 | exporter          | Custom `LogExporter` instance overriding built-in exporters                             | null                  |
 | traceContext      | Callback returning active W3C `{ traceId, spanId }` for OTLP correlation                | null                  |
@@ -174,11 +184,13 @@ You have access to the same parameters listed above, however, naming conventions
 | data-interval          | Delay between transmit checks                                            | 5000 (ms)             |
 | data-threshold         | Minimum number of logs to send                                           | 5                     |
 | data-user              | User identifier                                                          | null                  |
+| data-session           | Session identifier                                                       | auto-generated        |
 | data-version           | Application version identifier                                           | null                  |
 | data-log-details       | Toggle detailed logs (keys pressed and input/change values)              | false                 |
 | data-resolution        | Delay between instances of high frequency logs (mouseover, scroll, etc.) | 500 (ms)              |
 | data-user-from-params  | Query param in the page URL to fetch userId from                         | null                  |
 | data-tool              | Name of tool being logged                                                | null                  |
+| data-index             | Custom index identifier (`custIndex`)                                    | null                  |
 | data-auth              | `Authorization` header value                                             | null                  |
 | data-api-key           | `x-api-key` header value                                                 | null                  |
 | data-headers           | JSON-encoded object of custom HTTP headers                               | null                  |
@@ -274,137 +286,157 @@ userale.startSessionReplay({
 
 Including UserALE in your project as a `module` attaches the UserALE script as an object to the page.
 
-We have exposed a number of functions that assist you in modifying, filtering, and customizing logs
+We have exposed a number of functions that assist you in modifying, filtering, and customizing logs.
 
-A complete list of available functions are as follows:
+A complete list of exported functions is as follows:
 
-| Function                    | Description                                                                                   | Notes                                                                 |
-| --------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| userale.options             | modify userale's configuration option                                                         | see top level README for complete list of options                     |
-| [DEPRECATED] userale.filter | filters out logs from logging queue by keys or values                                         | filters are callbacks with global scope                               |
-| [DEPRECATED] userale.map    | modify/add log keys or values                                                                 | mappings are callbacks with global scope                              |
-| userale.addCallbacks        | add one or more callbacks to be executed during log packaging                                 | callbacks have global scope                                           |
-| userale.removeCallbacks     | remove one or more callbacks by name                                                          | Removes callbacks added from userale.addCallbacks                     |
-| userale.log                 | appends a custom log to the log queue                                                         | the custom log object is an object key:value pairs                    |
-| userale.packageLog          | transforms the provided event into a log and appends it to the log queue                      | designed for HTML events                                              |
-| userale.packageCustomLog    | packages the provided customLog to include standard meta data and appends it to the log queue | designed for non HTML events                                          |
-| userale.details             | defines the way information is extracted from various events                                  | supports packageLog/packageCustomLog 'details'                        |
-| userale.getSelector         | builds a string CSS selector from the provided HTML element id                                | populates 'target' field in packaged logs                             |
-| userale.buildPath           | builds an array of elements from the provided event target, to the root element (DOM path)    | populates the 'path' field in packaged logs                           |
-| userale.start               | used to start the logging process if                                                          | unecessary if 'autostart' is set to true in initial setting (default) |
-| userale.stop                | halts the logging process. Logs will no longer be sent                                        | will need to invoke userale.start to restart logging                  |
+| Function                            | Description                                                                                           | Notes                                                               |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `userale.options`                   | Modify or inspect UserALE's configuration options                                                     | Returns current `Configuration` object                              |
+| `userale.start`                     | Start the logging process if `autostart: false` or after `userale.stop()`                             | Unnecessary if `autostart: true` (default)                          |
+| `userale.stop`                      | Halt the logging process (`userale.start()` restarts logging)                                         | Pauses event packaging and transmission                             |
+| `userale.addCallbacks`              | Register one or more named callbacks `(log, event) => log \| false` executed during log packaging     | Return `false` to filter out a log, or return a modified log object |
+| `userale.removeCallbacks`           | Remove one or more registered callbacks by name                                                       | Accepts an array of callback keys                                   |
+| `userale.log`                       | Append a pre-constructed custom log object directly to the log queue                                  | Bypasses standard packaging unless combined with `packageCustomLog` |
+| `userale.packageLog`                | Transform a DOM `Event` into a canonical UserALE log and append it to the queue                       | Designed for HTML/DOM events                                        |
+| `userale.packageCustomLog`          | Merge custom metadata with standard UserALE context fields and append to the queue                    | Designed for custom application events                              |
+| `userale.details`                   | Return the default `details` extractor function for a given event type                                | Supports `packageLog` / `packageCustomLog`                          |
+| `userale.getSelector`               | Build a CSS selector string (`tag#id.class`) for an HTML `EventTarget`                                | Populates the `target` field in packaged logs                       |
+| `userale.buildPath`                 | Build the ordered DOM ancestor path array from event target to root                                   | Populates the `path` field in packaged logs                         |
+| `userale.getTargetRect`             | Extract rounded `{ x, y, width, height, top, right, bottom, left }` bounding box for a DOM element    | Populates `targetRect` on discrete interaction logs                 |
+| `userale.detectBrowser`             | Detect `{ browser, version }` using User-Agent Client Hints with regex fallback                       | Zero external runtime dependencies                                  |
+| `userale.registerAuthCallback`      | Register a callback `() => string` returning a dynamic `Authorization` header value                   | Reset with `userale.resetAuthCallback()`                            |
+| `userale.registerHeadersCallback`   | Register a callback `() => Record<string, string>` returning dynamic custom HTTP headers              | Reset with `userale.resetHeadersCallback()`                         |
+| `userale.registerExporter`          | Register a custom `LogExporter` implementation (`HttpJsonExporter`, `OtlpJsonExporter`, etc.)         | Also configurable via `userale.options({ exporter })`               |
+| `userale.startSessionReplay`        | Start Layer 1 (`MutationObserver`, `RageClickDetector`) and optional Layer 2 (`rrweb`) session replay | Returns a stop/cleanup function                                     |
+| `userale.flushSessionReplay`        | Immediately flush the active `rrweb` session replay ring buffer as a `logType: 'replay'` envelope     | Returns `Promise<ReplayEnvelope \| null>`                           |
+| `userale.stopSessionReplay`         | Stop active session replay observers and clear the ring buffer                                        | Safe to call multiple times                                         |
+| `userale.getActiveReplayRingBuffer` | Return the active `ReplayRingBuffer` instance when session replay is running                          | Returns `null` when inactive                                        |
 
-Including UserALE as a `script-tag` provides you access to the same functions listed above. However, UserALE essentially
-becomes a property of the DOM. As such, you'll need to call functions as a window property:
+Including UserALE as a `script-tag` provides you access to the same functions listed above as properties of `window.userale`:
 
-```html
-userale.options = window.userale.options
+```js
+window.userale.options({ userId: "example-user" });
 ```
 
 ## Examples
 
-We provide a number of examples to illustrate how the functions above
-can be used with sample webpages and logging servers. These are tailored for [module examples](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example/webpackUserAleExample)
-and [script-tag examples](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example).
-Select examples are below:
+We provide a number of examples to illustrate how the functions above can be used with sample webpages and logging servers. These are tailored for [module examples](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example/webpackUserAleExample) and [script-tag examples](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example).
 
-Filter your logs with `userale.filter`:
+Filter and modify logs using `userale.addCallbacks`:
 
-```html
-userale.filter(function (log) { var type_array = ['mouseup', 'mouseover',
-'mousedown', 'keydown', 'dblclick', 'blur', 'focus', 'input', 'wheel']; var
-logType_array = ['interval']; return !type_array.includes(log.type) &&
-!logType_array.includes(log.logType); });
+```js
+userale.addCallbacks({
+  filterNoisyEvents(log) {
+    const ignoredEvents = [
+      "mouseup",
+      "mouseover",
+      "mousedown",
+      "keydown",
+      "dblclick",
+      "blur",
+      "focus",
+      "input",
+      "wheel",
+    ];
+    if (ignoredEvents.includes(log.type) || log.logType === "interval") {
+      return false;
+    }
+    return log;
+  },
+  labelTestButton(log) {
+    if (log.target === "button#test_button") {
+      return Object.assign({}, log, { customLabel: "Click me!" });
+    }
+    return log;
+  },
+});
 ```
 
-Modify (add/remove) log fields with surgical precision using `userale.map`:
+(Additional examples illustrate [precision custom labeling](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example/log-label-example) using `addCallbacks` and `packageCustomLog`.)
 
-```html
-userale.map(function (log) { var targetsForLabels = ["button#test_button"]; if
-(targetsForLabels.includes(log.target)) { return Object.assign({}, log, {
-CustomLabel: "Click me!" }); } else { return log; } });
+Generate custom logs with `userale.packageCustomLog` or `userale.log`:
+
+```js
+document.addEventListener("change", function (e) {
+  if (e.target.value === "packageCustomLog") {
+    userale.packageCustomLog(
+      {
+        customLabel: "packageCustomLog Example",
+        customField1: "foo",
+        customField2: "bar",
+      },
+      function () {
+        return { changeValue: e.target.value };
+      },
+      true,
+    );
+  }
+});
 ```
 
-(Additional examples illustrate [precision custom labeling](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/example/log-label-example), using a variety of functions.)
+Use our own log packaging pipeline to streamline custom HTML event logging with `userale.packageLog`:
 
-Generate custom logs with `userale.log`:
-
-```html
-document.addEventListener('change', function(e) { if (e.target.value === 'log')
-{ userale.log({ target: userale.getSelector(e.target), path:
-userale.buildPath(e), type: e.type, logType: 'custom', userAction: false,
-details: 'I can make this log look like anything I want', customField1: 'foo',
-customField2: 'bar', userId: userale.options().userId, toolVersion:
-userale.options().version, toolName: userale.options().toolName, useraleVersion:
-userale.options().useraleVersion, sessionId: userale.options().sessionId,
-customLabel: "(custom) Log Example" }); } });
+```js
+document.addEventListener("change", function (e) {
+  if (e.target.value === "packageLog") {
+    userale.addCallbacks({
+      customChangeLabel(log) {
+        if (log.type === "change") {
+          return Object.assign({}, log, {
+            logType: "custom",
+            customLabel: "packageLog Example",
+          });
+        }
+        return log;
+      },
+    });
+    userale.packageLog(e, userale.details(userale.options(), "change"));
+  }
+});
 ```
 
-User our own log packaging pipeline to streamline custom HTML event logging with `userale.packageLog`:
+You can find additional examples on our [website](https://flagon.apache.org/docs/useralejs/API/).
 
-```html
-document.addEventListener('change', function(e){ if (e.target.value ===
-'packageLog') { /**You can then use the 'Mapping' API function to modify custom
-logs created with the packageLog function*/ userale.map(function (log) { var
-targetsForLabels = ['change']; if (targetsForLabels.includes(log.type)) { return
-Object.assign({}, log, { logType: 'custom', customLabel: 'packageLog Example'
-}); } else { return log; } }); /**You can also use the details function to
-package additional log meta data, or add custom details*/ userale.packageLog(e,
-userale.details(userale.options(),'change')); } else { return false } });
-```
+## Indexing, Storing, and Visualizing Logs
 
-Again, see [Usage](#usage) for differences in invoking these functions with `module` and `script-tag` includes.
+Apache Flagon provides ready-to-run reference architectures for collecting, storing, and visualizing UserALE telemetry:
 
-You can find additional examples on our [website](http://flagon.apache.org/docs/useralejs/API/).
-
-## Indexing, Storing and Visualizing Logs
-
-We recommend Elastic products, specifically an [ELK cluster](https://www.elastic.co/what-is/elk-stack), for indexing and storing logs in productions.
-
-You can find a 'sand-box' ELK build, configuration files, and visualization/dashboards tailored for UserALE in the [examples](https://github.com/apache/flagon/tree/master/examples).
+- **[OpenTelemetry + Grafana + Loki + Tempo](https://github.com/apache/flagon/tree/master/products/userale/example/otel-demo)**: 5-minute Docker Compose stack correlating browser clicks with distributed traces via W3C `traceparent`.
+- **[OpenSearch + OpenTelemetry Collector](https://github.com/apache/flagon/tree/master/examples/opensearch)**: 100% Apache-2.0 search and analytics stack with Docker Compose and Kubernetes manifests.
+- **[All-Apache Behavioral Lakehouse](https://github.com/apache/flagon/tree/master/examples/apache-lakehouse)**: Apache Kafka + Apache Iceberg + Apache DataFusion + Apache Flagon Distill + Apache Superset.
+- **[ELK Stack (Elasticsearch + Logstash + Kibana)](https://github.com/apache/flagon/tree/master/examples/elk)**: Classic Elastic stack with Logstash pipeline, index templates, and Kibana dashboards.
 
 ## Modifying Source
 
-You may wish to modify UserALE to suite your needs. After making modification to [UserALE src](https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/src),
-you will need to rebuild the UserALE script (and run tests).
+After making modifications to [`products/userale/packages/flagon-userale/src`](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/src), rebuild and run the test suite from `products/userale`:
 
-To (re)build UserALE:
+```bash
+# Install workspace dependencies
+pnpm install
 
-```
-npm run build
-```
+# Build ESM + IIFE bundles and TypeScript declarations
+pnpm build
 
-To run UserALE unit tests:
+# Run Jest unit & Protobuf/OTLP contract tests (118 tests)
+pnpm --dir packages/flagon-userale test
 
-```
-npm run test
-```
+# Run full test suite including Playwright E2E browser & extension tests
+pnpm test
 
-We use gulp-mocha for unit tests. The results will print to your terminal:
-
-```
-...
-    attachHandlers
-    ✓ attaches all the event handlers without duplicates
-    ✓ debounces bufferedEvents (505ms)
-    defineDetails
-      - configures high detail events correctly
-...
-
-  45 passing (954ms)
-  1 pending
+# Check formatting and linting
+pnpm format:check
+pnpm lint:check
 ```
 
-Any failing tests will also be logged in the terminal. If there are failing tests, please consider [submitting an issue report](https://github.com/apache/flagon/issues).
-
-For more guidance on modifying Flagon UserALE src code, check out [the guide on our website](http://flagon.apache.org/docs/useralejs/modifying/).
+For more guidance on modifying Flagon UserALE source code, check out [the guide on our website](https://flagon.apache.org/docs/useralejs/modifying/).
 
 ## Contributing
 
-Contributions are welcome! Simply [submit an issue](https://github.com/apache/flagon/issues). Pull requests are welcome. The core team will review it and work with you to incorporate it into UserALE. If you want to become a contributor to the project, see our [contribution guide](http://flagon.apache.org/docs/contributing/).
+Contributions are welcome! Simply [submit an issue](https://github.com/apache/flagon/issues) or open a pull request. See our [Contributing Guide](https://github.com/apache/flagon/blob/master/CONTRIBUTING.md) for development setup instructions.
 
-Join the conversation: tell us your needs, wishes, and interests by joining our [mailing list](dev-subscribe@flagon.apache.org)!
+Join the conversation: tell us your needs, wishes, and interests by joining our [mailing list](mailto:dev-subscribe@flagon.apache.org)!
 
 ## License
 
-Apache Flagon UserALE is provided under Apache License version 2.0. See [LICENSE](https://github.com/apache/flagon/blob/master/LICENSE) and [NOTICE](https://github.com/apache/flagon/blob/master/NOTICE) files at MASTER for more details.
+Apache Flagon UserALE is provided under Apache License version 2.0. See [LICENSE](https://github.com/apache/flagon/blob/master/LICENSE) and [NOTICE](https://github.com/apache/flagon/blob/master/NOTICE) files for more details.

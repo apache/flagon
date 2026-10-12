@@ -16,7 +16,8 @@
     specific language governing permissions and limitations
     under the License.
 -->
-# Apache Flagon UseraALE.js React Example
+
+# Apache Flagon UserALE.js React Example
 
 This example was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). It demonstrates UserALE `autostart` configurations and `start()`, `stop()` exports.
 
@@ -24,13 +25,13 @@ This example was bootstrapped with [Create React App](https://github.com/faceboo
 
 To use this example, first install dependencies (from this subdir):
 
-```Javascript
+```bash
 npm install
 ```
 
 Then run the `start` script:
 
-```Javascript
+```bash
 npm run start
 ```
 
@@ -40,4 +41,4 @@ Click the text on the page to execute the UserALE `start()` export and start log
 
 Or, modify `App.js` in `src` to experiment with `autostart` and `stop()` exports.
 
-Note that you will not receive logs unless you have a [logging server](https://github.com/apache/incubator-flagon-useralejs/tree/master/example#capturing-logs-using-the-logging-server) running. 
+Note that you will not receive logs unless you have a [logging server](https://github.com/apache/flagon/tree/master/products/userale/example#capturing-logs-using-the-logging-server) running.

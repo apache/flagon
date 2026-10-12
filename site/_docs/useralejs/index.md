@@ -79,13 +79,14 @@ All options can be configured via HTML `data-*` attributes on the `<script>` tag
 | `userFromParams` | `data-user-from-params` | URL query parameter to extract `userId` from | `null` |
 | `authHeader` | `data-auth` | `Authorization` header string or callback | `null` |
 | `apiKey` | `data-api-key` | Value sent in the `x-api-key` HTTP header | `null` |
-| `exporterFormat` / `exporterType` | `data-exporter` | Wire format: `'userale-json'` (default), `'otlp-json'` (`'otlp'`), `'proto-json'`, or `'ws'` | `'userale-json'` |
+| `exporterType` / `exporterFormat` | `data-exporter` | Wire format: `'http-json'` (default), `'otlp'` (`'otlp-json'`), `'proto-json'`, or `'websocket'` | `'http-json'` |
 | `otlpEndpoint` | `data-otlp-endpoint` | OpenTelemetry Collector HTTP logs endpoint (automatically appends `/v1/logs` if given a base origin) | `null` |
-| `headers` | — | Custom HTTP headers `Record<string, string>` merged into every request | `null` |
+| `headers` | `data-headers` | Custom HTTP headers `Record<string, string>` (or JSON string in `data-headers`) merged into every request | `null` |
+| `observeMutations` | `data-observe-mutations` | Enable throttled `MutationObserver` structural DOM telemetry (`#104`) | `false` |
 | `exporter` | — | Custom `LogExporter` instance implementing `export(logs, options)` | `null` |
 | `traceContext` | — | Optional `() => ({ traceId, spanId })` callback for W3C TraceContext correlation | `null` |
 
-See the [UserALE.js API Reference]({{ '/docs/useralejs/API' | prepend: site.baseurl }}) for full method and exporter documentation.
+See the [UserALE.js API Reference]({{ '/docs/useralejs/API' | prepend: site.baseurl }}) for full method, session replay, and exporter documentation.
 
 ---
 
@@ -101,7 +102,7 @@ The [UserALE Browser Extension](https://github.com/apache/flagon/tree/master/pro
 2. Load the extension in your browser:
    - **Chrome / Edge**: Open `chrome://extensions/`, enable **Developer mode**, click **Load unpacked**, and select `products/userale/packages/flagon-userale-ext/build/chrome-mv3-prod/` (or `chrome-mv3-dev/` when running `pnpm dev`).
    - **Firefox**: Open `about:debugging`, select **This Firefox**, click **Load Temporary Add-on**, and select `manifest.json` in `products/userale/packages/flagon-userale-ext/build/firefox-mv3-prod/`.
-3. Open the extension **Options** page to configure the **Logging Endpoint**, **Exporter Format** (`UserALE JSON`, `OpenTelemetry (OTLP/JSON)`, or `Protobuf v1 JSON`), **URL Allowlist**, **HTTP Basic Auth**, **Custom HTTP Headers (JSON)**, or **OAuth PKCE** credentials.
+3. Open the extension **Options** page to configure the **Logging Endpoint**, **Exporter Format** (`UserALE JSON`, `OpenTelemetry (OTLP/JSON)`, or `Protobuf v1 JSON`), **URL Allowlist**, **Excluded Event Types / Log Types**, and **Authentication** (`OAuth` PKCE or `API Key`).
 
 ---
 

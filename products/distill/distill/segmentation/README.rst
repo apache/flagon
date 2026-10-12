@@ -37,7 +37,7 @@ These fields can be accessed through `get` functions.  For example, if a collect
 
 .. code:: python
 
-    generated_segments = distill.generate_segments(sorted_dict, 'type', ['clicks'], 1, 1)
+    generated_segments = distill.generate_segments(sorted_dict, 'type', ['click'], 1, 1)
 
 then the number of logs in each of these ``Segment`` objects could be printed to the console by running:
 
@@ -431,7 +431,7 @@ Note that by default this function will not trim additional logs that do not fit
 
 Collapsing Window Segments
 **************************
-The ``generate_collapsing_windows_segments`` function generates ``Segment`` objects based on a window to time in which the given field name has a value matching one of the values indicated by the ``field_values_of_interest`` list parameter.  An example usage of this function is shown below:
+The ``generate_collapsing_window_segments`` function generates ``Segment`` objects based on a window of time in which the given field name has a value matching one of the values indicated by the ``field_values_of_interest`` list parameter.  An example usage of this function is shown below:
 
 .. code:: python
 
@@ -450,14 +450,14 @@ A union can be performed using the ``union`` function.  An example usage of this
 .. code:: python
 
     # Segment 1
-    segment1.get_uids()     #[uid1, uid2, uid3]
+    segment1.get_segment_uids()     #[uid1, uid2, uid3]
 
     # Segment 2
-    segment2.get_uids()     #[uid3, uid4, uid5]
+    segment2.get_segment_uids()     #[uid3, uid4, uid5]
 
     # Perform Union
     new_segment = distill.union("new_segment", segment1, segment2)
-    new_segment.get_uids()  #[uid1, uid2, uid3, uid4, uid5]
+    new_segment.get_segment_uids()  #[uid1, uid2, uid3, uid4, uid5]
 
 The above code will return a new ``Segment`` object with the given segment_name, start and end values based on the smallest client time and largest client time of the given ``Segment`` objects, and a list of the union of the uids of segment1 and segment2.
 
@@ -468,13 +468,13 @@ An intersection can be performed using the ``intersection`` function.  An exampl
 .. code:: python
 
     # Segment 1
-    segment1.get_uids()   #[uid1, uid3, uid6]
+    segment1.get_segment_uids()   #[uid1, uid3, uid6]
 
     # Segment 2
-    segment2.get_uids()     #[uid3, uid6, uid9]
+    segment2.get_segment_uids()     #[uid3, uid6, uid9]
 
     new_segment = distill.intersection("new_segment", segment1, segment2)
-    new_segment.get_uids()  #[uid3, uid6]
+    new_segment.get_segment_uids()  #[uid3, uid6]
 
 The above code will return a new ``Segment`` object (similarly to union) with uids that represent the intersection of the uids of segment1 and segment2.
 
@@ -485,16 +485,16 @@ The ``difference`` function creates a new ``Segment`` object based on the logica
 .. code:: python
 
     # Segment 1
-    segment1.get_uids()   #[uid1, uid2, uid3]
+    segment1.get_segment_uids()   #[uid1, uid2, uid3]
 
     # Segment 2
-    segment2.get_uids()     #[uid2, uid4, uid5]
+    segment2.get_segment_uids()     #[uid2, uid4, uid5]
 
     new_segment1 = distill.difference("new_segment_1", segment1, segment2)
-    new_segment1.get_uids()  #[uid1, uid3]
+    new_segment1.get_segment_uids()  #[uid1, uid3]
 
     new_segment2 = distill.difference("new_segment_2", segment2, segment1)
-    new_segment2.get_uids()  #[uid4, uid5]
+    new_segment2.get_segment_uids()  #[uid4, uid5]
 
 The above code will return a new ``Segment`` object (similarly to union and intersection) with uids that represent the difference of the uids of segment1 and segment2.
 
@@ -516,7 +516,7 @@ The ``write_segment`` function creates a nested dictionary of segment names to U
     # Write Segments
     segments = distill.write_segment(sorted_dict, segment_names, start_end_vals)
 
-The above code looks similar to the ``create_segments`` example usage, however, rather than returning a ``Segments`` object, this code will create a dictionary of segment names to UIDs to individual UserALE logs.
+The above code looks similar to the ``create_segment`` example usage, however, rather than returning a ``Segments`` object, this code will create a dictionary of segment names to UIDs to individual UserALE logs.
 
 Exporting Segments
 ------------------

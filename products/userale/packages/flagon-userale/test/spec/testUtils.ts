@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 import { JSDOM } from "jsdom";
-// @ts-ignore
+// @ts-expect-error dom-storage lacks bundled TypeScript declarations
 import Storage from "dom-storage";
 
 export function sleep(ms: number) {
@@ -37,6 +37,9 @@ export async function createEnvFromFile(fileName: string, extraConfig = {}) {
     ...extraConfig,
   });
   await sleep(100); // wait for external scripts to load
+  for (let i = 0; i < 40 && !dom.window.userale; i++) {
+    await sleep(50);
+  }
   return dom;
 }
 

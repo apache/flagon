@@ -37,15 +37,15 @@
   - `detect_rage_clicks`: Temporal and spatial sliding-window detector for rapid repeated clicks on the same target.
   - `detect_dead_clicks`: Identifies clicks on non-interactive targets (`div`, `span`, etc.) that produce no DOM mutation, form change, navigation, or state transition within a response window.
   - `detect_dom_thrash`: Detects high-frequency DOM mutation bursts (`logType == "mutation"`) indicating layout thrashing or infinite re-render loops.
-  - `frustration_score`: Computes a normalized `[0.0, 1.0]` composite UX friction index with breakdown counts.
+  - `frustration_score`: Computes a normalized `[0.0, 100.0]` composite UX friction index with severity classification (`none`, `low`, `medium`, `high`) and breakdown counts.
 - **Spatial & Viewport Analytics (`distill.analytics.spatial`)**:
   - `click_heatmap_data` & `plot_click_heatmap`: Extracts viewport-normalized `(x, y)` click coordinates and `targetRect` bounding boxes and renders interactive 2D Plotly density heatmaps.
   - `scroll_depth_summary`: Computes per-page maximum horizontal/vertical scroll depth in pixels and viewport ratios.
 - **OpenTelemetry & Replay Correlation (`distill.analytics.otel`)**:
   - `correlate_by_trace`: Joins frontend UserALE interaction logs by W3C `traceId` (`flagon.trace_id`) with span timelines, error flags, and duration.
-  - `extract_replay_envelopes`: Extracts and parses `logType == "replay"` (`flagon-lite-v1` and `rrweb-v2`) session replay envelopes.
+  - `extract_replay_envelopes`: Extracts and parses `logType == "replay"` (`type == "session_replay"`) session replay envelopes with frames, trigger metadata, and correlated `traceId`/`spanId`.
 - **Process, Graph & Statistical Analytics (`distill.process`, `distill.analytics.graph`, `distill.analytics.stat`)**:
-  - Directed clickstream graphs (`createDiGraph`, `funnel`), first-order Markov transition probability matrices (`transition_matrix`), and comprehensive session summaries (`session_summary`, `click_rate`).
+  - Directed clickstream graphs (`createDiGraph`, `funnel`, `sankey`), first-order Markov transition probability matrices (`transition_matrix`), and comprehensive session summaries (`session_summary`, `click_rate`).
 
 ---
 
@@ -53,20 +53,21 @@
 
 ```python
 import distill
-from distill.process.log import Log
-from distill.schemas.userale import UserAleSchema, extract_logs
+from distill import Log
+from distill.core.types import UserAleSchema
+from distill.schemas.userale import extract_logs
 
-# 1. Single log or batch of flat UserALE JSON, Proto-JSON LogBatch, or OTLP/JSON:
+# 1. Extract and validate logs from flat UserALE JSON, Proto-JSON LogBatch, or OTLP/JSON:
 raw_docs = extract_logs(payload)  # Accepts list[dict], LogBatch dict, or OTLP ExportLogsServiceRequest dict
-validated = [UserAleSchema(**doc) for doc in raw_docs]
+validated = [UserAleSchema.validate_python(doc) for doc in raw_docs]
 
-# 2. Load directly into a Distill Log container:
-log_stream = Log(data=payload, schema=UserAleSchema)
+# 2. Wrap a single log dictionary in a Distill Log container:
+single_log = Log(data=raw_docs[0], schema=UserAleSchema)
 
 # 3. Run behavioral & frustration analytics:
 summary = distill.session_summary(raw_docs)
 friction = distill.frustration_score(raw_docs)
-transitions = distill.transition_matrix(raw_docs, field="target", normalize=True)
+transitions = distill.transition_matrix(raw_docs, drop_recursions=True)
 traces = distill.correlate_by_trace(raw_docs)
 ```
 

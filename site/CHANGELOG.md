@@ -1,6 +1,9 @@
 CHANGELOG
 ---------
 
+### 1.1.0 (2026-04-11)
+- Updated UserALE.js and Distill documentation for 2.5 features (OpenTelemetry OTLP/JSON & SDK exporters, Protobuf v1 schemas, two-layer session replay, behavioral frustration & spatial analytics, `uv` workflow, and OpenSearch / Apache Lakehouse deployment examples).
+
 ### 1.0.2 (2025-04-03)
 - Updated site build process.
 

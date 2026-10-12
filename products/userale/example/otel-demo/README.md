@@ -38,14 +38,15 @@ OpenTelemetry Collector (otelcol-contrib:0.114.0)
 1. **Build UserALE.js** (from `products/userale`):
 
    ```bash
+   cd products/userale
    pnpm install
-   pnpm run build
+   pnpm build
    ```
 
-2. **Start the OpenTelemetry Collector, Loki, Tempo, and Grafana stack**:
+2. **Start the OpenTelemetry Collector, Loki, Tempo, and Grafana stack** (from `products/userale`):
 
    ```bash
-   docker compose -f products/userale/example/otel-demo/docker-compose.yml up -d
+   docker compose -f example/otel-demo/docker-compose.yml up -d
    ```
 
 3. **Open the Demo Page & Grafana**:
@@ -56,7 +57,7 @@ OpenTelemetry Collector (otelcol-contrib:0.114.0)
 
 4. **Tear Down**:
    ```bash
-   docker compose -f products/userale/example/otel-demo/docker-compose.yml down
+   docker compose -f example/otel-demo/docker-compose.yml down
    ```
 
 ## CORS Configuration on the OpenTelemetry Collector

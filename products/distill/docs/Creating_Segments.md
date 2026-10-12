@@ -17,21 +17,6 @@
   ~ under the License.
 -->
 
-> \<!\-\--Licensed to the Apache Software Foundation (ASF) under one or
-> more contributor license agreements. See the NOTICE file distributed
-> with this work for additional information regarding copyright
-> ownership. The ASF licenses this file to You under the Apache License,
-> Version 2.0 (the \"License\"); you may not use this file except in
-> compliance with the License. You may obtain a copy of the License at
->
-> > <http://www.apache.org/licenses/LICENSE-2.0>
->
-> Unless required by applicable law or agreed to in writing, software
-> distributed under the License is distributed on an \"AS IS\" BASIS,
-> WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-> implied. See the License for the specific language governing
-> permissions and limitations under the License. \-\--\>
-
 # Creating Segment Objects
 
 The creation of `Segment` objects can be done through the use of five
@@ -51,14 +36,14 @@ expects logs to be structured in a dictionary sorted by `clientTime`.
 The keys of the dictionary are universally unique identifiers (UUIDs)
 for each log and the value for each UUID key is the log itself. Distill
 provides analysts with a function that will generate these IDs:
-`get_UUID`. This function can be used as follows:
+`getUID`. This function can be used as follows:
 
 ``` python
 # A UserALE log
 log
 
-# Generate UUID
-uuid = distill.getUUID(log)
+# Generate UID
+uid = distill.getUID(log)
 ```
 
 Throughout the rest of this documentation UUID and UID will be used
@@ -172,7 +157,7 @@ that do not fit into an additional fixed time window.
 
 ### Generate Collapsing Window Segments
 
-The `generate_collapsing_windows_segments` function generates `Segment`
+The `generate_collapsing_window_segments` function generates `Segment`
 objects based on a window of time in which the given field name has a
 value matching one of the values indicated by the
 `field_values_of_interest` list parameter. An example usage of this

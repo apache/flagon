@@ -5,29 +5,29 @@ title: Distill
 image: /images/distill_inverted.png
 component: Distill
 
-description: Apache Distill is an analytics framework for handling and analyzing UserALE data. Distill allows you to focus on the data you want and model it. Distill empowers you to learn more from your data than any commercial service; use Distill's analytic libraries to generate statistics on how users interact with different elements of your application and also understand how users interact with your applications. Distill specializes in models of sequence and workflow so that you can understand how users experiment with your application and whether they interact with your application the way you expected. Distill is written in Python and built for scalable growth and customization.
+description: Apache Flagon Distill is a Python behavioral analytics framework for segmenting, modeling, and visualizing UserALE telemetry. Distill ingests UserALE flat JSON, Protobuf v1 LogBatch JSON, and OpenTelemetry OTLP/JSON payloads—giving data scientists and product engineers built-in algorithms for session segmentation, frustration detection (rage clicks, dead clicks, cursor thrashing), spatial & viewport engagement heatmaps, and clickstream graph modeling (Markov transition matrices, Sankey diagrams, and conversion funnels).
 
 features:
   -
     icon: search
     color: blue
-    title: Easy, efficient queries
-    description: Distill utilizes RESTful APIs to streamline making calls to your UserALE log database.
+    title: Multi-Format Ingestion & Validation
+    description: Normalize and validate UserALE flat JSON, Protobuf v1 LogBatch JSON, and OpenTelemetry OTLP/JSON payloads with Pydantic v2 schemas.
   -
     icon: object ungroup
     color: yellow
-    title: Segment your data
-    description: Retrieve on the cases or fields that you want.
+    title: Session & Window Segmentation
+    description: Slice event streams into fixed-time, collapsing-window, deadspace, and set-logic segments with session summaries.
   -
     icon: line chart
     color: red
-    title: Compute gross usage trends
-    description: Distill comes with built-in statistics libraries so that you can see how much your application is being used and which elements users rely on most.
+    title: Frustration & Spatial Analytics
+    description: Detect rage clicks, dead clicks, and cursor thrashing, compute composite frustration scores, and build click/scroll heatmaps.
   -
     icon: ordered list
     color: green
-    title: Model workflow
-    description: Distill comes with built in graph libraries for studying how user behaviors are sequenced in time allowing you to explore models of how user behavior unfolds over time.
+    title: Clickstream Graphs & Funnels
+    description: Build weighted NetworkX directed graphs, first-order Markov transition matrices, interactive Plotly Sankey diagrams, and funnels.
 
 contentCount: 0
 ---

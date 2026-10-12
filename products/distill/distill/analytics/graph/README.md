@@ -16,15 +16,25 @@
 
 # Graph Functions
 
-The file 'graph.py' provides Python functions for creating charts from edge lists.
+The file `graph.py` provides Python functions for building directed graphs, transition matrices, and interactive Plotly charts (`sankey` and `funnel`) from UserALE logs and edge lists.
+
+## `createDiGraph` and `transition_matrix`
+
+```python
+createDiGraph(nodes, edges, *, drop_recursions=False, node_labels=False)
+transition_matrix(edges_or_logs, *, drop_recursions=False, node_labels=False, as_dataframe=True)
+```
+
+- `createDiGraph`: Builds a weighted NetworkX `DiGraph` (with edge `"capacity"` counts) from a node list and edge list.
+- `transition_matrix`: Computes a row-normalized first-order Markov transition probability matrix (`pd.DataFrame` or `dict` where rows sum to `1.0`) from an edge list or a list/dict of UserALE logs.
 
 ## Sankey Function
 
 ```python
-sankey(edges_segmentN, node_labels=False)
+sankey(edges, node_labels=False, *, drop_recursions=False)
 ```
 
-The Sankey Function passes an edge list, or a list of tuples, and returns a Sankey, or a flow chart where width corresponds to quantity. Below is an example of a Sankey Diagram:
+The Sankey Function passes an edge list, or a list of tuples, and returns a Plotly Sankey figure (`go.Figure`) where link width corresponds to transition count. Below is an example of a Sankey Diagram:
 
 [![sankey0.png](https://i.postimg.cc/4NnnmphJ/sankey0.png)](https://postimg.cc/w789ryVP)
 Additionally, users have the option to pass a dictionary of node labels to replace existing labels.
@@ -51,14 +61,15 @@ sankey(edges, labels)
 ## Funnel Function
 
 ```python
-funnel(edges_segmentN, user_specification, node_labels=False)
+funnel(edges, targets, node_labels=False, *, infer=True)
 ```
 
-The Funnel Function takes the arguments: 
-edges_segmentN: List of Tuples
-user_specification: A string of target of interest e.g. #document
-node_labels (Optional): Optional Dictionary of key default values with value replacements 
-And it will return a Funnel graph. Below is an example of a Funnel Diagram:
+The Funnel Function takes the arguments:
+- `edges`: List of 2-element edge tuples `(source, target)`
+- `targets`: Either a starting target string (e.g. `'#document'`, which infers a 3-step funnel) or an explicit sequence of step targets (e.g. `['#document', 'input', 'button']`)
+- `node_labels` (Optional): Optional dictionary mapping raw target names to display labels
+
+And it will return a Plotly Funnel figure (`go.Figure`). Below is an example of a Funnel Diagram:
 
 [![funnelexample.png](https://i.postimg.cc/qvPxbKqT/newplot-2.png)](https://postimg.cc/tsz67YFS)
 Additionally, users have the option to pass a dictionary of node labels to replace existing labels.

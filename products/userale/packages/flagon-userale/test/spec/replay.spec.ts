@@ -186,6 +186,13 @@ describe("Session Replay & Behavioral DOM Telemetry (#104)", () => {
       document.body.appendChild(trackedModal);
 
       await new Promise((r) => setTimeout(r, 180));
+      for (
+        let i = 0;
+        i < 20 && !logs.some((l) => l.logType === "mutation");
+        i++
+      ) {
+        await new Promise((r) => setTimeout(r, 50));
+      }
 
       const mutationLogs = logs.filter((l) => l.logType === "mutation");
       expect(mutationLogs.length).toBeGreaterThanOrEqual(1);

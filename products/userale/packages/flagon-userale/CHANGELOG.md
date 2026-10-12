@@ -24,20 +24,19 @@ Apache Flagon UserALE.js (Unreleased)
 -------------------------------
 
 - [Closed Tickets](https://github.com/apache/flagon/issues)
-  - Pluggable `LogExporter` interface (`registerExporter`, `exporter`, `exporterFormat`) supporting `'userale-json'`, `'otlp-json'`, `'proto-json'`, and `'ws'` formats (#139)
+  - Pluggable `LogExporter` interface (`registerExporter`, `createExporter`, `exporter`, `exporterType`, `exporterFormat`) supporting `'http-json'` (`'v2-json'`), `'otlp'` (`'otlp-json'`), `'proto-json'`, and `'websocket'` formats (#139)
   - Native OpenTelemetry OTLP/JSON log exporter (`OtlpJsonExporter`, `toOtlpExportLogsServiceRequest`) with `Resource` attribute hoisting, nanosecond `BigInt` timestamps, OTel Event semantic naming (`eventName` / `event.name`), structured `kvlistValue` body, and W3C TraceContext (`traceId`, `spanId`) correlation (#140)
   - OpenTelemetry JS SDK bridge exporter (`OtelSdkExporter`) for apps already running `@opentelemetry/sdk-logs` (#140)
   - Zero-dependency Protobuf v1 canonical JSON exporter (`ProtoJsonExporter`) contract-tested against `proto/apache/flagon/userale/v1/log.proto` via `@bufbuild/protobuf` (#142, #143)
-  - Full-stack OpenTelemetry Collector + Grafana + Loki + Tempo `docker-compose` demo with click-to-trace W3C `traceparent` correlation (#141)
-  - Browser extension (`flagon-userale-ext`) updated with OAuth PKCE, basic auth, custom JSON headers, and Exporter Format selector (`UserALE JSON`, `OpenTelemetry (OTLP/JSON)`, `Protobuf v1 JSON`) (#140)
+  - Full-stack OpenTelemetry Collector + Grafana + Loki + Tempo `docker-compose` demo with click-to-trace W3C `traceparent` correlation (#141), plus 100% Apache-2.0 OpenSearch stack (`examples/opensearch`, #54) and All-Apache Behavioral Lakehouse (`examples/apache-lakehouse`)
+  - Browser extension (`flagon-userale-ext`) updated with OAuth PKCE, API Key (`x-api-key`), event/log type exclusion filters (`filterEventTypes`, `filterLogTypes`), and Exporter Format selector (`UserALE JSON`, `OpenTelemetry (OTLP/JSON)`, `Protobuf v1 JSON`) (#107, #109, #140)
   - Unified HTTP header builder (`buildHeaders`) with 48 KiB chunked `fetch(..., { keepalive: true })` transport on `pagehide` so auth/custom headers are preserved on tab close (#133, #139)
-  - Security hardening: automatic masking of `<input type="password">` values in change/input logs (#135)
+  - Security hardening: automatic masking of `<input type="password">` values in change/input logs and stripping of sensitive `data-api-key`, `data-auth`, `data-token`, `data-secret`, and `data-password` DOM attributes (#135)
   - Fixed `autostart: false` initialization bug where `start()` did not attach handlers or start log transmission, and fixed `intervalCounter` truthy check for timer ID `0` (#132)
   - Added SSR safety guards for `window` and `document` globals and moved `@bufbuild/protobuf` to `devDependencies` to keep the runtime bundle zero-dependency
-  - Upgraded `tsup` bundler from v5 to v8 and added `"files"` allowlist to `package.json` (#136, #146)
-  - Updated Apache Flagon Distill schema to seamlessly ingest UserALE v2.3/v2.4/v2.5 flat JSON, Protobuf v1 JSON (`LogBatch`), and OTLP/JSON (`ExportLogsServiceRequest`) payloads
+  - Upgraded `tsup` bundler from v5 to v8, removed unused `cypress` dependency, and added `"files"` allowlist to `package.json` (#136, #146)
+  - Updated Apache Flagon Distill schema and analytics (`frustration`, `spatial`, `otel`, `transition_matrix`, `session_summary`) to seamlessly ingest UserALE v2.3/v2.4/v2.5 flat JSON, Protobuf v1 JSON (`LogBatch`), and OTLP/JSON (`ExportLogsServiceRequest`) payloads
   - Zero-dependency browser metadata detection (`detectBrowser`) using User-Agent Client Hints with regex fallback (#108)
-  - Configurable event type and log type filtering in the browser extension (`flagon-userale-ext`) options UI (#107, #109)
   - Two-layer Session Replay & Behavioral DOM Telemetry (`startSessionReplay`, `flushSessionReplay`, `stopSessionReplay`, `ReplayRingBuffer`, `RageClickDetector`, `getTargetRect`) with throttled `MutationObserver` summaries, rage-click detection, `unhandledrejection` capture, and `rrweb`-compatible ring-buffer replay bridge correlated via `sessionId` and OpenTelemetry `traceId`/`spanId` (#104)
   - Fixed `input` event detail extraction (`extractInputDetails`) and added `targetRect` bounding-box geometry to discrete interaction events (`click`, `dblclick`, `change`, `submit`) and OTLP/Proto-JSON exporters
 
