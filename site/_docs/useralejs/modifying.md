@@ -20,11 +20,12 @@ priority: 3
 - [`exporters/`](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale/src/exporters):
   - `types.ts`: `LogExporter`, `ExportOptions`, `ExportResult`, and `ExporterType` interfaces.
   - `headers.ts`: Unified `buildHeaders(config)` and `chunkLogsForKeepalive` (48 KiB chunking for `fetch(..., { keepalive: true })`).
-  - `http-json.ts`: Default `HttpJsonExporter` (`'userale-json'`).
-  - `otlp-json.ts`: Native OpenTelemetry `OtlpJsonExporter` (`'otlp-json'`).
+  - `http-json.ts`: Default `HttpJsonExporter` (`'http-json'` / `'v2-json'`).
+  - `otlp-json.ts`: Native OpenTelemetry `OtlpJsonExporter` (`'otlp'` / `'otlp-json'`).
   - `otel-sdk.ts`: OpenTelemetry JS Logs API bridge (`OtelSdkExporter`).
   - `proto-json.ts`: Canonical Protobuf v1 JSON exporter (`ProtoJsonExporter`, `'proto-json'`).
-  - `websocket.ts`: Persistent `WebSocketExporter` (`'ws'`).
+  - `websocket.ts`: Persistent `WebSocketExporter` (`'websocket'`).
+- [`replay/index.ts`](https://github.com/apache/flagon/blob/master/products/userale/packages/flagon-userale/src/replay/index.ts): Two-layer Session Replay & Behavioral DOM Telemetry (`startSessionReplay`, `flushSessionReplay`, `stopSessionReplay`, `ReplayRingBuffer`, `RageClickDetector`, `MutationObserver` throttling).
 
 ---
 

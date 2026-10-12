@@ -6,15 +6,15 @@ priority: 4
 ---
 
 This guide describes the structure of [Apache Flagon UserALE.js](https://github.com/apache/flagon/tree/master/products/userale/packages/flagon-userale) logs, including:
-- The in-memory and default flat JSON schema (`'userale-json'`)
-- The OpenTelemetry OTLP/JSON export schema (`'otlp-json'`)
+- The in-memory and default flat JSON schema (`'http-json'`)
+- The OpenTelemetry OTLP/JSON export schema (`'otlp'` / `'otlp-json'`)
 - The Protobuf v1 canonical JSON export schema (`'proto-json'`, [`proto/apache/flagon/userale/v1/log.proto`](https://github.com/apache/flagon/blob/master/proto/apache/flagon/userale/v1/log.proto))
 
 All three formats are natively supported by **Apache Flagon Distill** (`distill.schemas.userale.extract_logs` and `UserAleSchema`).
 
 ---
 
-## 1. Standard UserALE Flat JSON Schema (`exporterFormat: 'userale-json'`)
+## 1. Standard UserALE Flat JSON Schema (`exporterType: 'http-json'`)
 
 By default, UserALE.js packages each interaction as a flat JSON object so `userale.addCallbacks(...)` filters and mappers can inspect or transform fields with zero nesting overhead.
 
@@ -40,12 +40,13 @@ By default, UserALE.js packages each interaction as a flat JSON object so `usera
   "microTime": 0.42,
   "location": { "x": 66, "y": 220 },
   "scrnRes": { "width": 1920, "height": 915 },
+  "targetRect": { "x": 20, "y": 200, "width": 120, "height": 36, "top": 200, "right": 140, "bottom": 236, "left": 20 },
   "type": "click",
   "logType": "raw",
   "userAction": true,
   "details": { "clicks": 1, "ctrl": false, "alt": false, "shift": false, "meta": false },
   "userId": "me",
-  "toolVersion": "2.4.0",
+  "toolVersion": "2.5.0",
   "toolName": "Apache UserALE Example",
   "useraleVersion": "2.4.0",
   "sessionId": "session_1729657762020",
@@ -78,7 +79,7 @@ High-frequency events (`mouseover`, `scroll`, etc.) are aggregated over `resolut
   "typeChange": false,
   "userAction": false,
   "userId": "me",
-  "toolVersion": "2.4.0",
+  "toolVersion": "2.5.0",
   "toolName": "Apache UserALE Example",
   "useraleVersion": "2.4.0",
   "sessionId": "session_1727742067433",
@@ -87,11 +88,18 @@ High-frequency events (`mouseover`, `scroll`, etc.) are aggregated over `resolut
 }
 ```
 
+### DOM Mutation, Rage-Click & Session Replay Logs (`#104`)
+
+When `startSessionReplay` or `observeMutations: true` is active:
+- **DOM Mutation Summary (`logType: 'mutation'`, `type: 'mutation'`)**: Emits throttled structural DOM mutation counts in `details` (`{ addedCount, removedCount, attributeCount, targets }`).
+- **Rage-Click Event (`logType: 'custom'`, `type: 'rage_click'`)**: Emits when 3+ rapid clicks occur on the same target within `1000ms` and `30px` radius, including `clickCount` and `targetRect`.
+- **Session Replay Envelope (`logType: 'replay'`, `type: 'session_replay'`)**: Emits rolling `rrweb` frames (`frames`, `frameCount`, `startTime`, `endTime`, `trigger`) correlated with `sessionId` and active `traceId`/`spanId`.
+
 ---
 
-## 2. OpenTelemetry OTLP/JSON Schema (`exporterFormat: 'otlp-json'`)
+## 2. OpenTelemetry OTLP/JSON Schema (`exporterType: 'otlp'`)
 
-When `exporterFormat: 'otlp-json'` (or `data-exporter="otlp"`) is enabled, `OtlpJsonExporter` serializes each batch into an OpenTelemetry `ExportLogsServiceRequest` JSON payload:
+When `exporterType: 'otlp'` (or `data-exporter="otlp"`) is enabled, `OtlpJsonExporter` serializes each batch into an OpenTelemetry `ExportLogsServiceRequest` JSON payload:
 
 - **Resource Attributes (`resourceLogs[].resource.attributes`)**: Constant session/device metadata is hoisted once per batch:
   - `service.name` $\leftarrow$ `toolName` (defaults to `"unknown_service:userale"`)
@@ -109,13 +117,13 @@ When `exporterFormat: 'otlp-json'` (or `data-exporter="otlp"`) is enabled, `Otlp
   - `eventName`: `"userale.<logType>.<type>"` (e.g. `"userale.raw.click"`, `"userale.interval.mouseover"`)
   - `traceId` / `spanId`: Populated from `log.traceId`/`log.spanId` or `config.traceContext()`
   - `body`: Structured `kvlistValue` representation of `log.details`
-  - `attributes`: `event.name`, `url.full`, `user.id`, `flagon.log_type`, `flagon.event_type`, `flagon.target`, `flagon.path` (`arrayValue`), `flagon.page_title`, `flagon.page_referrer`, `flagon.user_action`, `flagon.location.x`, `flagon.location.y`, `flagon.attributes`, `flagon.style`, and interval metrics (`flagon.count`, `flagon.duration_ms`, `flagon.start_time_ms`, `flagon.end_time_ms`)
+  - `attributes`: `event.name`, `url.full`, `page.title`, `page.referrer`, `user.id`, `flagon.log_type`, `flagon.event_type`, `flagon.target`, `flagon.path` (`arrayValue`), `flagon.user_action`, `flagon.location.x`, `flagon.location.y`, `flagon.target_rect` (`kvlistValue`), `flagon.element.attributes`, `flagon.element.style`, and interval metrics (`flagon.interval.count`, `flagon.interval.duration_ms`, `flagon.interval.start_time_ms`, `flagon.interval.end_time_ms`, `flagon.interval.target_change`, `flagon.interval.type_change`)
 
 ---
 
-## 3. Protobuf v1 Canonical JSON Schema (`exporterFormat: 'proto-json'`)
+## 3. Protobuf v1 Canonical JSON Schema (`exporterType: 'proto-json'`)
 
-When `exporterFormat: 'proto-json'` is configured, `ProtoJsonExporter` serializes each batch into canonical Proto3 JSON conforming to [`proto/apache/flagon/userale/v1/log.proto`](https://github.com/apache/flagon/blob/master/proto/apache/flagon/userale/v1/log.proto) (`apache.flagon.userale.v1.LogBatch`), grouping common context into `metadata` (`CommonMetadata`) and using the `raw`, `interval`, or `custom` `oneof` variant on each `UserALELog`.
+When `exporterType: 'proto-json'` is configured, `ProtoJsonExporter` serializes each batch into canonical Proto3 JSON conforming to [`proto/apache/flagon/userale/v1/log.proto`](https://github.com/apache/flagon/blob/master/proto/apache/flagon/userale/v1/log.proto) (`apache.flagon.userale.v1.LogBatch`), grouping common context into `metadata` (`CommonMetadata`) and using the `raw`, `interval`, or `custom` `oneof` variant on each `UserALELog`.
 
 ---
 

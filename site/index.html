@@ -12,7 +12,7 @@ layout: default
 <div class="ui very padded vertical segment">
   <div class="ui center aligned text container">
     <p>
-      Apache Flagon is an open-soure, thin-client behavioral logging capability useful for business analytics, usage analytics, usability and user testing. It's also for science into how information technology is used. Flagon supports a range of streamlined deployment schemas ranging from single webpage analysis to enterprise level monitoring, making it easy to collect data without heavy modification of your own code. Using Elastic products, Flagon makes it easy to scale, integrate other services, access your data and get the insights you need out of it. In the spirit of customization, the Apache Flagon project collects a number of modular products and capabilities to help you build the stack that suites your needs.
+      Apache Flagon is an open-source, thin-client behavioral logging and analytics suite for business analytics, usage analytics, usability, and user testing. Flagon supports a range of streamlined deployment architectures ranging from single-webpage analysis to cloud-native OpenTelemetry observability (Grafana + Loki + Tempo), OpenSearch, All-Apache Lakehouse (Kafka + Flink + Iceberg + Doris + Superset), and the Elastic Stack (ELK). In the spirit of customization, Apache Flagon combines modular instrumentation and Python analytics capabilities to help you build the stack that suits your needs.
     </p>
 
     <br>
@@ -33,7 +33,7 @@ layout: default
   <div class="ui text container">
     <div class="ui two column middle aligned grid">
       <div class="column">
-        With a single line of code capture all of your users' behavior on your web page with enough resolution and granularity for advanced behavioral modeling. Apache UserALE is Flagon's free, open-source application for thin-client behavioral logging. It's perfect for business analytics and enterprise application monitoring, but powerful enough for UI/UX research and user-testing. Check out our slick demo!
+        With a single line of code, capture your users' behavior on your web page with enough resolution and granularity for advanced behavioral modeling. Apache UserALE.js is Flagon's free, open-source client for thin-client behavioral logging, featuring pluggable exporters (`http-json`, `otlp`, `proto-json`, `websocket`), W3C Trace Context (`traceparent`) correlation, and two-layer session replay. Check out our interactive demo below!
       </div>
       <div class="center aligned column">
         <a href="{{ '/userale' | prepend: site.baseurl }}">
@@ -55,7 +55,7 @@ layout: default
         </a>
       </div>
       <div class="column">
-        Process and control your own user event data. Apache Distill is Flagon's experimental, customizable analytics stack built in Python that interfaces directly with Elastic. It gives data scientists and developers the power to segment and model user data in Python or push modeling output to visual analytic applications. From simple aggregations to complex graph models of user workflow, Distill provides access to user data and the python libraries you love in a streamlined analytical pipeline.
+        Process and control your own user event data. Apache Flagon Distill is Flagon's Python behavioral analytics toolkit that ingests UserALE flat JSON, Protobuf v1 `LogBatch` JSON, and OpenTelemetry OTLP/JSON payloads. It gives data scientists and developers the power to segment sessions, detect user frustration (rage clicks, dead clicks, cursor thrashing), compute spatial & viewport engagement heatmaps, and model user workflows with Markov transition matrices, Sankey diagrams, and conversion funnels.
       </div>
     </div>
   </div>

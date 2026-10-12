@@ -33,11 +33,11 @@ If you use [Nix](https://nixos.org/) with flakes enabled, run:
 nix develop
 ```
 
-This provides Node.js, `pnpm`, TypeScript, Python 3, `buf`, and `lefthook` git hooks automatically.
+This provides Node.js, `pnpm`, TypeScript, Python 3, `uv`, `buf`, and `lefthook` git hooks automatically.
 
 #### Option B: Manual Toolchain Setup
 - **UserALE (`products/userale`)**: Node.js `>= 20.x` and `pnpm >= 10.x`
-- **Distill (`products/distill`)**: Python `>= 3.8` and `poetry` (or `uv`)
+- **Distill (`products/distill`)**: Python `>= 3.10,< 4.0` and [`uv`](https://docs.astral.sh/uv/)
 - **Protobuf (`proto/`)**: [`buf` CLI](https://buf.build/docs/installation)
 
 ---
@@ -50,15 +50,16 @@ cd products/userale
 pnpm install
 pnpm build
 pnpm --dir packages/flagon-userale test
-pnpm format
-pnpm lint
+pnpm format:check
+pnpm lint:check
 ```
 
 #### Distill (`products/distill`)
 ```shell
 cd products/distill
-poetry install --all-groups
-poetry run pytest
+uv sync --all-groups
+uv run pytest
+uv run --group lint ruff check .
 ```
 
 #### Protobuf Schemas (`proto/`)

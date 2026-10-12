@@ -38,11 +38,11 @@ If you have [Nix](https://nixos.org/) with flakes enabled, run:
 nix develop
 ```
 
-This drops you into a reproducible shell containing Node.js, `pnpm`, TypeScript, Python 3, `buf`, `nixpkgs-fmt`, and `lefthook` git hooks.
+This drops you into a reproducible shell containing Node.js, `pnpm`, TypeScript, Python 3, `uv`, `buf`, `nixpkgs-fmt`, and `lefthook` git hooks.
 
 ### Option B: Manual Toolchain Setup
 - **UserALE (`products/userale`)**: Node.js `>= 20.x` and `pnpm >= 10.x`
-- **Distill (`products/distill`)**: Python `>= 3.8` (`3.10+` recommended) and `poetry` (or `uv`)
+- **Distill (`products/distill`)**: Python `>= 3.10,< 4.0` and [`uv`](https://docs.astral.sh/uv/)
 - **Protobuf (`proto/`)**: [`buf` CLI](https://buf.build/docs/installation) `>= 1.50`
 - **Website (`site/`)**: Ruby + Bundler + Jekyll
 
@@ -64,7 +64,7 @@ pnpm --dir packages/flagon-userale test
 # Run Playwright end-to-end tests
 pnpm test
 
-# Format and lint
+# Format and lint (or use format:check / lint:check as run in CI)
 pnpm format
 pnpm lint
 ```
@@ -77,21 +77,23 @@ buf lint
 buf generate
 ```
 
-Ensure `buf generate --exit-code` passes cleanly (do not reformat generated files under `products/userale/packages/flagon-userale/src/gen/`).
+Ensure `buf generate --exit-code` passes cleanly (and run `pnpm format` in `products/userale` if generated TypeScript files change).
 
 ### Distill (`products/distill`)
 ```bash
 cd products/distill
-poetry install --all-groups
-poetry run pytest
+uv sync --all-groups
+uv run pytest
+uv run --group lint ruff check .
 ```
 
 ---
 
 ## 4. Pre-Commit Hooks & Code Style
 
-This repository uses [`lefthook`](./lefthook.yml) to run formatting and lint checks before commits and pushes:
-- **Prettier & ESLint** run automatically on staged files under `products/userale/`.
+This repository uses [`lefthook`](./lefthook.yml) to run formatting, linting, and test checks before commits and pushes:
+- **`pre-commit`**: Runs Prettier & ESLint on staged files under `products/userale/`, `ruff check` (`uv run --group lint ruff check`) on staged Python files under `products/distill/`, and `nixpkgs-fmt` on `.nix` files.
+- **`pre-push`**: Runs the full UserALE (`pnpm test`) and Distill (`uv run --group test pytest`) test suites.
 - **Apache License Headers**: Every new source file must include the standard ASF Apache-2.0 license header (enforced in CI via SkyWalking Eyes).
 - Always run pre-commit hooks when committing (do not use `--no-verify`).
 

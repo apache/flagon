@@ -22,10 +22,11 @@ UserALE is a client-side behavioral analytics instrumentation library and browse
 
 ## Workspace Packages & Examples
 
-- [`packages/flagon-userale`](./packages/flagon-userale/README.md): Core TypeScript/JavaScript library (`ESM` module + `IIFE` script-tag bundle) with pluggable exporters for UserALE flat JSON, OpenTelemetry OTLP/JSON (`OtlpJsonExporter`), OpenTelemetry JS SDK (`OtelSdkExporter`), Protobuf v1 canonical JSON (`ProtoJsonExporter`), and WebSockets (`WebSocketExporter`).
+- [`packages/flagon-userale`](./packages/flagon-userale/README.md): Core TypeScript/JavaScript library (`ESM` module + `IIFE` script-tag bundle) with pluggable exporters for UserALE flat JSON (`HttpJsonExporter`), OpenTelemetry OTLP/JSON (`OtlpJsonExporter`), OpenTelemetry JS SDK (`OtelSdkExporter`), Protobuf v1 canonical JSON (`ProtoJsonExporter`), and WebSockets (`WebSocketExporter`), plus two-layer Session Replay & DOM mutation telemetry (`startSessionReplay`, `flushSessionReplay`, `stopSessionReplay`).
 - [`packages/flagon-userale-ext`](./packages/flagon-userale-ext/README.md): Chrome and Firefox Manifest V3 browser extension built with [Plasmo](https://docs.plasmo.com/).
 - [`example/server`](./example/server/server.js): Local Express + WebSocket test collector supporting `/` and `/v1/logs` across UserALE flat JSON, Protobuf v1 `LogBatch`, and OTLP/JSON payloads.
 - [`example/otel-demo`](./example/otel-demo/README.md): Full-stack `docker-compose` stack with OpenTelemetry Collector, Grafana, Loki, and Tempo demonstrating browser-to-backend W3C `traceparent` correlation.
+- [`../../examples`](../../examples/README.md): Production-oriented backend & analytics stacks including **OpenSearch + OTel Collector** (`examples/opensearch`), the **All-Apache Behavioral Lakehouse** (`examples/apache-lakehouse`), and **ELK** (`examples/elk`).
 
 ---
 
@@ -49,9 +50,11 @@ pnpm test
 # Run local example collector server on http://localhost:8000
 pnpm example:run
 
-# Format and lint source files
+# Format and lint source files (or check without mutating via format:check / lint:check)
 pnpm format
 pnpm lint
+pnpm format:check
+pnpm lint:check
 ```
 
 📚 [Apache Flagon Documentation](https://flagon.apache.org/docs/useralejs/)

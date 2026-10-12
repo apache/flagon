@@ -66,10 +66,14 @@ Configure UserALE.js in your application (or open `products/userale/example/otel
 import * as userale from "flagon-userale";
 
 userale.options({
-  url: "http://localhost:4318/v1/logs",
-  exporterFormat: "otlp-json",
+  otlpEndpoint: "http://localhost:4318",
+  exporterType: "otlp",
   toolName: "my-web-app",
   toolVersion: "1.0.0",
+  observeMutations: true,
+});
+
+userale.startSessionReplay({
   observeMutations: true,
   detectRageClicks: true,
 });

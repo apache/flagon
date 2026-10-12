@@ -59,10 +59,11 @@ PASS test/spec/attachHandlers.spec.ts
 PASS test/spec/sendLogs.spec.ts
 PASS test/spec/exporters.spec.ts
 PASS test/spec/packageLogs.spec.ts
+PASS test/spec/replay.spec.ts
 PASS test/spec/main.spec.ts
 
-Test Suites: 9 passed, 9 total
-Tests:       1 skipped, 103 passed, 104 total
+Test Suites: 10 passed, 10 total
+Tests:       1 skipped, 111 passed, 112 total
 ```
 
 ### Run End-to-End Tests (`Playwright`)
@@ -78,8 +79,10 @@ pnpm test
 ## Code Formatting & Linting
 
 ```bash
-pnpm format
-pnpm lint
+pnpm format        # Format source/test files with Prettier
+pnpm format:check  # Check formatting (used in CI)
+pnpm lint          # Lint and auto-fix with ESLint
+pnpm lint:check    # Lint without modifying files (used in CI)
 ```
 
 ---

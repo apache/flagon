@@ -29,10 +29,10 @@ The extension is built with [Plasmo](https://docs.plasmo.com/) and supports Chro
 - Passive DOM and browser tab interaction logging across allowlisted URLs
 - Zero code changes required on instrumented web pages
 - Configurable **Exporter Format**:
-  - **UserALE JSON (Default)** (`userale-json`)
-  - **OpenTelemetry (OTLP/JSON)** (`otlp-json` — automatically normalizes `/v1/logs` endpoints)
+  - **UserALE JSON (Default)** (`http-json`)
+  - **OpenTelemetry (OTLP/JSON)** (`otlp` — automatically normalizes `/v1/logs` endpoints)
   - **Protobuf v1 JSON (`LogBatch`)** (`proto-json`)
-- Built-in support for **HTTP Basic Auth**, **OAuth 2.0 PKCE**, and **Custom HTTP Headers (JSON)**
+- Built-in support for **OAuth 2.0 PKCE**, **API Key (`x-api-key`)** authentication, and configurable **Event Type / Log Type Exclusions**
 
 ---
 
@@ -72,12 +72,12 @@ pnpm --dir packages/flagon-userale-ext build
 Click the UserALE icon in your browser toolbar (or open the extension **Options** page) to configure:
 
 - **Logging Endpoint URL**: Target HTTP(S), WebSocket (`ws://` / `wss://`), or OpenTelemetry Collector (`http://localhost:4318/v1/logs`) URL.
-- **Exporter Format**: Choose between `UserALE JSON (Default)`, `OpenTelemetry (OTLP/JSON)`, or `Protobuf v1 JSON (LogBatch)`.
+- **Exporter Format**: Choose between `UserALE JSON (Default)` (`http-json`), `OpenTelemetry (OTLP/JSON)` (`otlp`), or `Protobuf v1 JSON` (`proto-json`).
 - **URL Allowlist**: Regular expression controlling which pages are instrumented.
-- **User ID & Tool Metadata**: Optional user identifier, tool name, and version.
-- **HTTP Basic Auth**: Optional username and password encoded as a `Basic` `Authorization` header.
-- **Custom HTTP Headers (JSON)**: Optional JSON object of custom headers (e.g. `{"x-api-key": "..."}`) attached to every export request.
-- **OAuth 2.0 PKCE Credentials**: Optional OAuth provider configuration for token-authenticated endpoints.
+- **Excluded Event Types & Log Types**: Comma-separated lists (`filterEventTypes`, `filterLogTypes`) to suppress specific DOM events (e.g., `mouseover,mousemove`) or log types (e.g., `interval`) before export.
+- **Authentication Mode (`None`, `OAuth`, `API Key`)**:
+  - **OAuth 2.0 PKCE**: Configure an OAuth Issuer URL and Client ID for token-authenticated ingestion endpoints.
+  - **API Key**: Configure an API key sent via the `x-api-key` HTTP header.
 
 ---
 

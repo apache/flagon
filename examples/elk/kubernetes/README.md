@@ -17,12 +17,14 @@
   ~ under the License.
 -->
 
-# Example Kubernetes deployment
+# Example Kubernetes Deployment (ELK)
 
-This script and accompanying yaml files provide an example ELK stack kubernetes deployment. This is intended to be a starting point for deploying a userale logging end point. 
+This script and accompanying YAML files provide an example ELK stack Kubernetes deployment. This is intended to be a starting point for deploying a UserALE logging endpoint.
 
-Prerequisites: A bash enviroment and Kubernetes running with at least 4 GB memory and 4 CPU cores.
+> **Note:** For a 100% `Apache-2.0`-licensed Kubernetes deployment using OpenTelemetry Collector + OpenSearch + OpenSearch Dashboards, see [`../../opensearch/kubernetes/opensearch.yaml`](../../opensearch/kubernetes/opensearch.yaml).
+
+Prerequisites: A bash environment and Kubernetes running with at least 4 GB memory and 4 CPU cores.
 
 Use the `run.sh` script to deploy the stack.
 
-`test.py` is included as a utility to verify that logs are correctly posted to elastic locally. To run `test.py`, you must first install it's requirements via `pip install -r requirements.txt`.
+`test.py` is included as a utility to verify that logs are correctly posted to Elasticsearch locally. To run `test.py`, first install its requirements via `uv pip install -r requirements.txt` (or `pip install -r requirements.txt`).

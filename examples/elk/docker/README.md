@@ -21,7 +21,10 @@
 
 This directory contains a pre-configured **Elasticsearch + Logstash + Kibana (ELK)** Docker Compose deployment adapted from [`deviantony/docker-elk`](https://github.com/deviantony/docker-elk) alongside a containerized example web page instrumented with **Apache Flagon UserALE.js**.
 
-> **Looking for OpenTelemetry + Grafana/Loki/Tempo?** See [`products/userale/example/otel-demo/`](../../../products/userale/example/otel-demo/README.md) for the modern OpenTelemetry Collector demo stack.
+> **Looking for 100% Apache-2.0 or OpenTelemetry stacks?**
+> - **OpenSearch + OpenTelemetry Collector (`Apache-2.0`)**: [`../../opensearch/README.md`](../../opensearch/README.md)
+> - **All-Apache Behavioral Lakehouse (Kafka + Iceberg + DataFusion + Distill)**: [`../../apache-lakehouse/README.md`](../../apache-lakehouse/README.md)
+> - **OpenTelemetry + Grafana/Loki/Tempo**: [`../../../products/userale/example/otel-demo/README.md`](../../../products/userale/example/otel-demo/README.md)
 
 ---
 

@@ -20,8 +20,8 @@ pip install flagon-distill
 ```bash
 git clone https://github.com/apache/flagon.git
 cd flagon/products/distill
-poetry install --all-groups
-poetry run pytest
+uv sync --all-groups
+uv run pytest
 ```
 
 ---
@@ -30,20 +30,28 @@ poetry run pytest
 
 Distill's `UserAleSchema` and `extract_logs` utilities automatically normalize and validate logs across all three wire formats emitted by UserALE.js:
 
-1. **UserALE Flat JSON (`v2.3` / `v2.4` / `v2.5`)**: Standard flat JSON log objects (`raw`, `interval`, and `custom` log types).
+1. **UserALE Flat JSON (`v2.3` / `v2.4` / `v2.5`)**: Standard flat JSON log objects (`raw`, `interval`, `custom`, `mutation`, and `replay` log types).
 2. **Protobuf v1 Canonical JSON (`LogBatch`)**: Nested `apache.flagon.userale.v1.LogBatch` payloads produced by `ProtoJsonExporter`.
 3. **OpenTelemetry OTLP/JSON (`ExportLogsServiceRequest`)**: `resourceLogs[].scopeLogs[].logRecords[]` payloads produced by `OtlpJsonExporter`.
 
 ```python
-from distill.process.log import Log
-from distill.schemas.userale import UserAleSchema, extract_logs, normalize_userale_dict
+import distill
+from distill import Log
+from distill.core.types import UserAleSchema
+from distill.schemas.userale import extract_logs, normalize_userale_dict
 
 # Extract and normalize logs from a flat list, Proto-JSON LogBatch, or OTLP/JSON payload:
 normalized_docs = extract_logs(payload)
-validated_logs = [UserAleSchema(**doc) for doc in normalized_docs]
+validated_logs = [UserAleSchema.validate_python(doc) for doc in normalized_docs]
 
-# Or initialize a Distill Log container directly:
-log = Log(data=payload, schema=UserAleSchema)
+# Wrap a single log dictionary in a Distill Log container:
+single_log = Log(data=normalized_docs[0], schema=UserAleSchema)
+
+# Run behavioral, frustration, spatial, and trace analytics:
+summary = distill.session_summary(normalized_docs)
+friction = distill.frustration_score(normalized_docs)
+transitions = distill.transition_matrix(normalized_docs, drop_recursions=True)
+traces = distill.correlate_by_trace(normalized_docs)
 ```
 
 ---
@@ -52,10 +60,14 @@ log = Log(data=payload, schema=UserAleSchema)
 
 | Module | Key Classes & Functions | Description |
 |---|---|---|
-| `distill.schemas.userale` | `UserAleSchema`, `extract_logs(payload)`, `normalize_userale_dict(data)` | Pydantic v2 validation and multi-format normalization for UserALE flat JSON, Protobuf v1 `LogBatch`, and OpenTelemetry OTLP/JSON logs. |
-| `distill.process.log` | `Log` | Container for validated interaction streams, indexing by timestamp/PKSUID and supporting DataFrame/dict conversion. |
-| `distill.segmentation.segment` | `Segment`, `Segments`, `create_segment(...)`, `detect_segments(...)` | Time-window, event-driven, and predicate-based slicing of user sessions. |
-| `distill.analytics.graph` | `graph`, `funnel`, `sankey` | Directed behavioral clickstream graphs, conversion funnels, and path visualizations powered by NetworkX and Plotly. |
+| `distill.schemas.userale` & `distill.core.types` | `UserAleSchema`, `extract_logs(payload)`, `normalize_userale_dict(data)` | Pydantic v2 validation and multi-format normalization for UserALE flat JSON, Protobuf v1 `LogBatch`, and OpenTelemetry OTLP/JSON logs. |
+| `distill.core.log` | `Log` | Container for validated interaction logs with timestamp/PKSUID indexing and DataFrame/dict conversion. |
+| `distill.segmentation` | `Segment`, `Segments`, `create_segment(...)`, `generate_segments(...)`, `generate_fixed_time_segments(...)`, `generate_collapsing_window_segments(...)`, `detect_deadspace(...)`, `write_segment(...)`, `export_segments(...)` | Time-window, event-driven, and predicate-based slicing and set-logic composition of user sessions. |
+| `distill.analytics.frustration` | `detect_rage_clicks`, `detect_dead_clicks`, `detect_dom_thrash`, `frustration_score` | Temporal/spatial rage-click detection, dead-click detection on non-interactive targets, DOM mutation burst detection, and `[0.0, 100.0]` composite UX friction scoring. |
+| `distill.analytics.spatial` | `click_heatmap_data`, `plot_click_heatmap`, `scroll_depth_summary` | Viewport-normalized `(x, y)` click coordinates, `targetRect` bounding boxes, interactive 2D Plotly density heatmaps, and per-page scroll depth ratios. |
+| `distill.analytics.otel` | `correlate_by_trace`, `extract_replay_envelopes` | Joins frontend UserALE interaction logs by W3C `traceId` (`flagon.trace_id`) and extracts `logType == "replay"` session replay envelopes. |
+| `distill.analytics.graph` | `createDiGraph`, `funnel`, `sankey`, `transition_matrix` | Directed behavioral clickstream graphs, conversion funnels, Sankey diagrams, and first-order Markov transition probability matrices. |
+| `distill.analytics.stat` | `session_summary`, `click_rate`, `setup` | Session duration, bounce/engagement metrics, action counts, and event rate calculations. |
 
 ---
 

@@ -19,7 +19,7 @@
 
 # Apache Flagon Deployment & Analytics Examples
 
-Apache Flagon UserALE.js and Distill support multiple open-standard wire formats (`userale-json`, `otlp-json`, and `proto-json`), allowing you to choose the right backend architecture for your workload:
+Apache Flagon UserALE.js and Distill support multiple open-standard wire formats (`http-json`, `otlp` / `otlp-json`, and `proto-json`), allowing you to choose the right backend architecture for your workload:
 
 | Example | Stack & License | Best For |
 | :--- | :--- | :--- |
