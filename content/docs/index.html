@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>About the Docs</title>
-  <meta name="description" content="The Apache Flagon docs are organized by product. Each product’s documentation includes information like quick start guides, tutorials, full API descriptions,...">
+  <meta name="description" content="The Apache Flagon documentation is organized by component and covers client-side telemetry collection, behavioral analytics, and full-stack observability dep...">
 
   <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
   <script src="/assets/jquery.min.js"></script>
@@ -77,6 +77,8 @@
       
         <a class="item" href="/docs/">About the Docs</a>
       
+        <a class="item" href="/docs/deployments/">Reference Architectures & Deployments</a>
+      
         <a class="item" href="/docs/contributing/">Contributing</a>
       
     </div>
@@ -121,6 +123,12 @@
       
         <a class="item" href="/docs/distill/">Getting Started & API Reference</a>
       
+        <a class="item" href="/docs/distill/behavioral/">Frustration & Spatial Analytics</a>
+      
+        <a class="item" href="/docs/distill/graphs/">Clickstream Graphs & Funnels</a>
+      
+        <a class="item" href="/docs/distill/segmentation/">Segmentation & Multi-Format Ingestion</a>
+      
     </div>
   </div>
 
@@ -129,7 +137,14 @@
   </div>
   <div class="docs-content">
     <h2 class="ui header">About the Docs</h2>
-    <p>The Apache Flagon docs are organized by product.  Each product’s documentation includes information like quick start guides, tutorials, full API descriptions, and contribution guides.</p>
+    <p>The <strong>Apache Flagon</strong> documentation is organized by component and covers client-side telemetry collection, behavioral analytics, and full-stack observability deployments:</p>
+
+<ul>
+  <li><strong><a href="/docs/deployments">Reference Architectures &amp; Deployments</a></strong>: Turnkey Docker Compose stacks for OpenTelemetry + Grafana (<code class="language-plaintext highlighter-rouge">Loki</code> + <code class="language-plaintext highlighter-rouge">Tempo</code>), OpenSearch + Dashboards, Apache Lakehouse (<code class="language-plaintext highlighter-rouge">Kafka</code> + <code class="language-plaintext highlighter-rouge">Iceberg</code> + <code class="language-plaintext highlighter-rouge">Spark</code> + <code class="language-plaintext highlighter-rouge">Superset</code>), and Elastic Stack (<code class="language-plaintext highlighter-rouge">ELK</code>).</li>
+  <li><strong><a href="/docs/useralejs">Apache Flagon UserALE.js</a></strong>: Frontend behavioral telemetry, OpenTelemetry <code class="language-plaintext highlighter-rouge">OTLP/JSON</code> &amp; <code class="language-plaintext highlighter-rouge">Protobuf v1</code> exporters, W3C TraceContext correlation, DOM mutation &amp; rage-click detection, and two-layer session replay (<code class="language-plaintext highlighter-rouge">rrweb</code>).</li>
+  <li><strong><a href="/docs/distill">Apache Flagon Distill</a></strong>: Python behavioral analytics framework for multi-format UserALE schema validation, UX frustration &amp; spatial analytics, clickstream graphs, Markov transition matrices, and session segmentation.</li>
+  <li><strong><a href="/docs/contributing">Contributing Guide</a></strong>: Monorepo setup with Nix, <code class="language-plaintext highlighter-rouge">pnpm</code>, <code class="language-plaintext highlighter-rouge">uv</code>, and <code class="language-plaintext highlighter-rouge">buf</code>.</li>
+</ul>
 
   </div>
 </div>
@@ -149,8 +164,9 @@
       <div class="column">
         <h4 class="ui inverted header">Docs</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/docs/useralejs">UserAle.js</a>
+          <a class="item" href="/docs/useralejs">UserALE.js</a>
           <a class="item" href="/docs/distill">Distill</a>
+          <a class="item" href="/docs/deployments">Reference Deployments</a>
         </div>
       </div>
       <div class="column">

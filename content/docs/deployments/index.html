@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Reference Architectures &amp; Deployments</title>
+  <meta name="description" content="Apache Flagon ships four production-modeled Docker Compose reference stacks in the apache/flagon repository so you can evaluate and deploy end-to-end behavio...">
+
+  <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
+  <script src="/assets/jquery.min.js"></script>
+  <script src="/semantic/dist/semantic.min.js"></script>
+  <script src="/assets/d3.v4.min.js"></script>
+  <script src="/js/main.js"></script>
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="https://flagon.apache.org/docs/deployments/">
+  <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
+
+  
+</head>
+
+
+  <body>
+
+    <div class="site-header">
+  <div id="main-menu" class="ui inverted padded fixed top borderless menu">
+    <a class="site-title" href="/">
+      <h3 class="ui inverted header item">Apache Flagon</h3>
+    </a>
+
+    <div class="right menu">
+      <div class="ui dropdown item">
+        Products
+        <div class="menu">
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+        </div>
+      </div>
+      <div class="ui dropdown item">
+        <a href="/docs">Docs</a>
+        <div class="menu">
+          <a class="item" href="/docs/useralejs">UserALE.js</a>
+          <a class="item" href="/docs/distill">Distill</a>
+        </div>
+      </div>
+      <a class="item" href="/releases">Releases</a>
+      <a class="item" href="/community">Community</a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="main-wrapper">
+      <div class="docs-wrapper">
+  <div class="docs-sidebar">
+    
+
+
+
+<!-- <div class="ui inverted list">
+  <a class="item" href="/docs">About the Docs</a>
+</div> -->
+<div id="docs-nav" class="ui inverted accordion">
+  
+    <div class="active title">
+  
+    <i class="dropdown icon"></i>
+    Apache Flagon
+  </div>
+  
+    <div class="active content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/">About the Docs</a>
+      
+        <a class="item" href="/docs/deployments/">Reference Architectures & Deployments</a>
+      
+        <a class="item" href="/docs/contributing/">Contributing</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE.js
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/useralejs/">Getting Started</a>
+      
+        <a class="item" href="/docs/useralejs/build/">UserALE.js Build and Test</a>
+      
+        <a class="item" href="/docs/useralejs/API/">The UserALE.js API</a>
+      
+        <a class="item" href="/docs/useralejs/modifying/">Modifying UserALE.js Source Code</a>
+      
+        <a class="item" href="/docs/useralejs/dataschema/">UserALE.js' Data Schema</a>
+      
+        <a class="item" href="/docs/useralejs/troubleshooting/">Troubleshooting</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Distill
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/distill/">Getting Started & API Reference</a>
+      
+        <a class="item" href="/docs/distill/behavioral/">Frustration & Spatial Analytics</a>
+      
+        <a class="item" href="/docs/distill/graphs/">Clickstream Graphs & Funnels</a>
+      
+        <a class="item" href="/docs/distill/segmentation/">Segmentation & Multi-Format Ingestion</a>
+      
+    </div>
+  </div>
+
+</div>
+
+  </div>
+  <div class="docs-content">
+    <h2 class="ui header">Reference Architectures & Deployments</h2>
+    <p>Apache Flagon ships four production-modeled <strong>Docker Compose reference stacks</strong> in the <a href="https://github.com/apache/flagon"><code class="language-plaintext highlighter-rouge">apache/flagon</code></a> repository so you can evaluate and deploy end-to-end behavioral observability pipelines in minutes.</p>
+
+<hr />
+
+<h2 id="choosing-a-reference-stack">Choosing a Reference Stack</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Stack</th>
+      <th>Directory</th>
+      <th>Best For</th>
+      <th>Primary Storage &amp; Query Engine</th>
+      <th>Visualization</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1. OpenTelemetry + Grafana</strong></td>
+      <td><a href="https://github.com/apache/flagon/tree/master/products/userale/example/otel-demo"><code class="language-plaintext highlighter-rouge">products/userale/example/otel-demo/</code></a></td>
+      <td>Cloud-native APM &amp; full-stack trace correlation (<code class="language-plaintext highlighter-rouge">traceId</code> / <code class="language-plaintext highlighter-rouge">spanId</code> joining frontend clicks with backend spans)</td>
+      <td>Grafana Loki (Logs) + Grafana Tempo (Traces) via OTel Collector</td>
+      <td>Grafana (pre-provisioned dashboard)</td>
+    </tr>
+    <tr>
+      <td><strong>2. OpenSearch</strong></td>
+      <td><a href="https://github.com/apache/flagon/tree/master/examples/opensearch"><code class="language-plaintext highlighter-rouge">examples/opensearch/</code></a></td>
+      <td>Apache-2.0 search, real-time UX friction monitoring, and Distill enrichment</td>
+      <td>OpenSearch 2.x (<code class="language-plaintext highlighter-rouge">userale</code> &amp; <code class="language-plaintext highlighter-rouge">flagon-distill-analytics</code> indices)</td>
+      <td>OpenSearch Dashboards (7 visualizations)</td>
+    </tr>
+    <tr>
+      <td><strong>3. Apache Lakehouse</strong></td>
+      <td><a href="https://github.com/apache/flagon/tree/master/examples/apache-lakehouse"><code class="language-plaintext highlighter-rouge">examples/apache-lakehouse/</code></a></td>
+      <td>Petabyte-scale event streaming, ACID table storage, and SQL/Spark behavioral data science</td>
+      <td>Apache Kafka + Apache Iceberg (<code class="language-plaintext highlighter-rouge">demo.flagon.userale_events</code> &amp; <code class="language-plaintext highlighter-rouge">distill_sessions</code>) + Apache Spark</td>
+      <td>Apache Superset (SQL Lab + dashboard)</td>
+    </tr>
+    <tr>
+      <td><strong>4. Elastic Stack (ELK)</strong></td>
+      <td><a href="https://github.com/apache/flagon/tree/master/examples/elk"><code class="language-plaintext highlighter-rouge">examples/elk/</code></a></td>
+      <td>Classic Elasticsearch + Logstash ingestion pipelines</td>
+      <td>Elasticsearch 8.15 via Logstash HTTP input</td>
+      <td>Kibana 8.15 (saved visualizations)</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="1-opentelemetry-collector--grafana--loki--tempo">1. OpenTelemetry Collector + Grafana + Loki + Tempo</h2>
+
+<p>Located in <a href="https://github.com/apache/flagon/tree/master/products/userale/example/otel-demo"><code class="language-plaintext highlighter-rouge">products/userale/example/otel-demo/</code></a>, this stack demonstrates zero-plugin ingestion of UserALE <code class="language-plaintext highlighter-rouge">OTLP/JSON</code> (<code class="language-plaintext highlighter-rouge">ExportLogsServiceRequest</code>) alongside W3C TraceContext (<code class="language-plaintext highlighter-rouge">traceparent</code>) propagation.</p>
+
+<h3 id="architecture">Architecture</h3>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Browser (UserALE 2.5 OtlpJsonExporter + W3C traceparent)
+   ├── POST /v1/logs ────► OpenTelemetry Collector ──► Grafana Loki (flagon.* attributes + replay frames)
+   └── GET /api/checkout ─► Demo Checkout API ───────► OpenTelemetry Collector ──► Grafana Tempo (distributed traces)
+                                                                                          │
+                                                                                          ▼
+                                                                             Grafana Unified Dashboard
+</code></pre></div></div>
+
+<h3 id="quick-start">Quick Start</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>products/userale/example/otel-demo
+docker compose up <span class="nt">--build</span>
+</code></pre></div></div>
+<ul>
+  <li><strong>Interactive Demo Storefront</strong>: <code class="language-plaintext highlighter-rouge">http://localhost:8000</code></li>
+  <li><strong>Grafana Dashboard</strong>: <code class="language-plaintext highlighter-rouge">http://localhost:3000</code> (anonymous Viewer enabled; pre-provisioned under <em>Dashboards -&gt; Apache Flagon - UserALE &amp; OpenTelemetry Correlated Observability</em>)</li>
+</ul>
+
+<hr />
+
+<h2 id="2-opensearch--opensearch-dashboards--distill">2. OpenSearch &amp; OpenSearch Dashboards + Distill</h2>
+
+<p>Located in <a href="https://github.com/apache/flagon/tree/master/examples/opensearch"><code class="language-plaintext highlighter-rouge">examples/opensearch/</code></a>, this 100% Apache-2.0 stack ingests UserALE flat JSON, Protobuf v1 <code class="language-plaintext highlighter-rouge">LogBatch</code>, or OTLP/JSON logs into OpenSearch and runs a continuous <strong>Distill Analytics Worker</strong> to compute session summaries, composite UX frustration scores, rage/dead-click counts, and scroll depth metrics.</p>
+
+<h3 id="architecture-1">Architecture</h3>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Browser (UserALE 2.5) ──► Flagon Ingest Bridge (:8000) ──► OpenSearch (`userale` index)
+                                                                │
+                                                                ▼
+OpenSearch Dashboards (:5601) ◄── (`flagon-distill-analytics`) ◄── Distill Analytics Worker
+</code></pre></div></div>
+
+<h3 id="quick-start-1">Quick Start</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>examples/opensearch
+docker compose up <span class="nt">--build</span>
+</code></pre></div></div>
+<ul>
+  <li><strong>Demo Storefront &amp; Ingest Bridge</strong>: <code class="language-plaintext highlighter-rouge">http://localhost:8000</code></li>
+  <li><strong>OpenSearch Dashboards</strong>: <code class="language-plaintext highlighter-rouge">http://localhost:5601</code> (<code class="language-plaintext highlighter-rouge">Apache Flagon — UserALE &amp; Distill Behavioral Observability</code>)</li>
+</ul>
+
+<hr />
+
+<h2 id="3-all-apache-behavioral-lakehouse-kafka--iceberg--spark--superset">3. All-Apache Behavioral Lakehouse (Kafka + Iceberg + Spark + Superset)</h2>
+
+<p>Located in <a href="https://github.com/apache/flagon/tree/master/examples/apache-lakehouse"><code class="language-plaintext highlighter-rouge">examples/apache-lakehouse/</code></a>, this stack streams UserALE telemetry through <strong>Apache Kafka (KRaft)</strong> into <strong>Apache Iceberg</strong> tables stored on MinIO S3, enriches sessions with <strong>Apache Flagon Distill</strong>, provides interactive <strong>Apache Spark SQL / PySpark</strong> notebooks, and visualizes metrics in <strong>Apache Superset</strong>.</p>
+
+<h3 id="architecture-2">Architecture</h3>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Browser (UserALE 2.5) ──► Kafka Ingest Gateway (:8000) ──► Apache Kafka (`flagon.userale.raw`)
+                                                                  │
+                                                                  ▼
+                                                    Distill Lakehouse Consumer
+                                                                  │
+                                    ┌─────────────────────────────┴─────────────────────────────┐
+                                    ▼                                                           ▼
+               Iceberg: `demo.flagon.userale_events`                       Iceberg: `demo.flagon.distill_sessions`
+                                    │                                                           │
+                                    └─────────────────────────────┬─────────────────────────────┘
+                                                                  ▼
+                                          Apache Spark (:8888) &amp; Apache Superset (:8088)
+</code></pre></div></div>
+
+<h3 id="quick-start-2">Quick Start</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>examples/apache-lakehouse
+docker compose up <span class="nt">--build</span>
+</code></pre></div></div>
+<ul>
+  <li><strong>Demo Storefront &amp; Kafka Gateway</strong>: <code class="language-plaintext highlighter-rouge">http://localhost:8000</code></li>
+  <li><strong>Apache Superset</strong>: <code class="language-plaintext highlighter-rouge">http://localhost:8088</code> (<code class="language-plaintext highlighter-rouge">admin</code> / <code class="language-plaintext highlighter-rouge">admin</code>)</li>
+  <li><strong>Apache Spark + Iceberg JupyterLab</strong>: <code class="language-plaintext highlighter-rouge">http://localhost:8888</code></li>
+</ul>
+
+<hr />
+
+<h2 id="4-elastic-stack-elasticsearch--logstash--kibana">4. Elastic Stack (Elasticsearch + Logstash + Kibana)</h2>
+
+<p>Located in <a href="https://github.com/apache/flagon/tree/master/examples/elk"><code class="language-plaintext highlighter-rouge">examples/elk/</code></a>, this stack pairs Logstash HTTP ingestion (<code class="language-plaintext highlighter-rouge">:8100</code>) with Elasticsearch 8.15 and Kibana 8.15.</p>
+
+<h3 id="quick-start-3">Quick Start</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>examples/elk
+docker compose up
+</code></pre></div></div>
+<ul>
+  <li><strong>Logstash UserALE Endpoint</strong>: <code class="language-plaintext highlighter-rouge">http://localhost:8100</code></li>
+  <li><strong>Kibana</strong>: <code class="language-plaintext highlighter-rouge">http://localhost:5601</code> (import <code class="language-plaintext highlighter-rouge">examples/elk/kibana/Apache Flagon Corso Dashboard.ndjson</code> under <em>Stack Management -&gt; Saved Objects</em>)</li>
+</ul>
+
+  </div>
+</div>
+
+    </div>
+
+    <div class="footer ui inverted very padded vertical segment">
+  <div class="ui vertical segment">
+    <div class="ui four column grid">
+      <div class="column">
+        <h4 class="ui inverted header">About</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Docs</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/docs/useralejs">UserALE.js</a>
+          <a class="item" href="/docs/distill">Distill</a>
+          <a class="item" href="/docs/deployments">Reference Deployments</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Community</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="https://github.com/apache/flagon">GitHub</a>
+          <a class="item" href="https://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Apache</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="https://www.apache.org/">Apache Software Foundation</a>
+          <a class="item" href="https://www.apache.org/licenses/">License</a>
+          <a class="item" href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+          <a class="item" href="https://www.apache.org/foundation/thanks.html">Thanks</a>
+          <a class="item" href="https://www.apache.org/security/">Security</a>
+          <a class="item" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui two column middle aligned grid">
+      <div class="center aligned column">
+        Copyright &copy; 2026 The Apache Software Foundation, Licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Apache Flagon, Flagon, Apache, the Apache feather logo, and the Apache Flagon logo are trademarks of The Apache Software Foundation.
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui one column middle aligned grid">
+      <div class="center aligned column">
+        <a href="https://www.apache.org/events/current-event.html">
+          <img src="https://www.apache.org/events/current-event-234x60.png" alt="ASF Current Event">
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </body>
+
+</html>

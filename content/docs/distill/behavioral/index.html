@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Frustration &amp; Spatial Analytics</title>
+  <meta name="description" content="Apache Flagon Distill 2.5+ includes dedicated behavioral analytics modules (distill.analytics.frustration, distill.analytics.spatial, and distill.analytics.o...">
+
+  <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
+  <script src="/assets/jquery.min.js"></script>
+  <script src="/semantic/dist/semantic.min.js"></script>
+  <script src="/assets/d3.v4.min.js"></script>
+  <script src="/js/main.js"></script>
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="https://flagon.apache.org/docs/distill/behavioral/">
+  <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
+
+  
+</head>
+
+
+  <body>
+
+    <div class="site-header">
+  <div id="main-menu" class="ui inverted padded fixed top borderless menu">
+    <a class="site-title" href="/">
+      <h3 class="ui inverted header item">Apache Flagon</h3>
+    </a>
+
+    <div class="right menu">
+      <div class="ui dropdown item">
+        Products
+        <div class="menu">
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+        </div>
+      </div>
+      <div class="ui dropdown item">
+        <a href="/docs">Docs</a>
+        <div class="menu">
+          <a class="item" href="/docs/useralejs">UserALE.js</a>
+          <a class="item" href="/docs/distill">Distill</a>
+        </div>
+      </div>
+      <a class="item" href="/releases">Releases</a>
+      <a class="item" href="/community">Community</a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="main-wrapper">
+      <div class="docs-wrapper">
+  <div class="docs-sidebar">
+    
+
+
+
+<!-- <div class="ui inverted list">
+  <a class="item" href="/docs">About the Docs</a>
+</div> -->
+<div id="docs-nav" class="ui inverted accordion">
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Apache Flagon
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/">About the Docs</a>
+      
+        <a class="item" href="/docs/deployments/">Reference Architectures & Deployments</a>
+      
+        <a class="item" href="/docs/contributing/">Contributing</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE.js
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/useralejs/">Getting Started</a>
+      
+        <a class="item" href="/docs/useralejs/build/">UserALE.js Build and Test</a>
+      
+        <a class="item" href="/docs/useralejs/API/">The UserALE.js API</a>
+      
+        <a class="item" href="/docs/useralejs/modifying/">Modifying UserALE.js Source Code</a>
+      
+        <a class="item" href="/docs/useralejs/dataschema/">UserALE.js' Data Schema</a>
+      
+        <a class="item" href="/docs/useralejs/troubleshooting/">Troubleshooting</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="active title">
+  
+    <i class="dropdown icon"></i>
+    Distill
+  </div>
+  
+    <div class="active content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/distill/">Getting Started & API Reference</a>
+      
+        <a class="item" href="/docs/distill/behavioral/">Frustration & Spatial Analytics</a>
+      
+        <a class="item" href="/docs/distill/graphs/">Clickstream Graphs & Funnels</a>
+      
+        <a class="item" href="/docs/distill/segmentation/">Segmentation & Multi-Format Ingestion</a>
+      
+    </div>
+  </div>
+
+</div>
+
+  </div>
+  <div class="docs-content">
+    <h2 class="ui header">Frustration & Spatial Analytics</h2>
+    <p><strong>Apache Flagon Distill 2.5+</strong> includes dedicated behavioral analytics modules (<code class="language-plaintext highlighter-rouge">distill.analytics.frustration</code>, <code class="language-plaintext highlighter-rouge">distill.analytics.spatial</code>, and <code class="language-plaintext highlighter-rouge">distill.analytics.otel</code>) for quantifying UX friction, mapping spatial click/scroll density, and correlating frontend user telemetry with distributed OpenTelemetry traces.</p>
+
+<p>All behavioral analytics functions accept:</p>
+<ul>
+  <li>A list of UserALE flat JSON dictionaries,</li>
+  <li>A Protobuf v1 <code class="language-plaintext highlighter-rouge">LogBatch</code> dictionary (<code class="language-plaintext highlighter-rouge">{"logs": [...]}</code>),</li>
+  <li>An OpenTelemetry OTLP/JSON <code class="language-plaintext highlighter-rouge">ExportLogsServiceRequest</code> dictionary (<code class="language-plaintext highlighter-rouge">{"resourceLogs": [...]}</code>), or</li>
+  <li>A Distill UID-keyed log dictionary (as returned by <code class="language-plaintext highlighter-rouge">distill.setup(...)</code>).</li>
+</ul>
+
+<hr />
+
+<h2 id="ux-frustration-analytics-distillanalyticsfrustration">UX Frustration Analytics (<code class="language-plaintext highlighter-rouge">distill.analytics.frustration</code>)</h2>
+
+<h3 id="1-rage-click-detection-detect_rage_clicks">1. Rage-Click Detection (<code class="language-plaintext highlighter-rouge">detect_rage_clicks</code>)</h3>
+
+<p>Detects rapid, repeated clicks on the same DOM target within a short time and spatial window. Supports both:</p>
+<ul>
+  <li><strong>Explicit <code class="language-plaintext highlighter-rouge">rage_click</code> custom logs</strong> emitted in real time by UserALE 2.5’s <code class="language-plaintext highlighter-rouge">RageClickDetector</code> (<code class="language-plaintext highlighter-rouge">source: "explicit"</code>), and</li>
+  <li><strong>Retroactive detection</strong> across raw <code class="language-plaintext highlighter-rouge">click</code> event streams (<code class="language-plaintext highlighter-rouge">source: "inferred"</code>).</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">distill</span>
+
+<span class="n">incidents</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">detect_rage_clicks</span><span class="p">(</span>
+    <span class="n">logs</span><span class="p">,</span>
+    <span class="n">window_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>   <span class="c1"># Sliding window in milliseconds (default: 1000)
+</span>    <span class="n">threshold</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>      <span class="c1"># Minimum clicks within window_ms (default: 3)
+</span>    <span class="n">radius_px</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span>   <span class="c1"># Maximum Euclidean distance in pixels (default: 30.0)
+</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Each returned incident dictionary contains:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+    <span class="s">"target"</span><span class="p">:</span> <span class="s">"button#checkout-submit"</span><span class="p">,</span>
+    <span class="s">"pageUrl"</span><span class="p">:</span> <span class="s">"https://shop.example.com/cart"</span><span class="p">,</span>
+    <span class="s">"sessionId"</span><span class="p">:</span> <span class="s">"session_1712000000"</span><span class="p">,</span>
+    <span class="s">"timestamp"</span><span class="p">:</span> <span class="mi">1712000045120</span><span class="p">,</span>
+    <span class="s">"clickCount"</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s">"targetRect"</span><span class="p">:</span> <span class="p">{</span><span class="s">"x"</span><span class="p">:</span> <span class="mi">420</span><span class="p">,</span> <span class="s">"y"</span><span class="p">:</span> <span class="mi">510</span><span class="p">,</span> <span class="s">"width"</span><span class="p">:</span> <span class="mi">160</span><span class="p">,</span> <span class="s">"height"</span><span class="p">:</span> <span class="mi">44</span><span class="p">},</span>
+    <span class="s">"traceId"</span><span class="p">:</span> <span class="s">"4bf92f3577b34da6a3ce929d0e0e4736"</span><span class="p">,</span>
+    <span class="s">"source"</span><span class="p">:</span> <span class="s">"explicit"</span><span class="p">,</span>  <span class="c1"># or "inferred"
+</span><span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="2-dead-click-detection-detect_dead_clicks">2. Dead-Click Detection (<code class="language-plaintext highlighter-rouge">detect_dead_clicks</code>)</h3>
+
+<p>Identifies clicks on elements that produce <strong>no observable application response</strong> within <code class="language-plaintext highlighter-rouge">response_window_ms</code> — i.e., no subsequent DOM mutation (<code class="language-plaintext highlighter-rouge">logType == "mutation"</code>), no form/input event (<code class="language-plaintext highlighter-rouge">input</code>, <code class="language-plaintext highlighter-rouge">change</code>, <code class="language-plaintext highlighter-rouge">submit</code>), and no navigation (<code class="language-plaintext highlighter-rouge">load</code> or <code class="language-plaintext highlighter-rouge">pageUrl</code> change).</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dead_clicks</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">detect_dead_clicks</span><span class="p">(</span>
+    <span class="n">logs</span><span class="p">,</span>
+    <span class="n">response_window_ms</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="3-dom-mutation-thrash-detection-detect_dom_thrash">3. DOM Mutation Thrash Detection (<code class="language-plaintext highlighter-rouge">detect_dom_thrash</code>)</h3>
+
+<p>Analyzes UserALE <code class="language-plaintext highlighter-rouge">mutation</code> logs emitted by <code class="language-plaintext highlighter-rouge">MutationCollector</code> to identify high-churn layout bursts (<code class="language-plaintext highlighter-rouge">addedCount + removedCount + attributeCount &gt;= churn_threshold</code>) and rank DOM targets by cumulative structural churn.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">thrash</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">detect_dom_thrash</span><span class="p">(</span><span class="n">logs</span><span class="p">,</span> <span class="n">churn_threshold</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">thrash</span><span class="p">[</span><span class="s">"totalChurn"</span><span class="p">],</span> <span class="n">thrash</span><span class="p">[</span><span class="s">"burstCount"</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="n">thrash</span><span class="p">[</span><span class="s">"targetChurn"</span><span class="p">])</span>  <span class="c1"># {"div#product-grid": 64, "ul#search-results": 22}
+</span></code></pre></div></div>
+
+<h3 id="4-composite-ux-frustration-score-frustration_score">4. Composite UX Frustration Score (<code class="language-plaintext highlighter-rouge">frustration_score</code>)</h3>
+
+<p>Computes a normalized <code class="language-plaintext highlighter-rouge">[0.0, 100.0]</code> UX friction score and severity rating (<code class="language-plaintext highlighter-rouge">"none"</code>, <code class="language-plaintext highlighter-rouge">"low"</code>, <code class="language-plaintext highlighter-rouge">"medium"</code>, <code class="language-plaintext highlighter-rouge">"high"</code>) combining rage clicks, dead clicks, DOM thrash bursts, and runtime JS errors (<code class="language-plaintext highlighter-rouge">error</code> / <code class="language-plaintext highlighter-rouge">unhandledrejection</code>):</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">report</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">frustration_score</span><span class="p">(</span><span class="n">logs</span><span class="p">)</span>
+<span class="c1"># {
+#     "frustrationScore": 65.0,
+#     "severity": "high",
+#     "rageClickCount": 2,
+#     "deadClickCount": 1,
+#     "domThrashBurstCount": 1,
+#     "errorCount": 0,
+#     "rageClicks": [...],
+#     "deadClicks": [...],
+# }
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="spatial--viewport-analytics-distillanalyticsspatial">Spatial &amp; Viewport Analytics (<code class="language-plaintext highlighter-rouge">distill.analytics.spatial</code>)</h2>
+
+<h3 id="1-viewport-normalized-click-coordinates-click_heatmap_data">1. Viewport-Normalized Click Coordinates (<code class="language-plaintext highlighter-rouge">click_heatmap_data</code>)</h3>
+
+<p>Extracts raw <code class="language-plaintext highlighter-rouge">(x, y)</code> click coordinates alongside viewport-normalized coordinates (<code class="language-plaintext highlighter-rouge">normX</code>, <code class="language-plaintext highlighter-rouge">normY</code> in <code class="language-plaintext highlighter-rouge">[0.0, 1.0]</code> using <code class="language-plaintext highlighter-rouge">scrnRes</code>) and element-relative coordinates (<code class="language-plaintext highlighter-rouge">relX</code>, <code class="language-plaintext highlighter-rouge">relY</code> in <code class="language-plaintext highlighter-rouge">[0.0, 1.0]</code> when <code class="language-plaintext highlighter-rouge">targetRect</code> bounding boxes are present):</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">points</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">click_heatmap_data</span><span class="p">(</span><span class="n">logs</span><span class="p">,</span> <span class="n">normalize_viewport</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="c1"># [
+#   {
+#     "target": "button#buy-now",
+#     "pageUrl": "https://shop.example.com/item/42",
+#     "type": "click",
+#     "x": 640.0, "y": 360.0,
+#     "normX": 0.5, "normY": 0.5,
+#     "relX": 0.42, "relY": 0.55,
+#     "targetRect": {"x": 580, "y": 340, "width": 140, "height": 36}
+#   }
+# ]
+</span></code></pre></div></div>
+
+<h3 id="2-interactive-2d-click-density-heatmaps-plot_click_heatmap">2. Interactive 2D Click Density Heatmaps (<code class="language-plaintext highlighter-rouge">plot_click_heatmap</code>)</h3>
+
+<p>Generates a Plotly <code class="language-plaintext highlighter-rouge">Figure</code> (<code class="language-plaintext highlighter-rouge">go.Histogram2d</code> with top-down screen y-axis orientation) for rendering in Jupyter notebooks or web dashboards:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fig</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">plot_click_heatmap</span><span class="p">(</span>
+    <span class="n">logs</span><span class="p">,</span>
+    <span class="n">nbinsx</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+    <span class="n">nbinsy</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+    <span class="n">normalize_viewport</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h3 id="3-scroll-depth-summary-scroll_depth_summary">3. Scroll Depth Summary (<code class="language-plaintext highlighter-rouge">scroll_depth_summary</code>)</h3>
+
+<p>Aggregates <code class="language-plaintext highlighter-rouge">scroll</code> and <code class="language-plaintext highlighter-rouge">wheel</code> telemetry per <code class="language-plaintext highlighter-rouge">pageUrl</code> to calculate maximum vertical/horizontal scroll reach and how many viewport heights (<code class="language-plaintext highlighter-rouge">maxViewportMultiple</code>) users scrolled down each page:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">scroll_metrics</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">scroll_depth_summary</span><span class="p">(</span><span class="n">logs</span><span class="p">)</span>
+<span class="c1"># {
+#   "https://shop.example.com/catalog": {
+#     "maxScrollX": 0.0,
+#     "maxScrollY": 2160.0,
+#     "scrollEventCount": 18,
+#     "maxViewportMultiple": 3.0
+#   }
+# }
+</span></code></pre></div></div>
+
+<hr />
+
+<h2 id="opentelemetry-trace--replay-correlation-distillanalyticsotel">OpenTelemetry Trace &amp; Replay Correlation (<code class="language-plaintext highlighter-rouge">distill.analytics.otel</code>)</h2>
+
+<h3 id="1-correlate-frontend-logs-by-w3c-traceid-correlate_by_trace">1. Correlate Frontend Logs by W3C <code class="language-plaintext highlighter-rouge">traceId</code> (<code class="language-plaintext highlighter-rouge">correlate_by_trace</code>)</h3>
+
+<p>Groups all frontend UserALE interactions, rage clicks, DOM mutations, and session replay envelopes by their W3C TraceContext <code class="language-plaintext highlighter-rouge">traceId</code> (<code class="language-plaintext highlighter-rouge">flagon.trace_id</code> in OTLP):</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">traces</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">correlate_by_trace</span><span class="p">(</span><span class="n">otlp_or_userale_payload</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">trace_id</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">traces</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">trace_id</span><span class="p">,</span> <span class="n">info</span><span class="p">[</span><span class="s">"targets"</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s">"rageClickCount"</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s">"spanIds"</span><span class="p">])</span>
+</code></pre></div></div>
+
+<h3 id="2-extract-session-replay-envelopes-extract_replay_envelopes">2. Extract Session Replay Envelopes (<code class="language-plaintext highlighter-rouge">extract_replay_envelopes</code>)</h3>
+
+<p>Extracts Layer 2 <code class="language-plaintext highlighter-rouge">rrweb</code>-compatible DOM replay envelopes (<code class="language-plaintext highlighter-rouge">logType == "replay"</code>) triggered by rage clicks, uncaught exceptions, or manual flushes:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">envelopes</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">extract_replay_envelopes</span><span class="p">(</span><span class="n">logs</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">env</span> <span class="ow">in</span> <span class="n">envelopes</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="s">"trigger"</span><span class="p">],</span> <span class="n">env</span><span class="p">[</span><span class="s">"sessionId"</span><span class="p">],</span> <span class="n">env</span><span class="p">[</span><span class="s">"frameCount"</span><span class="p">],</span> <span class="n">env</span><span class="p">[</span><span class="s">"traceId"</span><span class="p">])</span>
+</code></pre></div></div>
+
+  </div>
+</div>
+
+    </div>
+
+    <div class="footer ui inverted very padded vertical segment">
+  <div class="ui vertical segment">
+    <div class="ui four column grid">
+      <div class="column">
+        <h4 class="ui inverted header">About</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Docs</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/docs/useralejs">UserALE.js</a>
+          <a class="item" href="/docs/distill">Distill</a>
+          <a class="item" href="/docs/deployments">Reference Deployments</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Community</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="https://github.com/apache/flagon">GitHub</a>
+          <a class="item" href="https://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Apache</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="https://www.apache.org/">Apache Software Foundation</a>
+          <a class="item" href="https://www.apache.org/licenses/">License</a>
+          <a class="item" href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+          <a class="item" href="https://www.apache.org/foundation/thanks.html">Thanks</a>
+          <a class="item" href="https://www.apache.org/security/">Security</a>
+          <a class="item" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui two column middle aligned grid">
+      <div class="center aligned column">
+        Copyright &copy; 2026 The Apache Software Foundation, Licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Apache Flagon, Flagon, Apache, the Apache feather logo, and the Apache Flagon logo are trademarks of The Apache Software Foundation.
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui one column middle aligned grid">
+      <div class="center aligned column">
+        <a href="https://www.apache.org/events/current-event.html">
+          <img src="https://www.apache.org/events/current-event-234x60.png" alt="ASF Current Event">
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </body>
+
+</html>

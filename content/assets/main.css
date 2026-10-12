@@ -293,14 +293,56 @@ body {
 }
 
 #log-feed {
-  height: 720px;
-  overflow-y: hidden;
+  height: 680px;
+  overflow-y: auto;
+  background: #1b1c1d;
+  border-radius: 6px;
+  padding: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.log-card {
+  background: #262626;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 0.65rem;
+  text-align: left;
+}
+
+.log-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.log-target {
+  color: #38a6d8;
+  font-size: 0.85em;
+  background: rgba(56, 166, 216, 0.12);
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+}
+
+.log-json {
+  margin: 0;
+  max-height: 210px;
+  overflow: auto;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: #ebebeb;
+  background: #141414;
+  padding: 0.5rem;
+  border-radius: 4px;
 }
 
 #map-example {
-  min-height: 300px;
+  min-height: 260px;
   width: 100%;
   z-index: 0;
+  border-radius: 4px;
 }
 
 #demo-dropdown > .default.text {

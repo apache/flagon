@@ -98,136 +98,276 @@
 
 <div class="ui  very padded vertical segment">
   <div class="ui center aligned text container">
-    <h2 class="ui  header">UserALE.js</h2>
+    <h2 class="ui  header">Interactive UserALE.js 2.5 Live Telemetry Demo</h2>
     <p>
-      UserALE.js is the DOM/JavaScript client for UserALE.  Every user activity is logged and sent to the UserALE backend for storage and analysis by Distill.
+      Interact with the controls below to inspect live telemetry generated in your browser by <strong>UserALE.js 2.5</strong>. Switch between <strong>UserALE Flat JSON</strong>, <strong>OpenTelemetry (OTLP/JSON)</strong>, and <strong>Protobuf v1 (<code>LogBatch</code>)</strong> wire formats in real time.
     </p>
-    <div class="ui basic vertical segment">
-      <div id="start-button" class="ui green button">Start Logging</div>
-      <div id="stop-button" class="ui red button">Pause Logging</div>
+    <div class="ui basic vertical segment" data-userale-ignore="true">
+      <div id="start-button" class="ui green button"><i class="play icon"></i>Start Logging</div>
+      <div id="stop-button" class="ui red button"><i class="pause icon"></i>Pause Logging</div>
+      <div id="clear-button" class="ui basic  button"><i class="trash alternate outline icon"></i>Clear Feed</div>
     </div>
   </div>
 
   <div class="ui container">
-    <div class="ui equal height two column grid">
-      <div class="center aligned column">
-        <div class="ui basic row segment">
-          <h4 class="ui dividing header">Buttons</h4>
-          <div class="ui blue button">Blue</div>
-          <div class="ui yellow button">Yellow</div>
-          <div class="ui green button">Green</div>
-          <div class="ui red button">Red</div>
+    <div class="ui stackable two column grid">
+      <div class="eight wide column">
+        <div class="ui basic vertical segment">
+          <h4 class="ui dividing  header">1. Standard UI Interactions</h4>
+          <div id="demo-blue-button" class="ui blue button">Blue</div>
+          <div id="demo-yellow-button" class="ui yellow button">Yellow</div>
+          <div id="demo-green-button" class="ui green button">Green</div>
+          <div id="demo-red-button" class="ui red button">Red</div>
         </div>
 
-        <div class="ui form">
-          <h4 class="ui dividing header">Checkboxes</h4>
-          <div class="field">
-            <div class="two fields">
-              <div class="field">
-                <input type="checkbox">
-                <label>Checked!</label>
+        <div class="ui basic vertical segment">
+          <h4 class="ui dividing  header">2. Behavioral &amp; Session Replay Signals (2.5)</h4>
+          <p style="font-size: 0.92em; opacity: 0.85;">
+            Rapidly click the button below 3+ times to trigger <code>RageClickDetector</code> (<code>rage_click</code> + normalized <code>targetRect</code> bounding box), or mutate the DOM to emit a debounced <code>mutation</code> summary log.
+          </p>
+          <button id="rage-click-button" type="button" class="ui orange button">
+            <i class="bolt icon"></i>Click 3x Rapidly (Rage Click)
+          </button>
+          <button id="mutate-dom-button" type="button" class="ui teal button">
+            <i class="plus square outline icon"></i>Mutate DOM (+ Node)
+          </button>
+          <div id="mutation-sandbox" style="margin-top: 0.75em;"></div>
+        </div>
+
+        <div class="ui  form">
+          <h4 class="ui dividing  header">3. Forms &amp; Privacy Controls (<code>data-userale-redact</code>)</h4>
+          <div class="two fields">
+            <div class="field">
+              <label>Standard Text Input</label>
+              <input id="demo-standard-input" type="text" placeholder="Type to log input details...">
+            </div>
+            <div class="field">
+              <label>PII-Redacted Input (<code>data-userale-redact</code>)</label>
+              <input id="demo-redact-input" type="text" data-userale-redact="true" placeholder="Sensitive input is scrubbed to [REDACTED]">
+            </div>
+          </div>
+
+          <div class="two fields">
+            <div class="field">
+              <label>Checkboxes &amp; Radios</label>
+              <div class="inline fields" style="margin-top: 0.5em;">
+                <div class="field">
+                  <div class="ui checkbox">
+                    <input type="checkbox">
+                    <label>Opt-in</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="ui radio checkbox">
+                    <input type="radio" name="demo-checkbox">
+                    <label>Yes</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="ui radio checkbox">
+                    <input type="radio" name="demo-checkbox">
+                    <label>No</label>
+                  </div>
+                </div>
               </div>
-              <div class="field">
-                <div class="two fields">
-                  <div class="field">
-                    <div class="ui radio checkbox">
-                      <input type="radio" name="demo-checkbox">
-                      <label>Yes</label>
-                    </div>
-                  </div>
-                  <div class="field">
-                    <div class="ui radio checkbox">
-                      <input type="radio" name="demo-checkbox">
-                      <label>No</label>
-                    </div>
-                  </div>
+            </div>
+
+            <div class="field">
+              <label>Flagon Component</label>
+              <div id="demo-dropdown" class="ui fluid selection dropdown">
+                <input type="hidden" name="flagon-component">
+                <i class="dropdown icon"></i>
+                <div class="default text">Select Component</div>
+                <div class="menu">
+                  <div class="item" data-value="userale">UserALE.js 2.5</div>
+                  <div class="item" data-value="userale-ext">UserALE Browser Extension (MV3)</div>
+                  <div class="item" data-value="distill">Distill 2.5 (Python Analytics)</div>
+                  <div class="item" data-value="otel">OpenTelemetry + Grafana Stack</div>
+                  <div class="item" data-value="opensearch">OpenSearch + Data Prepper Stack</div>
+                  <div class="item" data-value="lakehouse">Apache Iceberg Lakehouse Stack</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <h4 class="ui dividing header">Inputs</h4>
-          <div class="field">
-            <div class="two fields">
-              <div class="field">
-                <div class="ui labeled input">
-                  <div class="ui grey label">Text</div>
-                  <input type="text">
-                </div>
-              </div>
-
-              <div class="field">
-                <div id="demo-dropdown" class="ui fluid selection dropdown">
-                  <input type="hidden" name="flagon-component">
-                  <i class="dropdown icon"></i>
-                  <div class="default text">Select Component</div>
-                  <div class="menu">
-                    <div class="item">UserALE</div>
-                    <div class="item">Distill</div>
-                    <div class="item">Tap</div>
-                    <div class="item">Stout</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <h4 class="ui dividing header">Maps</h4>
-          <div class="ui basic row segment">
+          <h4 class="ui dividing  header">4. Spatial Viewport &amp; Map Interaction</h4>
+          <div class="ui basic row segment" style="padding: 0;">
             <div id="map-example"></div>
           </div>
-
-
         </div>
       </div>
 
-      <div id="log-feed" class="center aligned column">
-        <div class="ui fluid row segment">
-
+      <div class="eight wide column" data-userale-ignore="true">
+        <div class="ui secondary Stackable menu" style="margin-bottom: 0.5em;">
+          <div class="header item " style="padding-left: 0;">Wire Format:</div>
+          <div class="ui small buttons" id="wire-format-selector">
+            <button type="button" class="ui active blue button" data-format="http-json">UserALE JSON</button>
+            <button type="button" class="ui button" data-format="otlp">OTLP/JSON (OpenTelemetry)</button>
+            <button type="button" class="ui button" data-format="proto-json">Protobuf v1 JSON</button>
+          </div>
         </div>
+        <div id="log-feed" data-userale-ignore="true"></div>
       </div>
     </div>
   </div>
 </div>
 
-
 <link rel="stylesheet" href="/assets/leaflet/leaflet.css" />
 <script src="/assets/leaflet/leaflet.js"></script>
-<script src="/js/userale-demo.min.js" data-url=""></script>
+<script
+  src="/js/userale-demo.min.js"
+  data-autostart="true"
+  data-log-details="true"
+  data-tool="flagon-website-demo"
+  data-version="2.5.0"
+></script>
 
 <script>
   $(document).ready(function () {
+    var selectedFormat = 'http-json';
+    var recentLogs = [];
+    var mutationCount = 0;
+
     $('#demo-dropdown').dropdown();
     $('.ui.checkbox').checkbox();
 
-    $('#start-button').on('click', userale.start);
-    $('#stop-button').on('click', userale.stop);
-    userale.options({
-      logCb: addLog,
-      noSend: true
+    // Register a no-op exporter so the interactive demo never makes network requests
+    if (window.userale && typeof userale.registerExporter === 'function') {
+      userale.registerExporter({
+        export: function () {
+          return Promise.resolve({ success: true, statusCode: 200 });
+        }
+      });
+    }
+
+    // Enable W3C trace context & two-layer session replay / DOM mutation observation
+    if (window.userale && typeof userale.options === 'function') {
+      userale.options({
+        toolName: 'flagon-website-demo',
+        toolVersion: '2.5.0',
+        logDetails: true,
+        observeMutations: true,
+        traceContext: function () {
+          return {
+            traceId: '4bf92f3577b34da6a3ce929d0e0e4736',
+            spanId: '00f067aa0ba902b7'
+          };
+        }
+      });
+    }
+
+    if (window.userale && typeof userale.startSessionReplay === 'function') {
+      userale.startSessionReplay({
+        observeMutations: true,
+        detectRageClicks: true
+      });
+    }
+
+    function formatPayload(log) {
+      var cfg = window.userale && typeof userale.options === 'function' ? userale.options() : {};
+      if (selectedFormat === 'otlp' && window.userale && typeof userale.toOtlpExportLogsServiceRequest === 'function') {
+        return userale.toOtlpExportLogsServiceRequest([log], cfg);
+      }
+      if (selectedFormat === 'proto-json' && window.userale && typeof userale.toProtoLogBatch === 'function') {
+        return userale.toProtoLogBatch([log], cfg);
+      }
+      return log;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function renderFeed() {
+      var $feed = $('#log-feed');
+      $feed.empty();
+      for (var i = 0; i < recentLogs.length; i++) {
+        var entry = recentLogs[i];
+        var badgeColor = 'blue';
+        if (entry.type === 'rage_click' || entry.logType === 'replay') badgeColor = 'orange';
+        else if (entry.logType === 'mutation') badgeColor = 'teal';
+        else if (entry.logType === 'custom') badgeColor = 'purple';
+
+        var payloadJson = JSON.stringify(formatPayload(entry), null, 2);
+        var cardHtml =
+          '<div class="log-card">' +
+            '<div class="log-card-header">' +
+              '<span class="ui mini ' + badgeColor + ' label">' + escapeHtml(entry.logType || 'raw') + '</span> ' +
+              '<span class="ui mini basic label">' + escapeHtml(entry.type || 'event') + '</span> ' +
+              '<code class="log-target">' + escapeHtml(entry.target || 'document') + '</code>' +
+            '</div>' +
+            '<pre class="log-json">' + escapeHtml(payloadJson) + '</pre>' +
+          '</div>';
+        $feed.append(cardHtml);
+      }
+    }
+
+    if (window.userale && typeof userale.addCallbacks === 'function') {
+      userale.addCallbacks({
+        websiteDemoFeed: function (log) {
+          if (!log) return log;
+          // Skip high-frequency hover noise in the visual demo feed
+          if (log.type === 'mouseover') {
+            return log;
+          }
+          var targetStr = String(log.target || '');
+          var pathStr = Array.isArray(log.path) ? log.path.join(' ') : '';
+          // Ignore interactions inside the log feed panel, wire format switcher, or start/stop/clear controls
+          if (
+            targetStr.indexOf('log-') !== -1 ||
+            pathStr.indexOf('log-feed') !== -1 ||
+            pathStr.indexOf('wire-format-selector') !== -1 ||
+            targetStr.indexOf('start-button') !== -1 ||
+            targetStr.indexOf('stop-button') !== -1 ||
+            targetStr.indexOf('clear-button') !== -1
+          ) {
+            return false;
+          }
+          recentLogs.unshift(Object.assign({}, log));
+          if (recentLogs.length > 8) {
+            recentLogs.pop();
+          }
+          renderFeed();
+          return log;
+        }
+      });
+    }
+
+    $('#start-button').on('click', function () {
+      if (window.userale) userale.start();
+    });
+    $('#stop-button').on('click', function () {
+      if (window.userale) userale.stop();
+    });
+    $('#clear-button').on('click', function () {
+      recentLogs = [];
+      renderFeed();
+    });
+
+    $('#mutate-dom-button').on('click', function () {
+      mutationCount += 1;
+      var $chip = $(
+        '<span class="ui tiny teal label" style="margin: 2px;">' +
+          'Dynamic Node #' + mutationCount +
+        '</span>'
+      );
+      $('#mutation-sandbox').append($chip);
+    });
+
+    $('#wire-format-selector button').on('click', function () {
+      $('#wire-format-selector button').removeClass('active blue');
+      $(this).addClass('active blue');
+      selectedFormat = $(this).data('format');
+      renderFeed();
     });
 
     var map = L.map('map-example').setView([42.3601, -71.0589], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-
-    function addLog(log) {
-      var html = '<div class="log ui fluid row segment">' + JSON.stringify(log) + '</div>';
-      $('#log-feed').prepend(html);
-    }
-
-    function clearLogs() {
-      setTimeout(function () {
-        var $feed = $('#log-feed .log');
-        if ($feed.length > 10) {
-          $feed.slice(9).remove();
-        }
-        clearLogs();
-      }, 1000);
-    }
-
-    clearLogs();
   });
 </script>
 
@@ -271,8 +411,9 @@
       <div class="column">
         <h4 class="ui inverted header">Docs</h4>
         <div class="ui inverted link list">
-          <a class="item" href="/docs/useralejs">UserAle.js</a>
+          <a class="item" href="/docs/useralejs">UserALE.js</a>
           <a class="item" href="/docs/distill">Distill</a>
+          <a class="item" href="/docs/deployments">Reference Deployments</a>
         </div>
       </div>
       <div class="column">

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Clickstream Graphs &amp; Funnels</title>
+  <meta name="description" content="Apache Flagon Distill models user clickstreams as directed behavioral graphs using NetworkX and renders interactive flow visualizations with Plotly.">
+
+  <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
+  <script src="/assets/jquery.min.js"></script>
+  <script src="/semantic/dist/semantic.min.js"></script>
+  <script src="/assets/d3.v4.min.js"></script>
+  <script src="/js/main.js"></script>
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="https://flagon.apache.org/docs/distill/graphs/">
+  <link rel="alternate" type="application/rss+xml" title="Apache Flagon" href="/feed.xml">
+
+  
+</head>
+
+
+  <body>
+
+    <div class="site-header">
+  <div id="main-menu" class="ui inverted padded fixed top borderless menu">
+    <a class="site-title" href="/">
+      <h3 class="ui inverted header item">Apache Flagon</h3>
+    </a>
+
+    <div class="right menu">
+      <div class="ui dropdown item">
+        Products
+        <div class="menu">
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+        </div>
+      </div>
+      <div class="ui dropdown item">
+        <a href="/docs">Docs</a>
+        <div class="menu">
+          <a class="item" href="/docs/useralejs">UserALE.js</a>
+          <a class="item" href="/docs/distill">Distill</a>
+        </div>
+      </div>
+      <a class="item" href="/releases">Releases</a>
+      <a class="item" href="/community">Community</a>
+    </div>
+  </div>
+</div>
+
+
+    <div class="main-wrapper">
+      <div class="docs-wrapper">
+  <div class="docs-sidebar">
+    
+
+
+
+<!-- <div class="ui inverted list">
+  <a class="item" href="/docs">About the Docs</a>
+</div> -->
+<div id="docs-nav" class="ui inverted accordion">
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    Apache Flagon
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/">About the Docs</a>
+      
+        <a class="item" href="/docs/deployments/">Reference Architectures & Deployments</a>
+      
+        <a class="item" href="/docs/contributing/">Contributing</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="title">
+  
+    <i class="dropdown icon"></i>
+    UserALE.js
+  </div>
+  
+    <div class="content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/useralejs/">Getting Started</a>
+      
+        <a class="item" href="/docs/useralejs/build/">UserALE.js Build and Test</a>
+      
+        <a class="item" href="/docs/useralejs/API/">The UserALE.js API</a>
+      
+        <a class="item" href="/docs/useralejs/modifying/">Modifying UserALE.js Source Code</a>
+      
+        <a class="item" href="/docs/useralejs/dataschema/">UserALE.js' Data Schema</a>
+      
+        <a class="item" href="/docs/useralejs/troubleshooting/">Troubleshooting</a>
+      
+    </div>
+  </div>
+
+  
+    <div class="active title">
+  
+    <i class="dropdown icon"></i>
+    Distill
+  </div>
+  
+    <div class="active content">
+  
+    <div class="ui inverted bulleted list docs-list">
+      
+        <a class="item" href="/docs/distill/">Getting Started & API Reference</a>
+      
+        <a class="item" href="/docs/distill/behavioral/">Frustration & Spatial Analytics</a>
+      
+        <a class="item" href="/docs/distill/graphs/">Clickstream Graphs & Funnels</a>
+      
+        <a class="item" href="/docs/distill/segmentation/">Segmentation & Multi-Format Ingestion</a>
+      
+    </div>
+  </div>
+
+</div>
+
+  </div>
+  <div class="docs-content">
+    <h2 class="ui header">Clickstream Graphs & Funnels</h2>
+    <p><strong>Apache Flagon Distill</strong> models user clickstreams as directed behavioral graphs using <a href="https://networkx.org/">NetworkX</a> and renders interactive flow visualizations with <a href="https://plotly.com/python/">Plotly</a>.</p>
+
+<hr />
+
+<h2 id="preparing-clickstream-edges">Preparing Clickstream Edges</h2>
+
+<p>Given a list of UserALE logs or a sorted log dictionary from <code class="language-plaintext highlighter-rouge">distill.setup(...)</code>, extract sequential <code class="language-plaintext highlighter-rouge">(source_target, destination_target)</code> interaction pairs or pass the logs directly to <code class="language-plaintext highlighter-rouge">distill.transition_matrix(...)</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">distill</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="n">nx</span>
+
+<span class="n">sorted_logs</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">setup</span><span class="p">(</span><span class="s">"userale_logs.json"</span><span class="p">,</span> <span class="n">date_type</span><span class="o">=</span><span class="s">"datetime"</span><span class="p">)</span>
+<span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">log</span><span class="p">[</span><span class="s">"target"</span><span class="p">]</span> <span class="k">for</span> <span class="n">log</span> <span class="ow">in</span> <span class="n">sorted_logs</span><span class="p">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">log</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"target"</span><span class="p">)]</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nx</span><span class="p">.</span><span class="n">utils</span><span class="p">.</span><span class="n">pairwise</span><span class="p">(</span><span class="n">targets</span><span class="p">))</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="directed-behavioral-graphs-createdigraph">Directed Behavioral Graphs (<code class="language-plaintext highlighter-rouge">createDiGraph</code>)</h2>
+
+<p>Builds a weighted <code class="language-plaintext highlighter-rouge">networkx.DiGraph</code> where each node is a DOM target (or mapped label) and each edge <code class="language-plaintext highlighter-rouge">(u, v)</code> carries a <code class="language-plaintext highlighter-rouge">capacity</code> attribute equal to the number of observed transitions from <code class="language-plaintext highlighter-rouge">u</code> to <code class="language-plaintext highlighter-rouge">v</code>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">G</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">createDiGraph</span><span class="p">(</span>
+    <span class="n">nodes</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span>
+    <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">,</span>
+    <span class="n">drop_recursions</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>  <span class="c1"># Exclude self-loops (target -&gt; same target)
+</span>    <span class="n">node_labels</span><span class="o">=</span><span class="p">{</span>
+        <span class="s">"button#add-to-cart"</span><span class="p">:</span> <span class="s">"Add to Cart"</span><span class="p">,</span>
+        <span class="s">"a#checkout-link"</span><span class="p">:</span> <span class="s">"Checkout"</span><span class="p">,</span>
+        <span class="s">"button#pay-now"</span><span class="p">:</span> <span class="s">"Submit Order"</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">G</span><span class="p">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">u</span><span class="si">}</span><span class="s"> -&gt; </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s">'capacity'</span><span class="p">]</span><span class="si">}</span><span class="s"> transitions"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="first-order-markov-transition-matrix-transition_matrix">First-Order Markov Transition Matrix (<code class="language-plaintext highlighter-rouge">transition_matrix</code>)</h2>
+
+<p>Computes the state-transition probability matrix $P(\text{target}_{t+1} \mid \text{target}_t)$ directly from either a list/dict of UserALE logs or a list of <code class="language-plaintext highlighter-rouge">(source, target)</code> edge tuples.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Returns a row-normalized pandas.DataFrame by default:
+</span><span class="n">df_prob</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">transition_matrix</span><span class="p">(</span>
+    <span class="n">sorted_logs</span><span class="p">,</span>
+    <span class="n">drop_recursions</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">as_dataframe</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">df_prob</span><span class="p">)</span>
+
+<span class="c1"># Or return a nested Python dictionary:
+</span><span class="n">prob_dict</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">transition_matrix</span><span class="p">(</span>
+    <span class="n">sorted_logs</span><span class="p">,</span>
+    <span class="n">drop_recursions</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">as_dataframe</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="interactive-sankey-diagrams-sankey">Interactive Sankey Diagrams (<code class="language-plaintext highlighter-rouge">sankey</code>)</h2>
+
+<p>Generates a Plotly Sankey diagram (<code class="language-plaintext highlighter-rouge">go.Figure</code>) visualizing multi-step user flow volume across DOM targets:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fig</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">sankey</span><span class="p">(</span>
+    <span class="n">edges</span><span class="p">,</span>
+    <span class="n">node_labels</span><span class="o">=</span><span class="p">{</span>
+        <span class="s">"button#search"</span><span class="p">:</span> <span class="s">"Search Catalog"</span><span class="p">,</span>
+        <span class="s">"div.product-card"</span><span class="p">:</span> <span class="s">"View Product"</span><span class="p">,</span>
+        <span class="s">"button#add-to-cart"</span><span class="p">:</span> <span class="s">"Add to Cart"</span><span class="p">,</span>
+        <span class="s">"button#checkout"</span><span class="p">:</span> <span class="s">"Checkout"</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="n">drop_recursions</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="conversion-funnels-funnel">Conversion Funnels (<code class="language-plaintext highlighter-rouge">funnel</code>)</h2>
+
+<p>Computes conversion progression and drop-off across an ordered sequence of target milestones. When <code class="language-plaintext highlighter-rouge">infer=True</code> (default), Distill automatically discovers the maximum-capacity path between non-adjacent target milestones in the user clickstream graph:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fig</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">funnel</span><span class="p">(</span>
+    <span class="n">edges</span><span class="p">,</span>
+    <span class="n">targets</span><span class="o">=</span><span class="p">[</span>
+        <span class="s">"button#search"</span><span class="p">,</span>
+        <span class="s">"button#add-to-cart"</span><span class="p">,</span>
+        <span class="s">"button#checkout"</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">infer</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+  </div>
+</div>
+
+    </div>
+
+    <div class="footer ui inverted very padded vertical segment">
+  <div class="ui vertical segment">
+    <div class="ui four column grid">
+      <div class="column">
+        <h4 class="ui inverted header">About</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/userale">UserALE</a>
+          <a class="item" href="/distill">Distill</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Docs</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="/docs/useralejs">UserALE.js</a>
+          <a class="item" href="/docs/distill">Distill</a>
+          <a class="item" href="/docs/deployments">Reference Deployments</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Community</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="https://github.com/apache/flagon">GitHub</a>
+          <a class="item" href="https://stackoverflow.com/questions/tagged/apache-flagon">StackOverflow</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui inverted header">Apache</h4>
+        <div class="ui inverted link list">
+          <a class="item" href="https://www.apache.org/">Apache Software Foundation</a>
+          <a class="item" href="https://www.apache.org/licenses/">License</a>
+          <a class="item" href="https://www.apache.org/foundation/sponsorship.html">Sponsorship</a>
+          <a class="item" href="https://www.apache.org/foundation/thanks.html">Thanks</a>
+          <a class="item" href="https://www.apache.org/security/">Security</a>
+          <a class="item" href="https://privacy.apache.org/policies/privacy-policy-public.html">Privacy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui two column middle aligned grid">
+      <div class="center aligned column">
+        Copyright &copy; 2026 The Apache Software Foundation, Licensed under the <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.<br>
+        Apache Flagon, Flagon, Apache, the Apache feather logo, and the Apache Flagon logo are trademarks of The Apache Software Foundation.
+      </div>
+    </div>
+  </div>
+  <div class="ui inverted vertical segment">
+    <div class="ui one column middle aligned grid">
+      <div class="center aligned column">
+        <a href="https://www.apache.org/events/current-event.html">
+          <img src="https://www.apache.org/events/current-event-234x60.png" alt="ASF Current Event">
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </body>
+
+</html>
