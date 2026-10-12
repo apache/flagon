@@ -142,8 +142,8 @@
 <h3 id="from-source-apacheflagon-monorepo">From Source (<code class="language-plaintext highlighter-rouge">apache/flagon</code> Monorepo)</h3>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/apache/flagon.git
 <span class="nb">cd </span>flagon/products/distill
-poetry <span class="nb">install</span> <span class="nt">--all-groups</span>
-poetry run pytest
+uv <span class="nb">sync</span> <span class="nt">--all-groups</span>
+uv run pytest
 </code></pre></div></div>
 
 <hr />
@@ -153,20 +153,28 @@ poetry run pytest
 <p>Distill’s <code class="language-plaintext highlighter-rouge">UserAleSchema</code> and <code class="language-plaintext highlighter-rouge">extract_logs</code> utilities automatically normalize and validate logs across all three wire formats emitted by UserALE.js:</p>
 
 <ol>
-  <li><strong>UserALE Flat JSON (<code class="language-plaintext highlighter-rouge">v2.3</code> / <code class="language-plaintext highlighter-rouge">v2.4</code> / <code class="language-plaintext highlighter-rouge">v2.5</code>)</strong>: Standard flat JSON log objects (<code class="language-plaintext highlighter-rouge">raw</code>, <code class="language-plaintext highlighter-rouge">interval</code>, and <code class="language-plaintext highlighter-rouge">custom</code> log types).</li>
+  <li><strong>UserALE Flat JSON (<code class="language-plaintext highlighter-rouge">v2.3</code> / <code class="language-plaintext highlighter-rouge">v2.4</code> / <code class="language-plaintext highlighter-rouge">v2.5</code>)</strong>: Standard flat JSON log objects (<code class="language-plaintext highlighter-rouge">raw</code>, <code class="language-plaintext highlighter-rouge">interval</code>, <code class="language-plaintext highlighter-rouge">custom</code>, <code class="language-plaintext highlighter-rouge">mutation</code>, and <code class="language-plaintext highlighter-rouge">replay</code> log types).</li>
   <li><strong>Protobuf v1 Canonical JSON (<code class="language-plaintext highlighter-rouge">LogBatch</code>)</strong>: Nested <code class="language-plaintext highlighter-rouge">apache.flagon.userale.v1.LogBatch</code> payloads produced by <code class="language-plaintext highlighter-rouge">ProtoJsonExporter</code>.</li>
   <li><strong>OpenTelemetry OTLP/JSON (<code class="language-plaintext highlighter-rouge">ExportLogsServiceRequest</code>)</strong>: <code class="language-plaintext highlighter-rouge">resourceLogs[].scopeLogs[].logRecords[]</code> payloads produced by <code class="language-plaintext highlighter-rouge">OtlpJsonExporter</code>.</li>
 </ol>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">distill.process.log</span> <span class="kn">import</span> <span class="n">Log</span>
-<span class="kn">from</span> <span class="nn">distill.schemas.userale</span> <span class="kn">import</span> <span class="n">UserAleSchema</span><span class="p">,</span> <span class="n">extract_logs</span><span class="p">,</span> <span class="n">normalize_userale_dict</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">distill</span>
+<span class="kn">from</span> <span class="nn">distill</span> <span class="kn">import</span> <span class="n">Log</span>
+<span class="kn">from</span> <span class="nn">distill.core.types</span> <span class="kn">import</span> <span class="n">UserAleSchema</span>
+<span class="kn">from</span> <span class="nn">distill.schemas.userale</span> <span class="kn">import</span> <span class="n">extract_logs</span><span class="p">,</span> <span class="n">normalize_userale_dict</span>
 
 <span class="c1"># Extract and normalize logs from a flat list, Proto-JSON LogBatch, or OTLP/JSON payload:
 </span><span class="n">normalized_docs</span> <span class="o">=</span> <span class="n">extract_logs</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
-<span class="n">validated_logs</span> <span class="o">=</span> <span class="p">[</span><span class="n">UserAleSchema</span><span class="p">(</span><span class="o">**</span><span class="n">doc</span><span class="p">)</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">normalized_docs</span><span class="p">]</span>
+<span class="n">validated_logs</span> <span class="o">=</span> <span class="p">[</span><span class="n">UserAleSchema</span><span class="p">.</span><span class="n">validate_python</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">normalized_docs</span><span class="p">]</span>
 
-<span class="c1"># Or initialize a Distill Log container directly:
-</span><span class="n">log</span> <span class="o">=</span> <span class="n">Log</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">UserAleSchema</span><span class="p">)</span>
+<span class="c1"># Wrap a single log dictionary in a Distill Log container:
+</span><span class="n">single_log</span> <span class="o">=</span> <span class="n">Log</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">normalized_docs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">schema</span><span class="o">=</span><span class="n">UserAleSchema</span><span class="p">)</span>
+
+<span class="c1"># Run behavioral, frustration, spatial, and trace analytics:
+</span><span class="n">summary</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">session_summary</span><span class="p">(</span><span class="n">normalized_docs</span><span class="p">)</span>
+<span class="n">friction</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">frustration_score</span><span class="p">(</span><span class="n">normalized_docs</span><span class="p">)</span>
+<span class="n">transitions</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">transition_matrix</span><span class="p">(</span><span class="n">normalized_docs</span><span class="p">,</span> <span class="n">drop_recursions</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">traces</span> <span class="o">=</span> <span class="n">distill</span><span class="p">.</span><span class="n">correlate_by_trace</span><span class="p">(</span><span class="n">normalized_docs</span><span class="p">)</span>
 </code></pre></div></div>
 
 <hr />
@@ -183,24 +191,44 @@ poetry run pytest
   </thead>
   <tbody>
     <tr>
-      <td><code class="language-plaintext highlighter-rouge">distill.schemas.userale</code></td>
+      <td><code class="language-plaintext highlighter-rouge">distill.schemas.userale</code> &amp; <code class="language-plaintext highlighter-rouge">distill.core.types</code></td>
       <td><code class="language-plaintext highlighter-rouge">UserAleSchema</code>, <code class="language-plaintext highlighter-rouge">extract_logs(payload)</code>, <code class="language-plaintext highlighter-rouge">normalize_userale_dict(data)</code></td>
       <td>Pydantic v2 validation and multi-format normalization for UserALE flat JSON, Protobuf v1 <code class="language-plaintext highlighter-rouge">LogBatch</code>, and OpenTelemetry OTLP/JSON logs.</td>
     </tr>
     <tr>
-      <td><code class="language-plaintext highlighter-rouge">distill.process.log</code></td>
+      <td><code class="language-plaintext highlighter-rouge">distill.core.log</code></td>
       <td><code class="language-plaintext highlighter-rouge">Log</code></td>
-      <td>Container for validated interaction streams, indexing by timestamp/PKSUID and supporting DataFrame/dict conversion.</td>
+      <td>Container for validated interaction logs with timestamp/PKSUID indexing and DataFrame/dict conversion.</td>
     </tr>
     <tr>
-      <td><code class="language-plaintext highlighter-rouge">distill.segmentation.segment</code></td>
-      <td><code class="language-plaintext highlighter-rouge">Segment</code>, <code class="language-plaintext highlighter-rouge">Segments</code>, <code class="language-plaintext highlighter-rouge">create_segment(...)</code>, <code class="language-plaintext highlighter-rouge">detect_segments(...)</code></td>
-      <td>Time-window, event-driven, and predicate-based slicing of user sessions.</td>
+      <td><code class="language-plaintext highlighter-rouge">distill.segmentation</code></td>
+      <td><code class="language-plaintext highlighter-rouge">Segment</code>, <code class="language-plaintext highlighter-rouge">Segments</code>, <code class="language-plaintext highlighter-rouge">create_segment(...)</code>, <code class="language-plaintext highlighter-rouge">generate_segments(...)</code>, <code class="language-plaintext highlighter-rouge">generate_fixed_time_segments(...)</code>, <code class="language-plaintext highlighter-rouge">generate_collapsing_window_segments(...)</code>, <code class="language-plaintext highlighter-rouge">detect_deadspace(...)</code>, <code class="language-plaintext highlighter-rouge">write_segment(...)</code>, <code class="language-plaintext highlighter-rouge">export_segments(...)</code></td>
+      <td>Time-window, event-driven, and predicate-based slicing and set-logic composition of user sessions.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">distill.analytics.frustration</code></td>
+      <td><code class="language-plaintext highlighter-rouge">detect_rage_clicks</code>, <code class="language-plaintext highlighter-rouge">detect_dead_clicks</code>, <code class="language-plaintext highlighter-rouge">detect_dom_thrash</code>, <code class="language-plaintext highlighter-rouge">frustration_score</code></td>
+      <td>Temporal/spatial rage-click detection, dead-click detection on non-interactive targets, DOM mutation burst detection, and <code class="language-plaintext highlighter-rouge">[0.0, 100.0]</code> composite UX friction scoring.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">distill.analytics.spatial</code></td>
+      <td><code class="language-plaintext highlighter-rouge">click_heatmap_data</code>, <code class="language-plaintext highlighter-rouge">plot_click_heatmap</code>, <code class="language-plaintext highlighter-rouge">scroll_depth_summary</code></td>
+      <td>Viewport-normalized <code class="language-plaintext highlighter-rouge">(x, y)</code> click coordinates, <code class="language-plaintext highlighter-rouge">targetRect</code> bounding boxes, interactive 2D Plotly density heatmaps, and per-page scroll depth ratios.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">distill.analytics.otel</code></td>
+      <td><code class="language-plaintext highlighter-rouge">correlate_by_trace</code>, <code class="language-plaintext highlighter-rouge">extract_replay_envelopes</code></td>
+      <td>Joins frontend UserALE interaction logs by W3C <code class="language-plaintext highlighter-rouge">traceId</code> (<code class="language-plaintext highlighter-rouge">flagon.trace_id</code>) and extracts <code class="language-plaintext highlighter-rouge">logType == "replay"</code> session replay envelopes.</td>
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">distill.analytics.graph</code></td>
-      <td><code class="language-plaintext highlighter-rouge">graph</code>, <code class="language-plaintext highlighter-rouge">funnel</code>, <code class="language-plaintext highlighter-rouge">sankey</code></td>
-      <td>Directed behavioral clickstream graphs, conversion funnels, and path visualizations powered by NetworkX and Plotly.</td>
+      <td><code class="language-plaintext highlighter-rouge">createDiGraph</code>, <code class="language-plaintext highlighter-rouge">funnel</code>, <code class="language-plaintext highlighter-rouge">sankey</code>, <code class="language-plaintext highlighter-rouge">transition_matrix</code></td>
+      <td>Directed behavioral clickstream graphs, conversion funnels, Sankey diagrams, and first-order Markov transition probability matrices.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">distill.analytics.stat</code></td>
+      <td><code class="language-plaintext highlighter-rouge">session_summary</code>, <code class="language-plaintext highlighter-rouge">click_rate</code>, <code class="language-plaintext highlighter-rouge">setup</code></td>
+      <td>Session duration, bounce/engagement metrics, action counts, and event rate calculations.</td>
     </tr>
   </tbody>
 </table>

@@ -135,7 +135,7 @@
 
 <h4 id="opentelemetry-collector-cors-configuration-receiversotlpprotocolshttp">OpenTelemetry Collector CORS Configuration (<code class="language-plaintext highlighter-rouge">receivers.otlp.protocols.http</code>)</h4>
 
-<p>When exporting directly from the browser to an OpenTelemetry Collector (<code class="language-plaintext highlighter-rouge">exporterFormat: 'otlp-json'</code>), enable <code class="language-plaintext highlighter-rouge">cors</code> on the HTTP receiver in your <code class="language-plaintext highlighter-rouge">otel-collector-config.yaml</code>:</p>
+<p>When exporting directly from the browser to an OpenTelemetry Collector (<code class="language-plaintext highlighter-rouge">exporterType: 'otlp'</code>), enable <code class="language-plaintext highlighter-rouge">cors</code> on the HTTP receiver in your <code class="language-plaintext highlighter-rouge">otel-collector-config.yaml</code>:</p>
 
 <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">receivers</span><span class="pi">:</span>
   <span class="na">otlp</span><span class="pi">:</span>
@@ -160,7 +160,7 @@
 
 <h3 id="page-unload-pagehide-payload-limits">Page Unload (<code class="language-plaintext highlighter-rouge">pagehide</code>) Payload Limits</h3>
 
-<p>Browsers enforce a 64 KiB cumulative quota on <code class="language-plaintext highlighter-rouge">fetch(..., { keepalive: true })</code> requests triggered during <code class="language-plaintext highlighter-rouge">pagehide</code> (tab close or navigation). UserALE.js’s HTTP exporters (<code class="language-plaintext highlighter-rouge">HttpJsonExporter</code>, <code class="language-plaintext highlighter-rouge">ProtoJsonExporter</code>, <code class="language-plaintext highlighter-rouge">OtlpJsonExporter</code>) automatically split large unload queues into $\le 48\text{ KiB}$ chunks via <code class="language-plaintext highlighter-rouge">chunkLogsForKeepalive</code> so unload flushes preserve custom <code class="language-plaintext highlighter-rouge">Authorization</code> and <code class="language-plaintext highlighter-rouge">x-api-key</code> headers without exceeding browser <code class="language-plaintext highlighter-rouge">keepalive</code> limits.</p>
+<p>Browsers enforce a 64 KiB cumulative quota on <code class="language-plaintext highlighter-rouge">fetch(..., { keepalive: true })</code> requests triggered during <code class="language-plaintext highlighter-rouge">pagehide</code> (tab close or navigation). UserALE.js’s HTTP exporters (<code class="language-plaintext highlighter-rouge">HttpJsonExporter</code>, <code class="language-plaintext highlighter-rouge">ProtoJsonExporter</code>, <code class="language-plaintext highlighter-rouge">OtlpJsonExporter</code>) automatically split large unload queues into <code class="language-plaintext highlighter-rouge">&lt;= 48 KiB</code> chunks via <code class="language-plaintext highlighter-rouge">chunkLogsForKeepalive</code> so unload flushes preserve custom <code class="language-plaintext highlighter-rouge">Authorization</code> and <code class="language-plaintext highlighter-rouge">x-api-key</code> headers without exceeding browser <code class="language-plaintext highlighter-rouge">keepalive</code> limits.</p>
 
 <hr />
 

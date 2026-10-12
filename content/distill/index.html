@@ -63,7 +63,7 @@
 <div class="ui very padded vertical segment">
   <div class="ui center aligned text container">
     <p>
-      Apache Distill is an analytics framework for handling and analyzing UserALE data. Distill allows you to focus on the data you want and model it. Distill empowers you to learn more from your data than any commercial service; use Distill's analytic libraries to generate statistics on how users interact with different elements of your application and also understand how users interact with your applications. Distill specializes in models of sequence and workflow so that you can understand how users experiment with your application and whether they interact with your application the way you expected. Distill is written in Python and built for scalable growth and customization.
+      Apache Flagon Distill is a Python behavioral analytics framework for segmenting, modeling, and visualizing UserALE telemetry. Distill ingests UserALE flat JSON, Protobuf v1 LogBatch JSON, and OpenTelemetry OTLP/JSON payloads—giving data scientists and product engineers built-in algorithms for session segmentation, frustration detection (rage clicks, dead clicks, cursor thrashing), spatial & viewport engagement heatmaps, and clickstream graph modeling (Markov transition matrices, Sankey diagrams, and conversion funnels).
     </p>
   </div>
 </div>
@@ -78,9 +78,9 @@
             <i class="huge circular inverted blue search icon"></i>
           </div>
           <div class="column">
-            <h3 class="ui inverted header">Easy, efficient queries</h3>
+            <h3 class="ui inverted header">Multi-Format Ingestion & Validation</h3>
             <div class="feature-description">
-              Distill utilizes RESTful APIs to streamline making calls to your UserALE log database.
+              Normalize and validate UserALE flat JSON, Protobuf v1 LogBatch JSON, and OpenTelemetry OTLP/JSON payloads with Pydantic v2 schemas.
             </div>
           </div>
         </div>
@@ -92,9 +92,9 @@
             <i class="huge circular inverted yellow object ungroup icon"></i>
           </div>
           <div class="column">
-            <h3 class="ui inverted header">Segment your data</h3>
+            <h3 class="ui inverted header">Session & Window Segmentation</h3>
             <div class="feature-description">
-              Retrieve on the cases or fields that you want.
+              Slice event streams into fixed-time, collapsing-window, deadspace, and set-logic segments with session summaries.
             </div>
           </div>
         </div>
@@ -106,9 +106,9 @@
             <i class="huge circular inverted red line chart icon"></i>
           </div>
           <div class="column">
-            <h3 class="ui inverted header">Compute gross usage trends</h3>
+            <h3 class="ui inverted header">Frustration & Spatial Analytics</h3>
             <div class="feature-description">
-              Distill comes with built-in statistics libraries so that you can see how much your application is being used and which elements users rely on most.
+              Detect rage clicks, dead clicks, and cursor thrashing, compute composite frustration scores, and build click/scroll heatmaps.
             </div>
           </div>
         </div>
@@ -120,9 +120,9 @@
             <i class="huge circular inverted green ordered list icon"></i>
           </div>
           <div class="column">
-            <h3 class="ui inverted header">Model workflow</h3>
+            <h3 class="ui inverted header">Clickstream Graphs & Funnels</h3>
             <div class="feature-description">
-              Distill comes with built in graph libraries for studying how user behaviors are sequenced in time allowing you to explore models of how user behavior unfolds over time.
+              Build weighted NetworkX directed graphs, first-order Markov transition matrices, interactive Plotly Sankey diagrams, and funnels.
             </div>
           </div>
         </div>

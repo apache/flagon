@@ -63,7 +63,7 @@
 <div class="ui very padded vertical segment">
   <div class="ui center aligned text container">
     <p>
-      Apache UserALE (User Analytic Logging Engine) is the beating heart of Apache Flagon technology. UserALE provides instrumentation for applications, embedding a light-weight, easy-to-manage behavioral logging capability. UserALE provides comprehensive user event tracking for web pages, but it is specially engineered for thin-client analytical applications. UserALE transmits specially structured messages from your application to an activity logging server whenever users interact with it. Apply UserALE with a single line of code and capture every user interaction without having to separately manage tags on each feature of your application. UserALE works with Elastic and other open source databases–you own your data and you can access it for analysis and automation without restriction. UserALE.js serves Javascript applications.
+      Apache UserALE (User Analytic Logging Engine) is the beating heart of Apache Flagon technology. UserALE provides instrumentation for web applications, embedding a lightweight, easy-to-manage behavioral logging and session replay capability. Apply UserALE.js with a single script tag or ES module import and capture every user interaction, bounding-box coordinate, W3C Trace Context (`traceparent`), and DOM mutation without managing manual tags on every feature. UserALE exports to OpenTelemetry (OTLP/JSON), Protobuf v1 JSON, UserALE flat JSON, and WebSockets—working seamlessly with Grafana/Loki/Tempo, OpenSearch, Apache Iceberg Lakehouses, and Elastic.
     </p>
   </div>
 </div>
@@ -80,7 +80,7 @@
           <div class="column">
             <h3 class="ui inverted header">Low-effort</h3>
             <div class="feature-description">
-              Embed UserALE with a single script tag in source, or from your browser console for testing.
+              Embed UserALE.js with a single script tag, ES module import, or Manifest V3 browser extension.
             </div>
           </div>
         </div>
@@ -92,9 +92,9 @@
             <i class="huge circular inverted yellow settings icon"></i>
           </div>
           <div class="column">
-            <h3 class="ui inverted header">Customizable</h3>
+            <h3 class="ui inverted header">Pluggable Exporters & OTel</h3>
             <div class="feature-description">
-              UserALE provides options for custom, manual instrumentation.
+              Export UserALE flat JSON, OpenTelemetry OTLP/JSON, Protobuf v1 JSON, or stream over WebSockets with W3C traceparent correlation.
             </div>
           </div>
         </div>
@@ -106,9 +106,9 @@
             <i class="huge circular inverted red mouse pointer icon"></i>
           </div>
           <div class="column">
-            <h3 class="ui inverted header">Capture every event</h3>
+            <h3 class="ui inverted header">Behavioral DOM & Session Replay</h3>
             <div class="feature-description">
-              And the document object model targets of those events, with resolution suitable for advanced behavioral analytics.
+              Capture fine-grained DOM targets, normalized element bounding-box coordinates, and two-layer session replay ring buffers.
             </div>
           </div>
         </div>
@@ -122,7 +122,7 @@
           <div class="column">
             <h3 class="ui inverted header">Own your own data</h3>
             <div class="feature-description">
-              UserALE utilizes Elastic as a scalable, searchable database for user event log storage.
+              Stream behavioral telemetry to OpenSearch, OpenTelemetry Collector, Apache Kafka/Flink/Iceberg, or Elastic.
             </div>
           </div>
         </div>
@@ -136,7 +136,7 @@
           <div class="column">
             <h3 class="ui inverted header">Low processing overhead</h3>
             <div class="feature-description">
-              UserALE will not adversely affect your applications performance.
+              Lightweight (~10 KB gzipped IIFE bundle) with throttled high-frequency events and keepalive unload chunking.
             </div>
           </div>
         </div>
@@ -148,9 +148,9 @@
             <i class="huge circular inverted yellow protect icon"></i>
           </div>
           <div class="column">
-            <h3 class="ui inverted header">Never lose data</h3>
+            <h3 class="ui inverted header">Privacy & Security Controls</h3>
             <div class="feature-description">
-              Temporary offline log storage safeguards from dropped signal due to connectivity issues.
+              Built-in PII scrubbing via data-userale- redact/ignore attributes, plus custom auth and header callbacks.
             </div>
           </div>
         </div>

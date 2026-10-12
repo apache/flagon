@@ -219,22 +219,29 @@
 
 <p>Utility helpers that compute a CSS-like element selector (<code class="language-plaintext highlighter-rouge">tag#id.class</code>) and full DOM ancestry path array from a DOM <code class="language-plaintext highlighter-rouge">Event</code>.</p>
 
+<h3 id="gettargetrectel-eventtarget--null-targetrect--null--detectbrowser--browser-string-version-string-"><code class="language-plaintext highlighter-rouge">getTargetRect(el: EventTarget | null): TargetRect | null</code> &amp; <code class="language-plaintext highlighter-rouge">detectBrowser(): { browser: string; version: string }</code></h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">getTargetRect</code> extracts a rounded bounding box (<code class="language-plaintext highlighter-rouge">{ x, y, width, height, top, right, bottom, left }</code>) for a DOM element (attached automatically as <code class="language-plaintext highlighter-rouge">targetRect</code> on <code class="language-plaintext highlighter-rouge">click</code>, <code class="language-plaintext highlighter-rouge">dblclick</code>, <code class="language-plaintext highlighter-rouge">change</code>, and <code class="language-plaintext highlighter-rouge">submit</code> events).</li>
+  <li><code class="language-plaintext highlighter-rouge">detectBrowser</code> detects the browser name and version using <code class="language-plaintext highlighter-rouge">navigator.userAgentData</code> (User-Agent Client Hints) with a regex fallback and zero external dependencies.</li>
+</ul>
+
 <hr />
 
 <h2 id="authentication--custom-http-headers">Authentication &amp; Custom HTTP Headers</h2>
 
 <p>All HTTP-based exporters (<code class="language-plaintext highlighter-rouge">HttpJsonExporter</code>, <code class="language-plaintext highlighter-rouge">ProtoJsonExporter</code>, <code class="language-plaintext highlighter-rouge">OtlpJsonExporter</code>) construct headers through <code class="language-plaintext highlighter-rouge">buildHeaders(config)</code>, applying them to both interval <code class="language-plaintext highlighter-rouge">fetch()</code> requests and <code class="language-plaintext highlighter-rouge">pagehide</code> (<code class="language-plaintext highlighter-rouge">fetch(..., { keepalive: true })</code>) flushes.</p>
 
-<h3 id="registerauthcallbackcallback---string-boolean"><code class="language-plaintext highlighter-rouge">registerAuthCallback(callback: () =&gt; string): boolean</code></h3>
+<h3 id="registerauthcallbackcallback---string-boolean--resetauthcallback-void"><code class="language-plaintext highlighter-rouge">registerAuthCallback(callback: () =&gt; string): boolean</code> &amp; <code class="language-plaintext highlighter-rouge">resetAuthCallback(): void</code></h3>
 
-<p>Registers a dynamic provider returning the <code class="language-plaintext highlighter-rouge">Authorization</code> header value on each batch export:</p>
+<p>Registers (or resets) a dynamic provider returning the <code class="language-plaintext highlighter-rouge">Authorization</code> header value on each batch export:</p>
 
 <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">userale</span><span class="p">.</span><span class="nx">registerAuthCallback</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="s2">`Bearer </span><span class="p">${</span><span class="nx">getCurrentJwtToken</span><span class="p">()}</span><span class="s2">`</span><span class="p">);</span>
 </code></pre></div></div>
 
-<h3 id="registerheaderscallbackcallback---recordstring-string-boolean"><code class="language-plaintext highlighter-rouge">registerHeadersCallback(callback: () =&gt; Record&lt;string, string&gt;): boolean</code></h3>
+<h3 id="registerheaderscallbackcallback---recordstring-string-boolean--resetheaderscallback-void"><code class="language-plaintext highlighter-rouge">registerHeadersCallback(callback: () =&gt; Record&lt;string, string&gt;): boolean</code> &amp; <code class="language-plaintext highlighter-rouge">resetHeadersCallback(): void</code></h3>
 
-<p>Registers a dynamic provider returning arbitrary HTTP headers on each batch export:</p>
+<p>Registers (or resets) a dynamic provider returning arbitrary HTTP headers on each batch export:</p>
 
 <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">userale</span><span class="p">.</span><span class="nx">registerHeadersCallback</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">({</span>
   <span class="dl">'</span><span class="s1">x-tenant-id</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">acme-corp</span><span class="dl">'</span><span class="p">,</span>
@@ -284,7 +291,7 @@
       <td>Streams log batches over a persistent <code class="language-plaintext highlighter-rouge">WebSocket</code> (<code class="language-plaintext highlighter-rouge">ws://</code> / <code class="language-plaintext highlighter-rouge">wss://</code>).</td>
     </tr>
     <tr>
-      <td><code class="language-plaintext highlighter-rouge">ProtoJsonExporter</code> / <code class="language-plaintext highlighter-rouge">toProtoLogBatch(logs)</code></td>
+      <td><code class="language-plaintext highlighter-rouge">ProtoJsonExporter</code> / <code class="language-plaintext highlighter-rouge">toProtoLogBatch(logs)</code> / <code class="language-plaintext highlighter-rouge">toProtoUserALELog(log)</code></td>
       <td>Serializes logs into canonical Protobuf v1 JSON (<code class="language-plaintext highlighter-rouge">apache.flagon.userale.v1.LogBatch</code>) matching <code class="language-plaintext highlighter-rouge">proto/apache/flagon/userale/v1/log.proto</code>.</td>
     </tr>
     <tr>
@@ -311,13 +318,66 @@
 <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">userale</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">flagon-userale</span><span class="dl">'</span><span class="p">;</span>
 
 <span class="nx">userale</span><span class="p">.</span><span class="nx">options</span><span class="p">({</span>
-  <span class="na">exporterFormat</span><span class="p">:</span> <span class="dl">'</span><span class="s1">otlp-json</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">exporterType</span><span class="p">:</span> <span class="dl">'</span><span class="s1">otlp</span><span class="dl">'</span><span class="p">,</span>
   <span class="na">otlpEndpoint</span><span class="p">:</span> <span class="dl">'</span><span class="s1">http://localhost:4318/v1/logs</span><span class="dl">'</span><span class="p">,</span>
   <span class="na">toolName</span><span class="p">:</span> <span class="dl">'</span><span class="s1">storefront-web</span><span class="dl">'</span><span class="p">,</span>
   <span class="na">traceContext</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">({</span>
     <span class="na">traceId</span><span class="p">:</span> <span class="nx">currentActiveSpan</span><span class="p">.</span><span class="nx">traceId</span><span class="p">,</span> <span class="c1">// 32-hex W3C trace-id</span>
     <span class="na">spanId</span><span class="p">:</span> <span class="nx">currentActiveSpan</span><span class="p">.</span><span class="nx">spanId</span><span class="p">,</span>   <span class="c1">// 16-hex W3C span-id</span>
   <span class="p">}),</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="two-layer-session-replay--behavioral-dom-telemetry-104">Two-Layer Session Replay &amp; Behavioral DOM Telemetry (<code class="language-plaintext highlighter-rouge">#104</code>)</h2>
+
+<p>UserALE provides a two-layer session replay architecture that keeps the core bundle dependency-free while supporting both structural DOM telemetry and <code class="language-plaintext highlighter-rouge">rrweb</code>-compatible visual playback:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Exported Symbol</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">startSessionReplay(options?: SessionReplayOptions, config?: Configuration): () =&gt; void</code></td>
+      <td>Starts Layer 1 (<code class="language-plaintext highlighter-rouge">MutationObserver</code> + <code class="language-plaintext highlighter-rouge">RageClickDetector</code>) and optional Layer 2 (<code class="language-plaintext highlighter-rouge">rrweb</code> ring-buffer recorder). Returns a stop/cleanup function.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">flushSessionReplay(trigger?: string): Promise&lt;ReplayEnvelope \| null&gt;</code></td>
+      <td>Immediately flushes the rolling <code class="language-plaintext highlighter-rouge">rrweb</code> ring buffer as a <code class="language-plaintext highlighter-rouge">logType: 'replay', type: 'session_replay'</code> envelope tagged with <code class="language-plaintext highlighter-rouge">sessionId</code> and active OpenTelemetry <code class="language-plaintext highlighter-rouge">traceId</code> / <code class="language-plaintext highlighter-rouge">spanId</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">stopSessionReplay(): void</code></td>
+      <td>Stops active <code class="language-plaintext highlighter-rouge">MutationObserver</code> and <code class="language-plaintext highlighter-rouge">rrweb</code> recording and clears the ring buffer.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">getActiveReplayRingBuffer(): ReplayRingBuffer \| null</code></td>
+      <td>Returns the active <code class="language-plaintext highlighter-rouge">ReplayRingBuffer</code> instance when session replay is running.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ReplayRingBuffer</code></td>
+      <td>Rolling in-memory ring buffer (<code class="language-plaintext highlighter-rouge">maxDurationMs</code>, <code class="language-plaintext highlighter-rouge">maxFrames</code>) that preserves <code class="language-plaintext highlighter-rouge">rrweb</code> <code class="language-plaintext highlighter-rouge">Meta</code> (<code class="language-plaintext highlighter-rouge">type: 4</code>) and latest <code class="language-plaintext highlighter-rouge">FullSnapshot</code> (<code class="language-plaintext highlighter-rouge">type: 2</code>) anchor frames.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">RageClickDetector</code></td>
+      <td>Sliding-window detector that triggers when <code class="language-plaintext highlighter-rouge">threshold</code> (default <code class="language-plaintext highlighter-rouge">3</code>) clicks occur on the same target selector within <code class="language-plaintext highlighter-rouge">windowMs</code> (<code class="language-plaintext highlighter-rouge">1000ms</code>) and <code class="language-plaintext highlighter-rouge">maxRadiusPx</code> (<code class="language-plaintext highlighter-rouge">30px</code>).</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">userale</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">flagon-userale</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">rrweb</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">rrweb</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="nx">userale</span><span class="p">.</span><span class="nx">startSessionReplay</span><span class="p">({</span>
+  <span class="na">recorder</span><span class="p">:</span> <span class="nx">rrweb</span><span class="p">.</span><span class="nx">record</span><span class="p">,</span>
+  <span class="na">maxDurationMs</span><span class="p">:</span> <span class="mi">30</span><span class="nx">_000</span><span class="p">,</span>
+  <span class="na">observeMutations</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="na">detectRageClicks</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="na">flushOnError</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
 <span class="p">});</span>
 </code></pre></div></div>
 

@@ -273,10 +273,10 @@ pnpm add flagon-userale
       <td><code class="language-plaintext highlighter-rouge">null</code></td>
     </tr>
     <tr>
-      <td><code class="language-plaintext highlighter-rouge">exporterFormat</code> / <code class="language-plaintext highlighter-rouge">exporterType</code></td>
+      <td><code class="language-plaintext highlighter-rouge">exporterType</code> / <code class="language-plaintext highlighter-rouge">exporterFormat</code></td>
       <td><code class="language-plaintext highlighter-rouge">data-exporter</code></td>
-      <td>Wire format: <code class="language-plaintext highlighter-rouge">'userale-json'</code> (default), <code class="language-plaintext highlighter-rouge">'otlp-json'</code> (<code class="language-plaintext highlighter-rouge">'otlp'</code>), <code class="language-plaintext highlighter-rouge">'proto-json'</code>, or <code class="language-plaintext highlighter-rouge">'ws'</code></td>
-      <td><code class="language-plaintext highlighter-rouge">'userale-json'</code></td>
+      <td>Wire format: <code class="language-plaintext highlighter-rouge">'http-json'</code> (default), <code class="language-plaintext highlighter-rouge">'otlp'</code> (<code class="language-plaintext highlighter-rouge">'otlp-json'</code>), <code class="language-plaintext highlighter-rouge">'proto-json'</code>, or <code class="language-plaintext highlighter-rouge">'websocket'</code></td>
+      <td><code class="language-plaintext highlighter-rouge">'http-json'</code></td>
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">otlpEndpoint</code></td>
@@ -286,9 +286,15 @@ pnpm add flagon-userale
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">headers</code></td>
-      <td>—</td>
-      <td>Custom HTTP headers <code class="language-plaintext highlighter-rouge">Record&lt;string, string&gt;</code> merged into every request</td>
+      <td><code class="language-plaintext highlighter-rouge">data-headers</code></td>
+      <td>Custom HTTP headers <code class="language-plaintext highlighter-rouge">Record&lt;string, string&gt;</code> (or JSON string in <code class="language-plaintext highlighter-rouge">data-headers</code>) merged into every request</td>
       <td><code class="language-plaintext highlighter-rouge">null</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">observeMutations</code></td>
+      <td><code class="language-plaintext highlighter-rouge">data-observe-mutations</code></td>
+      <td>Enable throttled <code class="language-plaintext highlighter-rouge">MutationObserver</code> structural DOM telemetry (<code class="language-plaintext highlighter-rouge">#104</code>)</td>
+      <td><code class="language-plaintext highlighter-rouge">false</code></td>
     </tr>
     <tr>
       <td><code class="language-plaintext highlighter-rouge">exporter</code></td>
@@ -305,7 +311,7 @@ pnpm add flagon-userale
   </tbody>
 </table>
 
-<p>See the <a href="/docs/useralejs/API">UserALE.js API Reference</a> for full method and exporter documentation.</p>
+<p>See the <a href="/docs/useralejs/API">UserALE.js API Reference</a> for full method, session replay, and exporter documentation.</p>
 
 <hr />
 
@@ -325,7 +331,7 @@ pnpm add flagon-userale
       <li><strong>Firefox</strong>: Open <code class="language-plaintext highlighter-rouge">about:debugging</code>, select <strong>This Firefox</strong>, click <strong>Load Temporary Add-on</strong>, and select <code class="language-plaintext highlighter-rouge">manifest.json</code> in <code class="language-plaintext highlighter-rouge">products/userale/packages/flagon-userale-ext/build/firefox-mv3-prod/</code>.</li>
     </ul>
   </li>
-  <li>Open the extension <strong>Options</strong> page to configure the <strong>Logging Endpoint</strong>, <strong>Exporter Format</strong> (<code class="language-plaintext highlighter-rouge">UserALE JSON</code>, <code class="language-plaintext highlighter-rouge">OpenTelemetry (OTLP/JSON)</code>, or <code class="language-plaintext highlighter-rouge">Protobuf v1 JSON</code>), <strong>URL Allowlist</strong>, <strong>HTTP Basic Auth</strong>, <strong>Custom HTTP Headers (JSON)</strong>, or <strong>OAuth PKCE</strong> credentials.</li>
+  <li>Open the extension <strong>Options</strong> page to configure the <strong>Logging Endpoint</strong>, <strong>Exporter Format</strong> (<code class="language-plaintext highlighter-rouge">UserALE JSON</code>, <code class="language-plaintext highlighter-rouge">OpenTelemetry (OTLP/JSON)</code>, or <code class="language-plaintext highlighter-rouge">Protobuf v1 JSON</code>), <strong>URL Allowlist</strong>, <strong>Excluded Event Types / Log Types</strong>, and <strong>Authentication</strong> (<code class="language-plaintext highlighter-rouge">OAuth</code> PKCE or <code class="language-plaintext highlighter-rouge">API Key</code>).</li>
 </ol>
 
 <hr />

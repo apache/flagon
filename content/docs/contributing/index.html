@@ -156,12 +156,12 @@ git checkout <span class="nt">-b</span> feat/your-feature-name
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nix develop
 </code></pre></div></div>
 
-<p>This provides Node.js, <code class="language-plaintext highlighter-rouge">pnpm</code>, TypeScript, Python 3, <code class="language-plaintext highlighter-rouge">buf</code>, and <code class="language-plaintext highlighter-rouge">lefthook</code> git hooks automatically.</p>
+<p>This provides Node.js, <code class="language-plaintext highlighter-rouge">pnpm</code>, TypeScript, Python 3, <code class="language-plaintext highlighter-rouge">uv</code>, <code class="language-plaintext highlighter-rouge">buf</code>, and <code class="language-plaintext highlighter-rouge">lefthook</code> git hooks automatically.</p>
 
 <h4 id="option-b-manual-toolchain-setup">Option B: Manual Toolchain Setup</h4>
 <ul>
   <li><strong>UserALE (<code class="language-plaintext highlighter-rouge">products/userale</code>)</strong>: Node.js <code class="language-plaintext highlighter-rouge">&gt;= 20.x</code> and <code class="language-plaintext highlighter-rouge">pnpm &gt;= 10.x</code></li>
-  <li><strong>Distill (<code class="language-plaintext highlighter-rouge">products/distill</code>)</strong>: Python <code class="language-plaintext highlighter-rouge">&gt;= 3.8</code> and <code class="language-plaintext highlighter-rouge">poetry</code> (or <code class="language-plaintext highlighter-rouge">uv</code>)</li>
+  <li><strong>Distill (<code class="language-plaintext highlighter-rouge">products/distill</code>)</strong>: Python <code class="language-plaintext highlighter-rouge">&gt;= 3.10,&lt; 4.0</code> and <a href="https://docs.astral.sh/uv/"><code class="language-plaintext highlighter-rouge">uv</code></a></li>
   <li><strong>Protobuf (<code class="language-plaintext highlighter-rouge">proto/</code>)</strong>: <a href="https://buf.build/docs/installation"><code class="language-plaintext highlighter-rouge">buf</code> CLI</a></li>
 </ul>
 
@@ -174,14 +174,15 @@ git checkout <span class="nt">-b</span> feat/your-feature-name
 pnpm <span class="nb">install
 </span>pnpm build
 pnpm <span class="nt">--dir</span> packages/flagon-userale <span class="nb">test
-</span>pnpm format
-pnpm lint
+</span>pnpm format:check
+pnpm lint:check
 </code></pre></div></div>
 
 <h4 id="distill-productsdistill">Distill (<code class="language-plaintext highlighter-rouge">products/distill</code>)</h4>
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>products/distill
-poetry <span class="nb">install</span> <span class="nt">--all-groups</span>
-poetry run pytest
+uv <span class="nb">sync</span> <span class="nt">--all-groups</span>
+uv run pytest
+uv run <span class="nt">--group</span> lint ruff check <span class="nb">.</span>
 </code></pre></div></div>
 
 <h4 id="protobuf-schemas-proto">Protobuf Schemas (<code class="language-plaintext highlighter-rouge">proto/</code>)</h4>

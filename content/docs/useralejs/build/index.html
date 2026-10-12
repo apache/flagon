@@ -178,10 +178,11 @@ PASS test/spec/attachHandlers.spec.ts
 PASS test/spec/sendLogs.spec.ts
 PASS test/spec/exporters.spec.ts
 PASS test/spec/packageLogs.spec.ts
+PASS test/spec/replay.spec.ts
 PASS test/spec/main.spec.ts
 
-Test Suites: 9 passed, 9 total
-Tests:       1 skipped, 103 passed, 104 total
+Test Suites: 10 passed, 10 total
+Tests:       1 skipped, 111 passed, 112 total
 </code></pre></div></div>
 
 <h3 id="run-end-to-end-tests-playwright">Run End-to-End Tests (<code class="language-plaintext highlighter-rouge">Playwright</code>)</h3>
@@ -195,8 +196,10 @@ Tests:       1 skipped, 103 passed, 104 total
 
 <h2 id="code-formatting--linting">Code Formatting &amp; Linting</h2>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pnpm format
-pnpm lint
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pnpm format        <span class="c"># Format source/test files with Prettier</span>
+pnpm format:check  <span class="c"># Check formatting (used in CI)</span>
+pnpm lint          <span class="c"># Lint and auto-fix with ESLint</span>
+pnpm lint:check    <span class="c"># Lint without modifying files (used in CI)</span>
 </code></pre></div></div>
 
 <hr />
