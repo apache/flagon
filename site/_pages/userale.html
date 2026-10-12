@@ -5,7 +5,7 @@ title: UserAle
 image: /images/userale_inverted.png
 component: UserALE
 
-description: Apache UserALE (User Analytic Logging Engine) is the beating heart of Apache Flagon technology. UserALE provides instrumentation for web applications, embedding a lightweight, easy-to-manage behavioral logging and session replay capability. Apply UserALE.js with a single script tag or ES module import and capture every user interaction, bounding-box coordinate, W3C Trace Context (`traceparent`), and DOM mutation without managing manual tags on every feature. UserALE exports to OpenTelemetry (OTLP/JSON), Protobuf v1 JSON, UserALE flat JSON, and WebSockets—working seamlessly with Grafana/Loki/Tempo, OpenSearch, Apache Iceberg Lakehouses, and Elastic.
+description: Apache UserALE (User Analytic Logging Engine) is the beating heart of Apache Flagon technology. UserALE provides instrumentation for web applications, embedding a lightweight, easy-to-manage behavioral logging and session replay capability. Apply UserALE.js with a single script tag or ES module import and capture every user interaction, bounding-box coordinate, W3C Trace Context (traceparent), and DOM mutation without managing manual tags on every feature. UserALE exports to OpenTelemetry (OTLP/JSON), Protobuf v1 JSON, UserALE flat JSON, and WebSockets—working seamlessly with Grafana/Loki/Tempo, OpenSearch, Apache Iceberg Lakehouses, and Elastic.
 
 features:
   -
@@ -27,7 +27,7 @@ features:
     icon: database
     color: green
     title: Own your own data
-    description: Stream behavioral telemetry to OpenSearch, OpenTelemetry Collector, Apache Kafka/Flink/Iceberg, or Elastic.
+    description: Stream behavioral telemetry to OpenSearch, OpenTelemetry Collector, Apache Kafka/Iceberg/Spark, or Elastic.
   -
     icon: dashboard
     color: blue
@@ -37,7 +37,7 @@ features:
     icon: protect
     color: yellow
     title: Privacy & Security Controls
-    description: Built-in PII scrubbing via data-userale- redact/ignore attributes, plus custom auth and header callbacks.
+    description: Built-in PII scrubbing via data-userale-redact and data-userale-ignore attributes, plus custom auth and header callbacks.
 
 contentCount: 1
 ---

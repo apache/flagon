@@ -11,33 +11,48 @@ layout: default
 
 <div class="ui very padded vertical segment">
   <div class="ui center aligned text container">
-    <p>
-      Apache Flagon is an open-source, thin-client behavioral logging and analytics suite for business analytics, usage analytics, usability, and user testing. Flagon supports a range of streamlined deployment architectures ranging from single-webpage analysis to cloud-native OpenTelemetry observability (Grafana + Loki + Tempo), OpenSearch, All-Apache Lakehouse (Kafka + Flink + Iceberg + Doris + Superset), and the Elastic Stack (ELK). In the spirit of customization, Apache Flagon combines modular instrumentation and Python analytics capabilities to help you build the stack that suits your needs.
+    <p style="font-size: 1.2rem; line-height: 1.65; margin-bottom: 1.25rem;">
+      <strong>Apache Flagon</strong> is an open-source, thin-client behavioral logging and analytics suite for web observability, usability engineering, and product analytics. Combine lightweight browser instrumentation with Python behavioral data science to build the stack that fits your infrastructure:
     </p>
 
-    <br>
+    <div class="ui medium labels" style="margin-bottom: 1.75rem;">
+      <a class="ui blue basic label" href="{{ '/docs/deployments/' | prepend: site.baseurl }}">
+        <i class="project diagram icon"></i>OpenTelemetry + Grafana (Loki &amp; Tempo)
+      </a>
+      <a class="ui teal basic label" href="{{ '/docs/deployments/' | prepend: site.baseurl }}">
+        <i class="search icon"></i>OpenSearch + Dashboards
+      </a>
+      <a class="ui purple basic label" href="{{ '/docs/deployments/' | prepend: site.baseurl }}">
+        <i class="database icon"></i>Apache Lakehouse (Kafka + Iceberg + Spark + Superset)
+      </a>
+      <a class="ui grey basic label" href="{{ '/docs/deployments/' | prepend: site.baseurl }}">
+        <i class="server icon"></i>Elastic Stack (ELK)
+      </a>
+    </div>
 
-    <a class="ui big red button" href="{{ '/docs/useralejs/' | prepend: site.baseurl }}">
-      Get Started
-    </a>
-    <a class="ui big blue button" href="{{ '/releases' | prepend: site.baseurl }}">
-      Download Flagon
-    </a>
-    <a class="ui big yellow button" href="mailto:dev-subscribe@flagon.apache.org">
-      Join our Dev List
-    </a>
+    <div>
+      <a class="ui big red button" href="{{ '/docs/useralejs/' | prepend: site.baseurl }}">
+        Get Started
+      </a>
+      <a class="ui big blue button" href="{{ '/releases' | prepend: site.baseurl }}">
+        Download Flagon
+      </a>
+      <a class="ui big yellow button" href="mailto:dev-subscribe@flagon.apache.org">
+        Join our Dev List
+      </a>
+    </div>
   </div>
 </div>
 
 <div class="ui inverted grey very padded vertical segment">
   <div class="ui text container">
-    <div class="ui two column middle aligned grid">
-      <div class="column">
-        With a single line of code, capture your users' behavior on your web page with enough resolution and granularity for advanced behavioral modeling. Apache UserALE.js is Flagon's free, open-source client for thin-client behavioral logging, featuring pluggable exporters (`http-json`, `otlp`, `proto-json`, `websocket`), W3C Trace Context (`traceparent`) correlation, and two-layer session replay. Check out our interactive demo below!
+    <div class="ui two column middle aligned stackable grid">
+      <div class="column" style="line-height: 1.65;">
+        With a single line of code, capture user behavior across your web application with the resolution needed for full-stack observability and behavioral modeling. <strong>Apache UserALE.js</strong> features pluggable exporters (<code>http-json</code>, <code>otlp</code>, <code>proto-json</code>, <code>websocket</code>), W3C Trace Context (<code>traceparent</code>) correlation, and two-layer session replay. Try the interactive demo below!
       </div>
       <div class="center aligned column">
         <a href="{{ '/userale' | prepend: site.baseurl }}">
-          <img class="component-image" src="/images/userale_inverted.png">
+          <img class="component-image" src="/images/userale_inverted.png" alt="Apache UserALE.js">
         </a>
       </div>
     </div>
@@ -48,14 +63,14 @@ layout: default
 
 <div class="ui inverted grey very padded vertical segment">
   <div class="ui text container">
-    <div class="ui two column middle aligned grid">
+    <div class="ui two column middle aligned stackable grid">
       <div class="center aligned column">
         <a href="{{ '/distill' | prepend: site.baseurl }}">
-          <img class="component-image" src="/images/distill_inverted.png">
+          <img class="component-image" src="/images/distill_inverted.png" alt="Apache Flagon Distill">
         </a>
       </div>
-      <div class="column">
-        Process and control your own user event data. Apache Flagon Distill is Flagon's Python behavioral analytics toolkit that ingests UserALE flat JSON, Protobuf v1 `LogBatch` JSON, and OpenTelemetry OTLP/JSON payloads. It gives data scientists and developers the power to segment sessions, detect user frustration (rage clicks, dead clicks, cursor thrashing), compute spatial & viewport engagement heatmaps, and model user workflows with Markov transition matrices, Sankey diagrams, and conversion funnels.
+      <div class="column" style="line-height: 1.65;">
+        Process and own your user event data. <strong>Apache Flagon Distill</strong> is a Python behavioral analytics framework that ingests UserALE flat JSON, Protobuf v1 <code>LogBatch</code> JSON, and OpenTelemetry OTLP/JSON payloads—giving data scientists and engineers built-in algorithms for session segmentation, UX frustration detection (rage clicks, dead clicks, DOM thrashing), spatial click/scroll heatmaps, and Markov clickstream graphs.
       </div>
     </div>
   </div>
