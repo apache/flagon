@@ -142,6 +142,47 @@ export function detectBrowser(): {
   return { browser: null, version: null };
 }
 
+const DISCRETE_RECT_EVENTS = new Set(["click", "dblclick", "change", "submit"]);
+
+export interface TargetRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+/**
+ * Safely extracts the bounding client rectangle for an event target on discrete
+ * user interactions (click, dblclick, change, submit).
+ */
+export function getTargetRect(target: EventTarget | null): TargetRect | null {
+  try {
+    if (
+      target &&
+      typeof (target as Element).getBoundingClientRect === "function"
+    ) {
+      const rect = (target as Element).getBoundingClientRect();
+      if (
+        rect &&
+        Number.isFinite(rect.x) &&
+        Number.isFinite(rect.y) &&
+        Number.isFinite(rect.width) &&
+        Number.isFinite(rect.height)
+      ) {
+        return {
+          x: Math.round(rect.x),
+          y: Math.round(rect.y),
+          width: Math.round(rect.width),
+          height: Math.round(rect.height),
+        };
+      }
+    }
+  } catch {
+    // Ignore errors in non-DOM environments
+  }
+  return null;
+}
+
 /**
  * Transforms the provided HTML event into a log and appends it to the log queue.
  * @param  {Event} e         The event to be logged.
@@ -191,6 +232,16 @@ export function packageLog(
     attributes: buildAttrs(e),
     style: buildCSS(e),
   };
+
+  if (DISCRETE_RECT_EVENTS.has(e.type) && e.target) {
+    const rect = getTargetRect(e.target);
+    if (
+      rect &&
+      (rect.width > 0 || rect.height > 0 || rect.x !== 0 || rect.y !== 0)
+    ) {
+      log.targetRect = rect as unknown as Logging.JSONObject;
+    }
+  }
 
   if (typeof filterHandler === "function" && !filterHandler(log)) {
     return false;

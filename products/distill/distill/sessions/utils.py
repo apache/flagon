@@ -24,15 +24,23 @@ from urllib.parse import urlparse
 def group_by_user(log):
     """
     A helper function to create separate logs associated with unique users
-    where a unique user to is the browserSessionId
-    :param log: Userale log in the form of dictionary
+    where a unique user is resolved from browserSessionId, userId, or sessionId.
+    :param log: Userale logs as a list of log dicts or a uid -> log dict
     :return: A dictionary that represent logs belonging to unique users
     """
     grouped_data = {}
-    for d in log:
-        # Create a combination of the two key values userId and sessionID
-        sessionId = d.get("browserSessionId", "")
-        combined_key = str(sessionId)
+    items = log.values() if isinstance(log, dict) else log
+    for d in items:
+        if not isinstance(d, dict):
+            continue
+        session_id = (
+            d.get("browserSessionId")
+            or d.get("userId")
+            or d.get("sessionId")
+            or d.get("sessionID")
+            or ""
+        )
+        combined_key = str(session_id)
         if combined_key not in grouped_data:
             grouped_data[combined_key] = []
         grouped_data[combined_key].append(d)
@@ -90,20 +98,26 @@ def chunk_by_idle_time(log, inactive_interval_s=60):
 
 def chunk_by_tabId(log):
     """
-    Separate logs by their browserSessionId
-    :param log: Userale log in the form of dictionary
-    :return: A dictionary that represent sets separated by unique browserSessionId
+    Separate logs by their tab/httpSessionId.
+    :param log: Userale logs as a list of log dicts or a uid -> log dict
+    :return: A dictionary that represent sets separated by unique httpSessionId/tabId
     """
     grouped_data = {}
-    for key in log:
-        # Depending on the log types, tabID can be inside the details element
-        if "browserSessionId" in key:
-            tab_key = "tab" + str(key["httpSessionId"])
+    items = log.values() if isinstance(log, dict) else log
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        # Depending on the log types, tabID can be inside httpSessionId, tabId, or details
+        tab_val = item.get("httpSessionId") or item.get("tabId")
+        if tab_val is None and isinstance(item.get("details"), dict):
+            tab_val = item["details"].get("tabId")
+        if tab_val is not None:
+            tab_key = "tab" + str(tab_val)
         else:
             tab_key = "unknown"
         if tab_key not in grouped_data:
             grouped_data[tab_key] = []
-        grouped_data[tab_key].append(key)
+        grouped_data[tab_key].append(item)
     return grouped_data
 
 

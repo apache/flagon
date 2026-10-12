@@ -38,7 +38,8 @@ Apache Flagon UserALE.js (Unreleased)
   - Updated Apache Flagon Distill schema to seamlessly ingest UserALE v2.3/v2.4/v2.5 flat JSON, Protobuf v1 JSON (`LogBatch`), and OTLP/JSON (`ExportLogsServiceRequest`) payloads
   - Zero-dependency browser metadata detection (`detectBrowser`) using User-Agent Client Hints with regex fallback (#108)
   - Configurable event type and log type filtering in the browser extension (`flagon-userale-ext`) options UI (#107, #109)
-  - Two-layer Session Replay & Behavioral DOM Telemetry (`startSessionReplay`, `flushSessionReplay`, `stopSessionReplay`, `ReplayRingBuffer`, `RageClickDetector`, `getTargetRect`) with throttled `MutationObserver` summaries, rage-click detection, and `rrweb`-compatible ring-buffer replay bridge correlated via `sessionId` and OpenTelemetry `traceId`/`spanId` (#104)
+  - Two-layer Session Replay & Behavioral DOM Telemetry (`startSessionReplay`, `flushSessionReplay`, `stopSessionReplay`, `ReplayRingBuffer`, `RageClickDetector`, `getTargetRect`) with throttled `MutationObserver` summaries, rage-click detection, `unhandledrejection` capture, and `rrweb`-compatible ring-buffer replay bridge correlated via `sessionId` and OpenTelemetry `traceId`/`spanId` (#104)
+  - Fixed `input` event detail extraction (`extractInputDetails`) and added `targetRect` bounding-box geometry to discrete interaction events (`click`, `dblclick`, `change`, `submit`) and OTLP/Proto-JSON exporters
 
 Apache Flagon UserALE.js 2.4.0 (2024-03-21)
 -------------------------------

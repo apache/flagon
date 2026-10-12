@@ -178,6 +178,9 @@ export function toProtoUserALELog(log: Logging.Log): Logging.JSONObject {
       customFields[key] = value;
     }
   }
+  if (typeof logType === "string" && logType !== "custom") {
+    customFields.logType = logType;
+  }
 
   const custom: Logging.JSONObject = {
     metadata,

@@ -33,13 +33,26 @@
   - **Protobuf v1 Canonical JSON (`LogBatch`)**: Automatically unwraps and normalizes `apache.flagon.userale.v1.LogBatch` / `UserALELog` payloads emitted by UserALE's `ProtoJsonExporter`.
   - **OpenTelemetry OTLP/JSON (`ExportLogsServiceRequest`)**: Automatically extracts and reconstructs UserALE logs from `resourceLogs[].scopeLogs[].logRecords[]` emitted by UserALE's `OtlpJsonExporter`.
 - **Behavioral Segmentation (`distill.segmentation`)**: Slice and group interaction streams by session, time window, event type, or custom predicates.
-- **Process & Graph Analytics (`distill.process`, `distill.analytics.graph`)**: Build directed clickstream transition graphs and analyze user navigation paths with NetworkX, Plotly, and Matplotlib.
+- **Frustration & UX Friction Analytics (`distill.analytics.frustration`)**:
+  - `detect_rage_clicks`: Temporal and spatial sliding-window detector for rapid repeated clicks on the same target.
+  - `detect_dead_clicks`: Identifies clicks on non-interactive targets (`div`, `span`, etc.) that produce no DOM mutation, form change, navigation, or state transition within a response window.
+  - `detect_dom_thrash`: Detects high-frequency DOM mutation bursts (`logType == "mutation"`) indicating layout thrashing or infinite re-render loops.
+  - `frustration_score`: Computes a normalized `[0.0, 1.0]` composite UX friction index with breakdown counts.
+- **Spatial & Viewport Analytics (`distill.analytics.spatial`)**:
+  - `click_heatmap_data` & `plot_click_heatmap`: Extracts viewport-normalized `(x, y)` click coordinates and `targetRect` bounding boxes and renders interactive 2D Plotly density heatmaps.
+  - `scroll_depth_summary`: Computes per-page maximum horizontal/vertical scroll depth in pixels and viewport ratios.
+- **OpenTelemetry & Replay Correlation (`distill.analytics.otel`)**:
+  - `correlate_by_trace`: Joins frontend UserALE interaction logs by W3C `traceId` (`flagon.trace_id`) with span timelines, error flags, and duration.
+  - `extract_replay_envelopes`: Extracts and parses `logType == "replay"` (`flagon-lite-v1` and `rrweb-v2`) session replay envelopes.
+- **Process, Graph & Statistical Analytics (`distill.process`, `distill.analytics.graph`, `distill.analytics.stat`)**:
+  - Directed clickstream graphs (`createDiGraph`, `funnel`), first-order Markov transition probability matrices (`transition_matrix`), and comprehensive session summaries (`session_summary`, `click_rate`).
 
 ---
 
-## Multi-Format Ingestion Quick Start
+## Multi-Format Ingestion & Behavioral Analytics Quick Start
 
 ```python
+import distill
 from distill.process.log import Log
 from distill.schemas.userale import UserAleSchema, extract_logs
 
@@ -47,8 +60,14 @@ from distill.schemas.userale import UserAleSchema, extract_logs
 raw_docs = extract_logs(payload)  # Accepts list[dict], LogBatch dict, or OTLP ExportLogsServiceRequest dict
 validated = [UserAleSchema(**doc) for doc in raw_docs]
 
-# 2. Or load directly into a Distill Log container:
+# 2. Load directly into a Distill Log container:
 log_stream = Log(data=payload, schema=UserAleSchema)
+
+# 3. Run behavioral & frustration analytics:
+summary = distill.session_summary(raw_docs)
+friction = distill.frustration_score(raw_docs)
+transitions = distill.transition_matrix(raw_docs, field="target", normalize=True)
+traces = distill.correlate_by_trace(raw_docs)
 ```
 
 ---
@@ -56,8 +75,8 @@ log_stream = Log(data=payload, schema=UserAleSchema)
 ## Installation & Development
 
 ### Prerequisites
-- Python `>= 3.8,< 4.0`
-- [Poetry](https://python-poetry.org/) `>= 1.0` (or [`uv`](https://docs.astral.sh/uv/) via `nix develop`)
+- Python `>= 3.8,< 4.0` (tested across Python `3.8`–`3.13`)
+- [Poetry](https://python-poetry.org/) `>= 1.0` or [`uv`](https://docs.astral.sh/uv/) (included in `nix develop`)
 
 ### Setup from the Monorepo
 
@@ -68,14 +87,14 @@ git clone https://github.com/apache/flagon.git
 cd flagon/products/distill
 ```
 
-2. Install dependencies (including test and documentation groups):
+2. Run tests with `uv` (Python 3.10–3.13 / `nix develop`) or Poetry:
 
 ```bash
+# Using uv (no virtualenv setup required):
+make test_uv
+
+# Or using Poetry:
 poetry install --all-groups
-```
-
-3. Run the test suite:
-
-```bash
 poetry run pytest
 ```
+

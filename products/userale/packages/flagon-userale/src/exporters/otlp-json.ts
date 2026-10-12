@@ -95,6 +95,7 @@ const KNOWN_LOG_KEYS = new Set([
   "endTime",
   "targetChange",
   "typeChange",
+  "targetRect",
   "traceId",
   "spanId",
 ]);
@@ -419,6 +420,17 @@ export function toOtlpLogRecord(
   if (loc && typeof loc === "object") {
     pushDoubleAttr(attrs, "flagon.location.x", loc.x);
     pushDoubleAttr(attrs, "flagon.location.y", loc.y);
+  }
+
+  if (
+    log.targetRect &&
+    typeof log.targetRect === "object" &&
+    !Array.isArray(log.targetRect)
+  ) {
+    attrs.push({
+      key: "flagon.target_rect",
+      value: toOtlpAnyValue(log.targetRect),
+    });
   }
 
   if (logType === "interval") {

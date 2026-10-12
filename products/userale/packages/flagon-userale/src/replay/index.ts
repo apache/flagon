@@ -17,15 +17,16 @@
 
 import { Configuration } from "@/configure";
 import { buildHeaders } from "@/exporters/headers";
-import { getSelector, packageCustomLog } from "@/packageLogs";
+import { resolveOtlpLogsEndpoint } from "@/exporters/otlp-json";
+import {
+  getSelector,
+  getTargetRect,
+  packageCustomLog,
+  type TargetRect,
+} from "@/packageLogs";
 import type { Logging } from "@/types";
 
-export interface TargetRect {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
+export { getTargetRect, type TargetRect };
 
 /**
  * Standard rrweb-compatible event frame structure.
@@ -110,38 +111,6 @@ export interface SessionReplayOptions {
 const DEFAULT_IGNORE_SELECTOR = "[data-userale-ignore], .userale-ignore";
 const DEFAULT_MASK_SELECTOR = "[data-userale-mask], .userale-mask";
 const MAX_KEEPALIVE_BYTES = 48 * 1024;
-
-/**
- * Safely extracts the bounding client rectangle for an event target on discrete
- * user interactions (click, dblclick, change, submit).
- */
-export function getTargetRect(target: EventTarget | null): TargetRect | null {
-  try {
-    if (
-      target &&
-      typeof (target as Element).getBoundingClientRect === "function"
-    ) {
-      const rect = (target as Element).getBoundingClientRect();
-      if (
-        rect &&
-        Number.isFinite(rect.x) &&
-        Number.isFinite(rect.y) &&
-        Number.isFinite(rect.width) &&
-        Number.isFinite(rect.height)
-      ) {
-        return {
-          x: Math.round(rect.x),
-          y: Math.round(rect.y),
-          width: Math.round(rect.width),
-          height: Math.round(rect.height),
-        };
-      }
-    }
-  } catch {
-    // Ignore errors in non-DOM environments
-  }
-  return null;
-}
 
 /**
  * Rolling ring buffer for rrweb-compatible DOM replay frames.
@@ -443,17 +412,33 @@ export function startSessionReplay(
           }) as unknown as Logging.JSONObject,
         false,
       );
-    } else if (typeof fetch === "function" && config.url) {
-      // Payloads > 48KB bypass keepalive so the browser's 64KB keepalive limit is never exceeded
+    } else if (
+      config.exporter &&
+      typeof config.exporter.export === "function"
+    ) {
       try {
-        await fetch(config.url, {
-          method: "POST",
-          headers: buildHeaders(config),
-          body: serialized,
+        await config.exporter.export([envelope as unknown as Logging.Log], {
           keepalive: false,
         });
       } catch {
-        // Ignore network errors in background replay flush
+        // Ignore custom exporter errors in background replay flush
+      }
+    } else if (typeof fetch === "function") {
+      const targetUrl = config.otlpEndpoint
+        ? resolveOtlpLogsEndpoint(config.otlpEndpoint)
+        : config.url;
+      if (targetUrl) {
+        // Payloads > 48KB bypass keepalive so the browser's 64KB keepalive limit is never exceeded
+        try {
+          await fetch(targetUrl, {
+            method: "POST",
+            headers: buildHeaders(config),
+            body: serialized,
+            keepalive: false,
+          });
+        } catch {
+          // Ignore network errors in background replay flush
+        }
       }
     }
 
@@ -603,9 +588,12 @@ export function startSessionReplay(
     document.addEventListener("click", onClickCapture, true);
   }
 
-  // Error trigger for Layer 2 replay flush
+  // Error & unhandledrejection triggers for Layer 2 replay flush
   const onWindowError = () => {
     void doFlush("error");
+  };
+  const onUnhandledRejection = () => {
+    void doFlush("unhandledrejection");
   };
   if (
     flushOnError &&
@@ -613,6 +601,7 @@ export function startSessionReplay(
     typeof self.addEventListener === "function"
   ) {
     self.addEventListener("error", onWindowError);
+    self.addEventListener("unhandledrejection", onUnhandledRejection);
   }
 
   const cleanup = () => {
@@ -633,6 +622,7 @@ export function startSessionReplay(
       typeof self.removeEventListener === "function"
     ) {
       self.removeEventListener("error", onWindowError);
+      self.removeEventListener("unhandledrejection", onUnhandledRejection);
     }
     if (typeof stopRecorder === "function") {
       stopRecorder();

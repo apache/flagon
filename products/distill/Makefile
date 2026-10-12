@@ -54,6 +54,11 @@ test:
 	poetry run pytest 
 	@echo "Done."
 
+test_uv:
+	@echo "Running tests with uv..."
+	uv run --no-project --with networkx --with pandas --with plotly --with pydantic --with dateparser --with pksuid --with "pytest<9" pytest
+	@echo "Done."
+
 test_all:
 	@echo "Testing with python3 versions 3.8 and up..."
 	@echo "This may take a while..."

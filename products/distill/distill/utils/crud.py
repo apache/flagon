@@ -34,16 +34,27 @@ def epoch_to_datetime(epoch_string):
 def getUUID(log):
     """
     Creates a unique id for a userale log.
+    Supports both legacy 'sessionID' and modern 'sessionId', as well as
+    'clientTime' (raw/custom logs) and 'startTime'/'endTime' (interval logs).
     :param log: Userale log in the form of a dictionary
     :return: A string representing a unique identifier for the log
     """
+    session_id = (
+        log.get("sessionID")
+        if "sessionID" in log
+        else log.get(
+            "sessionId",
+            log.get("browserSessionId", log.get("httpSessionId", "")),
+        )
+    )
+    timestamp = (
+        log.get("clientTime")
+        if "clientTime" in log
+        else log.get("startTime", log.get("endTime", ""))
+    )
+    log_type = log.get("logType", "")
 
     if "type" in log:
-        return (
-            str(log["sessionID"])
-            + str(log["clientTime"])
-            + str(log["logType"])
-            + str(log["type"])
-        )
+        return str(session_id) + str(timestamp) + str(log_type) + str(log["type"])
     else:
-        return str(log["sessionID"]) + str(log["clientTime"]) + str(log["logType"])
+        return str(session_id) + str(timestamp) + str(log_type)
