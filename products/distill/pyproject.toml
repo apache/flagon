@@ -20,7 +20,7 @@ version = "0.1.0"
 description = "An analytics framework for front-end UserALE data, enabling modeling, sequence analysis, and customization in Python."
 authors = []
 license = "Apache-2.0"
-readme = "README.rst"
+readme = "README.md"
 documentation = "http://flagon.incubator.apache.org/distill/"
 packages = [{ include = "distill" }]
 classifiers = [
@@ -44,11 +44,11 @@ classifiers = [
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
 networkx = "^2.5"
-numpy = "1.24.3"
+numpy = ">=1.24.3"
 pandas = ">=1.2.4,<3.0.0"
 plotly = "^5.5.0"
-matplotlib = "3.7.5"
-scipy = "1.9.3"
+matplotlib = ">=3.7.5"
+scipy = ">=1.9.3"
 pydantic = "^2.7.4"
 dateparser = "^1.2.0"
 pksuid = "^1.1.2"

@@ -29,11 +29,11 @@ const changeMe = "me";
 userale.options({
   userId: changeMe,
   url: "http://localhost:8000/",
-  version: "2.3.0",
+  toolVersion: "2.4.0",
   logDetails: true,
   toolName: "Apache UserALE Example (Custom)",
-  logCountThreshold: "1",
-  transmitInterval: "1000",
+  logCountThreshold: 1,
+  transmitInterval: 1000,
 });
 
 /**Filter API
@@ -124,7 +124,7 @@ document.addEventListener("change", function (e) {
       customField1: "I can make this log look like anything I want",
       customField2: "foo",
       userId: userale.options().userId,
-      toolVersion: userale.options().version,
+      toolVersion: userale.options().toolVersion,
       toolName: userale.options().toolName,
       useraleVersion: userale.options().useraleVersion,
       sessionId: userale.options().sessionId,
@@ -173,7 +173,7 @@ document.addEventListener("change", function (e) {
       function () {
         return { foo: "bar", bar: "foo" };
       },
-      true
+      true,
     );
   } else {
     return false;

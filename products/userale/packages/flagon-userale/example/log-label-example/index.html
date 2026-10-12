@@ -16,7 +16,7 @@ limitations under the License.
 <head>
     <script
             src="../../build/main.global.js"
-            data-url=""
+            data-url="http://localhost:8000/"
             data-tool="Apache UserALE Example"
             data-threshold="1"
             data-interval="100"
@@ -31,10 +31,11 @@ limitations under the License.
 </div>
 </body>
 <script>
-    window.userale.filter(log => ['click', 'customEvent'].includes(log.type))
-
     // Example 1
     window.userale.addCallbacks({
+        filter(log) {
+            return ['click', 'customEvent'].includes(log.type) ? log : false;
+        },
         map(log, e) {
             // determine whether we want to add custom labels to the log
             if (e && e.target.innerHTML !== 'New Feature') {
@@ -45,7 +46,7 @@ limitations under the License.
                 ...log,
                 customLabel: 'New Feature',
                 logType: 'custom',
-            }
+            };
         }
     });
 

@@ -26,28 +26,31 @@ function App() {
 
   userale.options({
     autostart: false,
-    logCountThreshold: "1",
-    transmitInterval: "1000",
+    logCountThreshold: 1,
+    transmitInterval: 1000,
     toolName: "Apache UserALE React Example",
   });
 
-  userale.filter(function (log) {
-    var type_array = [
-      "mouseup",
-      "mouseover",
-      "mousedown",
-      "keydown",
-      "dblclick",
-      "blur",
-      "focus",
-      "input",
-      "wheel",
-      "scroll",
-    ];
-    var logType_array = ["interval"];
-    return (
-      !type_array.includes(log.type) && !logType_array.includes(log.logType)
-    );
+  userale.addCallbacks({
+    filter(log) {
+      var type_array = [
+        "mouseup",
+        "mouseover",
+        "mousedown",
+        "keydown",
+        "dblclick",
+        "blur",
+        "focus",
+        "input",
+        "wheel",
+        "scroll",
+      ];
+      var logType_array = ["interval"];
+      return !type_array.includes(log.type) &&
+        !logType_array.includes(log.logType)
+        ? log
+        : false;
+    },
   });
 
   return (

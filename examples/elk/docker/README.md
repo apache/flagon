@@ -28,12 +28,12 @@ This directory contains a pre-configured **Elasticsearch + Logstash + Kibana (EL
 ## How This Differs from Stock `docker-elk`
 
 1. **Logstash HTTP Input & UserALE Pipeline ([`logstash/pipeline/logstash.conf`](./logstash/pipeline/logstash.conf))**:
-   - Exposes an HTTP input listener on port `8000` with CORS headers enabled so browser pages instrumented with UserALE.js can `POST` JSON log batches directly.
-   - Splits batched JSON arrays into individual event documents and strips internal Logstash transport metadata before indexing into Elasticsearch.
+   - Exposes an HTTP input listener on port `50000` with CORS headers enabled so browser pages instrumented with UserALE.js can `POST` JSON log batches directly.
+   - Parses JSON batches and strips internal Logstash transport metadata before indexing into Elasticsearch.
 2. **Elasticsearch Index Template ([`logstash/templates/userale.json`](./logstash/templates/userale.json))**:
-   - Maps UserALE fields (`target`, `path`, `pageUrl`, `pageTitle`, `clientTime`, `microTime`, `location`, `scrnRes`, `type`, `logType`, `userAction`, `details`, `userId`, `sessionId`, `toolName`, `toolVersion`, `useraleVersion`) with appropriate keyword, numeric, and date types in the `flagon-userale` index.
+   - Maps UserALE fields (`target`, `path`, `pageUrl`, `pageTitle`, `clientTime`, `microTime`, `location`, `scrnRes`, `type`, `logType`, `userAction`, `details`, `userId`, `sessionId`, `toolName`, `toolVersion`, `useraleVersion`) with appropriate keyword, numeric, and date types in the `userale` index.
 3. **Instrumented Example Site ([`site/Dockerfile`](./site/Dockerfile))**:
-   - Builds and serves the UserALE example web application on `http://localhost:8080`, pre-configured to send behavioral telemetry to Logstash at `http://localhost:8000`.
+   - Builds and serves the UserALE example web application on `http://localhost:8080`, pre-configured to send behavioral telemetry to Logstash at `http://localhost:50000`.
 
 ---
 
@@ -60,11 +60,11 @@ docker compose up -d
 
 3. **Generate Behavioral Telemetry**:
    - Open [`http://localhost:8080`](http://localhost:8080) in your browser.
-   - Click buttons, type into form inputs, hover, and scroll to emit `raw`, `interval`, and `custom` UserALE logs to Logstash (`http://localhost:8000`).
+   - Click buttons, type into form inputs, hover, and scroll to emit `raw`, `interval`, and `custom` UserALE logs to Logstash (`http://localhost:50000`).
 
 4. **Explore & Query Logs in Kibana**:
    - Open [`http://localhost:5601`](http://localhost:5601) and log in with the default credentials defined in [`.env`](./.env) (`elastic` / `changeme`).
-   - Navigate to **Stack Management -> Index Patterns** (or **Data Views**) and create a pattern matching `flagon-userale*` using `clientTime` as the timestamp field.
+   - Navigate to **Stack Management -> Index Patterns** (or **Data Views**) and create a pattern matching `userale*` using `clientTime` as the timestamp field.
    - Open **Discover** to inspect and filter live UserALE interaction events.
 
 5. **Stop the Stack**:

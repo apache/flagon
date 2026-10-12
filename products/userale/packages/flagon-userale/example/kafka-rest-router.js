@@ -58,7 +58,9 @@ const transformAndForward = async (req, res) => {
       typeof body === "object" &&
       body !== null &&
       Object.keys(body).length === 0;
-    if (isEmptyArray || isEmptyObject) return;
+    if (isEmptyArray || isEmptyObject) {
+      return res.status(204).end();
+    }
 
     if (options.verbose) console.log(JSON.stringify(body, null, 3));
 
