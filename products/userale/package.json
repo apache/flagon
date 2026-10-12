@@ -4,7 +4,9 @@
   "version": "1.0.0",
   "scripts": {
     "format": "prettier --ignore-path .gitignore --write 'packages/**/{src,test}/**/*.{ts,js,tsx,jsx}'",
+    "format:check": "prettier --ignore-path .gitignore --check 'packages/**/{src,test}/**/*.{ts,js,tsx,jsx}'",
     "lint": "eslint 'packages/**/src/**/*.{ts,js,tsx,jsx}' --fix",
+    "lint:check": "eslint 'packages/**/src/**/*.{ts,js,tsx,jsx}'",
     "build": "pnpm -r run build",
     "test": "playwright test -c ./test/playwright.config.ts && pnpm -r test",
     "pretest": "npx playwright install",

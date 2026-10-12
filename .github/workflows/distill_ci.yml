@@ -41,7 +41,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     steps:
       - name: Checkout code
@@ -49,47 +49,19 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          enable-cache: true
 
-      - name: Install poetry
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install poetry==1.8.5
-          poetry config virtualenvs.in-project true
-          poetry config virtualenvs.create true
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
 
-      - name: Install dependencies
-        run: |
-          poetry --version
-          poetry install
+      - name: Sync dependencies
+        run: uv sync --locked --group test --python ${{ matrix.python-version }}
 
       - name: Run tests
-        run: make test
+        run: uv run --no-sync --python ${{ matrix.python-version }} pytest
 
-  test-uv:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        python-version: ["3.12", "3.13"]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Install uv and run tests
-        run: |
-          python -m pip install --upgrade pip uv
-          make test_uv
 
 

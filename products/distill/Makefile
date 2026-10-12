@@ -15,81 +15,53 @@
 # limitations under the License.
 #
 
-.PHONY: setup_precommit .cz.toml setup_commitizen commit publish_pytest test lint format
-
-################### 
-# PRECOMMIT HOOKS #
-###################
-
-setup_precommit:
-	@echo "Setting up pre-commit hooks..."
-	poetry run pre-commit install
-	poetry run pre-commit autoupdate
-	@echo "Done."
-
-setup_commitizen:
-	@echo "Installing commitizen for convential commits..."
-	pip install commitizen
-	cz init
-	@echo "Done."
-
-commit:
-	@echo "Committing with commitizen..."
-	poetry run pre-commit run --all-files
-	poetry run cz commit
-	@echo "Done."
-
-publish_pytest:
-	@echo "Publishing to Test PyPI..."
-	poetry build
-	poetry publish -r testpypi
-	@echo "Done."
-
-########### 
-# Testing #
-###########
-
-test:
-	@echo "Running tests..."
-	poetry run pytest 
-	@echo "Done."
-
-test_uv:
-	@echo "Running tests with uv..."
-	uv run --no-project --with networkx --with pandas --with plotly --with pydantic --with dateparser --with pksuid --with "pytest<9" pytest
-	@echo "Done."
-
-test_all:
-	@echo "Testing with python3 versions 3.8 and up..."
-	@echo "This may take a while..."
-	tox run-parallel
+.PHONY: sync build publish_pytest test test_uv lint format
 
 #########
 # Setup #
 #########
-install_py_versions:
-	@echo "Installing python 3.8 and up..."
-ifeq ($(OS),Windows_NT)
-	@echo "Windows detected..."
-	@echo "Please run this in Windows Subsystem for Linux (WSL)"
-else
-	@echo "Unix detected"
-	./install_py_versions.sh
-endif
+
+sync:
+	@echo "Syncing dependencies with uv..."
+	uv sync --all-groups
+	@echo "Done."
+
+build:
+	@echo "Building distribution artifacts with uv..."
+	uv build
+	@echo "Done."
+
+publish_pytest:
+	@echo "Publishing to Test PyPI..."
+	uv build
+	uv publish --publish-url https://test.pypi.org/legacy/
+	@echo "Done."
+
+###########
+# Testing #
+###########
+
+test:
+	@echo "Running tests with uv..."
+	uv run --group test pytest
+	@echo "Done."
+
+test_uv: test
 
 ##########################
 # LINTING AND FORMATTING #
 ##########################
 PYTHON_FILES=.
 lint:
-	@echo "Running linting..."
-	poetry run mypy $(PYTHON_FILES)
-	poetry run black $(PYTHON_FILES) --check
-	poetry run ruff .
+	@echo "Running linting with uv..."
+	uv run --group lint mypy $(PYTHON_FILES)
+	uv run --group lint black $(PYTHON_FILES) --check
+	uv run --group lint ruff check $(PYTHON_FILES)
 	@echo "Done."
 
 format:
-	@echo "Running formatting..."
-	poetry run black $(PYTHON_FILES) 
-	poetry run ruff --select I --fix $(PYTHON_FILES)
+	@echo "Running formatting with uv..."
+	uv run --group lint black $(PYTHON_FILES)
+	uv run --group lint ruff check --select I --fix $(PYTHON_FILES)
 	@echo "Done."
+

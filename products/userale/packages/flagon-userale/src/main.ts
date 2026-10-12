@@ -16,12 +16,7 @@
  */
 
 import { defineCustomDetails } from "@/attachHandlers";
-import {
-  registerAuthCallback,
-  registerHeadersCallback,
-  resetAuthCallback,
-  resetHeadersCallback,
-} from "@/utils";
+import { registerAuthCallback, registerHeadersCallback } from "@/utils";
 import {
   addCallbacks,
   removeCallbacks,
@@ -40,8 +35,6 @@ import {
   flushSessionReplay,
   getActiveReplayRingBuffer,
   getTargetRect,
-  RageClickDetector,
-  ReplayRingBuffer,
   startSessionReplay,
   stopSessionReplay,
 } from "@/replay";

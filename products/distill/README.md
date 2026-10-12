@@ -75,8 +75,8 @@ traces = distill.correlate_by_trace(raw_docs)
 ## Installation & Development
 
 ### Prerequisites
-- Python `>= 3.8,< 4.0` (tested across Python `3.8`–`3.13`)
-- [Poetry](https://python-poetry.org/) `>= 1.0` or [`uv`](https://docs.astral.sh/uv/) (included in `nix develop`)
+- Python `>= 3.10,< 4.0` (tested across Python `3.10`–`3.13`)
+- [`uv`](https://docs.astral.sh/uv/) (included automatically in `nix develop`)
 
 ### Setup from the Monorepo
 
@@ -87,14 +87,11 @@ git clone https://github.com/apache/flagon.git
 cd flagon/products/distill
 ```
 
-2. Run tests with `uv` (Python 3.10–3.13 / `nix develop`) or Poetry:
+2. Sync the locked environment and run tests with `uv`:
 
 ```bash
-# Using uv (no virtualenv setup required):
-make test_uv
-
-# Or using Poetry:
-poetry install --all-groups
-poetry run pytest
+uv sync --all-groups
+uv run pytest
 ```
+
 
