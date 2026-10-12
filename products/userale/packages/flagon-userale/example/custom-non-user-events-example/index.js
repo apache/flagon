@@ -11,6 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import { context, trace } from "@opentelemetry/api";
 import {
   ConsoleSpanExporter,
   SimpleSpanProcessor,
@@ -71,16 +72,17 @@ function getData(url, resolve) {
     req.onreadystatechange = function () {
       if (req.readyState == XMLHttpRequest.DONE) {
         console.log(req.response);
+        const activeSpan = trace.getSpan(context.active());
         userale.log({
           clientTime: Date.now(),
           type: "XMLHttpRequest",
           logType: "custom",
-          userAction: "false",
+          userAction: false,
           details: JSON.parse(req.response),
           userId: userale.options().userId,
           useraleVersion: userale.options().useraleVersion,
           sessionId: userale.options().sessionId,
-          traceId: trace.getSpan(context.active())._spanContext.traceId,
+          traceId: activeSpan ? activeSpan.spanContext().traceId : undefined,
         });
       }
     };

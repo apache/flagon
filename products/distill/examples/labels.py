@@ -15,24 +15,28 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import os
-
-import distill
-from tests import testing_utils
-from tests.data_config import DATA_DIR
-from typing import Any, Dict, List, Callable
 import json
+import os
+from pathlib import Path
+import sys
+from typing import Any, Callable, Dict, List
 
+_DISTILL_ROOT = Path(__file__).resolve().parent.parent
+if str(_DISTILL_ROOT) not in sys.path:
+    sys.path.insert(0, str(_DISTILL_ROOT))
+
+import distill  # noqa: E402
+from tests.data_config import DATA_DIR  # noqa: E402
 
 
 class FeatureDefinition:
     # Implement class logic
     def __init__(self, label: str, rule: Callable[[Dict[str, Any]], bool]):
         # Immediately validate the rule, so you can error
-         # out/exit early if it's invalid
+        # out/exit early if it's invalid
         if not callable(rule):
             raise TypeError("Rule not callable")
-        
+
         if not isinstance(label, str):
             raise TypeError("Label is not a string")
 
@@ -84,25 +88,26 @@ def label_features(
 # that needs to be executed.
 ###########################################################
 if __name__ == "__main__":
-    file = open(os.path.join(DATA_DIR, "sample_data.json"), "r")
-    logs = json.load(file)
+    with open(os.path.join(DATA_DIR, "sample_data.json"), "r") as file:
+        logs = json.load(file)
 
     # Rule to test out the FeatureDefinition with
     def type_rule(log):
         return "type" in log and "scroll" in log["type"]
 
-    # Definitions to test out the FeatureDefinition with
+    # Valid definition to label scroll events
     type_rule_definition = FeatureDefinition(rule=type_rule, label="scroll_type")
-    rule_not_callable_definintion = FeatureDefinition(rule="rule", label="scroll_type")
-    string_error_definition = FeatureDefinition(rule=type_rule, label= 10)
-    
-    # Call label feature function to test the 3 definitions
-    label_features(logs=logs, definitions=[type_rule_definition])
-    label_features(logs=logs, definitions=[rule_not_callable_definintion])
-    label_features(logs=logs, definitions=[string_error_definition])
+    labeled_logs = label_features(logs=logs, definitions=[type_rule_definition])
+    scroll_labeled = [log for log in labeled_logs if "labels" in log]
+    print(f"Labeled {len(scroll_labeled)} / {len(labeled_logs)} logs with 'scroll_type'")
 
+    # Demonstrate early validation errors on invalid rule / label types
+    try:
+        FeatureDefinition(rule="rule", label="scroll_type")  # type: ignore[arg-type]
+    except TypeError as err:
+        print(f"Caught expected validation error for non-callable rule: {err}")
 
- 
-
-
-
+    try:
+        FeatureDefinition(rule=type_rule, label=10)  # type: ignore[arg-type]
+    except TypeError as err:
+        print(f"Caught expected validation error for non-string label: {err}")
