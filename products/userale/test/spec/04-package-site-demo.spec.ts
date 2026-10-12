@@ -23,6 +23,18 @@ test.describe("Website interactive UserALE 2.5 demo (site/_includes/useralejsDem
   test("captures interactions, switches wire formats (UserALE/OTLP/Protobuf), triggers rage-click & DOM mutation, and scrubs PII", async ({
     page,
   }) => {
+    const externalRequests: string[] = [];
+    page.on("request", (req) => {
+      const url = req.url();
+      if (
+        !url.startsWith("http://127.0.0.1") &&
+        !url.startsWith("http://localhost") &&
+        !url.startsWith("data:")
+      ) {
+        externalRequests.push(url);
+      }
+    });
+
     await page.goto("./site-demo");
 
     // 1. Verify UserALE 2.5 global and wire-format helpers are exposed
@@ -72,7 +84,12 @@ test.describe("Website interactive UserALE 2.5 demo (site/_includes/useralejsDem
     await page.locator("#mutate-dom-button").click();
     await expect(page.locator("#log-feed")).toContainText("mutation");
 
-    // 7. Type into data-userale-redact="true" input and verify PII is scrubbed
+    // 7. Click spatial viewport map and verify zero external tile requests (CSP-compliant)
+    await page.locator("#map-example").click();
+    await expect(page.locator("#log-feed")).toContainText("map-example");
+    expect(externalRequests).toEqual([]);
+
+    // 8. Type into data-userale-redact="true" input and verify PII is scrubbed
     const secret = "my-ultra-secret-token-999";
     await page.locator("#demo-redact-input").fill(secret);
     await page.locator("#demo-redact-input").dispatchEvent("change");
