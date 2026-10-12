@@ -364,10 +364,65 @@
       renderFeed();
     });
 
-    var map = L.map('map-example').setView([42.3601, -71.0589], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+    var map = L.map('map-example', { attributionControl: false }).setView([42.3601, -71.0589], 13);
+
+    // Self-contained SVG spatial coordinate grid (zero external tile requests, 100% CSP-compliant)
+    for (var lat = 42.30; lat <= 42.42; lat += 0.01) {
+      L.polyline([[lat, -71.14], [lat, -70.98]], {
+        color: '#38bdf8',
+        weight: 1,
+        opacity: 0.18,
+        clickable: false
+      }).addTo(map);
+    }
+    for (var lng = -71.14; lng <= -70.98; lng += 0.01) {
+      L.polyline([[42.30, lng], [42.42, lng]], {
+        color: '#38bdf8',
+        weight: 1,
+        opacity: 0.18,
+        clickable: false
+      }).addTo(map);
+    }
+
+    var nodes = [
+      { coords: [42.365, -71.085], color: '#38bdf8', label: 'UserALE.js Browser Client' },
+      { coords: [42.368, -71.055], color: '#fb923c', label: 'OpenTelemetry Collector (OTLP)' },
+      { coords: [42.352, -71.065], color: '#a855f7', label: 'Apache Flagon Distill (Analytics)' },
+      { coords: [42.356, -71.035], color: '#2dd4bf', label: 'OpenSearch / Apache Iceberg' }
+    ];
+
+    L.polyline(
+      [nodes[0].coords, nodes[1].coords, nodes[3].coords],
+      { color: '#38bdf8', weight: 2, opacity: 0.6, dashArray: '5, 5', clickable: false }
+    ).addTo(map);
+    L.polyline(
+      [nodes[0].coords, nodes[2].coords, nodes[3].coords],
+      { color: '#a855f7', weight: 2, opacity: 0.6, dashArray: '5, 5', clickable: false }
+    ).addTo(map);
+
+    for (var n = 0; n < nodes.length; n++) {
+      L.circleMarker(nodes[n].coords, {
+        radius: 9,
+        fillColor: nodes[n].color,
+        color: '#ffffff',
+        weight: 2,
+        opacity: 0.95,
+        fillOpacity: 0.85
+      })
+        .bindPopup('<strong>' + nodes[n].label + '</strong><br>Click, drag, or zoom to emit spatial telemetry.')
+        .addTo(map);
+    }
+
+    map.on('click', function (e) {
+      L.circleMarker(e.latlng, {
+        radius: 6,
+        fillColor: '#f43f5e',
+        color: '#ffffff',
+        weight: 1.5,
+        opacity: 0.9,
+        fillOpacity: 0.8
+      }).addTo(map);
+    });
   });
 </script>
 
