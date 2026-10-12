@@ -24,18 +24,23 @@ class Session:
     Allows the user to parse UserALE log data to user sessions.
     """
 
-    def __init__(self, session={}):
+    def __init__(self, session=None):
         """
         Initializes a Session object.  This object contains\
         metadata for the associated Session.
 
         :param session: a set of key value pair representing a session
         """
-
-        self.session = session
-        self.session_name = list(session.keys())[0]
-        self.num_logs = len(list(session.values())[0])
-        self.logs = list(session.values())[0]
+        if not session:
+            self.session = {}
+            self.session_name = ""
+            self.num_logs = 0
+            self.logs = []
+        else:
+            self.session = session
+            self.session_name = list(session.keys())[0]
+            self.logs = list(session.values())[0]
+            self.num_logs = len(self.logs)
 
     def __str__(self):
         return json.dumps(self.session)

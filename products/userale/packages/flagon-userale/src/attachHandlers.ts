@@ -84,7 +84,7 @@ export function extractInputDetails(e: InputEvent) {
     return null;
   }
   return {
-    value: (e.target as HTMLInputElement).value,
+    value: (e.target as HTMLInputElement | null)?.value,
   };
 }
 
@@ -149,7 +149,7 @@ export function defineDetails(config: Settings.DefaultConfig): void {
     mouseup: extractMouseDetails,
     focus: null,
     blur: null,
-    input: config.logDetails ? extractKeyboardDetails : null,
+    input: config.logDetails ? extractInputDetails : null,
     change: config.logDetails ? extractChangeDetails : null,
     dragstart: null,
     dragend: null,
@@ -192,7 +192,7 @@ export function defineCustomDetails(
     focus: null,
     blur: null,
     load: null,
-    input: options.logDetails ? extractKeyboardDetails : null,
+    input: options.logDetails ? extractInputDetails : null,
     change: options.logDetails ? extractChangeDetails : null,
     dragstart: null,
     dragend: null,

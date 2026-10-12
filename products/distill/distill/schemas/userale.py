@@ -245,6 +245,8 @@ def normalize_userale_dict(
                     "details": details,
                 }
             )
+            if isinstance(attrs.get("flagon.target_rect"), dict):
+                flat["targetRect"] = attrs["flagon.target_rect"]
         return flat
 
     return data

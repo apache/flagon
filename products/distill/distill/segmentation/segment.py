@@ -367,8 +367,24 @@ def generate_segments(
     index = 0
     for i in range(len(keys)):
         if field_name in target_dict[keys[i]]:
-            # Matches value in field_values list with dict values (str or list)
-            if any(item in target_dict[keys[i]][field_name] for item in field_values):
+            # Matches value in field_values list with dict values (str, list, or scalar)
+            raw_field_val = target_dict[keys[i]][field_name]
+            if raw_field_val is None:
+                matched = False
+            elif isinstance(raw_field_val, (str, list, tuple, set, dict)):
+                matched = any(
+                    item == raw_field_val
+                    or (isinstance(item, str) and item in raw_field_val)
+                    or (
+                        not isinstance(raw_field_val, str)
+                        and item in raw_field_val
+                    )
+                    for item in field_values
+                )
+            else:
+                matched = raw_field_val in field_values
+
+            if matched:
                 # Matches values - Create segment
                 orig_start_time = target_dict[keys[i]]["clientTime"]
                 if isinstance(orig_start_time, int):

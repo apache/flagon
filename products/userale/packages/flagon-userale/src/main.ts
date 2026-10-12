@@ -157,7 +157,7 @@ function setup(config: Configuration) {
         attachHandlers(config);
         initSender(logs, config);
         started = config.on = true;
-        if (config.observeMutations) {
+        if (config.observeMutations && !getActiveReplayRingBuffer()) {
           startSessionReplay({ observeMutations: true }, config);
         }
         if (typeof window !== "undefined" && typeof document !== "undefined") {
@@ -196,7 +196,7 @@ export function start(): void {
     if (!wasStarted) {
       attachHandlers(config);
       initSender(logs, config);
-      if (config.observeMutations) {
+      if (config.observeMutations && !getActiveReplayRingBuffer()) {
         startSessionReplay({ observeMutations: true }, config);
       }
     }
@@ -223,6 +223,13 @@ export function options(
 ): Settings.Config {
   if (newConfig) {
     config.update(newConfig);
+    if (started && newConfig.observeMutations !== undefined) {
+      if (newConfig.observeMutations && !getActiveReplayRingBuffer()) {
+        startSessionReplay({ observeMutations: true }, config);
+      } else if (!newConfig.observeMutations && getActiveReplayRingBuffer()) {
+        stopSessionReplay();
+      }
+    }
   }
 
   return config;

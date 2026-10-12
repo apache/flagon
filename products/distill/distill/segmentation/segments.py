@@ -29,14 +29,14 @@ class Segments:
     # IMPLEMENTATION OF PYTHON DEFINED FUNCTIONS #
     ##############################################
 
-    def __init__(self, segments=[]):
+    def __init__(self, segments=None):
         """
         Segments initialization function.
 
         :param segments ([]): An optional List of Segment objects to be included\
             in the Segments abstraction.
         """
-        self.segments = segments
+        self.segments = list(segments) if segments is not None else []
 
     def __iter__(self):
         """

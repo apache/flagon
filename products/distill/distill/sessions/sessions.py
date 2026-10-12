@@ -38,7 +38,7 @@ class Sessions:
     A collection of Session objects.
     """
 
-    def __init__(self, logs: Optional[Dict] = None, sessions=[], **kwargs):
+    def __init__(self, logs: Optional[Dict] = None, sessions=None, **kwargs):
         """
         Sessions initialization function.
 
@@ -48,7 +48,7 @@ class Sessions:
         **kwargs, Additional arguments passed to the user session parsing function,
             if logs are provided
         """
-        self.sessions = sessions
+        self.sessions = list(sessions) if sessions is not None else []
         self.sessions_type = Sessions_Type.DEFAULT
 
         # Chunk on initialization

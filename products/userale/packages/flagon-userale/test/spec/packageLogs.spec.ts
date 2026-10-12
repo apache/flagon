@@ -475,4 +475,30 @@ describe("packageLogs", () => {
     svg.setAttribute("class", "nav-icon");
     expect(getSelector(svg)).toBe("svg#icon.nav-icon");
   });
+
+  test("packageLog attaches targetRect on discrete click events with non-zero bounding rect", () => {
+    config.update({ on: true });
+    initPackager([], config);
+    const btn = document.createElement("button");
+    btn.id = "cta";
+    btn.getBoundingClientRect = () =>
+      ({
+        x: 24.4,
+        y: 88.6,
+        width: 140.2,
+        height: 44.1,
+      }) as DOMRect;
+    document.body.appendChild(btn);
+
+    btn.addEventListener("click", (e) => packageLog(e));
+    btn.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+
+    expect(logs).toHaveLength(1);
+    expect(logs[0].targetRect).toEqual({
+      x: 24,
+      y: 89,
+      width: 140,
+      height: 44,
+    });
+  });
 });

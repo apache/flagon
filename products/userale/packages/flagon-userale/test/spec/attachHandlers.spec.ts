@@ -25,6 +25,7 @@ jest.unstable_mockModule("@/packageLogs", () => ({
 
 import {
   attachHandlers,
+  defineCustomDetails,
   extractKeyboardDetails,
   extractInputDetails,
   extractChangeDetails,
@@ -139,8 +140,18 @@ describe("attachHandlers", () => {
   });
 
   describe("defineDetails", () => {
-    // TODO: clarify what constitutes "high detail events" and what is "correct"
-    it.skip("configures high detail events correctly", () => {});
+    it("configures high detail events including input -> extractInputDetails", () => {
+      config.update({ logDetails: true });
+      expect(defineCustomDetails(config, "input")).toBe(extractInputDetails);
+      expect(defineCustomDetails(config, "keydown")).toBe(
+        extractKeyboardDetails,
+      );
+      expect(defineCustomDetails(config, "change")).toBe(extractChangeDetails);
+
+      config.update({ logDetails: false });
+      expect(defineCustomDetails(config, "input")).toBeNull();
+      expect(defineCustomDetails(config, "keydown")).toBeNull();
+    });
 
     it("redacts details on password inputs", () => {
       const pwInput = document.createElement("input");
@@ -158,6 +169,10 @@ describe("attachHandlers", () => {
       const inputEvt = new Event("input") as InputEvent;
       Object.defineProperty(inputEvt, "target", { value: pwInput });
       expect(extractInputDetails(inputEvt)).toBeNull();
+
+      const normalInputEvt = new Event("input") as InputEvent;
+      Object.defineProperty(normalInputEvt, "target", { value: textInput });
+      expect(extractInputDetails(normalInputEvt)).toEqual({ value: "hello" });
 
       const changeEvt = new Event("change") as unknown as Events.ChangeEvent;
       Object.defineProperty(changeEvt, "target", { value: pwInput });

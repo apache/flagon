@@ -307,5 +307,30 @@ describe("Session Replay & Behavioral DOM Telemetry (#104)", () => {
 
       fetchSpy.mockRestore();
     });
+
+    it("flushes replay buffer on unhandledrejection when flushOnError is enabled", async () => {
+      const flushedEnvelopes: Array<ReplayEnvelope> = [];
+
+      startSessionReplay(
+        {
+          observeMutations: false,
+          detectRageClicks: false,
+          flushOnError: true,
+          recorder: ({ emit }) => {
+            emit({ type: 2, data: { root: "html" }, timestamp: 2_000 });
+            return () => {};
+          },
+          onFlush: (env) => {
+            flushedEnvelopes.push(env);
+          },
+        },
+        config,
+      );
+
+      self.dispatchEvent(new Event("unhandledrejection"));
+
+      expect(flushedEnvelopes).toHaveLength(1);
+      expect(flushedEnvelopes[0].trigger).toBe("unhandledrejection");
+    });
   });
 });
