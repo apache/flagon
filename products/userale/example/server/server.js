@@ -112,6 +112,7 @@ app.get("/site-demo", (req, res) => {
     <meta charset="utf-8">
     <title>Flagon Website Demo Test</title>
     <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
+    <style>#map-example { min-height: 260px; width: 100%; background-color: #0f172a; }</style>
     <script src="/assets/jquery.min.js"></script>
     <script src="/semantic/dist/semantic.min.js"></script>
   </head>
