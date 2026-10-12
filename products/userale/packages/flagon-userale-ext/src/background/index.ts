@@ -23,7 +23,6 @@ import { sendToContent } from "~utils/messaging"
 import { setOptions } from "./messages/config_change"
 
 // Top level await is not supported so immediately execute this async function to set options from storage
-
 ;(async () => {
   const options = await getStoredOptions()
   setOptions(options)

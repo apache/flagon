@@ -29,6 +29,10 @@ pre-commit:
       glob: "*.{ts,tsx,js,jsx,json,css,md}"
       root: "products/userale/"
       run: pnpm prettier --check {staged_files}
+    distill-lint:
+      glob: "*.py"
+      root: "products/distill/"
+      run: uv run --group lint ruff check {staged_files}
 
 pre-push:
   parallel: false
@@ -39,4 +43,8 @@ pre-push:
     userale-test:
       root: "products/userale/packages/flagon-userale/"
       run: npx jest -c ./test/jest.config.ts
+    distill-test:
+      root: "products/distill/"
+      run: uv run --group test pytest
+
 

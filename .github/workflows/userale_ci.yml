@@ -59,17 +59,17 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
-      - name: Format 
-        run: pnpm format
+      - name: Check formatting
+        run: pnpm format:check
 
-      - name: Lint 
-        run: pnpm lint
+      - name: Check linting
+        run: pnpm lint:check
 
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.x, 22.x, 24.x, 26.x]
+        node-version: [20.x, 22.x, 24.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
         # See active and security support for Node.js at https://endoflife.date/nodejs
     steps:
@@ -93,9 +93,7 @@ jobs:
           sudo apt-get install -y xvfb
 
       - name: Build
-        run: |
-          export PATH=${PATH}:`go env GOPATH`/bin
-          pnpm build
+        run: pnpm build
 
       - name: Test
         run: |

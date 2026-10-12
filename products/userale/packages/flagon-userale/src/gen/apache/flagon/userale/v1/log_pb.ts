@@ -19,7 +19,11 @@
 // @generated from file apache/flagon/userale/v1/log.proto (package apache.flagon.userale.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
+import type {
+  GenEnum,
+  GenFile,
+  GenMessage,
+} from "@bufbuild/protobuf/codegenv2";
 import { enumDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
 import { file_google_protobuf_struct } from "@bufbuild/protobuf/wkt";
 import type { JsonObject, Message } from "@bufbuild/protobuf";
@@ -27,31 +31,37 @@ import type { JsonObject, Message } from "@bufbuild/protobuf";
 /**
  * Describes the file apache/flagon/userale/v1/log.proto.
  */
-export const file_apache_flagon_userale_v1_log: GenFile = /*@__PURE__*/
-  fileDesc("CiJhcGFjaGUvZmxhZ29uL3VzZXJhbGUvdjEvbG9nLnByb3RvEhhhcGFjaGUuZmxhZ29uLnVzZXJhbGUudjEiMQoQU2NyZWVuUmVzb2x1dGlvbhINCgV3aWR0aBgBIAEoBRIOCgZoZWlnaHQYAiABKAUiNgoITG9jYXRpb24SDgoBeBgBIAEoAUgAiAEBEg4KAXkYAiABKAFIAYgBAUIECgJfeEIECgJfeSLyAwoLTG9nTWV0YWRhdGESEAoIcGFnZV91cmwYASABKAkSEgoKcGFnZV90aXRsZRgCIAEoCRIVCg1wYWdlX3JlZmVycmVyGAMgASgJEhIKCnVzZXJfYWdlbnQYBCABKAkSEwoLY2xpZW50X3RpbWUYBSABKAMSRQoRc2NyZWVuX3Jlc29sdXRpb24YBiABKAsyKi5hcGFjaGUuZmxhZ29uLnVzZXJhbGUudjEuU2NyZWVuUmVzb2x1dGlvbhIUCgd1c2VyX2lkGAcgASgJSACIAQESFwoKc2Vzc2lvbl9pZBgIIAEoCUgBiAEBEhwKD2h0dHBfc2Vzc2lvbl9pZBgJIAEoCUgCiAEBEh8KEmJyb3dzZXJfc2Vzc2lvbl9pZBgKIAEoCUgDiAEBEhYKCXRvb2xfbmFtZRgLIAEoCUgEiAEBEhkKDHRvb2xfdmVyc2lvbhgMIAEoCUgFiAEBEhwKD3VzZXJhbGVfdmVyc2lvbhgNIAEoCUgGiAEBQgoKCF91c2VyX2lkQg0KC19zZXNzaW9uX2lkQhIKEF9odHRwX3Nlc3Npb25faWRCFQoTX2Jyb3dzZXJfc2Vzc2lvbl9pZEIMCgpfdG9vbF9uYW1lQg8KDV90b29sX3ZlcnNpb25CEgoQX3VzZXJhbGVfdmVyc2lvbiLlAgoGUmF3TG9nEjcKCG1ldGFkYXRhGAEgASgLMiUuYXBhY2hlLmZsYWdvbi51c2VyYWxlLnYxLkxvZ01ldGFkYXRhEg4KBnRhcmdldBgCIAEoCRIMCgRwYXRoGAMgAygJEhIKCmV2ZW50X3R5cGUYBCABKAkSNAoIbG9jYXRpb24YBSABKAsyIi5hcGFjaGUuZmxhZ29uLnVzZXJhbGUudjEuTG9jYXRpb24SFwoKbWljcm9fdGltZRgGIAEoAUgAiAEBEhMKC3VzZXJfYWN0aW9uGAcgASgIEigKB2RldGFpbHMYCCABKAsyFy5nb29nbGUucHJvdG9idWYuU3RydWN0EisKCmF0dHJpYnV0ZXMYCSABKAsyFy5nb29nbGUucHJvdG9idWYuU3RydWN0EiYKBXN0eWxlGAogASgLMhcuZ29vZ2xlLnByb3RvYnVmLlN0cnVjdEINCgtfbWljcm9fdGltZSKAAgoLSW50ZXJ2YWxMb2cSNwoIbWV0YWRhdGEYASABKAsyJS5hcGFjaGUuZmxhZ29uLnVzZXJhbGUudjEuTG9nTWV0YWRhdGESDgoGdGFyZ2V0GAIgASgJEgwKBHBhdGgYAyADKAkSEgoKZXZlbnRfdHlwZRgEIAEoCRINCgVjb3VudBgFIAEoBRIQCghkdXJhdGlvbhgGIAEoAxISCgpzdGFydF90aW1lGAcgASgDEhAKCGVuZF90aW1lGAggASgDEhUKDXRhcmdldF9jaGFuZ2UYCSABKAgSEwoLdHlwZV9jaGFuZ2UYCiABKAgSEwoLdXNlcl9hY3Rpb24YCyABKAgiswEKCUN1c3RvbUxvZxI3CghtZXRhZGF0YRgBIAEoCzIlLmFwYWNoZS5mbGFnb24udXNlcmFsZS52MS5Mb2dNZXRhZGF0YRITCgt1c2VyX2FjdGlvbhgCIAEoCBIoCgdkZXRhaWxzGAMgASgLMhcuZ29vZ2xlLnByb3RvYnVmLlN0cnVjdBIuCg1jdXN0b21fZmllbGRzGAQgASgLMhcuZ29vZ2xlLnByb3RvYnVmLlN0cnVjdCLrAQoKVXNlckFMRUxvZxIzCghsb2dfdHlwZRgBIAEoDjIhLmFwYWNoZS5mbGFnb24udXNlcmFsZS52MS5Mb2dUeXBlEi8KA3JhdxgCIAEoCzIgLmFwYWNoZS5mbGFnb24udXNlcmFsZS52MS5SYXdMb2dIABI5CghpbnRlcnZhbBgDIAEoCzIlLmFwYWNoZS5mbGFnb24udXNlcmFsZS52MS5JbnRlcnZhbExvZ0gAEjUKBmN1c3RvbRgEIAEoCzIjLmFwYWNoZS5mbGFnb24udXNlcmFsZS52MS5DdXN0b21Mb2dIAEIFCgNsb2ciPgoITG9nQmF0Y2gSMgoEbG9ncxgBIAMoCzIkLmFwYWNoZS5mbGFnb24udXNlcmFsZS52MS5Vc2VyQUxFTG9nKmEKB0xvZ1R5cGUSGAoUTE9HX1RZUEVfVU5TUEVDSUZJRUQQABIQCgxMT0dfVFlQRV9SQVcQARIVChFMT0dfVFlQRV9JTlRFUlZBTBACEhMKD0xPR19UWVBFX0NVU1RPTRADQqsBChxjb20uYXBhY2hlLmZsYWdvbi51c2VyYWxlLnYxQghMb2dQcm90b1ABogIDQUZVqgIYQXBhY2hlLkZsYWdvbi5Vc2VyYWxlLlYxygIYQXBhY2hlXEZsYWdvblxVc2VyYWxlXFYx4gIkQXBhY2hlXEZsYWdvblxVc2VyYWxlXFYxXEdQQk1ldGFkYXRh6gIbQXBhY2hlOjpGbGFnb246OlVzZXJhbGU6OlYxYgZwcm90bzM", [file_google_protobuf_struct]);
+export const file_apache_flagon_userale_v1_log: GenFile =
+  /*@__PURE__*/
+  fileDesc(
+    "CiJhcGFjaGUvZmxhZ29uL3VzZXJhbGUvdjEvbG9nLnByb3RvEhhhcGFjaGUuZmxhZ29uLnVzZXJhbGUudjEiMQoQU2NyZWVuUmVzb2x1dGlvbhINCgV3aWR0aBgBIAEoBRIOCgZoZWlnaHQYAiABKAUiNgoITG9jYXRpb24SDgoBeBgBIAEoAUgAiAEBEg4KAXkYAiABKAFIAYgBAUIECgJfeEIECgJfeSLyAwoLTG9nTWV0YWRhdGESEAoIcGFnZV91cmwYASABKAkSEgoKcGFnZV90aXRsZRgCIAEoCRIVCg1wYWdlX3JlZmVycmVyGAMgASgJEhIKCnVzZXJfYWdlbnQYBCABKAkSEwoLY2xpZW50X3RpbWUYBSABKAMSRQoRc2NyZWVuX3Jlc29sdXRpb24YBiABKAsyKi5hcGFjaGUuZmxhZ29uLnVzZXJhbGUudjEuU2NyZWVuUmVzb2x1dGlvbhIUCgd1c2VyX2lkGAcgASgJSACIAQESFwoKc2Vzc2lvbl9pZBgIIAEoCUgBiAEBEhwKD2h0dHBfc2Vzc2lvbl9pZBgJIAEoCUgCiAEBEh8KEmJyb3dzZXJfc2Vzc2lvbl9pZBgKIAEoCUgDiAEBEhYKCXRvb2xfbmFtZRgLIAEoCUgEiAEBEhkKDHRvb2xfdmVyc2lvbhgMIAEoCUgFiAEBEhwKD3VzZXJhbGVfdmVyc2lvbhgNIAEoCUgGiAEBQgoKCF91c2VyX2lkQg0KC19zZXNzaW9uX2lkQhIKEF9odHRwX3Nlc3Npb25faWRCFQoTX2Jyb3dzZXJfc2Vzc2lvbl9pZEIMCgpfdG9vbF9uYW1lQg8KDV90b29sX3ZlcnNpb25CEgoQX3VzZXJhbGVfdmVyc2lvbiLlAgoGUmF3TG9nEjcKCG1ldGFkYXRhGAEgASgLMiUuYXBhY2hlLmZsYWdvbi51c2VyYWxlLnYxLkxvZ01ldGFkYXRhEg4KBnRhcmdldBgCIAEoCRIMCgRwYXRoGAMgAygJEhIKCmV2ZW50X3R5cGUYBCABKAkSNAoIbG9jYXRpb24YBSABKAsyIi5hcGFjaGUuZmxhZ29uLnVzZXJhbGUudjEuTG9jYXRpb24SFwoKbWljcm9fdGltZRgGIAEoAUgAiAEBEhMKC3VzZXJfYWN0aW9uGAcgASgIEigKB2RldGFpbHMYCCABKAsyFy5nb29nbGUucHJvdG9idWYuU3RydWN0EisKCmF0dHJpYnV0ZXMYCSABKAsyFy5nb29nbGUucHJvdG9idWYuU3RydWN0EiYKBXN0eWxlGAogASgLMhcuZ29vZ2xlLnByb3RvYnVmLlN0cnVjdEINCgtfbWljcm9fdGltZSKAAgoLSW50ZXJ2YWxMb2cSNwoIbWV0YWRhdGEYASABKAsyJS5hcGFjaGUuZmxhZ29uLnVzZXJhbGUudjEuTG9nTWV0YWRhdGESDgoGdGFyZ2V0GAIgASgJEgwKBHBhdGgYAyADKAkSEgoKZXZlbnRfdHlwZRgEIAEoCRINCgVjb3VudBgFIAEoBRIQCghkdXJhdGlvbhgGIAEoAxISCgpzdGFydF90aW1lGAcgASgDEhAKCGVuZF90aW1lGAggASgDEhUKDXRhcmdldF9jaGFuZ2UYCSABKAgSEwoLdHlwZV9jaGFuZ2UYCiABKAgSEwoLdXNlcl9hY3Rpb24YCyABKAgiswEKCUN1c3RvbUxvZxI3CghtZXRhZGF0YRgBIAEoCzIlLmFwYWNoZS5mbGFnb24udXNlcmFsZS52MS5Mb2dNZXRhZGF0YRITCgt1c2VyX2FjdGlvbhgCIAEoCBIoCgdkZXRhaWxzGAMgASgLMhcuZ29vZ2xlLnByb3RvYnVmLlN0cnVjdBIuCg1jdXN0b21fZmllbGRzGAQgASgLMhcuZ29vZ2xlLnByb3RvYnVmLlN0cnVjdCLrAQoKVXNlckFMRUxvZxIzCghsb2dfdHlwZRgBIAEoDjIhLmFwYWNoZS5mbGFnb24udXNlcmFsZS52MS5Mb2dUeXBlEi8KA3JhdxgCIAEoCzIgLmFwYWNoZS5mbGFnb24udXNlcmFsZS52MS5SYXdMb2dIABI5CghpbnRlcnZhbBgDIAEoCzIlLmFwYWNoZS5mbGFnb24udXNlcmFsZS52MS5JbnRlcnZhbExvZ0gAEjUKBmN1c3RvbRgEIAEoCzIjLmFwYWNoZS5mbGFnb24udXNlcmFsZS52MS5DdXN0b21Mb2dIAEIFCgNsb2ciPgoITG9nQmF0Y2gSMgoEbG9ncxgBIAMoCzIkLmFwYWNoZS5mbGFnb24udXNlcmFsZS52MS5Vc2VyQUxFTG9nKmEKB0xvZ1R5cGUSGAoUTE9HX1RZUEVfVU5TUEVDSUZJRUQQABIQCgxMT0dfVFlQRV9SQVcQARIVChFMT0dfVFlQRV9JTlRFUlZBTBACEhMKD0xPR19UWVBFX0NVU1RPTRADQqsBChxjb20uYXBhY2hlLmZsYWdvbi51c2VyYWxlLnYxQghMb2dQcm90b1ABogIDQUZVqgIYQXBhY2hlLkZsYWdvbi5Vc2VyYWxlLlYxygIYQXBhY2hlXEZsYWdvblxVc2VyYWxlXFYx4gIkQXBhY2hlXEZsYWdvblxVc2VyYWxlXFYxXEdQQk1ldGFkYXRh6gIbQXBhY2hlOjpGbGFnb246OlVzZXJhbGU6OlYxYgZwcm90bzM",
+    [file_google_protobuf_struct],
+  );
 
 /**
  * ScreenResolution captures the viewport dimensions at log time.
  *
  * @generated from message apache.flagon.userale.v1.ScreenResolution
  */
-export type ScreenResolution = Message<"apache.flagon.userale.v1.ScreenResolution"> & {
-  /**
-   * @generated from field: int32 width = 1;
-   */
-  width: number;
+export type ScreenResolution =
+  Message<"apache.flagon.userale.v1.ScreenResolution"> & {
+    /**
+     * @generated from field: int32 width = 1;
+     */
+    width: number;
 
-  /**
-   * @generated from field: int32 height = 2;
-   */
-  height: number;
-};
+    /**
+     * @generated from field: int32 height = 2;
+     */
+    height: number;
+  };
 
 /**
  * Describes the message apache.flagon.userale.v1.ScreenResolution.
  * Use `create(ScreenResolutionSchema)` to create a new message.
  */
-export const ScreenResolutionSchema: GenMessage<ScreenResolution> = /*@__PURE__*/
+export const ScreenResolutionSchema: GenMessage<ScreenResolution> =
+  /*@__PURE__*/
   messageDesc(file_apache_flagon_userale_v1_log, 0);
 
 /**
@@ -75,7 +85,8 @@ export type Location = Message<"apache.flagon.userale.v1.Location"> & {
  * Describes the message apache.flagon.userale.v1.Location.
  * Use `create(LocationSchema)` to create a new message.
  */
-export const LocationSchema: GenMessage<Location> = /*@__PURE__*/
+export const LocationSchema: GenMessage<Location> =
+  /*@__PURE__*/
   messageDesc(file_apache_flagon_userale_v1_log, 1);
 
 /**
@@ -166,7 +177,8 @@ export type LogMetadata = Message<"apache.flagon.userale.v1.LogMetadata"> & {
  * Describes the message apache.flagon.userale.v1.LogMetadata.
  * Use `create(LogMetadataSchema)` to create a new message.
  */
-export const LogMetadataSchema: GenMessage<LogMetadata> = /*@__PURE__*/
+export const LogMetadataSchema: GenMessage<LogMetadata> =
+  /*@__PURE__*/
   messageDesc(file_apache_flagon_userale_v1_log, 2);
 
 /**
@@ -251,7 +263,8 @@ export type RawLog = Message<"apache.flagon.userale.v1.RawLog"> & {
  * Describes the message apache.flagon.userale.v1.RawLog.
  * Use `create(RawLogSchema)` to create a new message.
  */
-export const RawLogSchema: GenMessage<RawLog> = /*@__PURE__*/
+export const RawLogSchema: GenMessage<RawLog> =
+  /*@__PURE__*/
   messageDesc(file_apache_flagon_userale_v1_log, 3);
 
 /**
@@ -336,7 +349,8 @@ export type IntervalLog = Message<"apache.flagon.userale.v1.IntervalLog"> & {
  * Describes the message apache.flagon.userale.v1.IntervalLog.
  * Use `create(IntervalLogSchema)` to create a new message.
  */
-export const IntervalLogSchema: GenMessage<IntervalLog> = /*@__PURE__*/
+export const IntervalLogSchema: GenMessage<IntervalLog> =
+  /*@__PURE__*/
   messageDesc(file_apache_flagon_userale_v1_log, 4);
 
 /**
@@ -377,7 +391,8 @@ export type CustomLog = Message<"apache.flagon.userale.v1.CustomLog"> & {
  * Describes the message apache.flagon.userale.v1.CustomLog.
  * Use `create(CustomLogSchema)` to create a new message.
  */
-export const CustomLogSchema: GenMessage<CustomLog> = /*@__PURE__*/
+export const CustomLogSchema: GenMessage<CustomLog> =
+  /*@__PURE__*/
   messageDesc(file_apache_flagon_userale_v1_log, 5);
 
 /**
@@ -395,32 +410,37 @@ export type UserALELog = Message<"apache.flagon.userale.v1.UserALELog"> & {
   /**
    * @generated from oneof apache.flagon.userale.v1.UserALELog.log
    */
-  log: {
-    /**
-     * @generated from field: apache.flagon.userale.v1.RawLog raw = 2;
-     */
-    value: RawLog;
-    case: "raw";
-  } | {
-    /**
-     * @generated from field: apache.flagon.userale.v1.IntervalLog interval = 3;
-     */
-    value: IntervalLog;
-    case: "interval";
-  } | {
-    /**
-     * @generated from field: apache.flagon.userale.v1.CustomLog custom = 4;
-     */
-    value: CustomLog;
-    case: "custom";
-  } | { case: undefined; value?: undefined };
+  log:
+    | {
+        /**
+         * @generated from field: apache.flagon.userale.v1.RawLog raw = 2;
+         */
+        value: RawLog;
+        case: "raw";
+      }
+    | {
+        /**
+         * @generated from field: apache.flagon.userale.v1.IntervalLog interval = 3;
+         */
+        value: IntervalLog;
+        case: "interval";
+      }
+    | {
+        /**
+         * @generated from field: apache.flagon.userale.v1.CustomLog custom = 4;
+         */
+        value: CustomLog;
+        case: "custom";
+      }
+    | { case: undefined; value?: undefined };
 };
 
 /**
  * Describes the message apache.flagon.userale.v1.UserALELog.
  * Use `create(UserALELogSchema)` to create a new message.
  */
-export const UserALELogSchema: GenMessage<UserALELog> = /*@__PURE__*/
+export const UserALELogSchema: GenMessage<UserALELog> =
+  /*@__PURE__*/
   messageDesc(file_apache_flagon_userale_v1_log, 6);
 
 /**
@@ -440,7 +460,8 @@ export type LogBatch = Message<"apache.flagon.userale.v1.LogBatch"> & {
  * Describes the message apache.flagon.userale.v1.LogBatch.
  * Use `create(LogBatchSchema)` to create a new message.
  */
-export const LogBatchSchema: GenMessage<LogBatch> = /*@__PURE__*/
+export const LogBatchSchema: GenMessage<LogBatch> =
+  /*@__PURE__*/
   messageDesc(file_apache_flagon_userale_v1_log, 7);
 
 /**
@@ -473,6 +494,6 @@ export enum LogType {
 /**
  * Describes the enum apache.flagon.userale.v1.LogType.
  */
-export const LogTypeSchema: GenEnum<LogType> = /*@__PURE__*/
+export const LogTypeSchema: GenEnum<LogType> =
+  /*@__PURE__*/
   enumDesc(file_apache_flagon_userale_v1_log, 0);
-
