@@ -38,6 +38,12 @@ import {
   startSessionReplay,
   stopSessionReplay,
 } from "@/replay";
+import {
+  toOtlpExportLogsServiceRequest,
+  toOtlpLogRecord,
+  toProtoLogBatch,
+  toProtoUserALELog,
+} from "@/exporters";
 
 import type { Settings, Logging } from "@/types";
 
@@ -258,6 +264,10 @@ if (typeof window !== "undefined") {
     stopSessionReplay,
     flushSessionReplay,
     getTargetRect,
+    toOtlpExportLogsServiceRequest,
+    toOtlpLogRecord,
+    toProtoLogBatch,
+    toProtoUserALELog,
     addCallbacks,
     removeCallbacks,
     packageLog,

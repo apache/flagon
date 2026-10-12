@@ -78,6 +78,15 @@ app.use(
   "/build",
   express.static(path.join(__dirname, "../../packages/flagon-userale/build")),
 );
+app.use("/js", express.static(path.join(__dirname, "../../../../site/js")));
+app.use(
+  "/assets",
+  express.static(path.join(__dirname, "../../../../site/assets")),
+);
+app.use(
+  "/semantic",
+  express.static(path.join(__dirname, "../../../../site/semantic")),
+);
 app.use("/", express.static(__dirname));
 
 app.get("/", (req, res) => res.sendFile("index.html", { root: __dirname }));
@@ -87,6 +96,28 @@ app.get("/ws", (req, res) =>
 app.get("/no-logging", (req, res) =>
   res.sendFile("no-logging.html", { root: __dirname }),
 );
+app.get("/site-demo", (req, res) => {
+  const demoPath = path.join(
+    __dirname,
+    "../../../../site/_includes/useralejsDemo.html",
+  );
+  const rawHtml = fs.readFileSync(demoPath, "utf8");
+  const renderedHtml = rawHtml.replace(
+    /\{%\s*if\s+include\.inverted\s*%\}[\s\S]*?\{%\s*endif\s*%\}/g,
+    "",
+  );
+  res.type("html").send(`<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Flagon Website Demo Test</title>
+    <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
+    <script src="/assets/jquery.min.js"></script>
+    <script src="/semantic/dist/semantic.min.js"></script>
+  </head>
+  <body>${renderedHtml}</body>
+</html>`);
+});
 
 app.post(["/", "/v1/logs"], (req, res) => {
   const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;

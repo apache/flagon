@@ -184,5 +184,31 @@ describe("attachHandlers", () => {
       Object.defineProperty(normalChangeEvt, "target", { value: textInput });
       expect(extractChangeDetails(normalChangeEvt)).toEqual({ value: "hello" });
     });
+
+    it("scrubs details to [REDACTED] on elements with data-userale-redact or data-userale-mask", () => {
+      const redactedInput = document.createElement("input");
+      redactedInput.type = "text";
+      redactedInput.setAttribute("data-userale-redact", "true");
+      redactedInput.value = "my-secret-token";
+
+      const keyEvt = new KeyboardEvent("keydown", { key: "m", code: "KeyM" });
+      Object.defineProperty(keyEvt, "target", { value: redactedInput });
+      expect(extractKeyboardDetails(keyEvt)).toEqual({
+        key: "[REDACTED]",
+        code: "[REDACTED]",
+        ctrl: false,
+        alt: false,
+        shift: false,
+        meta: false,
+      });
+
+      const inputEvt = new Event("input") as InputEvent;
+      Object.defineProperty(inputEvt, "target", { value: redactedInput });
+      expect(extractInputDetails(inputEvt)).toEqual({ value: "[REDACTED]" });
+
+      const changeEvt = new Event("change") as unknown as Events.ChangeEvent;
+      Object.defineProperty(changeEvt, "target", { value: redactedInput });
+      expect(extractChangeDetails(changeEvt)).toEqual({ value: "[REDACTED]" });
+    });
   });
 });

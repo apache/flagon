@@ -2,6 +2,7 @@
 title: Contributing
 component: flagon
 permalink: /docs/contributing/
+priority: 2
 ---
 
 First, thank you for contributing to **Apache Flagon**!
