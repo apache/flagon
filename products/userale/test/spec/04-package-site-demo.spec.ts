@@ -17,7 +17,7 @@
  * under the License.
  */
 
-import { expect, test } from "./fixtures/extension.fixture";
+import { expect, test } from "@playwright/test";
 
 test.describe("Website interactive UserALE 2.5 demo (site/_includes/useralejsDemo.html)", () => {
   test("captures interactions, switches wire formats (UserALE/OTLP/Protobuf), triggers rage-click & DOM mutation, and scrubs PII", async ({
@@ -76,7 +76,9 @@ test.describe("Website interactive UserALE 2.5 demo (site/_includes/useralejsDem
     const secret = "my-ultra-secret-token-999";
     await page.locator("#demo-redact-input").fill(secret);
     await page.locator("#demo-redact-input").dispatchEvent("change");
-    await expect(page.locator("#log-feed")).toContainText("[REDACTED]");
+    await expect(page.locator("#log-feed")).toContainText(
+      '"value": "[REDACTED]"',
+    );
     await expect(page.locator("#log-feed")).not.toContainText(secret);
   });
 });

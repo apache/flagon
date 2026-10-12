@@ -58,12 +58,41 @@ function isPasswordInput(target: EventTarget | null): boolean {
   );
 }
 
+function isRedactedElement(target: EventTarget | null): boolean {
+  if (
+    !target ||
+    typeof Element === "undefined" ||
+    !(target instanceof Element)
+  ) {
+    return false;
+  }
+  const redactSelector =
+    '[data-userale-redact]:not([data-userale-redact="false"]), [data-userale-mask]:not([data-userale-mask="false"]), .userale-redact, .userale-mask';
+  if (typeof target.closest === "function") {
+    return Boolean(target.closest(redactSelector));
+  }
+  return (
+    target.hasAttribute("data-userale-redact") ||
+    target.hasAttribute("data-userale-mask")
+  );
+}
+
 /** Maps a KeyboardEvent to an object containing useful infromation
  * @param {KeyboardEvent} e Event to extract data from
  */
 export function extractKeyboardDetails(e: KeyboardEvent) {
   if (isPasswordInput(e.target)) {
     return null;
+  }
+  if (isRedactedElement(e.target)) {
+    return {
+      key: "[REDACTED]",
+      code: "[REDACTED]",
+      ctrl: e.ctrlKey,
+      alt: e.altKey,
+      shift: e.shiftKey,
+      meta: e.metaKey,
+    };
   }
   return {
     key: e.key,
@@ -83,6 +112,11 @@ export function extractInputDetails(e: InputEvent) {
   if (isPasswordInput(e.target)) {
     return null;
   }
+  if (isRedactedElement(e.target)) {
+    return {
+      value: "[REDACTED]",
+    };
+  }
   return {
     value: (e.target as HTMLInputElement | null)?.value,
   };
@@ -95,6 +129,11 @@ export function extractInputDetails(e: InputEvent) {
 export function extractChangeDetails(e: Events.ChangeEvent) {
   if (isPasswordInput(e.target)) {
     return null;
+  }
+  if (isRedactedElement(e.target)) {
+    return {
+      value: "[REDACTED]",
+    };
   }
   return {
     value: e.target.value,
