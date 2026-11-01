@@ -25,7 +25,7 @@
     "flagon-userale": "workspace:flagon-userale",
     "jsonschema": "^1.4.1",
     "nodemon": "^3.0.2",
-    "pnpm": "^10.0.0",
+    "pnpm": "^12.16.1",
     "prettier": "^3.9.5",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.63.0",
