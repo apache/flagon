@@ -37,8 +37,10 @@
 │   │       └── otel-demo/                 # Full-stack OTel Collector + Grafana + Loki + Tempo demo
 │   └── distill/                           # Python behavioral analytics & graph toolkit
 ├── examples/
-│   ├── opensearch/                        # 100% Apache-2.0 OpenSearch + OTel Collector stack
 │   ├── apache-lakehouse/                  # All-Apache Kafka + Iceberg + DataFusion + Distill + Superset
+│   ├── doris/                             # 100% Apache-2.0 Apache Doris + OTel Collector real-time OLAP
+│   ├── skywalking/                        # 100% Apache-2.0 Apache SkyWalking + BanyanDB observability
+│   ├── opensearch/                        # 100% Apache-2.0 OpenSearch + OTel Collector stack
 │   └── elk/                               # Docker Compose & Kubernetes ELK stack examples
 └── site/                                  # Jekyll source for https://flagon.apache.org/
 ```
@@ -94,7 +96,7 @@ docker compose up -d
 # Open http://localhost:8080 (demo app) and http://localhost:3000 (Grafana)
 ```
 
-See [`examples/README.md`](./examples/README.md) for the **100% Apache-2.0 OpenSearch stack** (`examples/opensearch`) and the **All-Apache Behavioral Lakehouse** (`examples/apache-lakehouse`: Kafka + Iceberg + DataFusion + Distill + Superset).
+See [`examples/README.md`](./examples/README.md) for the **All-Apache Behavioral Lakehouse** (`examples/apache-lakehouse`: Kafka + Iceberg + DataFusion + Distill + Superset), **Apache Doris Real-Time OLAP** (`examples/doris`), **Apache SkyWalking & BanyanDB** (`examples/skywalking`), and the **OpenSearch stack** (`examples/opensearch`).
 
 ### Build & Test Distill (Python)
 ```bash
