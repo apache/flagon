@@ -21,6 +21,11 @@ import browser from "webextension-polyfill"
 
 import { sendToBackground } from "@plasmohq/messaging"
 
+import {
+  DEFAULT_ALLOWLIST_PATTERN,
+  validateAllowListPattern
+} from "~/utils/security"
+
 export const STORAGE_KEYS = {
   accessToken: "accessToken",
   apiKey: "apiKey",
@@ -49,7 +54,7 @@ export const DEFAULT_OPTIONS: StoredOptions = {
   accessToken: "",
   apiKey: "",
   authMode: "none",
-  allowList: "https://flagon.apache.org/",
+  allowList: DEFAULT_ALLOWLIST_PATTERN,
   exporterType: "http-json",
   filterEventTypes: "",
   filterLogTypes: "",
@@ -78,7 +83,12 @@ export async function getStoredOptions(): Promise<StoredOptions> {
 export async function setStoredOptions(values: Partial<StoredOptions>) {
   // Validate the new options
   try {
-    if (values.allowList !== undefined) new RegExp(values.allowList)
+    if (values.allowList !== undefined) {
+      const check = validateAllowListPattern(values.allowList)
+      if (!check.valid) {
+        return new Error(check.reason)
+      }
+    }
     if (values.loggingUrl !== undefined) new URL(values.loggingUrl)
   } catch (error) {
     return error

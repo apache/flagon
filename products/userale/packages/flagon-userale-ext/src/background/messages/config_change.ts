@@ -21,13 +21,16 @@ import * as userale from "flagon-userale"
 
 import type { PlasmoMessaging } from "@plasmohq/messaging"
 
+import { compileAllowListRegExp } from "~utils/security"
 import {
   DEFAULT_OPTIONS,
   getStoredOptions,
   type StoredOptions
 } from "~utils/storage"
 
-let allowListRegExp: RegExp = new RegExp(DEFAULT_OPTIONS.allowList)
+let allowListRegExp: RegExp | null = compileAllowListRegExp(
+  DEFAULT_OPTIONS.allowList
+)
 let excludedEventTypes = new Set<string>()
 let excludedLogTypes = new Set<string>()
 
@@ -52,7 +55,7 @@ export function setOptions(options: StoredOptions) {
     url: options.loggingUrl,
     exporterType: options.exporterType ?? "http-json"
   })
-  allowListRegExp = new RegExp(options.allowList)
+  allowListRegExp = compileAllowListRegExp(options.allowList)
   excludedEventTypes = parseCsvSet(options.filterEventTypes)
   excludedLogTypes = parseCsvSet(options.filterLogTypes)
 

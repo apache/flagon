@@ -31,7 +31,6 @@ const logPort = getPort("log")
 
 userale.addCallbacks({
   rerouteLog(log) {
-    console.log(log)
     logPort.postMessage({ body: log })
     return false
   }
