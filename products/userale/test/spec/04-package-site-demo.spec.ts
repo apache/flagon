@@ -48,6 +48,16 @@ test.describe("Website interactive UserALE 2.5 demo (site/_includes/useralejsDem
     });
     expect(hasHelpers).toBe(true);
 
+    // Wait for UserALE autostart (100ms setup timer) to attach event handlers
+    await page.waitForFunction(() => {
+      const u = (
+        window as unknown as {
+          userale?: { options?: () => { on?: boolean } };
+        }
+      ).userale;
+      return u?.options?.().on === true;
+    });
+
     // 2. Click a standard interaction button and verify a log card renders
     await page.locator("#demo-blue-button").click();
     await expect(page.locator("#log-feed")).toContainText(

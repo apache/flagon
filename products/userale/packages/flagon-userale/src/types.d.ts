@@ -14,10 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type {
-  ExporterType as ExporterMode,
-  LogExporter,
-} from "@/exporters/types";
+import type { OtelLogsApiLogger } from "./exporters/otel-sdk";
+import type { LogExporter } from "./exporters/types";
 
 export declare namespace Settings {
   type Version = string | null;
@@ -30,17 +28,67 @@ export declare namespace Settings {
   type CustomIndex = string | null;
   type HeaderObject = { [key: string]: string };
   type Headers = HeaderObject | null;
-  type ExporterType = ExporterMode;
+  type ExporterType =
+    | "http-json"
+    | "v2-json"
+    | "proto-json"
+    | "otlp"
+    | "otlp-json"
+    | "otel-sdk"
+    | "websocket"
+    | "custom";
   type CustomExporter = LogExporter | null;
   type OtlpEndpoint = string | null;
   type TraceContextCallback =
     (() => { traceId?: string; spanId?: string } | null) | null;
+  type DomSelectorMode = "full" | "structural" | "none";
+  type PrivacyPreset = "default" | "strict";
+
+  export interface PrivacyOptions {
+    preset?: PrivacyPreset;
+    allowlistSelector?: string | null;
+    capturePageUrl?: boolean;
+    capturePageTitle?: boolean;
+    capturePageReferrer?: boolean;
+    captureHost?: boolean;
+    captureUserAgent?: boolean;
+    captureScreenRes?: boolean;
+    captureLocation?: boolean;
+    captureTargetRect?: boolean;
+    captureDetails?: boolean;
+    captureMicroTime?: boolean;
+    attachTraceContext?: boolean;
+    ignoreUntrustedEvents?: boolean;
+    domSelectorMode?: DomSelectorMode;
+    allowedAttributes?: string[] | null;
+  }
+
+  export interface ResolvedPrivacyOptions {
+    preset: PrivacyPreset;
+    allowlistSelector: string | null;
+    capturePageUrl: boolean;
+    capturePageTitle: boolean;
+    capturePageReferrer: boolean;
+    captureHost: boolean;
+    captureUserAgent: boolean;
+    captureScreenRes: boolean;
+    captureLocation: boolean;
+    captureTargetRect: boolean;
+    captureDetails: boolean;
+    captureMicroTime: boolean;
+    attachTraceContext: boolean;
+    ignoreUntrustedEvents: boolean;
+    domSelectorMode: DomSelectorMode;
+    allowedAttributes: string[] | null;
+  }
+
   type ConfigValueTypes =
     | string
     | number
     | boolean
     | null
     | undefined
+    | string[]
     | Version
     | UserId
     | SessionId
@@ -53,6 +101,9 @@ export declare namespace Settings {
     | ExporterType
     | CustomExporter
     | OtlpEndpoint
+    | OtelLogsApiLogger
+    | PrivacyOptions
+    | ResolvedPrivacyOptions
     | TraceContextCallback;
 
   type TimeFunction = (() => number) | ((ts: number) => number);
@@ -67,6 +118,7 @@ export declare namespace Settings {
     authHeader: AuthHeader;
     browserSessionId: SessionId;
     custIndex: CustomIndex;
+    events?: string[] | null;
     exporter?: CustomExporter;
     exporterFormat?: ExporterType;
     exporterType?: ExporterType;
@@ -74,9 +126,13 @@ export declare namespace Settings {
     httpSessionId: SessionId;
     logCountThreshold: number;
     logDetails: boolean;
+    maxQueueSize?: number;
     observeMutations?: boolean;
     on?: boolean;
+    otelLogger?: OtelLogsApiLogger | null;
     otlpEndpoint?: OtlpEndpoint;
+    persistSession?: boolean;
+    privacy?: PrivacyOptions | null;
     resolution: number;
     sessionId: SessionId;
     time: TimeFunction;
@@ -93,7 +149,7 @@ export declare namespace Settings {
   }
 
   export interface IConfiguration extends Config {
-    getInstance(): Configuration;
+    getInstance(): IConfiguration;
     configure(newConfig: Config): void;
   }
 }
@@ -113,15 +169,15 @@ export declare namespace Logging {
   export type Log = JSONObject; // TODO: Intersect this with the default log objects (raw & interval)
   export type CustomLog = JSONObject;
 
-  export type DynamicDetailFunction<E extends Event = Event> = (
-    e: E,
-  ) => JSONObject | null;
+  export type DynamicDetailFunction<E extends Event = Event> = {
+    bivarianceHack(e: E): JSONObject | null;
+  }["bivarianceHack"];
   export type StaticDetailFunction = () => JSONObject | null;
 }
 
 export declare namespace Events {
   type FormElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
-  type ChangeEvent = Event<FormElement>;
+  type ChangeEvent = Event & { readonly target: FormElement };
   export type RawEvents =
     | "dblclick"
     | "mouseup"

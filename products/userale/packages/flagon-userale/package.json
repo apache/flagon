@@ -12,14 +12,22 @@
     "LICENSE",
     "NOTICE"
   ],
+  "sideEffects": [
+    "./build/main.mjs",
+    "./build/main.global.js"
+  ],
   "exports": {
     ".": {
       "types": "./build/main.d.ts",
       "import": "./build/main.mjs"
+    },
+    "./manual": {
+      "types": "./build/manual.d.ts",
+      "import": "./build/manual.mjs"
     }
   },
   "scripts": {
-    "build": "rm -f tsconfig.tsbuildinfo && tsup --onSuccess 'tsc --emitDeclarationOnly --declaration && cp src/types.d.ts build/types.d.ts'",
+    "build": "rm -rf build tsconfig.tsbuildinfo && tsup && node -e \"const fs=require('fs'),h='/*! Licensed to the Apache Software Foundation (ASF) under one or more\\n * contributor license agreements. See the NOTICE file distributed with\\n * this work for additional information regarding copyright ownership.\\n * The ASF licenses this file to You under the Apache License, Version 2.0\\n * (the \\\"License\\\"); you may not use this file except in compliance with\\n * the License. You may obtain a copy of the License at\\n *\\n *   http://www.apache.org/licenses/LICENSE-2.0\\n *\\n * Unless required by applicable law or agreed to in writing, software\\n * distributed under the License is distributed on an \\\"AS IS\\\" BASIS,\\n * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\\n * See the License for the specific language governing permissions and\\n * limitations under the License.\\n */\\n';for(const [src,dst] of [['build/main.d.mts','build/main.d.ts'],['build/manual.d.mts','build/manual.d.ts']]){if(fs.existsSync(src))fs.renameSync(src,dst);if(fs.existsSync(dst)){const c=fs.readFileSync(dst,'utf8');if(!c.includes('Apache Software Foundation'))fs.writeFileSync(dst,h+c);}}\"",
     "clean": "rm -rf ./build tsconfig.tsbuildinfo",
     "test": "jest -c ./test/jest.config.ts",
     "commit": "cz"

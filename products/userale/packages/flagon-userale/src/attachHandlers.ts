@@ -15,15 +15,20 @@
  * limitations under the License.
  */
 
-import { packageLog, packageIntervalLog } from "@/packageLogs";
+import {
+  packageLog,
+  packageIntervalLog,
+  type PackagerController,
+} from "@/packageLogs";
 import { Events, Logging, Settings } from "@/types";
 import { Configuration } from "@/configure";
+import {
+  isElementNode,
+  isElementRedacted,
+  safeGetAttribute,
+  safeGetLocalName,
+} from "@/domUtils";
 
-//@todo: Investigate drag events and their behavior
-let events: Events.EventDetailsMap<Events.AllowedEvents>;
-let bufferBools: Events.EventBoolMap<Events.BufferedEvents>;
-let bufferedEvents: Events.EventDetailsMap<Events.BufferedEvents>;
-let refreshEvents: Events.EventDetailsMap<Events.RefreshEvents>;
 const intervalEvents: Array<Events.IntervalEvents> = [
   "click",
   "focus",
@@ -34,6 +39,21 @@ const intervalEvents: Array<Events.IntervalEvents> = [
   "submit",
 ];
 const windowEvents: Array<Events.WindowEvents> = ["load", "blur", "focus"];
+
+function isPasswordInput(target: EventTarget | null): boolean {
+  if (!isElementNode(target)) {
+    return false;
+  }
+  if (safeGetLocalName(target).toLowerCase() !== "input") {
+    return false;
+  }
+  const typeAttr = safeGetAttribute(target, "type");
+  return typeof typeAttr === "string" && typeAttr.toLowerCase() === "password";
+}
+
+function isRedactedElement(target: EventTarget | null): boolean {
+  return isElementRedacted(target);
+}
 
 /**
  * Maps a MouseEvent to an object containing useful information.
@@ -46,35 +66,7 @@ export function extractMouseDetails(e: MouseEvent) {
     alt: e.altKey,
     shift: e.shiftKey,
     meta: e.metaKey,
-    //    'text' : e.target.innerHTML
   };
-}
-
-function isPasswordInput(target: EventTarget | null): boolean {
-  return (
-    typeof HTMLInputElement !== "undefined" &&
-    target instanceof HTMLInputElement &&
-    target.type?.toLowerCase() === "password"
-  );
-}
-
-function isRedactedElement(target: EventTarget | null): boolean {
-  if (
-    !target ||
-    typeof Element === "undefined" ||
-    !(target instanceof Element)
-  ) {
-    return false;
-  }
-  const redactSelector =
-    '[data-userale-redact]:not([data-userale-redact="false"]), [data-userale-mask]:not([data-userale-mask="false"]), .userale-redact, .userale-mask';
-  if (typeof target.closest === "function") {
-    return Boolean(target.closest(redactSelector));
-  }
-  return (
-    target.hasAttribute("data-userale-redact") ||
-    target.hasAttribute("data-userale-mask")
-  );
 }
 
 /** Maps a KeyboardEvent to an object containing useful infromation
@@ -136,7 +128,7 @@ export function extractChangeDetails(e: Events.ChangeEvent) {
     };
   }
   return {
-    value: e.target.value,
+    value: (e.target as Events.FormElement | null)?.value,
   };
 }
 
@@ -172,16 +164,8 @@ export function extractResizeDetails() {
   };
 }
 
-/**
- * Defines the way information is extracted from various events.
- * Also defines which events we will listen to.
- * @param  {Settings.Config} config Configuration object to read from.
- */
-export function defineDetails(config: Settings.DefaultConfig): void {
-  // Events list
-  // Keys are event types
-  // Values are functions that return details object if applicable
-  events = {
+function buildDetailMaps(config: Settings.DefaultConfig) {
+  const events: Events.EventDetailsMap<Events.AllowedEvents> = {
     click: extractMouseDetails,
     dblclick: extractMouseDetails,
     mousedown: extractMouseDetails,
@@ -197,32 +181,49 @@ export function defineDetails(config: Settings.DefaultConfig): void {
     keydown: config.logDetails ? extractKeyboardDetails : null,
     mouseover: null,
   };
-
-  bufferBools = {};
-  bufferedEvents = {
+  const bufferedEvents: Events.EventDetailsMap<Events.BufferedEvents> = {
     wheel: extractWheelDetails,
     scroll: extractScrollDetails,
     resize: extractResizeDetails,
   };
-
-  refreshEvents = {
+  const refreshEvents: Events.EventDetailsMap<Events.RefreshEvents> = {
     submit: null,
   };
+  return { events, bufferedEvents, refreshEvents };
 }
 
 /**
  * Defines the way information is extracted from various events.
- * Also defines which events we will listen to.
+ * @param  {Settings.Config} config Configuration object to read from.
+ */
+export function defineDetails(config: Settings.DefaultConfig): void {
+  buildDetailMaps(config);
+}
+
+/**
+ * Defines the way information is extracted from various events.
  * @param  {Settings.Config} options UserALE Configuration object to read from.
- * @param   {Events.AllowedEvents}    type of html event (e.g., 'click', 'mouseover', etc.), such as passed to addEventListener methods.
+ * @param  {Events.AllowedEvents} type Event type name.
  */
 export function defineCustomDetails(
   options: Settings.DefaultConfig,
   type: Events.AllowedEvents,
 ): Logging.DynamicDetailFunction | null | undefined {
-  // Events list
-  // Keys are event types
-  // Values are functions that return details object if applicable
+  if (
+    options instanceof Configuration &&
+    (options.isPrivacyLocked() || !options.getResolvedPrivacy().captureDetails)
+  ) {
+    return null;
+  }
+  const rawPrivacy = (options as Partial<Settings.Config> | undefined)?.privacy;
+  if (
+    rawPrivacy &&
+    typeof rawPrivacy === "object" &&
+    (rawPrivacy.captureDetails === false || rawPrivacy.preset === "strict")
+  ) {
+    return null;
+  }
+
   const eventType: Events.EventDetailsMap<Events.AllowedEvents> = {
     click: extractMouseDetails,
     dblclick: extractMouseDetails,
@@ -247,81 +248,173 @@ export function defineCustomDetails(
   return eventType[type];
 }
 
+export interface HandlerManager {
+  attachHandlers: (config: Configuration) => boolean;
+  detachHandlers: () => void;
+}
+
+/**
+ * Creates an encapsulated DOM/window event handler manager bound to a packager.
+ */
+export function createHandlerManager(
+  packager: Pick<PackagerController, "packageLog" | "packageIntervalLog">,
+): HandlerManager {
+  let events: Events.EventDetailsMap<Events.AllowedEvents> = {};
+  let bufferBools: Events.EventBoolMap<Events.BufferedEvents> = {};
+  let bufferedEvents: Events.EventDetailsMap<Events.BufferedEvents> = {};
+  let refreshEvents: Events.EventDetailsMap<Events.RefreshEvents> = {};
+  let handlerAbortController: AbortController | null = null;
+  const debounceTimers = new Set<ReturnType<typeof setTimeout>>();
+
+  const detachHandlers = (): void => {
+    if (handlerAbortController) {
+      handlerAbortController.abort();
+      handlerAbortController = null;
+    }
+    for (const timerId of debounceTimers) {
+      clearTimeout(timerId);
+    }
+    debounceTimers.clear();
+  };
+
+  const attachHandlers = (config: Configuration): boolean => {
+    try {
+      detachHandlers();
+      const maps = buildDetailMaps(config);
+      events = maps.events;
+      bufferedEvents = maps.bufferedEvents;
+      refreshEvents = maps.refreshEvents;
+      bufferBools = {};
+
+      handlerAbortController =
+        typeof AbortController !== "undefined" ? new AbortController() : null;
+      const signal = handlerAbortController?.signal;
+
+      const configuredEvents = Array.isArray(config.events)
+        ? new Set(config.events)
+        : null;
+
+      const docEventsToAttach: Array<string> = Object.keys(events).filter(
+        (ev) => !configuredEvents || configuredEvents.has(ev),
+      );
+      if (configuredEvents) {
+        const knownBuckets = new Set<string>([
+          ...Object.keys(events),
+          ...Object.keys(bufferedEvents),
+          ...Object.keys(refreshEvents),
+          ...windowEvents,
+        ]);
+        for (const ev of configuredEvents) {
+          if (!knownBuckets.has(ev)) {
+            docEventsToAttach.push(ev);
+          }
+        }
+      }
+
+      docEventsToAttach.forEach(function (ev) {
+        document.addEventListener(
+          ev,
+          function (e) {
+            packager.packageLog(
+              e,
+              defineCustomDetails(config, ev as Events.AllowedEvents),
+            );
+          },
+          signal ? { capture: true, signal } : true,
+        );
+      });
+
+      intervalEvents
+        .filter((ev) => !configuredEvents || configuredEvents.has(ev))
+        .forEach(function (ev) {
+          document.addEventListener(
+            ev,
+            function (e) {
+              packager.packageIntervalLog(e);
+            },
+            signal ? { capture: true, signal } : true,
+          );
+        });
+
+      (Object.keys(bufferedEvents) as Events.BufferedEvents[])
+        .filter((ev) => !configuredEvents || configuredEvents.has(ev))
+        .forEach(function (ev) {
+          bufferBools[ev] = true;
+          const passive = ev === "wheel" || ev === "scroll";
+
+          self.addEventListener(
+            ev,
+            function (e) {
+              if (bufferBools[ev]) {
+                bufferBools[ev] = false;
+                packager.packageLog(e, defineCustomDetails(config, ev));
+                const timerId = setTimeout(function () {
+                  debounceTimers.delete(timerId);
+                  bufferBools[ev] = true;
+                }, config.resolution);
+                debounceTimers.add(timerId);
+              }
+            },
+            signal
+              ? { capture: true, passive, signal }
+              : passive
+                ? { capture: true, passive: true }
+                : true,
+          );
+        });
+
+      (Object.keys(refreshEvents) as Events.RefreshEvents[])
+        .filter((ev) => !configuredEvents || configuredEvents.has(ev))
+        .forEach(function (ev) {
+          document.addEventListener(
+            ev,
+            function (e) {
+              packager.packageLog(e, defineCustomDetails(config, ev));
+            },
+            signal ? { capture: true, signal } : true,
+          );
+        });
+
+      windowEvents
+        .filter((ev) => !configuredEvents || configuredEvents.has(ev))
+        .forEach(function (ev) {
+          self.addEventListener(
+            ev,
+            function (e) {
+              packager.packageLog(e, function () {
+                return { window: true };
+              });
+            },
+            signal ? { capture: true, signal } : true,
+          );
+        });
+
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  return {
+    attachHandlers,
+    detachHandlers,
+  };
+}
+
+const defaultHandlers = createHandlerManager({
+  packageLog: (e, detailFcn) => packageLog(e, detailFcn),
+  packageIntervalLog: (e) => packageIntervalLog(e),
+});
+
+export function detachHandlers(): void {
+  defaultHandlers.detachHandlers();
+}
+
 /**
  * Hooks the event handlers for each event type of interest.
  * @param  {Configuration} config Configuration singleton to use.
  * @return {boolean}        Whether the operation succeeded
  */
 export function attachHandlers(config: Configuration): boolean {
-  try {
-    defineDetails(config);
-
-    (Object.keys(events) as Events.AllowedEvents[]).forEach(function (ev) {
-      document.addEventListener(
-        ev,
-        function (e) {
-          packageLog(e, events[ev]);
-        },
-        true,
-      );
-    });
-
-    intervalEvents.forEach(function (ev) {
-      document.addEventListener(
-        ev,
-        function (e) {
-          packageIntervalLog(e);
-        },
-        true,
-      );
-    });
-
-    (Object.keys(bufferedEvents) as Events.BufferedEvents[]).forEach(
-      function (ev) {
-        bufferBools[ev] = true;
-
-        self.addEventListener(
-          ev,
-          function (e) {
-            if (bufferBools[ev]) {
-              bufferBools[ev] = false;
-              packageLog(e, bufferedEvents[ev]);
-              setTimeout(function () {
-                bufferBools[ev] = true;
-              }, config.resolution);
-            }
-          },
-          true,
-        );
-      },
-    );
-
-    (Object.keys(refreshEvents) as Events.RefreshEvents[]).forEach(
-      function (ev) {
-        document.addEventListener(
-          ev,
-          function (e) {
-            packageLog(e, events[ev]);
-          },
-          true,
-        );
-      },
-    );
-
-    windowEvents.forEach(function (ev) {
-      self.addEventListener(
-        ev,
-        function (e) {
-          packageLog(e, function () {
-            return { window: true };
-          });
-        },
-        true,
-      );
-    });
-
-    return true;
-  } catch {
-    return false;
-  }
+  return defaultHandlers.attachHandlers(config);
 }

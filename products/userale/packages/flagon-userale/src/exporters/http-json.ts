@@ -22,16 +22,37 @@ import type { ExportOptions, ExportResult, LogExporter } from "./types";
 
 const MAX_KEEPALIVE_BYTES = 48 * 1024;
 
+export function utf8ByteLength(str: string): number {
+  if (typeof TextEncoder !== "undefined") {
+    return new TextEncoder().encode(str).byteLength;
+  }
+  let bytes = 0;
+  for (let i = 0; i < str.length; i++) {
+    const code = str.charCodeAt(i);
+    if (code < 0x80) {
+      bytes += 1;
+    } else if (code < 0x800) {
+      bytes += 2;
+    } else if (code >= 0xd800 && code <= 0xdbff) {
+      i++;
+      bytes += 4;
+    } else {
+      bytes += 3;
+    }
+  }
+  return bytes;
+}
+
 /**
- * Splits a log array into sub-batches whose serialized JSON size stays under
- * MAX_KEEPALIVE_BYTES so browser pagehide/keepalive requests do not reject.
+ * Splits a log array into sub-batches whose serialized UTF-8 byte size stays
+ * under MAX_KEEPALIVE_BYTES so browser pagehide/keepalive requests do not reject.
  */
 export function chunkLogsForKeepalive<T>(
   logs: Array<T>,
   serialize: (batch: Array<T>) => string,
 ): Array<string> {
   const full = serialize(logs);
-  if (full.length <= MAX_KEEPALIVE_BYTES || logs.length <= 1) {
+  if (utf8ByteLength(full) <= MAX_KEEPALIVE_BYTES || logs.length <= 1) {
     return [full];
   }
   const mid = Math.ceil(logs.length / 2);
@@ -70,16 +91,14 @@ export class HttpJsonExporter implements LogExporter {
         this.serialize(batch),
       );
       try {
-        await Promise.all(
-          payloads.map((body) =>
-            fetch(endpoint, {
-              keepalive: true,
-              method: "POST",
-              headers,
-              body,
-            }),
-          ),
-        );
+        for (const body of payloads) {
+          await fetch(endpoint, {
+            keepalive: utf8ByteLength(body) <= MAX_KEEPALIVE_BYTES,
+            method: "POST",
+            headers,
+            body,
+          });
+        }
         return { success: true };
       } catch (err) {
         const error = err instanceof Error ? err : new Error(String(err));
@@ -89,6 +108,8 @@ export class HttpJsonExporter implements LogExporter {
     }
 
     const body = this.serialize(logs);
+    const explicitKeepalive =
+      options?.keepalive === false ? { keepalive: false } : {};
 
     async function attemptSend(remainingRetries: number): Promise<void> {
       try {
@@ -96,6 +117,7 @@ export class HttpJsonExporter implements LogExporter {
           method: "POST",
           headers,
           body,
+          ...explicitKeepalive,
         });
 
         if (!response.ok) {
@@ -112,8 +134,14 @@ export class HttpJsonExporter implements LogExporter {
       }
     }
 
-    await attemptSend(retries);
-    return { success: true };
+    try {
+      await attemptSend(retries);
+      return { success: true };
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error(String(err));
+      console.error(error);
+      return { success: false, error };
+    }
   }
 
   public async flush(): Promise<void> {

@@ -15,79 +15,99 @@
  * limitations under the License.
  */
 
-import { defineCustomDetails } from "@/attachHandlers";
-import { registerAuthCallback, registerHeadersCallback } from "@/utils";
-import {
-  addCallbacks,
-  removeCallbacks,
-  packageLog,
-  packageCustomLog,
-  getSelector,
-  buildPath,
-  detectBrowser,
-  initPackager,
-} from "@/packageLogs";
+import { buildPath, detectBrowser, getSelector } from "@/packageLogs";
 import { version as userAleVersion } from "../package.json";
-import { Configuration } from "@/configure";
-import { attachHandlers } from "@/attachHandlers";
-import { initSender, registerExporter } from "@/sendLogs";
+import { getTargetRect, RageClickDetector, ReplayRingBuffer } from "@/replay";
 import {
-  flushSessionReplay,
-  getActiveReplayRingBuffer,
-  getTargetRect,
-  startSessionReplay,
-  stopSessionReplay,
-} from "@/replay";
-import {
+  type LogExporter,
   toOtlpExportLogsServiceRequest,
   toOtlpLogRecord,
   toProtoLogBatch,
   toProtoUserALELog,
 } from "@/exporters";
+import { createRuntime, createUserAle, type UserAleInstance } from "@/runtime";
 
-import type { Settings, Logging } from "@/types";
+import type { Callbacks, Events, Logging, Settings } from "@/types";
+import type { ReplayEnvelope, SessionReplayOptions } from "@/replay";
 
-const config = Configuration.getInstance();
-const logs: Array<Logging.Log> = [];
-
-const startLoadTimestamp = Date.now();
-let endLoadTimestamp: number | undefined;
-if (
-  typeof self !== "undefined" &&
-  typeof self.addEventListener === "function"
-) {
-  self.addEventListener("load", function () {
-    endLoadTimestamp = Date.now();
-  });
-}
+const runtime = createRuntime(true);
 
 export let started = false;
-export { defineCustomDetails as details } from "@/attachHandlers";
+runtime.notifyOnStartedChange((val) => {
+  started = val;
+});
+
+if (runtime.config.autostart) {
+  runtime.scheduleSetup();
+}
+
+export { createUserAle, type UserAleInstance };
+
+export function details(
+  opts: Settings.DefaultConfig,
+  type: Events.AllowedEvents,
+): Logging.DynamicDetailFunction | null | undefined {
+  return runtime.details(opts, type);
+}
+
 export {
   registerAuthCallback,
   registerHeadersCallback,
   resetAuthCallback,
   resetHeadersCallback,
 } from "@/utils";
-export {
-  addCallbacks as addCallbacks,
-  removeCallbacks as removeCallbacks,
-  packageLog as packageLog,
-  packageCustomLog as packageCustomLog,
-  getSelector as getSelector,
-  buildPath as buildPath,
-  detectBrowser as detectBrowser,
-} from "@/packageLogs";
-export { registerExporter } from "@/sendLogs";
-export {
-  flushSessionReplay,
-  getActiveReplayRingBuffer,
-  getTargetRect,
-  RageClickDetector,
-  ReplayRingBuffer,
-  startSessionReplay,
-  stopSessionReplay,
-} from "@/replay";
+
+export function addCallbacks(
+  ...newCallbacks: Record<symbol | string, CallableFunction>[]
+): Callbacks.CallbackMap {
+  return runtime.addCallbacks(...newCallbacks);
+}
+
+export function removeCallbacks(targetKeys: string[]): void {
+  runtime.removeCallbacks(targetKeys);
+}
+
+export function packageLog(
+  e: Event,
+  detailFcn?: Logging.DynamicDetailFunction | null,
+): boolean {
+  return runtime.packageLog(e, detailFcn);
+}
+
+export function packageCustomLog(
+  customLog: Logging.CustomLog,
+  detailFcn: Logging.DynamicDetailFunction | Logging.StaticDetailFunction,
+  userAction: boolean,
+): boolean {
+  return runtime.packageCustomLog(customLog, detailFcn, userAction);
+}
+
+export { buildPath, detectBrowser, getSelector };
+
+export function registerExporter(exporter: LogExporter | null): boolean {
+  return runtime.registerExporter(exporter);
+}
+
+export function startSessionReplay(options?: SessionReplayOptions): () => void {
+  return runtime.startSessionReplay(options);
+}
+
+export function stopSessionReplay(): void {
+  runtime.stopSessionReplay();
+}
+
+export function flushSessionReplay(
+  trigger?: string,
+): Promise<ReplayEnvelope | null> {
+  return runtime.flushSessionReplay(trigger);
+}
+
+export function getActiveReplayRingBuffer(): ReplayRingBuffer | null {
+  return runtime.getActiveReplayRingBuffer();
+}
+
+export { getTargetRect, RageClickDetector, ReplayRingBuffer };
+
 export type {
   ReplayEnvelope,
   ReplayFrame,
@@ -125,61 +145,6 @@ export type {
 } from "@/exporters";
 export type { Logging, Settings } from "@/types";
 
-config.update({
-  useraleVersion: userAleVersion,
-});
-initPackager(logs, config);
-if (config.autostart) {
-  setup(config);
-}
-
-/**
- * Hooks the global event listener, and starts up the
- * logging interval.
- * @param  {Configuration} config Configuration settings for the logger
- */
-function setup(config: Configuration) {
-  if (!started) {
-    setTimeout(function () {
-      let state;
-      try {
-        state = document.readyState;
-      } catch (error) {
-        // Assume there is no DOM and this is a web worker context
-        state = "complete";
-      }
-
-      if (
-        config.autostart &&
-        (state === "interactive" || state === "complete")
-      ) {
-        attachHandlers(config);
-        initSender(logs, config);
-        started = config.on = true;
-        if (config.observeMutations && !getActiveReplayRingBuffer()) {
-          startSessionReplay({ observeMutations: true }, config);
-        }
-        if (typeof window !== "undefined" && typeof document !== "undefined") {
-          const loadDuration = Math.max(
-            1,
-            (endLoadTimestamp ?? Date.now()) - startLoadTimestamp,
-          );
-          packageCustomLog(
-            {
-              type: "load",
-              details: { pageLoadTime: loadDuration },
-            },
-            () => ({}),
-            false,
-          );
-        }
-      } else {
-        setup(config);
-      }
-    }, 100);
-  }
-}
-
 // Export the Userale API
 export const version = userAleVersion;
 
@@ -188,27 +153,28 @@ export const version = userAleVersion;
  * autostart configuration option is set to false.
  */
 export function start(): void {
-  if (!started || config.autostart === false) {
-    const wasStarted = started;
-    started = config.on = true;
-    config.update({ autostart: true });
-    if (!wasStarted) {
-      attachHandlers(config);
-      initSender(logs, config);
-      if (config.observeMutations && !getActiveReplayRingBuffer()) {
-        startSessionReplay({ observeMutations: true }, config);
-      }
-    }
-  }
+  runtime.start();
 }
 
 /**
  * Halts the logging process. Logs will no longer be sent.
  */
 export function stop(): void {
-  started = config.on = false;
-  config.update({ autostart: false });
-  stopSessionReplay();
+  runtime.stop();
+}
+
+/**
+ * Flushes all queued logs through the active exporter and resolves on completion.
+ */
+export function flush(): Promise<void> {
+  return runtime.flush();
+}
+
+/**
+ * Clears queued logs and resets tracked interval state.
+ */
+export function reset(): void {
+  runtime.reset();
 }
 
 /**
@@ -217,21 +183,8 @@ export function stop(): void {
  * @param  {Partial<Settings.Config>} newConfig The configuration options to use.
  * @return {Settings.Config}           Returns the updated configuration.
  */
-export function options(
-  newConfig: Partial<Settings.Config> | undefined,
-): Settings.Config {
-  if (newConfig) {
-    config.update(newConfig);
-    if (started && newConfig.observeMutations !== undefined) {
-      if (newConfig.observeMutations && !getActiveReplayRingBuffer()) {
-        startSessionReplay({ observeMutations: true }, config);
-      } else if (!newConfig.observeMutations && getActiveReplayRingBuffer()) {
-        stopSessionReplay();
-      }
-    }
-  }
-
-  return config;
+export function options(newConfig?: Partial<Settings.Config>): Settings.Config {
+  return runtime.options(newConfig);
 }
 
 /**
@@ -239,26 +192,41 @@ export function options(
  * @param  {Logging.CustomLog} customLog The log to append.
  * @return {boolean}          Whether the operation succeeded.
  */
-export function log(customLog: Logging.CustomLog | undefined) {
-  if (customLog) {
-    logs.push(customLog);
-    return true;
-  } else {
-    return false;
-  }
+export function log(customLog?: Logging.CustomLog | null): boolean {
+  return runtime.log(customLog);
+}
+
+/**
+ * Locks privacy settings on the active runtime to prevent post-init tampering.
+ */
+export function lockPrivacy(): void {
+  runtime.lockPrivacy();
+}
+
+/**
+ * Returns whether privacy settings are currently locked.
+ */
+export function isPrivacyLocked(): boolean {
+  return runtime.isPrivacyLocked();
 }
 
 // Only attach to window in IIFE builds
-if (typeof window !== "undefined") {
+if (
+  typeof __USERALE_IIFE__ !== "undefined" &&
+  __USERALE_IIFE__ &&
+  typeof window !== "undefined"
+) {
   (window as any).userale = {
     start,
     stop,
+    flush,
+    reset,
     options,
     log,
     version: userAleVersion,
-    details: defineCustomDetails,
-    registerAuthCallback,
-    registerHeadersCallback,
+    details,
+    registerAuthCallback: runtime.registerAuthCallback,
+    registerHeadersCallback: runtime.registerHeadersCallback,
     registerExporter,
     startSessionReplay,
     stopSessionReplay,
@@ -275,5 +243,8 @@ if (typeof window !== "undefined") {
     getSelector,
     buildPath,
     detectBrowser,
+    createUserAle,
+    lockPrivacy,
+    isPrivacyLocked,
   };
 }

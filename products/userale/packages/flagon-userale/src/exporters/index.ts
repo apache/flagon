@@ -17,7 +17,11 @@
 
 import type { Configuration } from "@/configure";
 import { buildHeaders } from "./headers";
-import { HttpJsonExporter, chunkLogsForKeepalive } from "./http-json";
+import {
+  HttpJsonExporter,
+  chunkLogsForKeepalive,
+  utf8ByteLength,
+} from "./http-json";
 import { OtelSdkExporter } from "./otel-sdk";
 import type { OtelLogsApiLogger } from "./otel-sdk";
 import {
@@ -63,6 +67,7 @@ export {
   toProtoLogBatch,
   toProtoUserALELog,
   toUnixNanoString,
+  utf8ByteLength,
   WebSocketExporter,
 };
 export type {
@@ -87,26 +92,40 @@ export function createExporter(config: Configuration): LogExporter {
 
   const mode = config.exporterFormat || config.exporterType;
 
-  if (mode === "otlp" || mode === "otlp-json" || config.otlpEndpoint) {
+  if (mode === "otel-sdk" && config.otelLogger) {
+    return new OtelSdkExporter(config.otelLogger);
+  }
+
+  if (mode === "proto-json") {
+    return new ProtoJsonExporter(config);
+  }
+
+  if (mode === "otlp" || mode === "otlp-json") {
+    return new OtlpJsonExporter(config);
+  }
+
+  if (mode === "websocket" || config.websocketsEnabled) {
+    return new WebSocketExporter(config);
+  }
+
+  if (
+    config.hasExplicitExporterMode?.() &&
+    (mode === "http-json" || mode === "v2-json")
+  ) {
+    return new HttpJsonExporter(config);
+  }
+
+  if (config.otlpEndpoint) {
     return new OtlpJsonExporter(config);
   }
 
   try {
     const url = new URL(config.url);
-    if (
-      url.protocol === "ws:" ||
-      url.protocol === "wss:" ||
-      mode === "websocket" ||
-      config.websocketsEnabled
-    ) {
+    if (url.protocol === "ws:" || url.protocol === "wss:") {
       return new WebSocketExporter(config);
     }
   } catch {
     // Fallback to HTTP exporter if config.url is not a full URL (e.g. relative path in tests)
-  }
-
-  if (mode === "proto-json") {
-    return new ProtoJsonExporter(config);
   }
 
   return new HttpJsonExporter(config);

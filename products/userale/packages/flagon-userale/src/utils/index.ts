@@ -14,8 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { Configuration } from "@/configure";
+import type { Settings } from "@/types";
+
+export interface CredentialResolver {
+  resolveAuthHeader: () => string | null | undefined;
+  resolveCustomHeaders: () => Settings.HeaderObject | null | undefined;
+}
+
+const configCredentialResolvers = new WeakMap<
+  Configuration,
+  CredentialResolver
+>();
+
+export function registerConfigCredentialResolver(
+  config: Configuration,
+  resolver: CredentialResolver,
+): void {
+  configCredentialResolvers.set(config, resolver);
+}
+
+export function getConfigCredentialResolver(
+  config: Configuration,
+): CredentialResolver | undefined {
+  return configCredentialResolvers.get(config);
+}
+
 export {
   authCallback,
+  resolveAuthHeader,
   updateAuthHeader,
   registerAuthCallback,
   resetAuthCallback,
@@ -23,6 +50,7 @@ export {
 } from "./auth";
 export {
   headersCallback,
+  resolveCustomHeaders,
   updateCustomHeaders,
   registerHeadersCallback,
   resetHeadersCallback,
