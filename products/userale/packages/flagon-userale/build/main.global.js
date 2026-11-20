@@ -1,5 +1,4 @@
-"use strict";
-/* Licensed to the Apache Software Foundation (ASF) under one or more
+/*! Licensed to the Apache Software Foundation (ASF) under one or more
   contributor license agreements. See the NOTICE file distributed with
   this work for additional information regarding copyright ownership.
   The ASF licenses this file to you under the Apache License, Version 2.0
@@ -13,6 +12,7 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.*/
+"use strict";
 (() => {
   // src/packageLogs.ts
   var logs;
@@ -50,16 +50,96 @@
       }
     });
   }
-  function initPackager(newLogs, newConfig) {
-    logs = newLogs;
-    config = newConfig;
-    cbHandlers = {};
+  function enqueueLog(logEntry) {
+    const cap =
+      typeof config?.maxQueueSize === "number" && config.maxQueueSize > 0
+        ? config.maxQueueSize
+        : 1e4;
+    if (logs.length >= cap) {
+      logs.splice(0, logs.length - cap + 1);
+    }
+    logs.push(logEntry);
+  }
+  function resetIntervalState() {
     intervalId = null;
     intervalType = null;
     intervalPath = null;
     intervalTimer = null;
     intervalCounter = 0;
     intervalLog = null;
+  }
+  function initPackager(newLogs, newConfig) {
+    logs = newLogs;
+    config = newConfig;
+    cbHandlers = {};
+    resetIntervalState();
+  }
+  function detectBrowser() {
+    try {
+      const nav = typeof self !== "undefined" ? self.navigator : null;
+      if (!nav) {
+        return { browser: null, version: null };
+      }
+      const brands = nav.userAgentData?.brands;
+      if (Array.isArray(brands) && brands.length > 0) {
+        const meaningful =
+          brands.find(
+            (b) => b.brand && !/not.?a.?brand|chromium/i.test(b.brand),
+          ) ?? brands[0];
+        if (meaningful?.brand) {
+          return {
+            browser: meaningful.brand.toLowerCase(),
+            version: meaningful.version || null,
+          };
+        }
+      }
+      const ua = typeof nav.userAgent === "string" ? nav.userAgent : "";
+      if (!ua) {
+        return { browser: null, version: null };
+      }
+      const rules = [
+        ["edge", /Edg(?:e|A|iOS)?\/([\d.]+)/],
+        ["opera", /(?:OPR|Opera)\/([\d.]+)/],
+        ["chrome", /(?:Chrome|CriOS)\/([\d.]+)/],
+        ["firefox", /(?:Firefox|FxiOS)\/([\d.]+)/],
+        ["safari", /Version\/([\d.]+).*Safari/],
+      ];
+      for (const [name, regex] of rules) {
+        const match = ua.match(regex);
+        if (match) {
+          return { browser: name, version: match[1] ?? null };
+        }
+      }
+    } catch {}
+    return { browser: null, version: null };
+  }
+  var DISCRETE_RECT_EVENTS = /* @__PURE__ */ new Set([
+    "click",
+    "dblclick",
+    "change",
+    "submit",
+  ]);
+  function getTargetRect(target) {
+    try {
+      if (target && typeof target.getBoundingClientRect === "function") {
+        const rect = target.getBoundingClientRect();
+        if (
+          rect &&
+          Number.isFinite(rect.x) &&
+          Number.isFinite(rect.y) &&
+          Number.isFinite(rect.width) &&
+          Number.isFinite(rect.height)
+        ) {
+          return {
+            x: Math.round(rect.x),
+            y: Math.round(rect.y),
+            width: Math.round(rect.width),
+            height: Math.round(rect.height),
+          };
+        }
+      }
+    } catch {}
+    return null;
   }
   function packageLog(e, detailFcn) {
     if (!config.on) {
@@ -70,7 +150,7 @@
       details = detailFcn(e);
     }
     const timeFields = extractTimeFields(
-      e.timeStamp && e.timeStamp > 0 ? config.time(e.timeStamp) : Date.now()
+      e.timeStamp && e.timeStamp > 0 ? config.time(e.timeStamp) : Date.now(),
     );
     let log2 = {
       target: e.target ? getSelector(e.target) : null,
@@ -78,6 +158,7 @@
       pageUrl: self.location.href,
       pageTitle: document.title,
       pageReferrer: document.referrer,
+      browser: detectBrowser(),
       userAgent: self.navigator.userAgent,
       clientTime: timeFields.milli,
       microTime: timeFields.micro,
@@ -95,8 +176,17 @@
       httpSessionId: config.httpSessionId,
       browserSessionId: config.browserSessionId,
       attributes: buildAttrs(e),
-      style: buildCSS(e)
+      style: buildCSS(e),
     };
+    if (DISCRETE_RECT_EVENTS.has(e.type) && e.target) {
+      const rect = getTargetRect(e.target);
+      if (
+        rect &&
+        (rect.width > 0 || rect.height > 0 || rect.x !== 0 || rect.y !== 0)
+      ) {
+        log2.targetRect = rect;
+      }
+    }
     if (typeof filterHandler === "function" && !filterHandler(log2)) {
       return false;
     }
@@ -111,7 +201,7 @@
         }
       }
     }
-    logs.push(log2);
+    enqueueLog(log2);
     return true;
   }
   function packageCustomLog(customLog, detailFcn, userAction) {
@@ -119,14 +209,14 @@
       return false;
     }
     let details = null;
-    if (detailFcn.length === 0) {
-      const staticDetailFcn = detailFcn;
-      details = staticDetailFcn();
+    if (typeof detailFcn === "function") {
+      details = detailFcn();
     }
     const metaData = {
       pageUrl: self.location.href,
       pageTitle: document.title,
       pageReferrer: document.referrer,
+      browser: detectBrowser(),
       userAgent: self.navigator.userAgent,
       clientTime: Date.now(),
       scrnRes: getScreenRes(),
@@ -139,7 +229,7 @@
       useraleVersion: config.useraleVersion,
       sessionId: config.sessionId,
       httpSessionId: config.httpSessionId,
-      browserSessionId: config.browserSessionId
+      browserSessionId: config.browserSessionId,
     };
     let log2 = Object.assign(metaData, customLog);
     if (typeof filterHandler === "function" && !filterHandler(log2)) {
@@ -156,22 +246,25 @@
         }
       }
     }
-    logs.push(log2);
+    enqueueLog(log2);
     return true;
   }
   function extractTimeFields(timeStamp) {
     return {
       milli: Math.floor(timeStamp),
-      micro: Number((timeStamp % 1).toFixed(3))
+      micro: Number((timeStamp % 1).toFixed(3)),
     };
   }
   function packageIntervalLog(e) {
     try {
+      if (!config || !config.on) {
+        return false;
+      }
       const target = e.target ? getSelector(e.target) : null;
       const path = buildPath(e);
       const type = e.type;
       const timestamp = Math.floor(
-        e.timeStamp && e.timeStamp > 0 ? config.time(e.timeStamp) : Date.now()
+        e.timeStamp && e.timeStamp > 0 ? config.time(e.timeStamp) : Date.now(),
       );
       if (intervalId == null) {
         intervalId = target;
@@ -180,57 +273,72 @@
         intervalTimer = timestamp;
         intervalCounter = 0;
       }
+      let dropped = false;
       if ((intervalId !== target || intervalType !== type) && intervalTimer) {
-        intervalLog = {
-          target: intervalId,
-          path: intervalPath,
-          pageUrl: self.location.href,
-          pageTitle: document.title,
-          pageReferrer: document.referrer,
-          userAgent: self.navigator.userAgent,
-          count: intervalCounter,
-          duration: timestamp - intervalTimer,
-          startTime: intervalTimer,
-          endTime: timestamp,
-          type: intervalType,
-          logType: "interval",
-          targetChange: intervalId !== target,
-          typeChange: intervalType !== type,
-          userAction: false,
-          userId: config.userId,
-          toolVersion: config.toolVersion,
-          toolName: config.toolName,
-          useraleVersion: config.useraleVersion,
-          sessionId: config.sessionId,
-          httpSessionId: config.httpSessionId,
-          browserSessionId: config.browserSessionId
-        };
-        if (typeof filterHandler === "function" && !filterHandler(intervalLog)) {
-          return false;
-        }
-        if (typeof mapHandler === "function") {
-          intervalLog = mapHandler(intervalLog, e);
-        }
-        for (const func of Object.values(cbHandlers)) {
-          if (typeof func === "function") {
-            intervalLog = func(intervalLog, null);
-            if (!intervalLog) {
-              return false;
+        try {
+          intervalLog = {
+            target: intervalId,
+            path: intervalPath,
+            pageUrl: self.location.href,
+            pageTitle: document.title,
+            pageReferrer: document.referrer,
+            browser: detectBrowser(),
+            userAgent: self.navigator.userAgent,
+            count: intervalCounter,
+            duration: timestamp - intervalTimer,
+            // microseconds
+            startTime: intervalTimer,
+            endTime: timestamp,
+            type: intervalType,
+            logType: "interval",
+            targetChange: intervalId !== target,
+            typeChange: intervalType !== type,
+            userAction: false,
+            userId: config.userId,
+            toolVersion: config.toolVersion,
+            toolName: config.toolName,
+            useraleVersion: config.useraleVersion,
+            sessionId: config.sessionId,
+            httpSessionId: config.httpSessionId,
+            browserSessionId: config.browserSessionId,
+          };
+          if (
+            typeof filterHandler === "function" &&
+            !filterHandler(intervalLog)
+          ) {
+            dropped = true;
+          }
+          if (!dropped) {
+            if (typeof mapHandler === "function") {
+              intervalLog = mapHandler(intervalLog, e);
+            }
+            for (const func of Object.values(cbHandlers)) {
+              if (typeof func === "function") {
+                intervalLog = func(intervalLog, null);
+                if (!intervalLog) {
+                  dropped = true;
+                  break;
+                }
+              }
             }
           }
+          if (!dropped && intervalLog) enqueueLog(intervalLog);
+        } finally {
+          intervalId = target;
+          intervalType = type;
+          intervalPath = path;
+          intervalTimer = timestamp;
+          intervalCounter = 0;
         }
-        if (intervalLog)
-          logs.push(intervalLog);
-        intervalId = target;
-        intervalType = type;
-        intervalPath = path;
-        intervalTimer = timestamp;
-        intervalCounter = 0;
       }
-      if (intervalId == target && intervalType == type && intervalCounter) {
+      if (
+        intervalId == target &&
+        intervalType == type &&
+        intervalCounter !== null
+      ) {
         intervalCounter = intervalCounter + 1;
       }
-      return true;
+      return !dropped;
     } catch {
       return false;
     }
@@ -242,7 +350,7 @@
       } else if (e.clientX != null) {
         return {
           x: document.documentElement.scrollLeft + e.clientX,
-          y: document.documentElement.scrollTop + e.clientY
+          y: document.documentElement.scrollTop + e.clientY,
         };
       }
     } else {
@@ -254,10 +362,15 @@
   }
   function getSelector(ele) {
     if (ele instanceof HTMLElement || ele instanceof Element) {
-      if (ele.localName) {
-        return ele.localName + (ele.id ? "#" + ele.id : "") + (ele.className ? "." + ele.className : "");
-      } else if (ele.nodeName) {
-        return ele.nodeName + (ele.id ? "#" + ele.id : "") + (ele.className ? "." + ele.className : "");
+      const rawClass =
+        typeof ele.className === "string"
+          ? ele.className
+          : (ele.getAttribute?.("class") ?? "");
+      const tag = ele.localName || ele.nodeName;
+      if (tag) {
+        return (
+          tag + (ele.id ? "#" + ele.id : "") + (rawClass ? "." + rawClass : "")
+        );
       }
     } else if (ele instanceof Document) {
       return "#document";
@@ -274,24 +387,31 @@
     let i = 0;
     let pathEle;
     const pathSelectors = [];
-    while (pathEle = path[i]) {
+    while ((pathEle = path[i])) {
       pathSelectors.push(getSelector(pathEle));
       ++i;
-      pathEle = path[i];
     }
     return pathSelectors;
   }
+  var attributeBlackList = ["style", "data-api-key", "data-auth"];
+  var sensitiveAttributePattern = /^data-(api-key|auth|token|secret|password)/i;
+  var jsonValuePattern =
+    /^(?:\{[\s\S]*\}|\[[\s\S]*\]|"(?:[^"\\]|\\.)*"|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?|true|false|null)$/;
   function buildAttrs(e) {
     const attributes = {};
-    const attributeBlackList = ["style"];
     if (e.target && e.target instanceof Element) {
       for (const attr of e.target.attributes) {
-        if (attributeBlackList.includes(attr.name))
+        if (
+          attributeBlackList.includes(attr.name.toLowerCase()) ||
+          sensitiveAttributePattern.test(attr.name)
+        ) {
           continue;
+        }
         let val = attr.value;
-        try {
-          val = JSON.parse(val);
-        } catch {
+        if (jsonValuePattern.test(val.trim())) {
+          try {
+            val = JSON.parse(val);
+          } catch {}
         }
         attributes[attr.name] = val;
       }
@@ -322,53 +442,120 @@
     "input",
     "change",
     "mouseover",
-    "submit"
+    "submit",
   ];
   var windowEvents = ["load", "blur", "focus"];
+  var handlerAbortController = null;
+  function detachHandlers() {
+    if (handlerAbortController) {
+      handlerAbortController.abort();
+      handlerAbortController = null;
+    }
+  }
   function extractMouseDetails(e) {
     return {
       clicks: e.detail,
       ctrl: e.ctrlKey,
       alt: e.altKey,
       shift: e.shiftKey,
-      meta: e.metaKey
+      meta: e.metaKey,
+      //    'text' : e.target.innerHTML
     };
   }
+  function isPasswordInput(target) {
+    return (
+      typeof HTMLInputElement !== "undefined" &&
+      target instanceof HTMLInputElement &&
+      target.type?.toLowerCase() === "password"
+    );
+  }
+  function isRedactedElement(target) {
+    if (
+      !target ||
+      typeof Element === "undefined" ||
+      !(target instanceof Element)
+    ) {
+      return false;
+    }
+    const redactSelector =
+      '[data-userale-redact]:not([data-userale-redact="false"]), [data-userale-mask]:not([data-userale-mask="false"]), .userale-redact, .userale-mask';
+    if (typeof target.closest === "function") {
+      return Boolean(target.closest(redactSelector));
+    }
+    return (
+      target.hasAttribute("data-userale-redact") ||
+      target.hasAttribute("data-userale-mask")
+    );
+  }
   function extractKeyboardDetails(e) {
+    if (isPasswordInput(e.target)) {
+      return null;
+    }
+    if (isRedactedElement(e.target)) {
+      return {
+        key: "[REDACTED]",
+        code: "[REDACTED]",
+        ctrl: e.ctrlKey,
+        alt: e.altKey,
+        shift: e.shiftKey,
+        meta: e.metaKey,
+      };
+    }
     return {
       key: e.key,
       code: e.code,
       ctrl: e.ctrlKey,
       alt: e.altKey,
       shift: e.shiftKey,
-      meta: e.metaKey
+      meta: e.metaKey,
+    };
+  }
+  function extractInputDetails(e) {
+    if (isPasswordInput(e.target)) {
+      return null;
+    }
+    if (isRedactedElement(e.target)) {
+      return {
+        value: "[REDACTED]",
+      };
+    }
+    return {
+      value: e.target?.value,
     };
   }
   function extractChangeDetails(e) {
+    if (isPasswordInput(e.target)) {
+      return null;
+    }
+    if (isRedactedElement(e.target)) {
+      return {
+        value: "[REDACTED]",
+      };
+    }
     return {
-      value: e.target.value
+      value: e.target?.value,
     };
   }
   function extractWheelDetails(e) {
     return {
       x: e.deltaX,
       y: e.deltaY,
-      z: e.deltaZ
+      z: e.deltaZ,
     };
   }
   function extractScrollDetails() {
     return {
       x: window.scrollX,
-      y: window.scrollY
+      y: window.scrollY,
     };
   }
   function extractResizeDetails() {
     return {
       width: window.outerWidth,
-      height: window.outerHeight
+      height: window.outerHeight,
     };
   }
-  function defineDetails(config3) {
+  function defineDetails(config2) {
     events = {
       click: extractMouseDetails,
       dblclick: extractMouseDetails,
@@ -376,23 +563,23 @@
       mouseup: extractMouseDetails,
       focus: null,
       blur: null,
-      input: config3.logDetails ? extractKeyboardDetails : null,
-      change: config3.logDetails ? extractChangeDetails : null,
+      input: config2.logDetails ? extractInputDetails : null,
+      change: config2.logDetails ? extractChangeDetails : null,
       dragstart: null,
       dragend: null,
       drag: null,
       drop: null,
-      keydown: config3.logDetails ? extractKeyboardDetails : null,
-      mouseover: null
+      keydown: config2.logDetails ? extractKeyboardDetails : null,
+      mouseover: null,
     };
     bufferBools = {};
     bufferedEvents = {
       wheel: extractWheelDetails,
       scroll: extractScrollDetails,
-      resize: extractResizeDetails
+      resize: extractResizeDetails,
     };
     refreshEvents = {
-      submit: null
+      submit: null,
     };
   }
   function defineCustomDetails(options2, type) {
@@ -404,7 +591,7 @@
       focus: null,
       blur: null,
       load: null,
-      input: options2.logDetails ? extractKeyboardDetails : null,
+      input: options2.logDetails ? extractInputDetails : null,
       change: options2.logDetails ? extractChangeDetails : null,
       dragstart: null,
       dragend: null,
@@ -415,69 +602,74 @@
       wheel: extractWheelDetails,
       scroll: extractScrollDetails,
       resize: extractResizeDetails,
-      submit: null
+      submit: null,
     };
     return eventType[type];
   }
-  function attachHandlers(config3) {
+  function attachHandlers(config2) {
     try {
-      defineDetails(config3);
-      Object.keys(events).forEach(function(ev) {
+      detachHandlers();
+      defineDetails(config2);
+      handlerAbortController =
+        typeof AbortController !== "undefined" ? new AbortController() : null;
+      const signal = handlerAbortController?.signal;
+      Object.keys(events).forEach(function (ev) {
         document.addEventListener(
           ev,
-          function(e) {
-            packageLog(e, events[ev]);
+          function (e) {
+            packageLog(e, defineCustomDetails(config2, ev));
           },
-          true
+          signal ? { capture: true, signal } : true,
         );
       });
-      intervalEvents.forEach(function(ev) {
+      intervalEvents.forEach(function (ev) {
         document.addEventListener(
           ev,
-          function(e) {
+          function (e) {
             packageIntervalLog(e);
           },
-          true
+          signal ? { capture: true, signal } : true,
         );
       });
-      Object.keys(bufferedEvents).forEach(
-        function(ev) {
-          bufferBools[ev] = true;
-          self.addEventListener(
-            ev,
-            function(e) {
-              if (bufferBools[ev]) {
-                bufferBools[ev] = false;
-                packageLog(e, bufferedEvents[ev]);
-                setTimeout(function() {
-                  bufferBools[ev] = true;
-                }, config3.resolution);
-              }
-            },
-            true
-          );
-        }
-      );
-      Object.keys(refreshEvents).forEach(
-        function(ev) {
-          document.addEventListener(
-            ev,
-            function(e) {
-              packageLog(e, events[ev]);
-            },
-            true
-          );
-        }
-      );
-      windowEvents.forEach(function(ev) {
+      Object.keys(bufferedEvents).forEach(function (ev) {
+        bufferBools[ev] = true;
+        const passive = ev === "wheel" || ev === "scroll";
         self.addEventListener(
           ev,
-          function(e) {
-            packageLog(e, function() {
+          function (e) {
+            if (bufferBools[ev]) {
+              bufferBools[ev] = false;
+              packageLog(e, defineCustomDetails(config2, ev));
+              setTimeout(function () {
+                bufferBools[ev] = true;
+              }, config2.resolution);
+            }
+          },
+          signal
+            ? { capture: true, passive, signal }
+            : passive
+              ? { capture: true, passive: true }
+              : true,
+        );
+      });
+      Object.keys(refreshEvents).forEach(function (ev) {
+        document.addEventListener(
+          ev,
+          function (e) {
+            packageLog(e, defineCustomDetails(config2, ev));
+          },
+          signal ? { capture: true, signal } : true,
+        );
+      });
+      windowEvents.forEach(function (ev) {
+        self.addEventListener(
+          ev,
+          function (e) {
+            packageLog(e, function () {
               return { window: true };
             });
           },
-          true
+          signal ? { capture: true, signal } : true,
         );
       });
       return true;
@@ -488,13 +680,16 @@
 
   // src/utils/auth/index.ts
   var authCallback = null;
-  function updateAuthHeader(config3) {
-    if (authCallback) {
-      try {
-        config3.authHeader = authCallback();
-      } catch (e) {
-        console.error(`Error encountered while setting the auth header: ${e}`);
-      }
+  function resolveAuthHeader() {
+    if (!authCallback) {
+      return null;
+    }
+    try {
+      const result = authCallback();
+      return typeof result === "string" ? result : null;
+    } catch (e) {
+      console.error(`Error encountered while setting the auth header: ${e}`);
+      return null;
     }
   }
   function registerAuthCallback(callback) {
@@ -515,17 +710,62 @@
       throw new Error("Userale auth callback must return a string");
     }
   }
+  function resetAuthCallback() {
+    authCallback = null;
+  }
 
   // src/utils/headers/index.ts
   var headersCallback = null;
-  function updateCustomHeaders(config3) {
-    if (headersCallback) {
-      try {
-        config3.headers = headersCallback();
-      } catch (e) {
-        console.error(`Error encountered while setting the headers: ${e}`);
+  function isValidHeadersObject(value) {
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+      return false;
+    }
+    for (const [key, val] of Object.entries(value)) {
+      if (typeof key !== "string" || typeof val !== "string") {
+        return false;
       }
     }
+    return true;
+  }
+  function resolveCustomHeaders() {
+    if (!headersCallback) {
+      return null;
+    }
+    try {
+      const result = headersCallback();
+      return isValidHeadersObject(result) ? { ...result } : null;
+    } catch (e) {
+      console.error(`Error encountered while setting the headers: ${e}`);
+      return null;
+    }
+  }
+  function registerHeadersCallback(callback) {
+    try {
+      verifyCallback2(callback);
+      headersCallback = callback;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  function verifyCallback2(callback) {
+    if (typeof callback !== "function") {
+      throw new Error("Userale headers callback must be a function");
+    }
+    const result = callback();
+    if (!result || typeof result !== "object" || Array.isArray(result)) {
+      throw new Error("Userale headers callback must return an object");
+    }
+    for (const [key, value] of Object.entries(result)) {
+      if (typeof key !== "string" || typeof value !== "string") {
+        throw new Error(
+          "Userale header callback must return an object with string keys and values",
+        );
+      }
+    }
+  }
+  function resetHeadersCallback() {
+    headersCallback = null;
   }
 
   // package.json
@@ -534,99 +774,179 @@
   // src/getInitialSettings.ts
   var sessionId = null;
   var httpSessionId = null;
-  function getInitialSettings() {
-    if (typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope) {
+  function parseHeadersAttr(raw) {
+    if (!raw) {
+      return null;
+    }
+    try {
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+        ? parsed
+        : null;
+    } catch {
+      return null;
+    }
+  }
+  function getInitialSettings(overrides) {
+    const isWorker =
+      typeof WorkerGlobalScope !== "undefined" &&
+      typeof self !== "undefined" &&
+      self instanceof WorkerGlobalScope;
+    if (
+      isWorker ||
+      typeof document === "undefined" ||
+      typeof window === "undefined"
+    ) {
       const settings2 = {
+        apiKey: null,
         authHeader: null,
-        autostart: true,
+        autostart: overrides?.autostart ?? isWorker,
         browserSessionId: null,
         custIndex: null,
+        exporter: null,
+        exporterFormat: "http-json",
+        exporterType: "http-json",
         headers: null,
         httpSessionId: null,
         logCountThreshold: 5,
         logDetails: false,
+        maxQueueSize: 1e4,
+        observeMutations: false,
+        otlpEndpoint: null,
+        persistSession: overrides?.persistSession ?? isWorker,
         resolution: 500,
-        sessionId,
-        time: (ts) => ts !== void 0 ? ts : Date.now(),
+        sessionId: overrides?.sessionId !== void 0 ? overrides.sessionId : null,
+        time: (ts) => (ts !== void 0 ? ts : Date.now()),
         toolName: null,
         toolVersion: null,
+        traceContext: null,
         transmitInterval: 5e3,
         url: "http://localhost:8000",
         useraleVersion: null,
         userFromParams: null,
-        userId: null
+        userId: null,
       };
       return settings2;
     }
-    if (sessionId === null) {
-      sessionId = getsessionId(
-        "userAlesessionId",
-        "session_" + String(Date.now())
-      );
+    const script = document.currentScript;
+    const get = script
+      ? script.getAttribute.bind(script)
+      : function () {
+          return null;
+        };
+    const persistSession =
+      overrides?.persistSession !== void 0
+        ? overrides.persistSession
+        : get("data-persist-session") === "false"
+          ? false
+          : true;
+    let resolvedSessionId = null;
+    let resolvedHttpSessionId = null;
+    if (persistSession) {
+      if (overrides?.sessionId !== void 0) {
+        resolvedSessionId = overrides.sessionId;
+      } else {
+        if (sessionId === null) {
+          sessionId = getsessionId(
+            "userAlesessionId",
+            "session_" + String(Date.now()),
+          );
+        }
+        resolvedSessionId = get("data-session") || sessionId;
+      }
+      if (httpSessionId === null) {
+        httpSessionId = getsessionId(
+          "userAleHttpSessionId",
+          generatehttpSessionId(),
+        );
+      }
+      resolvedHttpSessionId = httpSessionId;
+    } else {
+      resolvedSessionId =
+        overrides?.sessionId !== void 0
+          ? overrides.sessionId
+          : get("data-session") || null;
+      resolvedHttpSessionId = null;
     }
-    if (httpSessionId === null) {
-      httpSessionId = getsessionId(
-        "userAleHttpSessionId",
-        generatehttpSessionId()
-      );
-    }
-    const script = document.currentScript || function() {
-      const scripts = document.getElementsByTagName("script");
-      return scripts[scripts.length - 1];
-    }();
-    const get = script ? script.getAttribute.bind(script) : function() {
-      return null;
-    };
     const headers = get("data-headers");
+    const otlpEndpoint = get("data-otlp-endpoint") || null;
+    const exporterAttr =
+      get("data-exporter-type") ||
+      get("data-exporter-format") ||
+      get("data-exporter") ||
+      (otlpEndpoint ? "otlp" : "http-json");
+    const defaultAutostart = get("data-autostart") === "false" ? false : true;
     const settings = {
+      apiKey: get("data-api-key") || null,
       authHeader: get("data-auth") || null,
-      autostart: get("data-autostart") === "false" ? false : true,
+      autostart:
+        overrides?.autostart !== void 0
+          ? overrides.autostart
+          : defaultAutostart,
       browserSessionId: null,
       custIndex: get("data-index") || null,
-      headers: headers ? JSON.parse(headers) : null,
-      httpSessionId,
+      exporter: null,
+      exporterFormat: exporterAttr,
+      exporterType: exporterAttr,
+      headers: parseHeadersAttr(headers),
+      httpSessionId: resolvedHttpSessionId,
       logCountThreshold: +(get("data-threshold") || 5),
       logDetails: get("data-log-details") === "true" ? true : false,
+      maxQueueSize: +(get("data-max-queue-size") || 1e4),
+      observeMutations: get("data-observe-mutations") === "true" ? true : false,
+      otlpEndpoint,
+      persistSession,
       resolution: +(get("data-resolution") || 500),
-      sessionId: get("data-session") || sessionId,
+      sessionId: resolvedSessionId,
       time: timeStampScale(document.createEvent("CustomEvent")),
       toolName: get("data-tool") || null,
       toolVersion: get("data-version") || null,
+      traceContext: null,
       transmitInterval: +(get("data-interval") || 5e3),
       url: get("data-url") || "http://localhost:8000",
       useraleVersion: get("data-userale-version") || null,
       userFromParams: get("data-user-from-params") || null,
-      userId: get("data-user") || null
+      userId: get("data-user") || null,
     };
     return settings;
   }
   function getsessionId(sessionKey, value) {
-    if (self.sessionStorage.getItem(sessionKey) === null) {
-      self.sessionStorage.setItem(sessionKey, JSON.stringify(value));
+    try {
+      const storage =
+        typeof self !== "undefined" ? self.sessionStorage : void 0;
+      if (!storage) {
+        return value;
+      }
+      const existing = storage.getItem(sessionKey);
+      if (existing === null) {
+        storage.setItem(sessionKey, JSON.stringify(value));
+        return value;
+      }
+      return JSON.parse(existing);
+    } catch {
       return value;
     }
-    return JSON.parse(self.sessionStorage.getItem(sessionKey) || "");
   }
   function timeStampScale(e) {
     let tsScaler;
     if (e.timeStamp && e.timeStamp > 0) {
       const delta = Date.now() - e.timeStamp;
       if (delta < 0) {
-        tsScaler = function() {
+        tsScaler = function () {
           return e.timeStamp / 1e3;
         };
       } else if (delta > e.timeStamp) {
         const navStart = performance.timeOrigin;
-        tsScaler = function(ts) {
+        tsScaler = function (ts) {
           return ts + navStart;
         };
       } else {
-        tsScaler = function(ts) {
+        tsScaler = function (ts) {
           return ts;
         };
       }
     } else {
-      tsScaler = function() {
+      tsScaler = function () {
         return Date.now();
       };
     }
@@ -635,29 +955,47 @@
   function generatehttpSessionId() {
     const len = 32;
     const arr = new Uint8Array(len / 2);
-    window.crypto.getRandomValues(arr);
+    if (
+      typeof globalThis !== "undefined" &&
+      globalThis.crypto &&
+      typeof globalThis.crypto.getRandomValues === "function"
+    ) {
+      globalThis.crypto.getRandomValues(arr);
+    }
     return Array.from(arr, (dec) => {
       return dec.toString(16).padStart(2, "0");
     }).join("");
   }
 
   // src/configure.ts
-  var _Configuration = class {
-    constructor() {
+  var _Configuration = class _Configuration {
+    // Private constructor to prevent external instantiation
+    constructor(skipInit = false) {
+      this.initialized = false;
+      // Public properties corresponding to fields in the Config interface
+      this.apiKey = null;
       this.autostart = false;
       this.authHeader = null;
       this.browserSessionId = null;
       this.custIndex = null;
+      this.exporter = null;
+      this.exporterFormat = "http-json";
+      this.exporterType = "http-json";
       this.headers = null;
       this.httpSessionId = null;
       this.logCountThreshold = 0;
       this.logDetails = false;
+      this.maxQueueSize = 1e4;
+      this.observeMutations = false;
       this.on = false;
+      this.otlpEndpoint = null;
+      this.persistSession = true;
       this.resolution = 0;
       this.sessionId = null;
       this.time = () => Date.now();
       this.toolName = null;
       this.toolVersion = null;
+      this.traceContext = null;
       this.transmitInterval = 0;
       this.url = "";
       this.userFromParams = null;
@@ -665,44 +1003,91 @@
       this.userId = null;
       this.version = null;
       this.websocketsEnabled = false;
-      if (_Configuration.instance === null) {
+      if (!skipInit && _Configuration.instance === null) {
         this.initialize();
       }
     }
+    // Static method to get the singleton instance
     static getInstance() {
       if (_Configuration.instance === null) {
-        _Configuration.instance = new _Configuration();
+        _Configuration.instance = new _Configuration(false);
       }
       return _Configuration.instance;
     }
-    initialize() {
-      const settings = getInitialSettings();
+    // Creates an uninitialized Configuration instance without reading browser storage
+    static createUninitialized() {
+      return new _Configuration(true);
+    }
+    isInitialized() {
+      return this.initialized;
+    }
+    initialize(overrides) {
+      const settings = getInitialSettings(overrides);
       this.update(settings);
+      this.initialized = true;
     }
-    reset() {
-      this.initialize();
+    /**
+     * Resets the configuration to its initial state.
+     */
+    reset(overrides) {
+      this.initialize(overrides);
     }
+    /**
+     * Shallow merges a newConfig with the configuration class, updating it.
+     * Retrieves/updates the userid if userFromParams is provided.
+     * @param  {Partial<Settings.Config>} newConfig Configuration object to merge into the current config.
+     */
     update(newConfig) {
       Object.keys(newConfig).forEach((option) => {
         if (option === "userFromParams") {
           const userParamString = newConfig[option];
-          const userId = userParamString ? _Configuration.getUserIdFromParams(userParamString) : null;
+          const userId = userParamString
+            ? _Configuration.getUserIdFromParams(userParamString)
+            : null;
           if (userId) {
             this["userId"] = userId;
           }
         }
         const hasNewUserFromParams = newConfig["userFromParams"];
-        const willNullifyUserId = option === "userId" && newConfig[option] === null;
+        const willNullifyUserId =
+          option === "userId" && newConfig[option] === null;
         if (willNullifyUserId && hasNewUserFromParams) {
           return;
         }
         const newOption = newConfig[option];
         if (newOption !== void 0) {
           this[option] = newOption;
+          if (
+            option === "exporterFormat" &&
+            newConfig.exporterType === void 0
+          ) {
+            this.exporterType = newOption;
+          } else if (
+            option === "exporterType" &&
+            newConfig.exporterFormat === void 0
+          ) {
+            this.exporterFormat = newOption;
+          }
         }
       });
+      if (newConfig.persistSession === false) {
+        if (newConfig.httpSessionId === void 0) {
+          this.httpSessionId = null;
+        }
+        if (newConfig.sessionId === void 0) {
+          this.sessionId = null;
+        }
+      }
     }
+    /**
+     * Attempts to extract the userid from the query parameters of the URL.
+     * @param  {string} param The name of the query parameter containing the userid.
+     * @return {string | null}       The extracted/decoded userid, or null if none is found.
+     */
     static getUserIdFromParams(param) {
+      if (typeof window === "undefined" || !window.location?.href) {
+        return null;
+      }
       const userField = param;
       const regex = new RegExp("[?&]" + userField + "(=([^&#]*)|&|#|$)");
       const results = window.location.href.match(regex);
@@ -712,193 +1097,1763 @@
       return null;
     }
   };
+  // Private static property to hold the singleton instance
+  _Configuration.instance = null;
   var Configuration = _Configuration;
-  Configuration.instance = null;
 
-  // src/sendLogs.ts
-  var sendIntervalId;
-  var wsock;
-  function initSender(logs3, config3) {
-    if (sendIntervalId) {
-      clearInterval(sendIntervalId);
-    }
-    const url = new URL(config3.url);
-    if (url.protocol === "ws:" || url.protocol === "wss:") {
-      wsock = new WebSocket(config3.url);
-    }
-    sendIntervalId = sendOnInterval(logs3, config3);
-    sendOnClose(logs3, config3);
-  }
-  function sendOnInterval(logs3, config3) {
-    return setInterval(function() {
-      if (!config3.on) {
-        return;
-      }
-      if (logs3.length >= config3.logCountThreshold) {
-        sendLogs(logs3.slice(0), config3, 0);
-        logs3.splice(0);
-      }
-    }, config3.transmitInterval);
-  }
-  function sendOnClose(logs3, config3) {
-    self.addEventListener("pagehide", function() {
-      if (!config3.on) {
-        return;
-      }
-      if (logs3.length > 0) {
-        const url = new URL(config3.url);
-        if (url.protocol === "ws:" || url.protocol === "wss:") {
-          const data = JSON.stringify(logs3);
-          wsock.send(data);
-        } else {
-          const headers = new Headers();
-          headers.set("Content-Type", "application/json;charset=UTF-8");
-          if (config3.authHeader) {
-            headers.set("Authorization", config3.authHeader.toString());
-          }
-          fetch(config3.url, {
-            keepalive: true,
-            method: "POST",
-            headers,
-            body: JSON.stringify(logs3)
-          }).catch((error) => {
-            console.error(error);
-          });
-        }
-        logs3.splice(0);
-      }
-    });
-  }
-  async function sendLogs(logs3, config3, retries) {
-    const data = JSON.stringify(logs3);
-    const url = new URL(config3.url);
-    if (url.protocol === "ws:" || url.protocol === "wss:") {
-      wsock.send(data);
-      return;
-    }
+  // src/exporters/headers.ts
+  function buildHeaders(config2) {
     const headers = new Headers({
-      "Content-Type": "application/json;charset=UTF-8"
+      "Content-Type": "application/json;charset=UTF-8",
     });
-    updateAuthHeader(config3);
-    if (config3.authHeader) {
-      const authHeaderValue = typeof config3.authHeader === "function" ? config3.authHeader() : config3.authHeader;
-      headers.set("Authorization", authHeaderValue);
+    if (authCallback) {
+      const dynamicAuth = resolveAuthHeader();
+      if (dynamicAuth) {
+        headers.set("Authorization", dynamicAuth);
+      }
+    } else if (config2.authHeader) {
+      const authHeaderValue =
+        typeof config2.authHeader === "function"
+          ? config2.authHeader()
+          : String(config2.authHeader);
+      if (authHeaderValue) {
+        headers.set("Authorization", authHeaderValue);
+      }
     }
-    updateCustomHeaders(config3);
-    if (config3.headers) {
-      for (const [header, value] of Object.entries(config3.headers)) {
+    if (config2.apiKey) {
+      headers.set("x-api-key", config2.apiKey);
+    }
+    const customHeaders = headersCallback
+      ? resolveCustomHeaders()
+      : config2.headers;
+    if (customHeaders) {
+      for (const [header, value] of Object.entries(customHeaders)) {
         headers.set(header, value);
       }
     }
-    async function attemptSend(remainingRetries) {
-      try {
-        const response = await fetch(config3.url, {
-          method: "POST",
-          headers,
-          body: data
-        });
-        if (!response.ok) {
-          if (remainingRetries > 0) {
-            return attemptSend(remainingRetries - 1);
-          } else {
-            throw new Error(`Failed to send logs: ${response.statusText}`);
-          }
-        }
-      } catch (error) {
-        if (remainingRetries > 0) {
-          return attemptSend(remainingRetries - 1);
-        }
-        throw error;
-      }
-    }
-    return attemptSend(retries);
+    return headers;
   }
 
-  // src/main.ts
-  var config2 = Configuration.getInstance();
-  var logs2 = [];
-  var startLoadTimestamp = Date.now();
-  var endLoadTimestamp;
-  self.onload = function() {
-    endLoadTimestamp = Date.now();
-  };
-  var started = false;
-  config2.update({
-    useraleVersion: version
-  });
-  initPackager(logs2, config2);
-  if (config2.autostart) {
-    setup(config2);
+  // src/exporters/http-json.ts
+  var MAX_KEEPALIVE_BYTES = 48 * 1024;
+  function chunkLogsForKeepalive(logs2, serialize) {
+    const full = serialize(logs2);
+    if (full.length <= MAX_KEEPALIVE_BYTES || logs2.length <= 1) {
+      return [full];
+    }
+    const mid = Math.ceil(logs2.length / 2);
+    return [
+      ...chunkLogsForKeepalive(logs2.slice(0, mid), serialize),
+      ...chunkLogsForKeepalive(logs2.slice(mid), serialize),
+    ];
   }
-  function setup(config3) {
-    if (!started) {
-      setTimeout(function() {
+  var HttpJsonExporter = class {
+    constructor(config2) {
+      this.config = config2;
+    }
+    serialize(logs2) {
+      return JSON.stringify(logs2);
+    }
+    getEndpoint() {
+      return this.config.url;
+    }
+    async export(logs2, options2) {
+      const headers = buildHeaders(this.config);
+      const endpoint = this.getEndpoint();
+      const keepalive = Boolean(options2?.keepalive);
+      const retries = options2?.retries ?? 0;
+      if (keepalive) {
+        const payloads = chunkLogsForKeepalive(logs2, (batch) =>
+          this.serialize(batch),
+        );
+        try {
+          await Promise.all(
+            payloads.map((body2) =>
+              fetch(endpoint, {
+                keepalive: true,
+                method: "POST",
+                headers,
+                body: body2,
+              }),
+            ),
+          );
+          return { success: true };
+        } catch (err) {
+          const error = err instanceof Error ? err : new Error(String(err));
+          console.error(error);
+          return { success: false, error };
+        }
+      }
+      const body = this.serialize(logs2);
+      async function attemptSend(remainingRetries) {
+        try {
+          const response = await fetch(endpoint, {
+            method: "POST",
+            headers,
+            body,
+          });
+          if (!response.ok) {
+            if (remainingRetries > 0) {
+              return attemptSend(remainingRetries - 1);
+            }
+            throw new Error(`Failed to send logs: ${response.statusText}`);
+          }
+        } catch (error) {
+          if (remainingRetries > 0) {
+            return attemptSend(remainingRetries - 1);
+          }
+          throw error;
+        }
+      }
+      try {
+        await attemptSend(retries);
+        return { success: true };
+      } catch (err) {
+        const error = err instanceof Error ? err : new Error(String(err));
+        console.error(error);
+        return { success: false, error };
+      }
+    }
+    async flush() {
+      return Promise.resolve();
+    }
+    async shutdown() {
+      return Promise.resolve();
+    }
+  };
+
+  // src/exporters/otlp-json.ts
+  var HEX_32_RE = /^[0-9a-f]{32}$/i;
+  var HEX_16_RE = /^[0-9a-f]{16}$/i;
+  var ALL_ZEROS_RE = /^0+$/;
+  var KNOWN_LOG_KEYS = /* @__PURE__ */ new Set([
+    "target",
+    "path",
+    "pageUrl",
+    "pageTitle",
+    "pageReferrer",
+    "browser",
+    "userAgent",
+    "clientTime",
+    "scrnRes",
+    "microTime",
+    "location",
+    "type",
+    "logType",
+    "userAction",
+    "details",
+    "userId",
+    "toolVersion",
+    "toolName",
+    "useraleVersion",
+    "sessionId",
+    "httpSessionId",
+    "browserSessionId",
+    "attributes",
+    "style",
+    "count",
+    "duration",
+    "startTime",
+    "endTime",
+    "targetChange",
+    "typeChange",
+    "targetRect",
+    "traceId",
+    "spanId",
+  ]);
+  function resolveOtlpLogsEndpoint(rawUrl) {
+    try {
+      const parsed = new URL(
+        rawUrl,
+        typeof window !== "undefined" && window.location
+          ? window.location.origin
+          : "http://localhost:4318",
+      );
+      if (parsed.pathname === "" || parsed.pathname === "/") {
+        parsed.pathname = "/v1/logs";
+        return parsed.toString();
+      }
+      return rawUrl;
+    } catch {
+      const trimmed = rawUrl.replace(/\/+$/, "");
+      return `${trimmed}/v1/logs`;
+    }
+  }
+  function toOtlpAnyValue(val) {
+    if (val === null || val === void 0) {
+      return { stringValue: "" };
+    }
+    if (typeof val === "string") {
+      return { stringValue: val };
+    }
+    if (typeof val === "boolean") {
+      return { boolValue: val };
+    }
+    if (typeof val === "bigint") {
+      return { intValue: val.toString(10) };
+    }
+    if (typeof val === "number") {
+      if (!Number.isFinite(val)) {
+        return { stringValue: String(val) };
+      }
+      if (Number.isInteger(val)) {
+        return { intValue: BigInt(val).toString(10) };
+      }
+      return { doubleValue: val };
+    }
+    if (Array.isArray(val)) {
+      return {
+        arrayValue: {
+          values: val.map((item) => toOtlpAnyValue(item)),
+        },
+      };
+    }
+    if (typeof val === "object") {
+      const entries = Object.entries(val).filter(([, v]) => v !== void 0);
+      return {
+        kvlistValue: {
+          values: entries.map(([key, v]) => ({
+            key,
+            value: toOtlpAnyValue(v),
+          })),
+        },
+      };
+    }
+    return { stringValue: String(val) };
+  }
+  function pushStringAttr(attrs, key, val) {
+    if (typeof val === "string" && val.length > 0) {
+      attrs.push({ key, value: { stringValue: val } });
+    }
+  }
+  function pushIntAttr(attrs, key, val) {
+    if (typeof val === "number" && Number.isFinite(val)) {
+      attrs.push({
+        key,
+        value: { intValue: BigInt(Math.trunc(val)).toString(10) },
+      });
+    }
+  }
+  function pushDoubleAttr(attrs, key, val) {
+    if (typeof val === "number" && Number.isFinite(val)) {
+      attrs.push({ key, value: { doubleValue: val } });
+    }
+  }
+  function pushBoolAttr(attrs, key, val) {
+    if (typeof val === "boolean") {
+      attrs.push({ key, value: { boolValue: val } });
+    }
+  }
+  function toUnixNanoString(clientTimeMs, microTime) {
+    const ms =
+      typeof clientTimeMs === "number" && Number.isFinite(clientTimeMs)
+        ? Math.trunc(clientTimeMs)
+        : Date.now();
+    let subMsNanos = 0;
+    if (typeof microTime === "number" && Number.isFinite(microTime)) {
+      const frac = microTime - Math.trunc(microTime);
+      if (frac > 0 && frac < 1) {
+        subMsNanos = Math.round(frac * 1e6);
+      }
+    }
+    return (BigInt(ms) * BigInt(1e6) + BigInt(subMsNanos)).toString(10);
+  }
+  function resolveTraceContext(log2, config2) {
+    let rawTraceId = typeof log2.traceId === "string" ? log2.traceId : void 0;
+    let rawSpanId = typeof log2.spanId === "string" ? log2.spanId : void 0;
+    if (
+      (!rawTraceId || !rawSpanId) &&
+      typeof config2?.traceContext === "function"
+    ) {
+      try {
+        const ctx = config2.traceContext();
+        if (ctx) {
+          rawTraceId = rawTraceId ?? ctx.traceId;
+          rawSpanId = rawSpanId ?? ctx.spanId;
+        }
+      } catch {}
+    }
+    if (!rawTraceId || !rawSpanId) {
+      const globalOtel = globalThis.opentelemetry;
+      const spanCtx = globalOtel?.trace?.getActiveSpan?.()?.spanContext?.();
+      if (spanCtx) {
+        rawTraceId = rawTraceId ?? spanCtx.traceId;
+        rawSpanId = rawSpanId ?? spanCtx.spanId;
+      }
+    }
+    const result = {};
+    if (
+      rawTraceId &&
+      HEX_32_RE.test(rawTraceId) &&
+      !ALL_ZEROS_RE.test(rawTraceId)
+    ) {
+      result.traceId = rawTraceId.toLowerCase();
+    }
+    if (
+      rawSpanId &&
+      HEX_16_RE.test(rawSpanId) &&
+      !ALL_ZEROS_RE.test(rawSpanId)
+    ) {
+      result.spanId = rawSpanId.toLowerCase();
+    }
+    return result;
+  }
+  function buildOtlpResourceAttributes(logs2, config2) {
+    const first = logs2[0] ?? {};
+    const attrs = [];
+    const serviceName =
+      (typeof first.toolName === "string" && first.toolName) ||
+      config2?.toolName ||
+      "unknown_service:userale";
+    attrs.push({ key: "service.name", value: { stringValue: serviceName } });
+    const serviceVersion =
+      (typeof first.toolVersion === "string" && first.toolVersion) ||
+      config2?.toolVersion;
+    pushStringAttr(attrs, "service.version", serviceVersion);
+    attrs.push({
+      key: "telemetry.sdk.name",
+      value: { stringValue: "apache-flagon-userale" },
+    });
+    attrs.push({
+      key: "telemetry.sdk.language",
+      value: { stringValue: "webjs" },
+    });
+    const sdkVersion =
+      (typeof first.useraleVersion === "string" && first.useraleVersion) ||
+      config2?.useraleVersion ||
+      "2.4.0";
+    pushStringAttr(attrs, "telemetry.sdk.version", sdkVersion);
+    pushStringAttr(attrs, "user_agent.original", first.userAgent);
+    const browserObj = first.browser;
+    if (browserObj && typeof browserObj === "object") {
+      pushStringAttr(attrs, "browser.name", browserObj.browser);
+      pushStringAttr(attrs, "browser.version", browserObj.version);
+    }
+    const sessionId2 =
+      (typeof first.sessionId === "string" && first.sessionId) ||
+      config2?.sessionId;
+    pushStringAttr(attrs, "session.id", sessionId2);
+    const httpSessionId2 =
+      (typeof first.httpSessionId === "string" && first.httpSessionId) ||
+      config2?.httpSessionId;
+    pushStringAttr(attrs, "flagon.http_session_id", httpSessionId2);
+    const browserSessionId =
+      (typeof first.browserSessionId === "string" && first.browserSessionId) ||
+      config2?.browserSessionId;
+    pushStringAttr(attrs, "flagon.browser_session_id", browserSessionId);
+    const scrnRes = first.scrnRes;
+    if (scrnRes && typeof scrnRes === "object") {
+      pushIntAttr(attrs, "screen.width", scrnRes.width);
+      pushIntAttr(attrs, "screen.height", scrnRes.height);
+    }
+    return attrs;
+  }
+  function toOtlpLogRecord(log2, config2) {
+    const logType = typeof log2.logType === "string" ? log2.logType : "raw";
+    const eventType =
+      typeof log2.type === "string" && log2.type.trim().length > 0
+        ? log2.type.trim()
+        : logType;
+    const eventName = `userale.${logType}.${eventType}`;
+    const primaryTimeMs =
+      typeof log2.clientTime === "number"
+        ? log2.clientTime
+        : typeof log2.endTime === "number"
+          ? log2.endTime
+          : typeof log2.startTime === "number"
+            ? log2.startTime
+            : Date.now();
+    const timeUnixNano = toUnixNanoString(primaryTimeMs, log2.microTime);
+    const attrs = [
+      { key: "event.name", value: { stringValue: eventName } },
+      { key: "flagon.log_type", value: { stringValue: logType } },
+      { key: "flagon.event_type", value: { stringValue: eventType } },
+    ];
+    pushStringAttr(attrs, "url.full", log2.pageUrl);
+    pushStringAttr(attrs, "page.title", log2.pageTitle);
+    pushStringAttr(attrs, "page.referrer", log2.pageReferrer);
+    pushStringAttr(attrs, "user.id", log2.userId);
+    pushStringAttr(attrs, "flagon.target", log2.target);
+    pushBoolAttr(attrs, "flagon.user_action", log2.userAction);
+    if (Array.isArray(log2.path) && log2.path.length > 0) {
+      attrs.push({
+        key: "flagon.path",
+        value: {
+          arrayValue: {
+            values: log2.path.map((p) => ({ stringValue: String(p) })),
+          },
+        },
+      });
+    }
+    const loc = log2.location;
+    if (loc && typeof loc === "object") {
+      pushDoubleAttr(attrs, "flagon.location.x", loc.x);
+      pushDoubleAttr(attrs, "flagon.location.y", loc.y);
+    }
+    if (
+      log2.targetRect &&
+      typeof log2.targetRect === "object" &&
+      !Array.isArray(log2.targetRect)
+    ) {
+      attrs.push({
+        key: "flagon.target_rect",
+        value: toOtlpAnyValue(log2.targetRect),
+      });
+    }
+    if (logType === "interval") {
+      pushIntAttr(attrs, "flagon.interval.count", log2.count);
+      pushIntAttr(attrs, "flagon.interval.duration_ms", log2.duration);
+      pushIntAttr(attrs, "flagon.interval.start_time_ms", log2.startTime);
+      pushIntAttr(attrs, "flagon.interval.end_time_ms", log2.endTime);
+      pushBoolAttr(attrs, "flagon.interval.target_change", log2.targetChange);
+      pushBoolAttr(attrs, "flagon.interval.type_change", log2.typeChange);
+    }
+    if (
+      log2.attributes &&
+      typeof log2.attributes === "object" &&
+      !Array.isArray(log2.attributes) &&
+      Object.keys(log2.attributes).length > 0
+    ) {
+      attrs.push({
+        key: "flagon.element.attributes",
+        value: toOtlpAnyValue(log2.attributes),
+      });
+    }
+    if (
+      log2.style &&
+      typeof log2.style === "object" &&
+      !Array.isArray(log2.style) &&
+      Object.keys(log2.style).length > 0
+    ) {
+      attrs.push({
+        key: "flagon.element.style",
+        value: toOtlpAnyValue(log2.style),
+      });
+    }
+    const extraFields = {};
+    for (const [key, val] of Object.entries(log2)) {
+      if (!KNOWN_LOG_KEYS.has(key) && val !== void 0) {
+        extraFields[key] = val;
+      }
+    }
+    const bodyObj = {};
+    if (
+      log2.details &&
+      typeof log2.details === "object" &&
+      !Array.isArray(log2.details)
+    ) {
+      Object.assign(bodyObj, log2.details);
+    } else if (log2.details !== void 0 && log2.details !== null) {
+      bodyObj.details = log2.details;
+    }
+    Object.assign(bodyObj, extraFields);
+    const body =
+      Object.keys(bodyObj).length > 0
+        ? toOtlpAnyValue(bodyObj)
+        : {
+            stringValue:
+              typeof log2.target === "string" && log2.target
+                ? `${eventType} on ${log2.target}`
+                : eventType,
+          };
+    const record = {
+      timeUnixNano,
+      observedTimeUnixNano: timeUnixNano,
+      severityNumber: 9,
+      severityText: "INFO",
+      eventName,
+      body,
+      attributes: attrs,
+    };
+    const traceCtx = resolveTraceContext(log2, config2);
+    if (traceCtx.traceId) {
+      record.traceId = traceCtx.traceId;
+    }
+    if (traceCtx.spanId) {
+      record.spanId = traceCtx.spanId;
+    }
+    return record;
+  }
+  function toOtlpExportLogsServiceRequest(logs2, config2) {
+    const first = logs2[0] ?? {};
+    const scopeVersion =
+      (typeof first.useraleVersion === "string" && first.useraleVersion) ||
+      config2?.useraleVersion ||
+      "2.4.0";
+    return {
+      resourceLogs: [
+        {
+          resource: {
+            attributes: buildOtlpResourceAttributes(logs2, config2),
+          },
+          scopeLogs: [
+            {
+              scope: {
+                name: "org.apache.flagon.userale",
+                version: scopeVersion,
+              },
+              logRecords: logs2.map((log2) => toOtlpLogRecord(log2, config2)),
+            },
+          ],
+        },
+      ],
+    };
+  }
+  var OtlpJsonExporter = class extends HttpJsonExporter {
+    constructor(config2) {
+      super(config2);
+      this.otlpConfig = config2;
+    }
+    getEndpoint() {
+      const raw = this.otlpConfig.otlpEndpoint || this.otlpConfig.url;
+      return resolveOtlpLogsEndpoint(raw);
+    }
+    serialize(logs2) {
+      return JSON.stringify(
+        toOtlpExportLogsServiceRequest(logs2, this.otlpConfig),
+      );
+    }
+  };
+
+  // src/replay/index.ts
+  var DEFAULT_IGNORE_SELECTOR = "[data-userale-ignore], .userale-ignore";
+  var DEFAULT_MASK_SELECTOR = "[data-userale-mask], .userale-mask";
+  var MAX_KEEPALIVE_BYTES2 = 48 * 1024;
+  var ReplayRingBuffer = class {
+    constructor(maxDurationMs = 3e4, maxFrames = 2e3) {
+      this.frames = [];
+      this.anchorMeta = null;
+      this.anchorFullSnapshot = null;
+      this.maxDurationMs = Math.max(1e3, maxDurationMs);
+      this.maxFrames = Math.max(10, maxFrames);
+    }
+    push(frame, isCheckout = false) {
+      const ts =
+        typeof frame.timestamp === "number" && Number.isFinite(frame.timestamp)
+          ? frame.timestamp
+          : Date.now();
+      const normalized = { ...frame, timestamp: ts };
+      if (isCheckout) {
+        this.frames = [];
+        this.anchorMeta = null;
+        this.anchorFullSnapshot = null;
+      }
+      if (normalized.type === 4) {
+        this.anchorMeta = normalized;
+      } else if (normalized.type === 2) {
+        this.anchorFullSnapshot = normalized;
+      }
+      this.frames.push(normalized);
+      this.prune(ts);
+    }
+    prune(now = Date.now()) {
+      const cutoff = now - this.maxDurationMs;
+      let firstValidIdx = 0;
+      while (
+        firstValidIdx < this.frames.length &&
+        this.frames[firstValidIdx].timestamp < cutoff
+      ) {
+        firstValidIdx++;
+      }
+      if (firstValidIdx > 0) {
+        this.frames = this.frames.slice(firstValidIdx);
+      }
+      if (this.frames.length > this.maxFrames) {
+        this.frames = this.frames.slice(this.frames.length - this.maxFrames);
+      }
+    }
+    getSnapshotFrames() {
+      this.prune(
+        this.frames.length > 0
+          ? this.frames[this.frames.length - 1].timestamp
+          : Date.now(),
+      );
+      if (this.frames.length === 0) {
+        return [];
+      }
+      const result = [];
+      const hasFullSnapshotInWindow = this.frames.some((f) => f.type === 2);
+      if (!hasFullSnapshotInWindow && this.anchorFullSnapshot) {
+        if (
+          this.anchorMeta &&
+          this.anchorMeta.timestamp <= this.anchorFullSnapshot.timestamp
+        ) {
+          result.push(this.anchorMeta);
+        }
+        result.push(this.anchorFullSnapshot);
+      }
+      for (const f of this.frames) {
+        if (result.length > 0 && result[result.length - 1] === f) {
+          continue;
+        }
+        result.push(f);
+      }
+      return result;
+    }
+    clear() {
+      this.frames = [];
+      this.anchorMeta = null;
+      this.anchorFullSnapshot = null;
+    }
+    size() {
+      return this.frames.length;
+    }
+  };
+  var RageClickDetector = class {
+    constructor(windowMs = 1e3, threshold = 3, radiusPx = 30) {
+      this.clicks = [];
+      this.windowMs = windowMs;
+      this.threshold = threshold;
+      this.radiusPx = radiusPx;
+    }
+    recordClick(sample) {
+      const cutoff = sample.timestamp - this.windowMs;
+      this.clicks = this.clicks.filter((c) => c.timestamp >= cutoff);
+      this.clicks.push(sample);
+      const matching = this.clicks.filter((c) => {
+        if (c.target !== sample.target) {
+          return false;
+        }
+        if (
+          c.x !== null &&
+          c.y !== null &&
+          sample.x !== null &&
+          sample.y !== null
+        ) {
+          const dx = c.x - sample.x;
+          const dy = c.y - sample.y;
+          return Math.hypot(dx, dy) <= this.radiusPx;
+        }
+        return true;
+      });
+      if (matching.length >= this.threshold) {
+        const count = matching.length;
+        this.clicks = this.clicks.filter((c) => c.target !== sample.target);
+        return { isRageClick: true, clickCount: count };
+      }
+      return { isRageClick: false, clickCount: matching.length };
+    }
+    reset() {
+      this.clicks = [];
+    }
+  };
+  function isIgnoredNode(node, ignoreSelector) {
+    if (!node || typeof node !== "object") {
+      return false;
+    }
+    const candidate = node;
+    const el =
+      typeof candidate.closest === "function"
+        ? candidate
+        : candidate.parentElement &&
+            typeof candidate.parentElement.closest === "function"
+          ? candidate.parentElement
+          : null;
+    if (!el || typeof el.closest !== "function") {
+      return false;
+    }
+    try {
+      return Boolean(el.closest(ignoreSelector));
+    } catch {
+      return false;
+    }
+  }
+  var activeStopFn = null;
+  var activeRingBuffer = null;
+  var activeFlushFn = null;
+  async function flushSessionReplay(trigger = "manual") {
+    if (activeFlushFn) {
+      return activeFlushFn(trigger);
+    }
+    return null;
+  }
+  function stopSessionReplay() {
+    if (activeStopFn) {
+      activeStopFn();
+      activeStopFn = null;
+    }
+    activeRingBuffer = null;
+    activeFlushFn = null;
+  }
+  function startSessionReplay(
+    options2 = {},
+    config2 = Configuration.getInstance(),
+  ) {
+    stopSessionReplay();
+    const maxDurationMs = options2.maxDurationMs ?? 3e4;
+    const maxFrames = options2.maxFrames ?? 2e3;
+    const observeMutations = options2.observeMutations ?? true;
+    const detectRageClicks = options2.detectRageClicks ?? true;
+    const flushOnError = options2.flushOnError ?? true;
+    const ignoreSelector = options2.ignoreSelector ?? DEFAULT_IGNORE_SELECTOR;
+    const maskTextSelector = options2.maskTextSelector ?? DEFAULT_MASK_SELECTOR;
+    const maskAllInputs = options2.maskAllInputs ?? true;
+    const ringBuffer = new ReplayRingBuffer(maxDurationMs, maxFrames);
+    activeRingBuffer = ringBuffer;
+    let stopRecorder;
+    if (typeof options2.recorder === "function") {
+      stopRecorder = options2.recorder({
+        emit: (event, isCheckout) => {
+          ringBuffer.push(event, isCheckout);
+        },
+        checkoutEveryNms: maxDurationMs,
+        maskAllInputs,
+        blockSelector: ignoreSelector,
+        maskTextSelector,
+      });
+    }
+    const doFlush = async (trigger) => {
+      if (!config2.on) {
+        return null;
+      }
+      const frames = ringBuffer.getSnapshotFrames();
+      if (frames.length === 0) {
+        return null;
+      }
+      const traceCtx =
+        typeof config2.traceContext === "function"
+          ? config2.traceContext()
+          : null;
+      const envelope = {
+        logType: "replay",
+        type: "session_replay",
+        trigger,
+        sessionId: config2.sessionId,
+        httpSessionId: config2.httpSessionId,
+        browserSessionId: config2.browserSessionId,
+        pageUrl:
+          typeof self !== "undefined" && self.location
+            ? self.location.href
+            : "",
+        startTime: frames[0].timestamp,
+        endTime: frames[frames.length - 1].timestamp,
+        frameCount: frames.length,
+        frames,
+        ...(traceCtx?.traceId ? { traceId: traceCtx.traceId } : {}),
+        ...(traceCtx?.spanId ? { spanId: traceCtx.spanId } : {}),
+      };
+      if (typeof options2.onFlush === "function") {
+        await options2.onFlush(envelope);
+        return envelope;
+      }
+      const serialized = JSON.stringify(envelope);
+      if (serialized.length <= MAX_KEEPALIVE_BYTES2) {
+        packageCustomLog(
+          {
+            logType: "replay",
+            type: "session_replay",
+            trigger,
+            frameCount: envelope.frameCount,
+            startTime: envelope.startTime,
+            endTime: envelope.endTime,
+          },
+          () => ({
+            frames: envelope.frames,
+          }),
+          false,
+        );
+      } else if (
+        config2.exporter &&
+        typeof config2.exporter.export === "function"
+      ) {
+        try {
+          await config2.exporter.export([envelope], {
+            keepalive: false,
+          });
+        } catch {}
+      } else if (typeof fetch === "function") {
+        const targetUrl = config2.otlpEndpoint
+          ? resolveOtlpLogsEndpoint(config2.otlpEndpoint)
+          : config2.url;
+        if (targetUrl) {
+          try {
+            await fetch(targetUrl, {
+              method: "POST",
+              headers: buildHeaders(config2),
+              body: serialized,
+              keepalive: false,
+            });
+          } catch {}
+        }
+      }
+      return envelope;
+    };
+    activeFlushFn = doFlush;
+    let observer = null;
+    let mutationTimer = null;
+    let pendingAdded = 0;
+    let pendingRemoved = 0;
+    let pendingAttributes = 0;
+    const pendingTargets = /* @__PURE__ */ new Set();
+    const flushMutationSummary = () => {
+      mutationTimer = null;
+      if (
+        pendingAdded === 0 &&
+        pendingRemoved === 0 &&
+        pendingAttributes === 0
+      ) {
+        return;
+      }
+      const addedCount = pendingAdded;
+      const removedCount = pendingRemoved;
+      const attributeCount = pendingAttributes;
+      const targets = Array.from(pendingTargets).slice(0, 10);
+      pendingAdded = 0;
+      pendingRemoved = 0;
+      pendingAttributes = 0;
+      pendingTargets.clear();
+      if (config2.on) {
+        packageCustomLog(
+          {
+            logType: "mutation",
+            type: "mutation",
+            target: targets[0] ?? "#document",
+          },
+          () => ({
+            addedCount,
+            removedCount,
+            attributeCount,
+            targets,
+          }),
+          false,
+        );
+      }
+    };
+    if (
+      observeMutations &&
+      typeof MutationObserver !== "undefined" &&
+      typeof document !== "undefined" &&
+      document.documentElement
+    ) {
+      observer = new MutationObserver((records) => {
+        for (const rec of records) {
+          if (isIgnoredNode(rec.target, ignoreSelector)) {
+            continue;
+          }
+          if (rec.type === "childList") {
+            let validAdded = 0;
+            for (let i = 0; i < rec.addedNodes.length; i++) {
+              if (!isIgnoredNode(rec.addedNodes[i], ignoreSelector)) {
+                validAdded++;
+              }
+            }
+            let validRemoved = 0;
+            for (let i = 0; i < rec.removedNodes.length; i++) {
+              if (!isIgnoredNode(rec.removedNodes[i], ignoreSelector)) {
+                validRemoved++;
+              }
+            }
+            if (validAdded === 0 && validRemoved === 0) {
+              continue;
+            }
+            pendingAdded += validAdded;
+            pendingRemoved += validRemoved;
+          } else if (rec.type === "attributes") {
+            pendingAttributes += 1;
+          }
+          if (rec.target && pendingTargets.size < 10) {
+            const sel = getSelector(rec.target);
+            if (sel && sel !== "Unknown") {
+              pendingTargets.add(sel);
+            }
+          }
+        }
+        if (
+          (pendingAdded > 0 || pendingRemoved > 0 || pendingAttributes > 0) &&
+          mutationTimer === null
+        ) {
+          const delay = Math.max(20, config2.resolution || 500);
+          mutationTimer = setTimeout(flushMutationSummary, delay);
+        }
+      });
+      observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["class", "id", "hidden", "disabled", "aria-expanded"],
+      });
+    }
+    const rageDetector = new RageClickDetector();
+    const onClickCapture = (e) => {
+      if (!config2.on || !e.target) {
+        return;
+      }
+      if (isIgnoredNode(e.target, ignoreSelector)) {
+        return;
+      }
+      const targetSel = getSelector(e.target);
+      const now = Date.now();
+      const { isRageClick, clickCount } = rageDetector.recordClick({
+        target: targetSel,
+        timestamp: now,
+        x: typeof e.clientX === "number" ? e.clientX : null,
+        y: typeof e.clientY === "number" ? e.clientY : null,
+      });
+      if (isRageClick) {
+        const rect = getTargetRect(e.target);
+        packageCustomLog(
+          {
+            logType: "custom",
+            type: "rage_click",
+            target: targetSel,
+          },
+          () => ({
+            clickCount,
+            ...(rect ? { targetRect: rect } : {}),
+          }),
+          true,
+        );
+        void doFlush("rage_click");
+      }
+    };
+    if (detectRageClicks && typeof document !== "undefined") {
+      document.addEventListener("click", onClickCapture, true);
+    }
+    const onWindowError = () => {
+      void doFlush("error");
+    };
+    const onUnhandledRejection = () => {
+      void doFlush("unhandledrejection");
+    };
+    if (
+      flushOnError &&
+      typeof self !== "undefined" &&
+      typeof self.addEventListener === "function"
+    ) {
+      self.addEventListener("error", onWindowError);
+      self.addEventListener("unhandledrejection", onUnhandledRejection);
+    }
+    const cleanup = () => {
+      if (mutationTimer !== null) {
+        clearTimeout(mutationTimer);
+        mutationTimer = null;
+      }
+      if (observer) {
+        observer.disconnect();
+        observer = null;
+      }
+      if (detectRageClicks && typeof document !== "undefined") {
+        document.removeEventListener("click", onClickCapture, true);
+      }
+      if (
+        flushOnError &&
+        typeof self !== "undefined" &&
+        typeof self.removeEventListener === "function"
+      ) {
+        self.removeEventListener("error", onWindowError);
+        self.removeEventListener("unhandledrejection", onUnhandledRejection);
+      }
+      if (typeof stopRecorder === "function") {
+        stopRecorder();
+        stopRecorder = void 0;
+      }
+      rageDetector.reset();
+      ringBuffer.clear();
+    };
+    activeStopFn = cleanup;
+    return cleanup;
+  }
+  function getActiveReplayRingBuffer() {
+    return activeRingBuffer;
+  }
+
+  // src/exporters/otel-sdk.ts
+  var OtelSdkExporter = class {
+    constructor(logger) {
+      this.logger = logger;
+    }
+    async export(logs2) {
+      try {
+        for (const log2 of logs2) {
+          const logType =
+            typeof log2.logType === "string" ? log2.logType : "raw";
+          const eventType =
+            typeof log2.type === "string" && log2.type.trim().length > 0
+              ? log2.type.trim()
+              : logType;
+          const eventName = `userale.${logType}.${eventType}`;
+          const timestamp =
+            typeof log2.clientTime === "number"
+              ? log2.clientTime
+              : typeof log2.endTime === "number"
+                ? log2.endTime
+                : Date.now();
+          const attributes = {
+            "event.name": eventName,
+            "flagon.log_type": logType,
+            "flagon.event_type": eventType,
+          };
+          if (typeof log2.pageUrl === "string") {
+            attributes["url.full"] = log2.pageUrl;
+          }
+          if (typeof log2.pageTitle === "string") {
+            attributes["page.title"] = log2.pageTitle;
+          }
+          if (typeof log2.userId === "string") {
+            attributes["user.id"] = log2.userId;
+          }
+          if (typeof log2.sessionId === "string") {
+            attributes["session.id"] = log2.sessionId;
+          }
+          if (typeof log2.target === "string") {
+            attributes["flagon.target"] = log2.target;
+          }
+          if (Array.isArray(log2.path)) {
+            attributes["flagon.path"] = log2.path;
+          }
+          if (typeof log2.userAction === "boolean") {
+            attributes["flagon.user_action"] = log2.userAction;
+          }
+          const loc = log2.location;
+          if (loc && typeof loc === "object") {
+            if (typeof loc.x === "number") {
+              attributes["flagon.location.x"] = loc.x;
+            }
+            if (typeof loc.y === "number") {
+              attributes["flagon.location.y"] = loc.y;
+            }
+          }
+          this.logger.emit({
+            timestamp,
+            observedTimestamp: timestamp,
+            severityNumber: 9,
+            severityText: "INFO",
+            eventName,
+            body: log2.details ?? eventName,
+            attributes,
+          });
+        }
+        return { success: true };
+      } catch (err) {
+        const error = err instanceof Error ? err : new Error(String(err));
+        return { success: false, error };
+      }
+    }
+  };
+
+  // src/exporters/proto-json.ts
+  var KNOWN_CUSTOM_LOG_KEYS = /* @__PURE__ */ new Set([
+    "pageUrl",
+    "pageTitle",
+    "pageReferrer",
+    "browser",
+    "userAgent",
+    "clientTime",
+    "scrnRes",
+    "logType",
+    "userAction",
+    "details",
+    "userId",
+    "toolVersion",
+    "toolName",
+    "useraleVersion",
+    "sessionId",
+    "httpSessionId",
+    "browserSessionId",
+  ]);
+  function buildProtoMetadata(log2) {
+    const scrnRes = log2.scrnRes;
+    const metadata = {
+      pageUrl: typeof log2.pageUrl === "string" ? log2.pageUrl : "",
+      pageTitle: typeof log2.pageTitle === "string" ? log2.pageTitle : "",
+      pageReferrer:
+        typeof log2.pageReferrer === "string" ? log2.pageReferrer : "",
+      userAgent: typeof log2.userAgent === "string" ? log2.userAgent : "",
+      clientTime: String(
+        typeof log2.clientTime === "number"
+          ? Math.trunc(log2.clientTime)
+          : typeof log2.startTime === "number"
+            ? Math.trunc(log2.startTime)
+            : 0,
+      ),
+    };
+    if (scrnRes && typeof scrnRes === "object") {
+      metadata.screenResolution = {
+        width:
+          typeof scrnRes.width === "number" ? Math.trunc(scrnRes.width) : 0,
+        height:
+          typeof scrnRes.height === "number" ? Math.trunc(scrnRes.height) : 0,
+      };
+    }
+    if (typeof log2.userId === "string") metadata.userId = log2.userId;
+    if (typeof log2.sessionId === "string") metadata.sessionId = log2.sessionId;
+    if (typeof log2.httpSessionId === "string")
+      metadata.httpSessionId = log2.httpSessionId;
+    if (typeof log2.browserSessionId === "string")
+      metadata.browserSessionId = log2.browserSessionId;
+    if (typeof log2.toolName === "string") metadata.toolName = log2.toolName;
+    if (typeof log2.toolVersion === "string")
+      metadata.toolVersion = log2.toolVersion;
+    if (typeof log2.useraleVersion === "string")
+      metadata.useraleVersion = log2.useraleVersion;
+    return metadata;
+  }
+  function toStringAttributes(attrs) {
+    if (!attrs || typeof attrs !== "object" || Array.isArray(attrs)) {
+      return void 0;
+    }
+    const out = {};
+    for (const [k, v] of Object.entries(attrs)) {
+      out[k] = typeof v === "string" ? v : JSON.stringify(v);
+    }
+    return out;
+  }
+  function toProtoUserALELog(log2) {
+    const metadata = buildProtoMetadata(log2);
+    const logType = log2.logType;
+    if (logType === "raw") {
+      const loc = log2.location;
+      const location = {};
+      if (loc && typeof loc === "object") {
+        if (typeof loc.x === "number") location.x = loc.x;
+        if (typeof loc.y === "number") location.y = loc.y;
+      }
+      const raw = {
+        metadata,
+        target: typeof log2.target === "string" ? log2.target : "",
+        path: Array.isArray(log2.path) ? log2.path : [],
+        eventType: typeof log2.type === "string" ? log2.type : "",
+        location,
+        userAction: Boolean(log2.userAction),
+      };
+      if (typeof log2.microTime === "number") {
+        raw.microTime = log2.microTime;
+      }
+      if (
+        log2.details &&
+        typeof log2.details === "object" &&
+        !Array.isArray(log2.details)
+      ) {
+        raw.details = log2.details;
+      }
+      const strAttrs = toStringAttributes(log2.attributes);
+      if (strAttrs) {
+        raw.attributes = strAttrs;
+      }
+      if (
+        log2.style &&
+        typeof log2.style === "object" &&
+        !Array.isArray(log2.style)
+      ) {
+        raw.style = log2.style;
+      }
+      return {
+        logType: "LOG_TYPE_RAW",
+        raw,
+      };
+    }
+    if (logType === "interval") {
+      const interval = {
+        metadata,
+        target: typeof log2.target === "string" ? log2.target : "",
+        path: Array.isArray(log2.path) ? log2.path : [],
+        eventType: typeof log2.type === "string" ? log2.type : "",
+        count: typeof log2.count === "number" ? Math.trunc(log2.count) : 0,
+        duration: String(
+          typeof log2.duration === "number" ? Math.trunc(log2.duration) : 0,
+        ),
+        startTime: String(
+          typeof log2.startTime === "number" ? Math.trunc(log2.startTime) : 0,
+        ),
+        endTime: String(
+          typeof log2.endTime === "number" ? Math.trunc(log2.endTime) : 0,
+        ),
+        targetChange: Boolean(log2.targetChange),
+        typeChange: Boolean(log2.typeChange),
+        userAction: Boolean(log2.userAction),
+      };
+      return {
+        logType: "LOG_TYPE_INTERVAL",
+        interval,
+      };
+    }
+    const customFields = {};
+    for (const [key, value] of Object.entries(log2)) {
+      if (!KNOWN_CUSTOM_LOG_KEYS.has(key) && value !== void 0) {
+        customFields[key] = value;
+      }
+    }
+    if (typeof logType === "string" && logType !== "custom") {
+      customFields.logType = logType;
+    }
+    const custom = {
+      metadata,
+      userAction: Boolean(log2.userAction),
+      customFields,
+    };
+    if (
+      log2.details &&
+      typeof log2.details === "object" &&
+      !Array.isArray(log2.details)
+    ) {
+      custom.details = log2.details;
+    }
+    return {
+      logType: "LOG_TYPE_CUSTOM",
+      custom,
+    };
+  }
+  function toProtoLogBatch(logs2) {
+    return {
+      logs: logs2.map(toProtoUserALELog),
+    };
+  }
+  var ProtoJsonExporter = class extends HttpJsonExporter {
+    serialize(logs2) {
+      return JSON.stringify(toProtoLogBatch(logs2));
+    }
+  };
+
+  // src/exporters/websocket.ts
+  var MAX_PENDING_MESSAGES = 100;
+  var WS_CONNECTING = 0;
+  var WS_OPEN = 1;
+  var WebSocketExporter = class {
+    constructor(config2) {
+      this.pendingPayloads = [];
+      this.wsock = new WebSocket(config2.url);
+      if (typeof this.wsock.addEventListener === "function") {
+        this.wsock.addEventListener("open", () => {
+          this.drainPending();
+        });
+      }
+    }
+    drainPending() {
+      const openState =
+        typeof WebSocket !== "undefined" ? WebSocket.OPEN : WS_OPEN;
+      if (this.wsock.readyState !== openState) {
+        return;
+      }
+      while (this.pendingPayloads.length > 0) {
+        if (this.wsock.readyState !== openState) {
+          break;
+        }
+        const next = this.pendingPayloads.shift();
+        this.wsock.send(next);
+      }
+    }
+    async export(logs2) {
+      const data = JSON.stringify(logs2);
+      const openState =
+        typeof WebSocket !== "undefined" ? WebSocket.OPEN : WS_OPEN;
+      const connectingState =
+        typeof WebSocket !== "undefined" ? WebSocket.CONNECTING : WS_CONNECTING;
+      if (this.wsock.readyState === openState) {
+        this.wsock.send(data);
+        return { success: true };
+      }
+      if (this.wsock.readyState === connectingState) {
+        if (this.pendingPayloads.length >= MAX_PENDING_MESSAGES) {
+          this.pendingPayloads.shift();
+        }
+        this.pendingPayloads.push(data);
+        return { success: true };
+      }
+      return {
+        success: false,
+        error: new Error("WebSocket is not open"),
+      };
+    }
+    async flush() {
+      this.drainPending();
+      return Promise.resolve();
+    }
+    async shutdown() {
+      this.pendingPayloads = [];
+      const openState =
+        typeof WebSocket !== "undefined" ? WebSocket.OPEN : WS_OPEN;
+      const connectingState =
+        typeof WebSocket !== "undefined" ? WebSocket.CONNECTING : WS_CONNECTING;
+      if (
+        this.wsock.readyState === openState ||
+        this.wsock.readyState === connectingState
+      ) {
+        this.wsock.close();
+      }
+      return Promise.resolve();
+    }
+  };
+
+  // src/exporters/index.ts
+  function createExporter(config2) {
+    if (config2.exporter) {
+      return config2.exporter;
+    }
+    const mode = config2.exporterFormat || config2.exporterType;
+    if (mode === "otlp" || mode === "otlp-json" || config2.otlpEndpoint) {
+      return new OtlpJsonExporter(config2);
+    }
+    try {
+      const url = new URL(config2.url);
+      if (
+        url.protocol === "ws:" ||
+        url.protocol === "wss:" ||
+        mode === "websocket" ||
+        config2.websocketsEnabled
+      ) {
+        return new WebSocketExporter(config2);
+      }
+    } catch {}
+    if (mode === "proto-json") {
+      return new ProtoJsonExporter(config2);
+    }
+    return new HttpJsonExporter(config2);
+  }
+
+  // src/sendLogs.ts
+  var sendIntervalId;
+  var pagehideHandler = null;
+  var pageshowHandler = null;
+  var activeExporter = null;
+  var activeExporterKey = null;
+  var activeCustomExporter = null;
+  var inFlightExports = /* @__PURE__ */ new Set();
+  function trackExport(promise) {
+    const tracked = promise.then(
+      () => void 0,
+      (error) => {
+        console.error(error);
+      },
+    );
+    inFlightExports.add(tracked);
+    tracked.finally(() => {
+      inFlightExports.delete(tracked);
+    });
+    return tracked;
+  }
+  function isWebSocketMode(config2) {
+    return Boolean(
+      config2.websocketsEnabled ||
+      (typeof config2.url === "string" && /^wss?:/i.test(config2.url)),
+    );
+  }
+  function registerExporter(exporter, targetConfig) {
+    if (exporter !== null && typeof exporter?.export !== "function") {
+      return false;
+    }
+    (targetConfig ?? Configuration.getInstance()).update({ exporter });
+    activeExporter = null;
+    activeExporterKey = null;
+    activeCustomExporter = null;
+    return true;
+  }
+  function resolveExporter(config2) {
+    const key = [
+      config2.url,
+      config2.otlpEndpoint ?? "",
+      config2.exporterFormat ?? "",
+      config2.exporterType ?? "http-json",
+      String(Boolean(config2.websocketsEnabled)),
+    ].join("|");
+    if (
+      activeExporter &&
+      activeExporterKey === key &&
+      activeCustomExporter === (config2.exporter ?? null)
+    ) {
+      return activeExporter;
+    }
+    activeExporter = createExporter(config2);
+    activeExporterKey = key;
+    activeCustomExporter = config2.exporter ?? null;
+    return activeExporter;
+  }
+  function initSender(logs2, config2) {
+    if (sendIntervalId !== void 0) {
+      clearInterval(sendIntervalId);
+      sendIntervalId = void 0;
+    }
+    try {
+      const url = new URL(config2.url);
+      if (
+        (config2.apiKey || config2.authHeader) &&
+        url.protocol === "http:" &&
+        !["localhost", "127.0.0.1", "[::1]"].includes(url.hostname)
+      ) {
+        console.warn(
+          "[UserALE] Sending credentials over plaintext HTTP. Use HTTPS in production.",
+        );
+      }
+    } catch {}
+    activeExporter = null;
+    resolveExporter(config2);
+    sendIntervalId = sendOnInterval(logs2, config2);
+    if (typeof self !== "undefined") {
+      if (pagehideHandler && typeof self.removeEventListener === "function") {
+        self.removeEventListener("pagehide", pagehideHandler);
+        pagehideHandler = null;
+      }
+      if (pageshowHandler && typeof self.removeEventListener === "function") {
+        self.removeEventListener("pageshow", pageshowHandler);
+        pageshowHandler = null;
+      }
+    }
+    sendOnClose(logs2, config2);
+  }
+  async function stopSender() {
+    if (sendIntervalId !== void 0) {
+      clearInterval(sendIntervalId);
+      sendIntervalId = void 0;
+    }
+    if (
+      typeof self !== "undefined" &&
+      typeof self.removeEventListener === "function"
+    ) {
+      if (pagehideHandler) {
+        self.removeEventListener("pagehide", pagehideHandler);
+        pagehideHandler = null;
+      }
+      if (pageshowHandler) {
+        self.removeEventListener("pageshow", pageshowHandler);
+        pageshowHandler = null;
+      }
+    }
+    const exporter = activeExporter;
+    activeExporter = null;
+    activeExporterKey = null;
+    activeCustomExporter = null;
+    if (exporter && typeof exporter.shutdown === "function") {
+      try {
+        await exporter.shutdown();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+  async function flushLogs(logs2, config2) {
+    if (logs2.length > 0) {
+      const batch = logs2.splice(0);
+      await trackExport(sendLogs(batch, config2, 0));
+    }
+    if (inFlightExports.size > 0) {
+      await Promise.allSettled(Array.from(inFlightExports));
+    }
+    if (activeExporter && typeof activeExporter.flush === "function") {
+      await activeExporter.flush();
+    }
+  }
+  function sendOnInterval(logs2, config2) {
+    return setInterval(function () {
+      if (!config2.on) {
+        return;
+      }
+      if (logs2.length >= config2.logCountThreshold) {
+        const batch = logs2.splice(0);
+        trackExport(sendLogs(batch, config2, 0));
+      }
+    }, config2.transmitInterval);
+  }
+  function sendOnClose(logs2, config2) {
+    if (
+      typeof self === "undefined" ||
+      typeof self.addEventListener !== "function"
+    ) {
+      return;
+    }
+    const hideListener = function () {
+      if (!config2.on) {
+        return;
+      }
+      if (logs2.length > 0) {
+        const batch = logs2.splice(0);
+        const exporter = resolveExporter(config2);
+        trackExport(
+          exporter.export(batch, { keepalive: true }).catch((error) => {
+            console.error(error);
+          }),
+        );
+      }
+      if (
+        activeExporter &&
+        isWebSocketMode(config2) &&
+        typeof activeExporter.shutdown === "function"
+      ) {
+        const wsExporter = activeExporter;
+        activeExporter = null;
+        activeExporterKey = null;
+        void wsExporter.shutdown?.().catch((error) => {
+          console.error(error);
+        });
+      }
+    };
+    const showListener = function (event) {
+      const persisted = Boolean(event.persisted);
+      if (
+        persisted &&
+        config2.on &&
+        isWebSocketMode(config2) &&
+        !activeExporter
+      ) {
+        resolveExporter(config2);
+      }
+    };
+    pagehideHandler = hideListener;
+    pageshowHandler = showListener;
+    self.addEventListener("pagehide", hideListener);
+    self.addEventListener("pageshow", showListener);
+  }
+  async function sendLogs(logs2, config2, retries) {
+    const exporter = resolveExporter(config2);
+    const result = await exporter.export(logs2, { retries });
+    if (result && result.success === false && result.error) {
+      console.error(result.error);
+    }
+  }
+
+  // src/runtime.ts
+  var INTERNAL_CONFIG_KEYS = /* @__PURE__ */ new Set(["initialized"]);
+  function snapshotConfig(config2) {
+    const snapshot = {};
+    for (const key of Object.keys(config2)) {
+      if (INTERNAL_CONFIG_KEYS.has(key)) {
+        continue;
+      }
+      const val = config2[key];
+      if (
+        key === "headers" &&
+        val &&
+        typeof val === "object" &&
+        !Array.isArray(val)
+      ) {
+        snapshot[key] = { ...val };
+      } else {
+        snapshot[key] = val;
+      }
+    }
+    return snapshot;
+  }
+  function createRuntime(autoInit) {
+    const config2 = autoInit
+      ? Configuration.getInstance()
+      : Configuration.createUninitialized();
+    const logs2 = [];
+    let isStarted = false;
+    let setupTimerId = null;
+    let startedChangeListener = null;
+    const startLoadTimestamp = Date.now();
+    let endLoadTimestamp;
+    if (autoInit) {
+      if (
+        typeof self !== "undefined" &&
+        typeof self.addEventListener === "function"
+      ) {
+        self.addEventListener("load", function () {
+          endLoadTimestamp = Date.now();
+        });
+      }
+      config2.update({
+        useraleVersion: version,
+      });
+    }
+    initPackager(logs2, config2);
+    const setStarted = (value) => {
+      isStarted = value;
+      startedChangeListener?.(value);
+    };
+    const clearSetupTimer = () => {
+      if (setupTimerId !== null) {
+        clearTimeout(setupTimerId);
+        setupTimerId = null;
+      }
+    };
+    const ensureInitialized = (newConfig) => {
+      if (!config2.isInitialized()) {
+        const pendingExporter = config2.exporter;
+        config2.initialize({
+          autostart: autoInit,
+          persistSession: newConfig?.persistSession,
+          sessionId: newConfig?.sessionId,
+        });
+        config2.update({ useraleVersion: version });
+        if (pendingExporter && newConfig?.exporter === void 0) {
+          config2.update({ exporter: pendingExporter });
+        }
+      }
+    };
+    const start2 = () => {
+      ensureInitialized();
+      clearSetupTimer();
+      if (!isStarted || config2.autostart === false) {
+        const wasStarted = isStarted;
+        setStarted(true);
+        config2.on = true;
+        config2.update({ autostart: true });
+        if (!wasStarted) {
+          attachHandlers(config2);
+          initSender(logs2, config2);
+          if (config2.observeMutations && !getActiveReplayRingBuffer()) {
+            startSessionReplay({ observeMutations: true }, config2);
+          }
+        }
+      }
+    };
+    const stop2 = () => {
+      clearSetupTimer();
+      setStarted(false);
+      config2.on = false;
+      config2.update({ autostart: false });
+      detachHandlers();
+      resetIntervalState();
+      stopSessionReplay();
+      void stopSender();
+    };
+    const flush2 = async () => {
+      ensureInitialized();
+      await flushLogs(logs2, config2);
+    };
+    const reset2 = () => {
+      logs2.splice(0);
+      resetIntervalState();
+    };
+    const options2 = (newConfig) => {
+      ensureInitialized(newConfig);
+      if (newConfig) {
+        config2.update(newConfig);
+        if (newConfig.autostart === false) {
+          clearSetupTimer();
+        }
+        if (isStarted && newConfig.observeMutations !== void 0) {
+          if (newConfig.observeMutations && !getActiveReplayRingBuffer()) {
+            startSessionReplay({ observeMutations: true }, config2);
+          } else if (
+            !newConfig.observeMutations &&
+            getActiveReplayRingBuffer()
+          ) {
+            stopSessionReplay();
+          }
+        }
+      }
+      return snapshotConfig(config2);
+    };
+    const log2 = (customLog) => {
+      if (customLog && typeof customLog === "object") {
+        enqueueLog(customLog);
+        return true;
+      }
+      return false;
+    };
+    const registerExporter3 = (exporter) => {
+      return registerExporter(exporter, config2);
+    };
+    const scheduleSetup = () => {
+      if (isStarted || !config2.autostart) {
+        return;
+      }
+      if (typeof document === "undefined" && typeof self === "undefined") {
+        return;
+      }
+      clearSetupTimer();
+      setupTimerId = setTimeout(function () {
+        setupTimerId = null;
+        if (isStarted || !config2.autostart) {
+          return;
+        }
         let state;
         try {
           state = document.readyState;
-        } catch (error) {
+        } catch {
           state = "complete";
         }
-        if (config3.autostart && (state === "interactive" || state === "complete")) {
-          attachHandlers(config3);
-          initSender(logs2, config3);
-          started = config3.on = true;
-          if (typeof window !== "undefined" && typeof document !== "undefined") {
+        if (state === "interactive" || state === "complete") {
+          start2();
+          if (
+            typeof window !== "undefined" &&
+            typeof document !== "undefined"
+          ) {
+            const loadDuration = Math.max(
+              1,
+              (endLoadTimestamp ?? Date.now()) - startLoadTimestamp,
+            );
             packageCustomLog(
               {
                 type: "load",
-                details: { pageLoadTime: endLoadTimestamp - startLoadTimestamp }
+                details: { pageLoadTime: loadDuration },
               },
               () => ({}),
-              false
+              false,
             );
           }
         } else {
-          setup(config3);
+          scheduleSetup();
         }
       }, 100);
-    }
+    };
+    return {
+      config: config2,
+      logs: logs2,
+      getStarted: () => isStarted,
+      start: start2,
+      stop: stop2,
+      flush: flush2,
+      reset: reset2,
+      options: options2,
+      log: log2,
+      registerExporter: registerExporter3,
+      scheduleSetup,
+      notifyOnStartedChange: (fn) => {
+        startedChangeListener = fn;
+      },
+    };
+  }
+
+  // src/main.ts
+  var runtime = createRuntime(true);
+  var started = false;
+  runtime.notifyOnStartedChange((val) => {
+    started = val;
+  });
+  if (runtime.config.autostart) {
+    runtime.scheduleSetup();
+  }
+  function registerExporter2(exporter) {
+    return runtime.registerExporter(exporter);
   }
   var version2 = version;
   function start() {
-    if (!started || config2.autostart === false) {
-      started = config2.on = true;
-      config2.update({ autostart: true });
-    }
+    runtime.start();
   }
   function stop() {
-    started = config2.on = false;
-    config2.update({ autostart: false });
+    runtime.stop();
+  }
+  function flush() {
+    return runtime.flush();
+  }
+  function reset() {
+    runtime.reset();
   }
   function options(newConfig) {
-    if (newConfig) {
-      config2.update(newConfig);
-    }
-    return config2;
+    return runtime.options(newConfig);
   }
   function log(customLog) {
-    if (customLog) {
-      logs2.push(customLog);
-      return true;
-    } else {
-      return false;
-    }
+    return runtime.log(customLog);
   }
   if (typeof window !== "undefined") {
     window.userale = {
       start,
       stop,
+      flush,
+      reset,
       options,
       log,
       version,
       details: defineCustomDetails,
       registerAuthCallback,
+      registerHeadersCallback,
+      registerExporter: registerExporter2,
+      startSessionReplay,
+      stopSessionReplay,
+      flushSessionReplay,
+      getTargetRect,
+      toOtlpExportLogsServiceRequest,
+      toOtlpLogRecord,
+      toProtoLogBatch,
+      toProtoUserALELog,
       addCallbacks,
       removeCallbacks,
       packageLog,
       packageCustomLog,
       getSelector,
-      buildPath
+      buildPath,
+      detectBrowser,
     };
   }
 })();

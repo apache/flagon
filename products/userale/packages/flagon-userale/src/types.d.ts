@@ -14,10 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type {
-  ExporterType as ExporterMode,
-  LogExporter,
-} from "@/exporters/types";
+import type { LogExporter } from "./exporters/types";
 
 export declare namespace Settings {
   type Version = string | null;
@@ -30,7 +27,14 @@ export declare namespace Settings {
   type CustomIndex = string | null;
   type HeaderObject = { [key: string]: string };
   type Headers = HeaderObject | null;
-  type ExporterType = ExporterMode;
+  type ExporterType =
+    | "http-json"
+    | "v2-json"
+    | "proto-json"
+    | "otlp"
+    | "otlp-json"
+    | "websocket"
+    | "custom";
   type CustomExporter = LogExporter | null;
   type OtlpEndpoint = string | null;
   type TraceContextCallback =
@@ -74,9 +78,11 @@ export declare namespace Settings {
     httpSessionId: SessionId;
     logCountThreshold: number;
     logDetails: boolean;
+    maxQueueSize?: number;
     observeMutations?: boolean;
     on?: boolean;
     otlpEndpoint?: OtlpEndpoint;
+    persistSession?: boolean;
     resolution: number;
     sessionId: SessionId;
     time: TimeFunction;
@@ -93,7 +99,7 @@ export declare namespace Settings {
   }
 
   export interface IConfiguration extends Config {
-    getInstance(): Configuration;
+    getInstance(): IConfiguration;
     configure(newConfig: Config): void;
   }
 }
@@ -113,15 +119,15 @@ export declare namespace Logging {
   export type Log = JSONObject; // TODO: Intersect this with the default log objects (raw & interval)
   export type CustomLog = JSONObject;
 
-  export type DynamicDetailFunction<E extends Event = Event> = (
-    e: E,
-  ) => JSONObject | null;
+  export type DynamicDetailFunction<E extends Event = Event> = {
+    bivarianceHack(e: E): JSONObject | null;
+  }["bivarianceHack"];
   export type StaticDetailFunction = () => JSONObject | null;
 }
 
 export declare namespace Events {
   type FormElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
-  type ChangeEvent = Event<FormElement>;
+  type ChangeEvent = Event & { readonly target: FormElement };
   export type RawEvents =
     | "dblclick"
     | "mouseup"

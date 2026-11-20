@@ -17,22 +17,9 @@
  * under the License.
  */
 
-import { defineConfig } from 'tsup';
+import { defineConfig } from "tsup";
 
-export default defineConfig([
-  {
-    tsconfig: './tsconfig.json',
-    entry: ['src/main.ts'],
-    outDir: 'build',
-    format: ['esm', 'iife'],
-    name: 'userale',
-    target: 'es2021',
-    dts: false,
-    sourcemap: true,
-    clean: true,
-    minify: false,
-    banner: {
-      js: `/* Licensed to the Apache Software Foundation (ASF) under one or more
+const ASF_BANNER = `/*! Licensed to the Apache Software Foundation (ASF) under one or more
   contributor license agreements. See the NOTICE file distributed with
   this work for additional information regarding copyright ownership.
   The ASF licenses this file to you under the Apache License, Version 2.0
@@ -45,7 +32,74 @@ export default defineConfig([
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
-  limitations under the License.*/`,
+  limitations under the License.*/`;
+
+export default defineConfig([
+  {
+    tsconfig: "./tsconfig.json",
+    entry: { main: "src/main.ts" },
+    outDir: "build",
+    format: ["esm"],
+    splitting: false,
+    target: "es2021",
+    dts: {
+      compilerOptions: {
+        composite: false,
+        incremental: false,
+        rootDir: ".",
+      },
+    },
+    sourcemap: true,
+    clean: false,
+    minify: false,
+    define: {
+      __USERALE_IIFE__: "false",
+    },
+    banner: {
+      js: ASF_BANNER,
+    },
+  },
+  {
+    tsconfig: "./tsconfig.json",
+    entry: { manual: "src/manual.ts" },
+    outDir: "build",
+    format: ["esm"],
+    splitting: false,
+    target: "es2021",
+    dts: {
+      compilerOptions: {
+        composite: false,
+        incremental: false,
+        rootDir: ".",
+      },
+    },
+    sourcemap: true,
+    clean: false,
+    minify: false,
+    define: {
+      __USERALE_IIFE__: "false",
+    },
+    banner: {
+      js: ASF_BANNER,
+    },
+  },
+  {
+    tsconfig: "./tsconfig.json",
+    entry: { main: "src/main.ts" },
+    outDir: "build",
+    format: ["iife"],
+    splitting: false,
+    name: "userale",
+    target: "es2021",
+    dts: false,
+    sourcemap: true,
+    clean: false,
+    minify: false,
+    define: {
+      __USERALE_IIFE__: "true",
+    },
+    banner: {
+      js: ASF_BANNER,
     },
   },
 ]);

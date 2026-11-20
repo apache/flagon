@@ -71,6 +71,29 @@ export function removeCallbacks(targetKeys: string[]) {
   });
 }
 
+export function enqueueLog(logEntry: Logging.Log): void {
+  const cap =
+    typeof config?.maxQueueSize === "number" && config.maxQueueSize > 0
+      ? config.maxQueueSize
+      : 10000;
+  if (logs.length >= cap) {
+    logs.splice(0, logs.length - cap + 1);
+  }
+  logs.push(logEntry);
+}
+
+/**
+ * Resets tracked interval logging state.
+ */
+export function resetIntervalState(): void {
+  intervalId = null;
+  intervalType = null;
+  intervalPath = null;
+  intervalTimer = null;
+  intervalCounter = 0;
+  intervalLog = null;
+}
+
 /**
  * Assigns the config and log container to be used by the logging functions.
  * @param  {Array<Logging.Log>} newLogs   Log container.
@@ -83,12 +106,7 @@ export function initPackager(
   logs = newLogs;
   config = newConfig;
   cbHandlers = {};
-  intervalId = null;
-  intervalType = null;
-  intervalPath = null;
-  intervalTimer = null;
-  intervalCounter = 0;
-  intervalLog = null;
+  resetIntervalState();
 }
 
 /**
@@ -260,7 +278,7 @@ export function packageLog(
     }
   }
 
-  logs.push(log);
+  enqueueLog(log);
   return true;
 }
 
@@ -324,7 +342,7 @@ export function packageCustomLog(
     }
   }
 
-  logs.push(log);
+  enqueueLog(log);
 
   return true;
 }
@@ -349,6 +367,9 @@ export function extractTimeFields(timeStamp: number) {
  */
 export function packageIntervalLog(e: Event) {
   try {
+    if (!config || !config.on) {
+      return false;
+    }
     const target = e.target ? getSelector(e.target) : null;
     const path = buildPath(e);
     const type = e.type;
@@ -365,61 +386,68 @@ export function packageIntervalLog(e: Event) {
       intervalCounter = 0;
     }
 
+    let dropped = false;
     if ((intervalId !== target || intervalType !== type) && intervalTimer) {
       // When to create log? On transition end
-      // @todo Possible for intervalLog to not be pushed in the event the interval never ends...
+      try {
+        intervalLog = {
+          target: intervalId,
+          path: intervalPath,
+          pageUrl: self.location.href,
+          pageTitle: document.title,
+          pageReferrer: document.referrer,
+          browser: detectBrowser(),
+          userAgent: self.navigator.userAgent,
+          count: intervalCounter,
+          duration: timestamp - intervalTimer, // microseconds
+          startTime: intervalTimer,
+          endTime: timestamp,
+          type: intervalType,
+          logType: "interval",
+          targetChange: intervalId !== target,
+          typeChange: intervalType !== type,
+          userAction: false,
+          userId: config.userId,
+          toolVersion: config.toolVersion,
+          toolName: config.toolName,
+          useraleVersion: config.useraleVersion,
+          sessionId: config.sessionId,
+          httpSessionId: config.httpSessionId,
+          browserSessionId: config.browserSessionId,
+        };
 
-      intervalLog = {
-        target: intervalId,
-        path: intervalPath,
-        pageUrl: self.location.href,
-        pageTitle: document.title,
-        pageReferrer: document.referrer,
-        browser: detectBrowser(),
-        userAgent: self.navigator.userAgent,
-        count: intervalCounter,
-        duration: timestamp - intervalTimer, // microseconds
-        startTime: intervalTimer,
-        endTime: timestamp,
-        type: intervalType,
-        logType: "interval",
-        targetChange: intervalId !== target,
-        typeChange: intervalType !== type,
-        userAction: false,
-        userId: config.userId,
-        toolVersion: config.toolVersion,
-        toolName: config.toolName,
-        useraleVersion: config.useraleVersion,
-        sessionId: config.sessionId,
-        httpSessionId: config.httpSessionId,
-        browserSessionId: config.browserSessionId,
-      };
+        if (
+          typeof filterHandler === "function" &&
+          !filterHandler(intervalLog)
+        ) {
+          dropped = true;
+        }
 
-      if (typeof filterHandler === "function" && !filterHandler(intervalLog)) {
-        return false;
-      }
+        if (!dropped) {
+          if (typeof mapHandler === "function") {
+            intervalLog = mapHandler(intervalLog, e);
+          }
 
-      if (typeof mapHandler === "function") {
-        intervalLog = mapHandler(intervalLog, e);
-      }
-
-      for (const func of Object.values(cbHandlers)) {
-        if (typeof func === "function") {
-          intervalLog = func(intervalLog, null);
-          if (!intervalLog) {
-            return false;
+          for (const func of Object.values(cbHandlers)) {
+            if (typeof func === "function") {
+              intervalLog = func(intervalLog, null);
+              if (!intervalLog) {
+                dropped = true;
+                break;
+              }
+            }
           }
         }
+
+        if (!dropped && intervalLog) enqueueLog(intervalLog);
+      } finally {
+        // Always reset interval state for the new target/type even if filtered
+        intervalId = target;
+        intervalType = type;
+        intervalPath = path;
+        intervalTimer = timestamp;
+        intervalCounter = 0;
       }
-
-      if (intervalLog) logs.push(intervalLog);
-
-      // Reset
-      intervalId = target;
-      intervalType = type;
-      intervalPath = path;
-      intervalTimer = timestamp;
-      intervalCounter = 0;
     }
 
     // Interval is still occuring, just update counter
@@ -431,7 +459,7 @@ export function packageIntervalLog(e: Event) {
       intervalCounter = intervalCounter + 1;
     }
 
-    return true;
+    return !dropped;
   } catch {
     return false;
   }
