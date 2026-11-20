@@ -238,11 +238,11 @@ describe("UserALE lifecycle, storage opt-out, manual entrypoint, and exporters",
         manual.stop();
         expect(shutdownSpy).toHaveBeenCalledTimes(1);
 
-        btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-        const pkg = await import("@/packageLogs");
         expect(
-          pkg.packageIntervalLog(new MouseEvent("click", { bubbles: true })),
+          manual.packageLog(new MouseEvent("click", { bubbles: true })),
         ).toBe(false);
+        btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        btn.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
         await manual.flush();
         expect(exportedBatches.length).toBe(2);
 
@@ -301,27 +301,22 @@ describe("UserALE lifecycle, storage opt-out, manual entrypoint, and exporters",
           },
         });
 
-        const pkg = await import("@/packageLogs");
-
-        // Accumulate 3 events on btnA
+        // Accumulate 3 events on btnA via real DOM dispatch
         for (let i = 0; i < 3; i++) {
           const ev = new MouseEvent("mouseover", { bubbles: true });
-          Object.defineProperty(ev, "target", { value: btnA });
           Object.defineProperty(ev, "timeStamp", { value: 1000 + i * 10 });
-          pkg.packageIntervalLog(ev);
+          btnA.dispatchEvent(ev);
         }
 
         // Transition to btnB: btnA interval log is filtered out, state must reset to btnB (count = 1)
         const evB1 = new MouseEvent("mouseover", { bubbles: true });
-        Object.defineProperty(evB1, "target", { value: btnB });
         Object.defineProperty(evB1, "timeStamp", { value: 2000 });
-        expect(pkg.packageIntervalLog(evB1)).toBe(false);
+        btnB.dispatchEvent(evB1);
 
         // Transition to btnC: btnB interval log must emit with count = 1, not leaked count from btnA
         const evC1 = new MouseEvent("mouseover", { bubbles: true });
-        Object.defineProperty(evC1, "target", { value: btnC });
         Object.defineProperty(evC1, "timeStamp", { value: 2500 });
-        expect(pkg.packageIntervalLog(evC1)).toBe(true);
+        btnC.dispatchEvent(evC1);
 
         await manual.flush();
         const intervalLogs = exported.filter((l) => l.logType === "interval");

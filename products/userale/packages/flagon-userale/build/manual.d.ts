@@ -21,6 +21,7 @@ type ExporterType =
   | "proto-json"
   | "otlp"
   | "otlp-json"
+  | "otel-sdk"
   | "websocket"
   | "custom";
 interface ExportOptions {
@@ -74,18 +75,61 @@ declare namespace Settings {
     | "proto-json"
     | "otlp"
     | "otlp-json"
+    | "otel-sdk"
     | "websocket"
     | "custom";
   type CustomExporter = LogExporter | null;
   type OtlpEndpoint = string | null;
   type TraceContextCallback =
     (() => { traceId?: string; spanId?: string } | null) | null;
+  type DomSelectorMode = "full" | "structural" | "none";
+  type PrivacyPreset = "default" | "strict";
+
+  export interface PrivacyOptions {
+    preset?: PrivacyPreset;
+    allowlistSelector?: string | null;
+    capturePageUrl?: boolean;
+    capturePageTitle?: boolean;
+    capturePageReferrer?: boolean;
+    captureHost?: boolean;
+    captureUserAgent?: boolean;
+    captureScreenRes?: boolean;
+    captureLocation?: boolean;
+    captureTargetRect?: boolean;
+    captureDetails?: boolean;
+    captureMicroTime?: boolean;
+    attachTraceContext?: boolean;
+    ignoreUntrustedEvents?: boolean;
+    domSelectorMode?: DomSelectorMode;
+    allowedAttributes?: string[] | null;
+  }
+
+  export interface ResolvedPrivacyOptions {
+    preset: PrivacyPreset;
+    allowlistSelector: string | null;
+    capturePageUrl: boolean;
+    capturePageTitle: boolean;
+    capturePageReferrer: boolean;
+    captureHost: boolean;
+    captureUserAgent: boolean;
+    captureScreenRes: boolean;
+    captureLocation: boolean;
+    captureTargetRect: boolean;
+    captureDetails: boolean;
+    captureMicroTime: boolean;
+    attachTraceContext: boolean;
+    ignoreUntrustedEvents: boolean;
+    domSelectorMode: DomSelectorMode;
+    allowedAttributes: string[] | null;
+  }
+
   type ConfigValueTypes =
     | string
     | number
     | boolean
     | null
     | undefined
+    | string[]
     | Version
     | UserId
     | SessionId
@@ -98,6 +142,9 @@ declare namespace Settings {
     | ExporterType
     | CustomExporter
     | OtlpEndpoint
+    | OtelLogsApiLogger
+    | PrivacyOptions
+    | ResolvedPrivacyOptions
     | TraceContextCallback;
 
   type TimeFunction = (() => number) | ((ts: number) => number);
@@ -112,6 +159,7 @@ declare namespace Settings {
     authHeader: AuthHeader;
     browserSessionId: SessionId;
     custIndex: CustomIndex;
+    events?: string[] | null;
     exporter?: CustomExporter;
     exporterFormat?: ExporterType;
     exporterType?: ExporterType;
@@ -122,8 +170,10 @@ declare namespace Settings {
     maxQueueSize?: number;
     observeMutations?: boolean;
     on?: boolean;
+    otelLogger?: OtelLogsApiLogger | null;
     otlpEndpoint?: OtlpEndpoint;
     persistSession?: boolean;
+    privacy?: PrivacyOptions | null;
     resolution: number;
     sessionId: SessionId;
     time: TimeFunction;
@@ -218,6 +268,50 @@ declare namespace Callbacks {
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Minimal duck-typed interface matching @opentelemetry/api-logs Logger.
+ * Avoids taking a runtime dependency on @opentelemetry/api-logs.
+ */
+interface OtelLogsApiLogger {
+  emit(logRecord: {
+    timestamp?: number;
+    observedTimestamp?: number;
+    severityNumber?: number;
+    severityText?: string;
+    eventName?: string;
+    body?: unknown;
+    attributes?: Record<string, unknown>;
+  }): void;
+}
+/**
+ * Bridges UserALE logs directly into an existing OpenTelemetry JS Logs SDK
+ * Logger instance (`@opentelemetry/api-logs`), allowing applications that
+ * already configure an OpenTelemetry LoggerProvider to emit UserALE events
+ * through their shared OTel pipeline and processors.
+ */
+declare class OtelSdkExporter implements LogExporter {
+  private logger;
+  constructor(logger: OtelLogsApiLogger);
+  export(logs: Array<Logging.Log>): Promise<ExportResult>;
+}
+
+/*!
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the 'License'); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -234,6 +328,7 @@ interface InitialSettingsOverrides {
   persistSession?: boolean;
   sessionId?: string | null;
   autostart?: boolean;
+  skipScriptTag?: boolean;
 }
 
 /*!
@@ -262,6 +357,7 @@ declare class Configuration {
   authHeader: Settings.AuthHeader;
   browserSessionId: Settings.SessionId;
   custIndex: Settings.CustomIndex;
+  events: string[] | null;
   exporter: Settings.CustomExporter;
   exporterFormat: Settings.ExporterType;
   exporterType: Settings.ExporterType;
@@ -272,8 +368,10 @@ declare class Configuration {
   maxQueueSize: number;
   observeMutations: boolean;
   on: boolean;
+  otelLogger: OtelLogsApiLogger | null;
   otlpEndpoint: Settings.OtlpEndpoint;
   persistSession: boolean;
+  privacy: Readonly<Settings.ResolvedPrivacyOptions>;
   resolution: number;
   sessionId: Settings.SessionId;
   time: Settings.TimeFunction;
@@ -290,18 +388,25 @@ declare class Configuration {
   private constructor();
   static getInstance(): Configuration;
   static createUninitialized(): Configuration;
+  static create(overrides?: InitialSettingsOverrides): Configuration;
   isInitialized(): boolean;
+  lockPrivacy(): void;
+  isPrivacyLocked(): boolean;
+  getResolvedPrivacy(): Settings.ResolvedPrivacyOptions;
+  isAllowlistSelectorInvalid(): boolean;
+  hasExplicitExporterMode(): boolean;
   initialize(overrides?: InitialSettingsOverrides): void;
   /**
    * Resets the configuration to its initial state.
    */
   reset(overrides?: InitialSettingsOverrides): void;
   /**
-   * Shallow merges a newConfig with the configuration class, updating it.
-   * Retrieves/updates the userid if userFromParams is provided.
+   * Merges `newConfig` into the configuration instance, updating privacy policy
+   * first and enforcing locked-mode and prototype-pollution guards.
    * @param  {Partial<Settings.Config>} newConfig Configuration object to merge into the current config.
    */
   update(newConfig: Partial<Settings.Config>): void;
+  private applyUpdate;
   /**
    * Attempts to extract the userid from the query parameters of the URL.
    * @param  {string} param The name of the query parameter containing the userid.
@@ -364,50 +469,6 @@ declare class HttpJsonExporter implements LogExporter {
   ): Promise<ExportResult>;
   flush(): Promise<void>;
   shutdown(): Promise<void>;
-}
-
-/*!
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/**
- * Minimal duck-typed interface matching @opentelemetry/api-logs Logger.
- * Avoids taking a runtime dependency on @opentelemetry/api-logs.
- */
-interface OtelLogsApiLogger {
-  emit(logRecord: {
-    timestamp?: number;
-    observedTimestamp?: number;
-    severityNumber?: number;
-    severityText?: string;
-    eventName?: string;
-    body?: unknown;
-    attributes?: Record<string, unknown>;
-  }): void;
-}
-/**
- * Bridges UserALE logs directly into an existing OpenTelemetry JS Logs SDK
- * Logger instance (`@opentelemetry/api-logs`), allowing applications that
- * already configure an OpenTelemetry LoggerProvider to emit UserALE events
- * through their shared OTel pipeline and processors.
- */
-declare class OtelSdkExporter implements LogExporter {
-  private logger;
-  constructor(logger: OtelLogsApiLogger);
-  export(logs: Array<Logging.Log>): Promise<ExportResult>;
 }
 
 /*!
@@ -538,17 +599,25 @@ declare class OtlpJsonExporter extends HttpJsonExporter {
  * Converts a flat UserALE log entry into the proto3 canonical JSON structure
  * defined by apache.flagon.userale.v1.UserALELog in log.proto (#142, #143).
  */
-declare function toProtoUserALELog(log: Logging.Log): Logging.JSONObject;
+declare function toProtoUserALELog(
+  log: Logging.Log,
+  config?: Configuration,
+): Logging.JSONObject;
 /**
  * Converts an array of UserALE logs into an apache.flagon.userale.v1.LogBatch
  * proto3 JSON object.
  */
-declare function toProtoLogBatch(logs: Array<Logging.Log>): Logging.JSONObject;
+declare function toProtoLogBatch(
+  logs: Array<Logging.Log>,
+  config?: Configuration,
+): Logging.JSONObject;
 /**
  * Exporter that serializes UserALE logs using the apache.flagon.userale.v1
  * Protobuf JSON schema (#142, #143) with zero runtime protobuf dependencies.
  */
 declare class ProtoJsonExporter extends HttpJsonExporter {
+  private protoConfig;
+  constructor(config: Configuration);
   protected serialize(logs: Array<Logging.Log>): string;
 }
 
@@ -619,110 +688,6 @@ declare function createExporter(config: Configuration): LogExporter;
  */
 
 /**
- * Defines the way information is extracted from various events.
- * Also defines which events we will listen to.
- * @param  {Settings.Config} options UserALE Configuration object to read from.
- * @param   {Events.AllowedEvents}    type of html event (e.g., 'click', 'mouseover', etc.), such as passed to addEventListener methods.
- */
-declare function defineCustomDetails(
-  options: Settings.DefaultConfig,
-  type: Events.AllowedEvents,
-): Logging.DynamicDetailFunction | null | undefined;
-
-/*!
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/**
- * Registers the provided callback to be used when updating the auth header.
- * @param {Callbacks.AuthCallback} callback Callback used to fetch the newest header. Should return a string.
- * @returns {boolean} Whether the operation succeeded.
- */
-declare function registerAuthCallback(
-  callback: Callbacks.AuthCallback,
-): boolean;
-/**
- * Resets the authCallback to null. Used for primarily for testing, but could be used
- * to remove the callback in production.
- * @returns {void}
- */
-declare function resetAuthCallback(): void;
-
-/*!
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/**
- * Registers the provided callback to be used when updating the auth header.
- * @param {Callbacks.HeadersCallback} callback Callback used to fetch the newest headers. Should return an object.
- * @returns {boolean} Whether the operation succeeded.
- */
-declare function registerHeadersCallback(
-  callback: Callbacks.HeadersCallback,
-): boolean;
-/**
- * Resets the authCallback to null. Used for primarily for testing, but could be used
- * to remove the callback in production.
- * @returns {void}
- */
-declare function resetHeadersCallback(): void;
-
-/*!
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/**
- * Adds named callbacks to be executed when logging.
- * @param  {Object } newCallbacks An object containing named callback functions.
- */
-declare function addCallbacks(
-  ...newCallbacks: Record<symbol | string, CallableFunction>[]
-): Callbacks.CallbackMap;
-/**
- * Removes callbacks by name.
- * @param  {String[]} targetKeys A list of names of functions to remove.
- */
-declare function removeCallbacks(targetKeys: string[]): void;
-/**
  * Zero-dependency browser metadata detection (#108).
  * Uses User-Agent Client Hints (navigator.userAgentData) when available,
  * falling back to lightweight User-Agent string parsing.
@@ -743,39 +708,16 @@ interface TargetRect {
  */
 declare function getTargetRect(target: EventTarget | null): TargetRect | null;
 /**
- * Transforms the provided HTML event into a log and appends it to the log queue.
- * @param  {Event} e         The event to be logged.
- * @param  {Function} detailFcn The function to extract additional log parameters from the event.
- * @return {boolean}           Whether the event was logged.
+ * Builds a string CSS selector from the provided element.
  */
-declare function packageLog(
-  e: Event,
-  detailFcn?: Logging.DynamicDetailFunction | null,
-): boolean;
-/**
- * Packages the provided customLog to include standard meta data and appends it to the log queue.
- * @param  {Logging.CustomLog} customLog        The behavior to be logged.
- * @param  {Logging.DynamicDetailFunction} detailFcn     The function to extract additional log parameters from the event.
- * @param  {boolean} userAction     Indicates user behavior (true) or system behavior (false)
- * @return {boolean}           Whether the event was logged.
- */
-declare function packageCustomLog(
-  customLog: Logging.CustomLog,
-  detailFcn: Logging.DynamicDetailFunction | Logging.StaticDetailFunction,
-  userAction: boolean,
-): boolean;
-/**
- * Builds a string CSS selector from the provided element
- * @param  {EventTarget} ele The element from which the selector is built.
- * @return {string}     The CSS selector for the element, or Unknown if it can't be determined.
- */
-declare function getSelector(ele: EventTarget): string;
+declare function getSelector(
+  ele: EventTarget,
+  mode?: Settings.DomSelectorMode,
+): string;
 /**
  * Builds an array of elements from the provided event target, to the root element.
- * @param  {Event} e Event from which the path should be built.
- * @return {HTMLElement[]}   Array of elements, starting at the event target, ending at the root element.
  */
-declare function buildPath(e: Event): string[];
+declare function buildPath(e: Event, mode?: Settings.DomSelectorMode): string[];
 
 /*!
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -808,6 +750,7 @@ type ReplayRecorderFn = (options: {
   emit: (event: ReplayFrame, isCheckout?: boolean) => void;
   checkoutEveryNms?: number;
   maskAllInputs?: boolean;
+  maskAllText?: boolean;
   blockSelector?: string;
   maskTextSelector?: string;
   [key: string]: unknown;
@@ -841,6 +784,10 @@ interface SessionReplayOptions {
    */
   maxFrames?: number;
   /**
+   * Maximum total serialized UTF-8 byte budget retained in the ring buffer (default: 5 MiB).
+   */
+  maxBytes?: number;
+  /**
    * Enable Layer 1 MutationObserver structural DOM telemetry (default: true).
    */
   observeMutations?: boolean;
@@ -853,20 +800,23 @@ interface SessionReplayOptions {
    */
   flushOnError?: boolean;
   /**
-   * CSS selector for DOM subtrees ignored by MutationObserver and rrweb (default: "[data-userale-ignore], .userale-ignore").
+   * CSS selector for DOM subtrees ignored by MutationObserver and rrweb.
    */
   ignoreSelector?: string;
   /**
-   * CSS selector for elements whose text should be masked in rrweb (default: "[data-userale-mask], .userale-mask").
+   * CSS selector for elements whose text should be masked in rrweb.
    */
   maskTextSelector?: string;
+  /**
+   * Mask all text nodes in rrweb (`maskTextSelector: "*"`).
+   */
+  maskAllText?: boolean;
   /**
    * Mask all input values in rrweb (default: true).
    */
   maskAllInputs?: boolean;
   /**
    * Optional custom callback invoked when a replay envelope is flushed.
-   * If omitted, flushes via POST to config.replayEndpoint || config.url (or packageCustomLog when smaller than 48KB).
    */
   onFlush?: (envelope: ReplayEnvelope) => void | Promise<void>;
 }
@@ -878,10 +828,13 @@ interface SessionReplayOptions {
 declare class ReplayRingBuffer {
   private maxDurationMs;
   private maxFrames;
+  private maxBytes;
   private frames;
+  private head;
+  private totalBytes;
   private anchorMeta;
   private anchorFullSnapshot;
-  constructor(maxDurationMs?: number, maxFrames?: number);
+  constructor(maxDurationMs?: number, maxFrames?: number, maxBytes?: number);
   push(frame: ReplayFrame, isCheckout?: boolean): void;
   prune(now?: number): void;
   getSnapshotFrames(): Array<ReplayFrame>;
@@ -909,29 +862,73 @@ declare class RageClickDetector {
   };
   reset(): void;
 }
-/**
- * Flushes the current Layer 2 replay ring buffer (if active) with the given trigger reason.
+
+/*!
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-declare function flushSessionReplay(
-  trigger?: string,
-): Promise<ReplayEnvelope | null>;
+
+interface UserAleInstance {
+  readonly version: string;
+  readonly started: boolean;
+  start: () => void;
+  stop: () => void;
+  flush: () => Promise<void>;
+  reset: () => void;
+  options: (newConfig?: Partial<Settings.Config>) => Settings.Config;
+  log: (customLog?: Logging.CustomLog | null) => boolean;
+  details: (
+    opts: Settings.DefaultConfig,
+    type: Events.AllowedEvents,
+  ) => Logging.DynamicDetailFunction | null | undefined;
+  addCallbacks: (
+    ...newCallbacks: Record<symbol | string, CallableFunction>[]
+  ) => Callbacks.CallbackMap;
+  removeCallbacks: (targetKeys: string[]) => void;
+  packageLog: (
+    e: Event,
+    detailFcn?: Logging.DynamicDetailFunction | null,
+  ) => boolean;
+  packageCustomLog: (
+    customLog: Logging.CustomLog,
+    detailFcn: Logging.DynamicDetailFunction | Logging.StaticDetailFunction,
+    userAction: boolean,
+  ) => boolean;
+  registerAuthCallback: (callback: Callbacks.AuthCallback) => boolean;
+  resetAuthCallback: () => void;
+  registerHeadersCallback: (callback: Callbacks.HeadersCallback) => boolean;
+  resetHeadersCallback: () => void;
+  registerExporter: (exporter: LogExporter | null) => boolean;
+  startSessionReplay: (options?: SessionReplayOptions) => () => void;
+  stopSessionReplay: () => void;
+  flushSessionReplay: (trigger?: string) => Promise<ReplayEnvelope | null>;
+  getActiveReplayRingBuffer: () => ReplayRingBuffer | null;
+  getSelector: typeof getSelector;
+  buildPath: typeof buildPath;
+  detectBrowser: typeof detectBrowser;
+  getTargetRect: typeof getTargetRect;
+  lockPrivacy: () => void;
+  isPrivacyLocked: () => boolean;
+}
 /**
- * Stops any active session replay / DOM mutation observer and resets internal state.
+ * Creates an encapsulated, isolated UserALE client instance safe for
+ * multi-instance SPAs, micro-frontends, and strict privacy opt-in workflows.
  */
-declare function stopSessionReplay(): void;
-/**
- * Starts Layer 1 (MutationObserver + RageClick friction telemetry) and optional
- * Layer 2 (rrweb-compatible ring buffer replay bridge).
- * Returns a cleanup function that stops observation and recording.
- */
-declare function startSessionReplay(
-  options?: SessionReplayOptions,
-  config?: Configuration,
-): () => void;
-/**
- * Returns the active ReplayRingBuffer instance if session replay is running.
- */
-declare function getActiveReplayRingBuffer(): ReplayRingBuffer | null;
+declare function createUserAle(
+  initialOptions?: Partial<Settings.Config>,
+): UserAleInstance;
 
 /*!
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -952,7 +949,39 @@ declare function getActiveReplayRingBuffer(): ReplayRingBuffer | null;
 
 declare let started: boolean;
 
+declare function details(
+  opts: Settings.DefaultConfig,
+  type: Events.AllowedEvents,
+): Logging.DynamicDetailFunction | null | undefined;
+declare function registerAuthCallback(
+  callback: Callbacks.AuthCallback,
+): boolean;
+declare function resetAuthCallback(): void;
+declare function registerHeadersCallback(
+  callback: Callbacks.HeadersCallback,
+): boolean;
+declare function resetHeadersCallback(): void;
+declare function addCallbacks(
+  ...newCallbacks: Record<symbol | string, CallableFunction>[]
+): Callbacks.CallbackMap;
+declare function removeCallbacks(targetKeys: string[]): void;
+declare function packageLog(
+  e: Event,
+  detailFcn?: Logging.DynamicDetailFunction | null,
+): boolean;
+declare function packageCustomLog(
+  customLog: Logging.CustomLog,
+  detailFcn: Logging.DynamicDetailFunction | Logging.StaticDetailFunction,
+  userAction: boolean,
+): boolean;
+
 declare function registerExporter(exporter: LogExporter | null): boolean;
+declare function startSessionReplay(options?: SessionReplayOptions): () => void;
+declare function stopSessionReplay(): void;
+declare function flushSessionReplay(
+  trigger?: string,
+): Promise<ReplayEnvelope | null>;
+declare function getActiveReplayRingBuffer(): ReplayRingBuffer | null;
 
 declare const version: string;
 declare function start(): void;
@@ -961,6 +990,8 @@ declare function flush(): Promise<void>;
 declare function reset(): void;
 declare function options(newConfig?: Partial<Settings.Config>): Settings.Config;
 declare function log(customLog?: Logging.CustomLog | null): boolean;
+declare function lockPrivacy(): void;
+declare function isPrivacyLocked(): boolean;
 
 export {
   type ExportOptions,
@@ -985,19 +1016,23 @@ export {
   type SessionReplayOptions,
   Settings,
   type TargetRect,
+  type UserAleInstance,
   WebSocketExporter,
   addCallbacks,
   buildHeaders,
   buildOtlpResourceAttributes,
   buildPath,
   createExporter,
-  defineCustomDetails as details,
+  createUserAle,
+  details,
   detectBrowser,
   flush,
   flushSessionReplay,
   getActiveReplayRingBuffer,
   getSelector,
   getTargetRect,
+  isPrivacyLocked,
+  lockPrivacy,
   log,
   options,
   packageCustomLog,

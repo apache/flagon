@@ -15,98 +15,511 @@
  * limitations under the License.
  */
 
-import { Callbacks, Logging } from "@/types";
+import { Callbacks, Logging, type Settings } from "@/types";
 import { Configuration } from "@/configure";
+import {
+  isDocumentNode,
+  isElementNode,
+  safeComposedPath,
+  safeGetAttribute,
+  safeGetAttributes,
+  safeGetClassName,
+  safeGetId,
+  safeGetLocalName,
+  safeGetStyle,
+} from "@/domUtils";
+import {
+  enforcePrivacyOnLog,
+  evaluateEventPrivacyFilter,
+  isPrivacySensitiveAttribute,
+  safeReadPageReferrer,
+  safeReadPageTitle,
+  safeReadPageUrl,
+  safeReadUserAgent,
+} from "@/privacy";
 
-export let logs: Array<Logging.Log>;
-let config: Configuration;
+export interface PackagerController {
+  packageLog: (
+    e: Event,
+    detailFcn?: Logging.DynamicDetailFunction | null,
+  ) => boolean;
+  packageCustomLog: (
+    customLog: Logging.CustomLog,
+    detailFcn: Logging.DynamicDetailFunction | Logging.StaticDetailFunction,
+    userAction: boolean,
+  ) => boolean;
+  packageIntervalLog: (e: Event) => boolean;
+  addCallbacks: (
+    ...newCallbacks: Record<symbol | string, CallableFunction>[]
+  ) => Callbacks.CallbackMap;
+  removeCallbacks: (targetKeys: string[]) => void;
+  enqueueLog: (logEntry: Logging.Log) => void;
+  resetIntervalState: () => void;
+  log: (customLog?: Logging.CustomLog | null) => boolean;
+}
 
-// Interval Logging Globals
-let intervalId: string | null;
-let intervalType: string | null;
-let intervalPath: string[] | null;
-let intervalTimer: number | null;
-let intervalCounter: number | null;
-let intervalLog: Logging.Log | null;
+const FORBIDDEN_KEYS = new Set(["__proto__", "constructor", "prototype"]);
 
+function mergeSafeCustomFields(
+  target: Record<string, unknown>,
+  source: Logging.CustomLog,
+): Logging.Log {
+  for (const [key, val] of Object.entries(source)) {
+    if (!FORBIDDEN_KEYS.has(key) && val !== undefined) {
+      target[key] = val;
+    }
+  }
+  return target as Logging.Log;
+}
+
+/**
+ * Creates an encapsulated log packager and callback registry bound to the
+ * provided log buffer and Configuration instance.
+ */
+export function createPackager(
+  targetLogs: Array<Logging.Log>,
+  targetConfig: Configuration,
+  onCallbackRegistryUpdate?: (next: Callbacks.CallbackMap) => void,
+): PackagerController {
+  let intervalId: string | null = null;
+  let intervalType: string | null = null;
+  let intervalPath: string[] | null = null;
+  let intervalTimer: number | null = null;
+  let intervalCounter: number | null = 0;
+  let intervalLog: Logging.Log | null = null;
+  const cbMap: Callbacks.CallbackMap = {};
+
+  const resetIntervalState = (): void => {
+    intervalId = null;
+    intervalType = null;
+    intervalPath = null;
+    intervalTimer = null;
+    intervalCounter = 0;
+    intervalLog = null;
+  };
+
+  const addCallbacks = (
+    ...newCallbacks: Record<symbol | string, CallableFunction>[]
+  ): Callbacks.CallbackMap => {
+    if (targetConfig.isPrivacyLocked()) {
+      return {};
+    }
+    newCallbacks.forEach((source) => {
+      if (!source || typeof source !== "object") {
+        return;
+      }
+      const descriptors: Record<string | symbol, PropertyDescriptor> = {};
+      for (const key of Object.keys(source)) {
+        if (FORBIDDEN_KEYS.has(key)) {
+          continue;
+        }
+        const descriptor = Object.getOwnPropertyDescriptor(source, key);
+        if (descriptor) {
+          descriptors[key] = descriptor;
+        }
+      }
+      for (const sym of Object.getOwnPropertySymbols(source)) {
+        const descriptor = Object.getOwnPropertyDescriptor(source, sym);
+        if (descriptor?.enumerable) {
+          descriptors[sym] = descriptor;
+        }
+      }
+      Object.defineProperties(cbMap, descriptors);
+    });
+    onCallbackRegistryUpdate?.(cbMap);
+    return { ...cbMap };
+  };
+
+  const removeCallbacks = (targetKeys: string[]): void => {
+    targetKeys.forEach((key) => {
+      if (Object.prototype.hasOwnProperty.call(cbMap, key)) {
+        delete cbMap[key];
+      }
+    });
+    onCallbackRegistryUpdate?.(cbMap);
+  };
+
+  const enqueueLog = (logEntry: Logging.Log): void => {
+    const cap =
+      typeof targetConfig?.maxQueueSize === "number" &&
+      targetConfig.maxQueueSize > 0
+        ? targetConfig.maxQueueSize
+        : 10000;
+    if (targetLogs.length >= cap) {
+      targetLogs.splice(0, targetLogs.length - cap + 1);
+    }
+    targetLogs.push(logEntry);
+  };
+
+  const packageLog = (
+    e: Event,
+    detailFcn?: Logging.DynamicDetailFunction | null,
+  ): boolean => {
+    if (!targetConfig.on) {
+      return false;
+    }
+
+    const privacy = targetConfig.getResolvedPrivacy();
+    const filterResult = evaluateEventPrivacyFilter(
+      e,
+      privacy,
+      targetConfig.isAllowlistSelectorInvalid(),
+    );
+    if (!filterResult.allowed) {
+      return false;
+    }
+
+    const details = privacy.captureDetails && detailFcn ? detailFcn(e) : null;
+
+    const timeFields = extractTimeFields(
+      e.timeStamp && e.timeStamp > 0
+        ? targetConfig.time(e.timeStamp)
+        : Date.now(),
+    );
+
+    const rawTarget = e.target
+      ? getSelector(e.target, privacy.domSelectorMode)
+      : privacy.domSelectorMode === "none"
+        ? ""
+        : null;
+
+    let log: Logging.Log = {
+      target: rawTarget,
+      path: buildPath(e, privacy.domSelectorMode),
+      pageUrl: safeReadPageUrl(privacy),
+      pageTitle: safeReadPageTitle(privacy),
+      pageReferrer: safeReadPageReferrer(privacy),
+      browser: privacy.captureUserAgent
+        ? detectBrowser()
+        : { browser: null, version: null },
+      userAgent: safeReadUserAgent(privacy),
+      clientTime: timeFields.milli,
+      microTime: privacy.captureMicroTime ? timeFields.micro : null,
+      location: privacy.captureLocation ? getLocation(e) : null,
+      scrnRes: privacy.captureScreenRes ? getScreenRes() : null,
+      type: e.type,
+      logType: "raw",
+      userAction: true,
+      details: details,
+      userId: targetConfig.userId,
+      toolVersion: targetConfig.toolVersion,
+      toolName: targetConfig.toolName,
+      useraleVersion: targetConfig.useraleVersion,
+      sessionId: targetConfig.sessionId,
+      httpSessionId: targetConfig.httpSessionId,
+      browserSessionId: targetConfig.browserSessionId,
+      attributes: buildAttrs(
+        e,
+        filterResult.matchedElement,
+        privacy.allowedAttributes,
+      ),
+      style: privacy.allowedAttributes !== null ? {} : buildCSS(e),
+    };
+
+    if (
+      privacy.captureTargetRect &&
+      DISCRETE_RECT_EVENTS.has(e.type) &&
+      e.target
+    ) {
+      const rect = getTargetRect(e.target);
+      if (
+        rect &&
+        (rect.width > 0 || rect.height > 0 || rect.x !== 0 || rect.y !== 0)
+      ) {
+        log.targetRect = rect as unknown as Logging.JSONObject;
+      }
+    }
+
+    if (typeof filterHandler === "function" && !filterHandler(log)) {
+      return false;
+    }
+
+    const redactEventInCallback =
+      targetConfig.isPrivacyLocked() ||
+      privacy.preset === "strict" ||
+      privacy.domSelectorMode === "none" ||
+      !privacy.captureDetails;
+    const cbEventArg = redactEventInCallback ? null : e;
+
+    if (typeof mapHandler === "function") {
+      log = mapHandler(log, cbEventArg);
+    }
+
+    for (const func of Object.values(cbMap)) {
+      if (typeof func === "function") {
+        log = func(log, cbEventArg);
+        if (!log) {
+          return false;
+        }
+      }
+    }
+
+    log = enforcePrivacyOnLog(log, privacy, { isPackaged: true });
+    enqueueLog(log);
+    return true;
+  };
+
+  const packageCustomLog = (
+    customLog: Logging.CustomLog,
+    detailFcn: Logging.DynamicDetailFunction | Logging.StaticDetailFunction,
+    userAction: boolean,
+  ): boolean => {
+    if (!targetConfig.on) {
+      return false;
+    }
+
+    const privacy = targetConfig.getResolvedPrivacy();
+    let details = null;
+    if (privacy.captureDetails && typeof detailFcn === "function") {
+      details = (detailFcn as () => Logging.JSONObject | null)();
+    }
+
+    const metaData: Record<string, unknown> = {
+      pageUrl: safeReadPageUrl(privacy),
+      pageTitle: safeReadPageTitle(privacy),
+      pageReferrer: safeReadPageReferrer(privacy),
+      browser: privacy.captureUserAgent
+        ? detectBrowser()
+        : { browser: null, version: null },
+      userAgent: safeReadUserAgent(privacy),
+      clientTime: Date.now(),
+      scrnRes: privacy.captureScreenRes ? getScreenRes() : null,
+      logType: "custom",
+      userAction: userAction,
+      details: details,
+      userId: targetConfig.userId,
+      toolVersion: targetConfig.toolVersion,
+      toolName: targetConfig.toolName,
+      useraleVersion: targetConfig.useraleVersion,
+      sessionId: targetConfig.sessionId,
+      httpSessionId: targetConfig.httpSessionId,
+      browserSessionId: targetConfig.browserSessionId,
+    };
+
+    let log = mergeSafeCustomFields(metaData, customLog);
+
+    if (typeof filterHandler === "function" && !filterHandler(log)) {
+      return false;
+    }
+
+    if (typeof mapHandler === "function") {
+      log = mapHandler(log);
+    }
+
+    for (const func of Object.values(cbMap)) {
+      if (typeof func === "function") {
+        log = func(log, null);
+        if (!log) {
+          return false;
+        }
+      }
+    }
+
+    log = enforcePrivacyOnLog(log, privacy, { isPackaged: true });
+    enqueueLog(log);
+    return true;
+  };
+
+  const packageIntervalLog = (e: Event): boolean => {
+    try {
+      if (!targetConfig || !targetConfig.on) {
+        return false;
+      }
+
+      const privacy = targetConfig.getResolvedPrivacy();
+      const filterResult = evaluateEventPrivacyFilter(
+        e,
+        privacy,
+        targetConfig.isAllowlistSelectorInvalid(),
+      );
+      if (!filterResult.allowed) {
+        return false;
+      }
+
+      const target = e.target
+        ? getSelector(e.target, privacy.domSelectorMode)
+        : privacy.domSelectorMode === "none"
+          ? ""
+          : null;
+      const path = buildPath(e, privacy.domSelectorMode);
+      const type = e.type;
+      const timestamp = Math.floor(
+        e.timeStamp && e.timeStamp > 0
+          ? targetConfig.time(e.timeStamp)
+          : Date.now(),
+      );
+
+      // Init - this should only happen once on initialization
+      if (intervalId == null) {
+        intervalId = target;
+        intervalType = type;
+        intervalPath = path;
+        intervalTimer = timestamp;
+        intervalCounter = 0;
+      }
+
+      let dropped = false;
+      if ((intervalId !== target || intervalType !== type) && intervalTimer) {
+        try {
+          intervalLog = {
+            target: intervalId,
+            path: intervalPath,
+            pageUrl: safeReadPageUrl(privacy),
+            pageTitle: safeReadPageTitle(privacy),
+            pageReferrer: safeReadPageReferrer(privacy),
+            browser: privacy.captureUserAgent
+              ? detectBrowser()
+              : { browser: null, version: null },
+            userAgent: safeReadUserAgent(privacy),
+            count: intervalCounter,
+            duration: timestamp - intervalTimer,
+            startTime: intervalTimer,
+            endTime: timestamp,
+            type: intervalType,
+            logType: "interval",
+            targetChange: intervalId !== target,
+            typeChange: intervalType !== type,
+            userAction: false,
+            userId: targetConfig.userId,
+            toolVersion: targetConfig.toolVersion,
+            toolName: targetConfig.toolName,
+            useraleVersion: targetConfig.useraleVersion,
+            sessionId: targetConfig.sessionId,
+            httpSessionId: targetConfig.httpSessionId,
+            browserSessionId: targetConfig.browserSessionId,
+          };
+
+          if (
+            typeof filterHandler === "function" &&
+            !filterHandler(intervalLog)
+          ) {
+            dropped = true;
+          }
+
+          if (!dropped) {
+            const redactEventInCallback =
+              targetConfig.isPrivacyLocked() ||
+              privacy.preset === "strict" ||
+              privacy.domSelectorMode === "none" ||
+              !privacy.captureDetails;
+            if (typeof mapHandler === "function") {
+              intervalLog = mapHandler(
+                intervalLog,
+                redactEventInCallback ? null : e,
+              );
+            }
+
+            for (const func of Object.values(cbMap)) {
+              if (typeof func === "function") {
+                intervalLog = func(intervalLog, null);
+                if (!intervalLog) {
+                  dropped = true;
+                  break;
+                }
+              }
+            }
+          }
+
+          if (!dropped && intervalLog) {
+            intervalLog = enforcePrivacyOnLog(intervalLog, privacy, {
+              isPackaged: true,
+            });
+            enqueueLog(intervalLog);
+          }
+        } finally {
+          // Always reset interval state for the new target/type even if filtered
+          intervalId = target;
+          intervalType = type;
+          intervalPath = path;
+          intervalTimer = timestamp;
+          intervalCounter = 0;
+        }
+      }
+
+      if (
+        intervalId == target &&
+        intervalType == type &&
+        intervalCounter !== null
+      ) {
+        intervalCounter = intervalCounter + 1;
+      }
+
+      return !dropped;
+    } catch {
+      return false;
+    }
+  };
+
+  const log = (customLog?: Logging.CustomLog | null): boolean => {
+    if (
+      !customLog ||
+      typeof customLog !== "object" ||
+      Array.isArray(customLog)
+    ) {
+      return false;
+    }
+    const cloned = mergeSafeCustomFields({}, customLog);
+    const enforced = enforcePrivacyOnLog(
+      cloned,
+      targetConfig.getResolvedPrivacy(),
+      { isPackaged: false },
+    );
+    enqueueLog(enforced);
+    return true;
+  };
+
+  return {
+    packageLog,
+    packageCustomLog,
+    packageIntervalLog,
+    addCallbacks,
+    removeCallbacks,
+    enqueueLog,
+    resetIntervalState,
+    log,
+  };
+}
+
+export let logs: Array<Logging.Log> = [];
 export const filterHandler: CallableFunction | null = null;
 export const mapHandler: CallableFunction | null = null;
 export let cbHandlers: Callbacks.CallbackMap = {};
 
-/**
- * Adds named callbacks to be executed when logging.
- * @param  {Object } newCallbacks An object containing named callback functions.
- */
+let legacyPackager: PackagerController = createPackager(
+  logs,
+  Configuration.createUninitialized(),
+  (next) => {
+    cbHandlers = next;
+  },
+);
+
 export function addCallbacks(
   ...newCallbacks: Record<symbol | string, CallableFunction>[]
 ) {
-  newCallbacks.forEach((source) => {
-    let descriptors: { [key in string | symbol]: any } = {};
-
-    descriptors = Object.keys(source).reduce((descriptors, key) => {
-      descriptors[key] = Object.getOwnPropertyDescriptor(source, key);
-      return descriptors;
-    }, descriptors);
-
-    Object.getOwnPropertySymbols(source).forEach((sym) => {
-      const descriptor = Object.getOwnPropertyDescriptor(source, sym);
-      if (descriptor?.enumerable) {
-        descriptors[sym] = descriptor;
-      }
-    });
-    Object.defineProperties(cbHandlers, descriptors);
-  });
-  return cbHandlers;
+  return legacyPackager.addCallbacks(...newCallbacks);
 }
 
-/**
- * Removes callbacks by name.
- * @param  {String[]} targetKeys A list of names of functions to remove.
- */
 export function removeCallbacks(targetKeys: string[]) {
-  targetKeys.forEach((key) => {
-    if (Object.prototype.hasOwnProperty.call(cbHandlers, key)) {
-      delete cbHandlers[key];
-    }
-  });
+  legacyPackager.removeCallbacks(targetKeys);
 }
 
 export function enqueueLog(logEntry: Logging.Log): void {
-  const cap =
-    typeof config?.maxQueueSize === "number" && config.maxQueueSize > 0
-      ? config.maxQueueSize
-      : 10000;
-  if (logs.length >= cap) {
-    logs.splice(0, logs.length - cap + 1);
-  }
-  logs.push(logEntry);
+  legacyPackager.enqueueLog(logEntry);
 }
 
-/**
- * Resets tracked interval logging state.
- */
 export function resetIntervalState(): void {
-  intervalId = null;
-  intervalType = null;
-  intervalPath = null;
-  intervalTimer = null;
-  intervalCounter = 0;
-  intervalLog = null;
+  legacyPackager.resetIntervalState();
 }
 
-/**
- * Assigns the config and log container to be used by the logging functions.
- * @param  {Array<Logging.Log>} newLogs   Log container.
- * @param  {Object} newConfig Configuration to use while logging.
- */
 export function initPackager(
   newLogs: Array<Logging.Log>,
   newConfig: Configuration,
 ) {
   logs = newLogs;
-  config = newConfig;
   cbHandlers = {};
-  resetIntervalState();
+  legacyPackager = createPackager(newLogs, newConfig, (next) => {
+    cbHandlers = next;
+  });
 }
 
 /**
@@ -201,150 +614,19 @@ export function getTargetRect(target: EventTarget | null): TargetRect | null {
   return null;
 }
 
-/**
- * Transforms the provided HTML event into a log and appends it to the log queue.
- * @param  {Event} e         The event to be logged.
- * @param  {Function} detailFcn The function to extract additional log parameters from the event.
- * @return {boolean}           Whether the event was logged.
- */
 export function packageLog(
   e: Event,
   detailFcn?: Logging.DynamicDetailFunction | null,
 ) {
-  if (!config.on) {
-    return false;
-  }
-
-  let details = null;
-  if (detailFcn) {
-    details = detailFcn(e);
-  }
-
-  const timeFields = extractTimeFields(
-    e.timeStamp && e.timeStamp > 0 ? config.time(e.timeStamp) : Date.now(),
-  );
-
-  let log: Logging.Log = {
-    target: e.target ? getSelector(e.target) : null,
-    path: buildPath(e),
-    pageUrl: self.location.href,
-    pageTitle: document.title,
-    pageReferrer: document.referrer,
-    browser: detectBrowser(),
-    userAgent: self.navigator.userAgent,
-    clientTime: timeFields.milli,
-    microTime: timeFields.micro,
-    location: getLocation(e),
-    scrnRes: getScreenRes(),
-    type: e.type,
-    logType: "raw",
-    userAction: true,
-    details: details,
-    userId: config.userId,
-    toolVersion: config.toolVersion,
-    toolName: config.toolName,
-    useraleVersion: config.useraleVersion,
-    sessionId: config.sessionId,
-    httpSessionId: config.httpSessionId,
-    browserSessionId: config.browserSessionId,
-    attributes: buildAttrs(e),
-    style: buildCSS(e),
-  };
-
-  if (DISCRETE_RECT_EVENTS.has(e.type) && e.target) {
-    const rect = getTargetRect(e.target);
-    if (
-      rect &&
-      (rect.width > 0 || rect.height > 0 || rect.x !== 0 || rect.y !== 0)
-    ) {
-      log.targetRect = rect as unknown as Logging.JSONObject;
-    }
-  }
-
-  if (typeof filterHandler === "function" && !filterHandler(log)) {
-    return false;
-  }
-
-  if (typeof mapHandler === "function") {
-    log = mapHandler(log, e);
-  }
-
-  for (const func of Object.values(cbHandlers)) {
-    if (typeof func === "function") {
-      log = func(log, e);
-      if (!log) {
-        return false;
-      }
-    }
-  }
-
-  enqueueLog(log);
-  return true;
+  return legacyPackager.packageLog(e, detailFcn);
 }
 
-/**
- * Packages the provided customLog to include standard meta data and appends it to the log queue.
- * @param  {Logging.CustomLog} customLog        The behavior to be logged.
- * @param  {Logging.DynamicDetailFunction} detailFcn     The function to extract additional log parameters from the event.
- * @param  {boolean} userAction     Indicates user behavior (true) or system behavior (false)
- * @return {boolean}           Whether the event was logged.
- */
 export function packageCustomLog(
   customLog: Logging.CustomLog,
   detailFcn: Logging.DynamicDetailFunction | Logging.StaticDetailFunction,
   userAction: boolean,
 ): boolean {
-  if (!config.on) {
-    return false;
-  }
-
-  let details = null;
-  if (typeof detailFcn === "function") {
-    details = (detailFcn as () => Logging.JSONObject | null)();
-  }
-
-  const metaData = {
-    pageUrl: self.location.href,
-    pageTitle: document.title,
-    pageReferrer: document.referrer,
-    browser: detectBrowser(),
-    userAgent: self.navigator.userAgent,
-    clientTime: Date.now(),
-    scrnRes: getScreenRes(),
-    logType: "custom",
-    userAction: userAction,
-    details: details,
-    userId: config.userId,
-    toolVersion: config.toolVersion,
-    toolName: config.toolName,
-    useraleVersion: config.useraleVersion,
-    sessionId: config.sessionId,
-    httpSessionId: config.httpSessionId,
-    browserSessionId: config.browserSessionId,
-  };
-
-  let log = Object.assign(metaData, customLog);
-
-  if (typeof filterHandler === "function" && !filterHandler(log)) {
-    return false;
-  }
-
-  if (typeof mapHandler === "function") {
-    log = mapHandler(log);
-  }
-
-  for (const func of Object.values(cbHandlers)) {
-    if (typeof func === "function") {
-      log = func(log, null);
-      if (!log) {
-        return false;
-      }
-    }
-  }
-
-  enqueueLog(log);
-
-  return true;
+  return legacyPackager.packageCustomLog(customLog, detailFcn, userAction);
 }
 
 /**
@@ -360,109 +642,8 @@ export function extractTimeFields(timeStamp: number) {
   };
 }
 
-/**
- * Track intervals and gather details about it.
- * @param {Object} e
- * @return boolean
- */
 export function packageIntervalLog(e: Event) {
-  try {
-    if (!config || !config.on) {
-      return false;
-    }
-    const target = e.target ? getSelector(e.target) : null;
-    const path = buildPath(e);
-    const type = e.type;
-    const timestamp = Math.floor(
-      e.timeStamp && e.timeStamp > 0 ? config.time(e.timeStamp) : Date.now(),
-    );
-
-    // Init - this should only happen once on initialization
-    if (intervalId == null) {
-      intervalId = target;
-      intervalType = type;
-      intervalPath = path;
-      intervalTimer = timestamp;
-      intervalCounter = 0;
-    }
-
-    let dropped = false;
-    if ((intervalId !== target || intervalType !== type) && intervalTimer) {
-      // When to create log? On transition end
-      try {
-        intervalLog = {
-          target: intervalId,
-          path: intervalPath,
-          pageUrl: self.location.href,
-          pageTitle: document.title,
-          pageReferrer: document.referrer,
-          browser: detectBrowser(),
-          userAgent: self.navigator.userAgent,
-          count: intervalCounter,
-          duration: timestamp - intervalTimer, // microseconds
-          startTime: intervalTimer,
-          endTime: timestamp,
-          type: intervalType,
-          logType: "interval",
-          targetChange: intervalId !== target,
-          typeChange: intervalType !== type,
-          userAction: false,
-          userId: config.userId,
-          toolVersion: config.toolVersion,
-          toolName: config.toolName,
-          useraleVersion: config.useraleVersion,
-          sessionId: config.sessionId,
-          httpSessionId: config.httpSessionId,
-          browserSessionId: config.browserSessionId,
-        };
-
-        if (
-          typeof filterHandler === "function" &&
-          !filterHandler(intervalLog)
-        ) {
-          dropped = true;
-        }
-
-        if (!dropped) {
-          if (typeof mapHandler === "function") {
-            intervalLog = mapHandler(intervalLog, e);
-          }
-
-          for (const func of Object.values(cbHandlers)) {
-            if (typeof func === "function") {
-              intervalLog = func(intervalLog, null);
-              if (!intervalLog) {
-                dropped = true;
-                break;
-              }
-            }
-          }
-        }
-
-        if (!dropped && intervalLog) enqueueLog(intervalLog);
-      } finally {
-        // Always reset interval state for the new target/type even if filtered
-        intervalId = target;
-        intervalType = type;
-        intervalPath = path;
-        intervalTimer = timestamp;
-        intervalCounter = 0;
-      }
-    }
-
-    // Interval is still occuring, just update counter
-    if (
-      intervalId == target &&
-      intervalType == type &&
-      intervalCounter !== null
-    ) {
-      intervalCounter = intervalCounter + 1;
-    }
-
-    return !dropped;
-  } catch {
-    return false;
-  }
+  return legacyPackager.packageIntervalLog(e);
 }
 
 /**
@@ -472,18 +653,24 @@ export function packageIntervalLog(e: Event) {
  * @return {Object}   An object containing nullable x and y coordinates for the event.
  */
 export function getLocation(e: Event) {
-  if (e instanceof MouseEvent) {
-    if (e.pageX != null) {
-      return { x: e.pageX, y: e.pageY };
-    } else if (e.clientX != null) {
+  if (
+    e &&
+    typeof e === "object" &&
+    ((typeof MouseEvent !== "undefined" && e instanceof MouseEvent) ||
+      typeof (e as MouseEvent).pageX === "number" ||
+      typeof (e as MouseEvent).clientX === "number")
+  ) {
+    const me = e as MouseEvent;
+    if (me.pageX != null) {
+      return { x: me.pageX, y: me.pageY };
+    } else if (me.clientX != null) {
       return {
-        x: document.documentElement.scrollLeft + e.clientX,
-        y: document.documentElement.scrollTop + e.clientY,
+        x: document.documentElement.scrollLeft + me.clientX,
+        y: document.documentElement.scrollTop + me.clientY,
       };
     }
-  } else {
-    return { x: null, y: null };
   }
+  return { x: null, y: null };
 }
 
 /**
@@ -495,25 +682,34 @@ export function getScreenRes() {
 }
 
 /**
- * Builds a string CSS selector from the provided element
- * @param  {EventTarget} ele The element from which the selector is built.
- * @return {string}     The CSS selector for the element, or Unknown if it can't be determined.
+ * Builds a string CSS selector from the provided element.
  */
-export function getSelector(ele: EventTarget) {
-  if (ele instanceof HTMLElement || ele instanceof Element) {
-    const rawClass =
-      typeof ele.className === "string"
-        ? ele.className
-        : (ele.getAttribute?.("class") ?? "");
-    const tag = ele.localName || ele.nodeName;
+export function getSelector(
+  ele: EventTarget,
+  mode: Settings.DomSelectorMode = "full",
+): string {
+  if (mode === "none") {
+    return "";
+  }
+  if (isElementNode(ele)) {
+    const tag = safeGetLocalName(ele);
     if (tag) {
-      return (
-        tag + (ele.id ? "#" + ele.id : "") + (rawClass ? "." + rawClass : "")
-      );
+      if (mode === "structural") {
+        return tag;
+      }
+      const id = safeGetId(ele);
+      const rawClass = safeGetClassName(ele);
+      return tag + (id ? "#" + id : "") + (rawClass ? "." + rawClass : "");
     }
-  } else if (ele instanceof Document) {
+  } else if (isDocumentNode(ele)) {
     return "#document";
-  } else if (ele === globalThis) {
+  } else if (
+    ele === globalThis ||
+    (typeof self !== "undefined" && ele === self) ||
+    (typeof ele === "object" &&
+      ele !== null &&
+      (ele as { window?: unknown }).window === ele)
+  ) {
     return "Window";
   }
   return "Unknown";
@@ -521,50 +717,77 @@ export function getSelector(ele: EventTarget) {
 
 /**
  * Builds an array of elements from the provided event target, to the root element.
- * @param  {Event} e Event from which the path should be built.
- * @return {HTMLElement[]}   Array of elements, starting at the event target, ending at the root element.
  */
-export function buildPath(e: Event) {
-  const path = e.composedPath();
-  return selectorizePath(path);
+export function buildPath(
+  e: Event,
+  mode: Settings.DomSelectorMode = "full",
+): string[] {
+  if (mode === "none") {
+    return [];
+  }
+  const path = safeComposedPath(e);
+  return selectorizePath(path, mode);
 }
 
 /**
  * Builds a CSS selector path from the provided list of elements.
- * @param  {EventTarget[]} path Array of HTML Elements from which the path should be built.
- * @return {string[]}      Array of string CSS selectors.
  */
-export function selectorizePath(path: EventTarget[]) {
+export function selectorizePath(
+  path: EventTarget[],
+  mode: Settings.DomSelectorMode = "full",
+): string[] {
+  if (mode === "none") {
+    return [];
+  }
   let i = 0;
   let pathEle;
   const pathSelectors: string[] = [];
   while ((pathEle = path[i])) {
-    pathSelectors.push(getSelector(pathEle));
+    pathSelectors.push(getSelector(pathEle, mode));
     ++i;
   }
   return pathSelectors;
 }
 
-const attributeBlackList = ["style", "data-api-key", "data-auth"];
-const sensitiveAttributePattern = /^data-(api-key|auth|token|secret|password)/i;
 const jsonValuePattern =
   /^(?:\{[\s\S]*\}|\[[\s\S]*\]|"(?:[^"\\]|\\.)*"|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?|true|false|null)$/;
 
 /**
  * Builds an object containing attributes of an element.
- * Attempts to parse all attribute values as JSON text.
- * @param  {Event} e Event from which the target element's attributes should be extracted.
- * @return {Record<string, any>} Object with element attributes as key-value pairs.
+ * When `allowedAttributes` is provided, extracts only explicitly allowlisted
+ * non-sensitive attribute names as raw strings (no `JSON.parse`).
  */
-export function buildAttrs(e: Event): Record<string, any> {
+export function buildAttrs(
+  e: Event,
+  targetElement?: Element | null,
+  allowedAttributes?: string[] | null,
+): Record<string, any> {
   const attributes: Record<string, any> = {};
+  const rawTarget = (e as { target?: unknown } | null)?.target;
+  const el = targetElement ?? (isElementNode(rawTarget) ? rawTarget : null);
 
-  if (e.target && e.target instanceof Element) {
-    for (const attr of e.target.attributes) {
-      if (
-        attributeBlackList.includes(attr.name.toLowerCase()) ||
-        sensitiveAttributePattern.test(attr.name)
-      ) {
+  if (!el) {
+    return attributes;
+  }
+
+  if (Array.isArray(allowedAttributes)) {
+    for (const attrName of allowedAttributes) {
+      if (isPrivacySensitiveAttribute(attrName)) {
+        continue;
+      }
+      const val = safeGetAttribute(el, attrName);
+      if (val !== null) {
+        attributes[attrName] = val;
+      }
+    }
+    return attributes;
+  }
+
+  const attrList = safeGetAttributes(el);
+  if (attrList) {
+    for (let i = 0; i < attrList.length; i++) {
+      const attr = attrList[i];
+      if (!attr || isPrivacySensitiveAttribute(attr.name)) {
         continue;
       }
       let val: any = attr.value;
@@ -584,16 +807,17 @@ export function buildAttrs(e: Event): Record<string, any> {
 
 /**
  * Builds an object containing all CSS properties of an element.
- * @param  {Event} e Event from which the target element's properties should be extracted.
- * @return {Record<string, string>} Object with all CSS properties as key-value pairs.
  */
 export function buildCSS(e: Event): Record<string, string> {
   const properties: Record<string, string> = {};
-  if (e.target && e.target instanceof HTMLElement) {
-    const styleObj = e.target.style;
-    for (let i = 0; i < styleObj.length; i++) {
-      const prop = styleObj[i];
-      properties[prop] = styleObj.getPropertyValue(prop);
+  const target = (e as { target?: unknown }).target;
+  if (isElementNode(target)) {
+    const styleObj = safeGetStyle(target);
+    if (styleObj && typeof styleObj.getPropertyValue === "function") {
+      for (let i = 0; i < styleObj.length; i++) {
+        const prop = styleObj[i];
+        properties[prop] = styleObj.getPropertyValue(prop);
+      }
     }
   }
   return properties;

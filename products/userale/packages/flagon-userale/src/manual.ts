@@ -23,9 +23,17 @@
 
 import { version as userAleVersion } from "../package.json";
 import type { LogExporter } from "@/exporters";
-import { createRuntime } from "@/runtime";
+import { buildPath, detectBrowser, getSelector } from "@/packageLogs";
+import {
+  getTargetRect,
+  RageClickDetector,
+  ReplayRingBuffer,
+  type ReplayEnvelope,
+  type SessionReplayOptions,
+} from "@/replay";
+import { createRuntime, createUserAle, type UserAleInstance } from "@/runtime";
 
-import type { Logging, Settings } from "@/types";
+import type { Callbacks, Events, Logging, Settings } from "@/types";
 
 const runtime = createRuntime(false);
 
@@ -34,34 +42,86 @@ runtime.notifyOnStartedChange((val) => {
   started = val;
 });
 
-export { defineCustomDetails as details } from "@/attachHandlers";
-export {
-  registerAuthCallback,
-  registerHeadersCallback,
-  resetAuthCallback,
-  resetHeadersCallback,
-} from "@/utils";
-export {
-  addCallbacks as addCallbacks,
-  removeCallbacks as removeCallbacks,
-  packageLog as packageLog,
-  packageCustomLog as packageCustomLog,
-  getSelector as getSelector,
-  buildPath as buildPath,
-  detectBrowser as detectBrowser,
-} from "@/packageLogs";
+export { createUserAle, type UserAleInstance };
+
+export function details(
+  opts: Settings.DefaultConfig,
+  type: Events.AllowedEvents,
+): Logging.DynamicDetailFunction | null | undefined {
+  return runtime.details(opts, type);
+}
+
+export function registerAuthCallback(
+  callback: Callbacks.AuthCallback,
+): boolean {
+  return runtime.registerAuthCallback(callback);
+}
+
+export function resetAuthCallback(): void {
+  runtime.resetAuthCallback();
+}
+
+export function registerHeadersCallback(
+  callback: Callbacks.HeadersCallback,
+): boolean {
+  return runtime.registerHeadersCallback(callback);
+}
+
+export function resetHeadersCallback(): void {
+  runtime.resetHeadersCallback();
+}
+
+export function addCallbacks(
+  ...newCallbacks: Record<symbol | string, CallableFunction>[]
+): Callbacks.CallbackMap {
+  return runtime.addCallbacks(...newCallbacks);
+}
+
+export function removeCallbacks(targetKeys: string[]): void {
+  runtime.removeCallbacks(targetKeys);
+}
+
+export function packageLog(
+  e: Event,
+  detailFcn?: Logging.DynamicDetailFunction | null,
+): boolean {
+  return runtime.packageLog(e, detailFcn);
+}
+
+export function packageCustomLog(
+  customLog: Logging.CustomLog,
+  detailFcn: Logging.DynamicDetailFunction | Logging.StaticDetailFunction,
+  userAction: boolean,
+): boolean {
+  return runtime.packageCustomLog(customLog, detailFcn, userAction);
+}
+
+export { buildPath, detectBrowser, getSelector };
+
 export function registerExporter(exporter: LogExporter | null): boolean {
   return runtime.registerExporter(exporter);
 }
-export {
-  flushSessionReplay,
-  getActiveReplayRingBuffer,
-  getTargetRect,
-  RageClickDetector,
-  ReplayRingBuffer,
-  startSessionReplay,
-  stopSessionReplay,
-} from "@/replay";
+
+export function startSessionReplay(options?: SessionReplayOptions): () => void {
+  return runtime.startSessionReplay(options);
+}
+
+export function stopSessionReplay(): void {
+  runtime.stopSessionReplay();
+}
+
+export function flushSessionReplay(
+  trigger?: string,
+): Promise<ReplayEnvelope | null> {
+  return runtime.flushSessionReplay(trigger);
+}
+
+export function getActiveReplayRingBuffer(): ReplayRingBuffer | null {
+  return runtime.getActiveReplayRingBuffer();
+}
+
+export { getTargetRect, RageClickDetector, ReplayRingBuffer };
+
 export type {
   ReplayEnvelope,
   ReplayFrame,
@@ -123,4 +183,12 @@ export function options(newConfig?: Partial<Settings.Config>): Settings.Config {
 
 export function log(customLog?: Logging.CustomLog | null): boolean {
   return runtime.log(customLog);
+}
+
+export function lockPrivacy(): void {
+  runtime.lockPrivacy();
+}
+
+export function isPrivacyLocked(): boolean {
+  return runtime.isPrivacyLocked();
 }

@@ -450,6 +450,41 @@ describe("packageLogs", () => {
     });
   });
 
+  test("packageIntervalLog returns false when filtered and resets count to 1", () => {
+    config.update({ on: true });
+    initPackager([], config);
+    addCallbacks({
+      dropBtn1: (log: Logging.Log) =>
+        log.logType === "interval" && log.target === "button#btn1" ? null : log,
+    });
+
+    const btn1 = document.createElement("button");
+    btn1.id = "btn1";
+    const btn2 = document.createElement("button");
+    btn2.id = "btn2";
+    const btn3 = document.createElement("button");
+    btn3.id = "btn3";
+
+    const ev1 = new window.MouseEvent("mouseover", { bubbles: true });
+    Object.defineProperty(ev1, "target", { value: btn1 });
+    expect(packageIntervalLog(ev1)).toBe(true);
+
+    const ev2 = new window.MouseEvent("mouseover", { bubbles: true });
+    Object.defineProperty(ev2, "target", { value: btn2 });
+    expect(packageIntervalLog(ev2)).toBe(false);
+
+    const ev3 = new window.MouseEvent("mouseover", { bubbles: true });
+    Object.defineProperty(ev3, "target", { value: btn3 });
+    expect(packageIntervalLog(ev3)).toBe(true);
+
+    expect(logs).toHaveLength(1);
+    expect(logs[0]).toMatchObject({
+      target: "button#btn2",
+      count: 1,
+      logType: "interval",
+    });
+  });
+
   test("buildCSS", () => {
     let result;
     const document = window.document;
