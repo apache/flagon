@@ -21,18 +21,25 @@
 name: Userale CI test suite
 run-name: ${{ github.actor }} running Userale CI test suite
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
       - master
     paths:
       - products/userale/**
+      - proto/**
+      - site/_includes/useralejsDemo.html
       - .github/workflows/userale_ci.yml
   pull_request:
     branches:
       - master
     paths:
       - products/userale/**
+      - proto/**
+      - site/_includes/useralejsDemo.html
       - .github/workflows/userale_ci.yml
 
 defaults:
@@ -48,13 +55,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node v${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: Setup pnpm
-        run: npm install -g pnpm@10
 
       - name: Install dependencies
         run: pnpm i
@@ -64,6 +71,9 @@ jobs:
 
       - name: Check linting
         run: pnpm lint:check
+
+      - name: Typecheck flagon-userale
+        run: pnpm exec tsc --noEmit -p packages/flagon-userale/tsconfig.json
 
   test:
     runs-on: ubuntu-latest
@@ -75,13 +85,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node v${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: Setup pnpm
-        run: npm install -g pnpm@10
 
       - name: Install dependencies
         run: pnpm i
