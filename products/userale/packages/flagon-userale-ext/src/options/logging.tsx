@@ -19,6 +19,7 @@
 
 import { useEffect, useState } from "react"
 
+import { validateAllowListPattern } from "~/utils/security"
 import {
   getStoredOptions,
   setStoredOptions,
@@ -32,6 +33,7 @@ function Logging() {
     useState<StoredOptions["exporterType"]>("http-json")
   const [filterEventTypes, setFilterEventTypes] = useState("")
   const [filterLogTypes, setFilterLogTypes] = useState("")
+  const [validationError, setValidationError] = useState("")
 
   useEffect(() => {
     getStoredOptions().then((data) => {
@@ -45,6 +47,13 @@ function Logging() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setValidationError("")
+    const allowListCheck = validateAllowListPattern(allowList)
+    if (!allowListCheck.valid) {
+      setValidationError(allowListCheck.reason)
+      alert(allowListCheck.reason)
+      return
+    }
     const resp = await setStoredOptions({
       loggingUrl,
       allowList,
@@ -53,6 +62,7 @@ function Logging() {
       filterLogTypes
     })
     if (resp instanceof Error) {
+      setValidationError(resp.message)
       alert(resp.message)
     } else {
       alert(typeof resp === "string" && resp ? resp : "Configuration saved!")
@@ -117,6 +127,7 @@ function Logging() {
         <div style={{ textAlign: "right" }}>
           <button type="submit">Save Changes</button>
         </div>
+        {validationError && <p role="alert">{validationError}</p>}
       </form>
     </div>
   )
