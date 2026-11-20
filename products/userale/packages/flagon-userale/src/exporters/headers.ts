@@ -16,12 +16,18 @@
  */
 
 import type { Configuration } from "@/configure";
-import { updateAuthHeader, updateCustomHeaders } from "@/utils";
+import {
+  authCallback,
+  headersCallback,
+  resolveAuthHeader,
+  resolveCustomHeaders,
+} from "@/utils";
 
 /**
  * Builds the HTTP headers for outgoing log requests, unifying
- * Authorization (static or callback), x-api-key, and custom headers.
- * @param  {Configuration} config Configuration singleton.
+ * Authorization (callback or static), x-api-key, and custom headers
+ * without mutating dynamic callback credentials back onto config.
+ * @param  {Configuration} config Configuration object.
  * @return {Headers}              Constructed Fetch Headers instance.
  */
 export function buildHeaders(config: Configuration): Headers {
@@ -29,23 +35,31 @@ export function buildHeaders(config: Configuration): Headers {
     "Content-Type": "application/json;charset=UTF-8",
   });
 
-  updateAuthHeader(config);
-  if (config.authHeader) {
+  if (authCallback) {
+    const dynamicAuth = resolveAuthHeader();
+    if (dynamicAuth) {
+      headers.set("Authorization", dynamicAuth);
+    }
+  } else if (config.authHeader) {
     const authHeaderValue =
       typeof config.authHeader === "function"
         ? config.authHeader()
         : String(config.authHeader);
-    headers.set("Authorization", authHeaderValue);
+    if (authHeaderValue) {
+      headers.set("Authorization", authHeaderValue);
+    }
   }
 
   if (config.apiKey) {
     headers.set("x-api-key", config.apiKey);
   }
 
-  // Update custom headers last to allow them to over-write the defaults.
-  updateCustomHeaders(config);
-  if (config.headers) {
-    for (const [header, value] of Object.entries(config.headers)) {
+  // Resolve custom headers last to allow them to override defaults cleanly.
+  const customHeaders = headersCallback
+    ? resolveCustomHeaders()
+    : config.headers;
+  if (customHeaders) {
+    for (const [header, value] of Object.entries(customHeaders)) {
       headers.set(header, value);
     }
   }

@@ -14,6 +14,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { authCallback, updateAuthHeader, registerAuthCallback, resetAuthCallback, verifyCallback as verifyAuthCallback, } from "./auth";
-export { headersCallback, updateCustomHeaders, registerHeadersCallback, resetHeadersCallback, verifyCallback as verifyHeadersCallback, } from "./headers";
-//# sourceMappingURL=index.d.ts.map
+
+declare const __USERALE_IIFE__: boolean;

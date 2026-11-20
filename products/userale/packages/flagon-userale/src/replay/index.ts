@@ -366,6 +366,9 @@ export function startSessionReplay(
   }
 
   const doFlush = async (trigger: string): Promise<ReplayEnvelope | null> => {
+    if (!config.on) {
+      return null;
+    }
     const frames = ringBuffer.getSnapshotFrames();
     if (frames.length === 0) {
       return null;

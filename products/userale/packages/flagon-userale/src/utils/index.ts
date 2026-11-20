@@ -16,6 +16,7 @@
  */
 export {
   authCallback,
+  resolveAuthHeader,
   updateAuthHeader,
   registerAuthCallback,
   resetAuthCallback,
@@ -23,6 +24,7 @@ export {
 } from "./auth";
 export {
   headersCallback,
+  resolveCustomHeaders,
   updateCustomHeaders,
   registerHeadersCallback,
   resetHeadersCallback,

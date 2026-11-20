@@ -34,6 +34,17 @@ const intervalEvents: Array<Events.IntervalEvents> = [
   "submit",
 ];
 const windowEvents: Array<Events.WindowEvents> = ["load", "blur", "focus"];
+let handlerAbortController: AbortController | null = null;
+
+/**
+ * Detaches all active DOM and window event listeners attached by UserALE.
+ */
+export function detachHandlers(): void {
+  if (handlerAbortController) {
+    handlerAbortController.abort();
+    handlerAbortController = null;
+  }
+}
 
 /**
  * Maps a MouseEvent to an object containing useful information.
@@ -136,7 +147,7 @@ export function extractChangeDetails(e: Events.ChangeEvent) {
     };
   }
   return {
-    value: e.target.value,
+    value: (e.target as Events.FormElement | null)?.value,
   };
 }
 
@@ -254,15 +265,20 @@ export function defineCustomDetails(
  */
 export function attachHandlers(config: Configuration): boolean {
   try {
+    detachHandlers();
     defineDetails(config);
+
+    handlerAbortController =
+      typeof AbortController !== "undefined" ? new AbortController() : null;
+    const signal = handlerAbortController?.signal;
 
     (Object.keys(events) as Events.AllowedEvents[]).forEach(function (ev) {
       document.addEventListener(
         ev,
         function (e) {
-          packageLog(e, events[ev]);
+          packageLog(e, defineCustomDetails(config, ev));
         },
-        true,
+        signal ? { capture: true, signal } : true,
       );
     });
 
@@ -272,26 +288,31 @@ export function attachHandlers(config: Configuration): boolean {
         function (e) {
           packageIntervalLog(e);
         },
-        true,
+        signal ? { capture: true, signal } : true,
       );
     });
 
     (Object.keys(bufferedEvents) as Events.BufferedEvents[]).forEach(
       function (ev) {
         bufferBools[ev] = true;
+        const passive = ev === "wheel" || ev === "scroll";
 
         self.addEventListener(
           ev,
           function (e) {
             if (bufferBools[ev]) {
               bufferBools[ev] = false;
-              packageLog(e, bufferedEvents[ev]);
+              packageLog(e, defineCustomDetails(config, ev));
               setTimeout(function () {
                 bufferBools[ev] = true;
               }, config.resolution);
             }
           },
-          true,
+          signal
+            ? { capture: true, passive, signal }
+            : passive
+              ? { capture: true, passive: true }
+              : true,
         );
       },
     );
@@ -301,9 +322,9 @@ export function attachHandlers(config: Configuration): boolean {
         document.addEventListener(
           ev,
           function (e) {
-            packageLog(e, events[ev]);
+            packageLog(e, defineCustomDetails(config, ev));
           },
-          true,
+          signal ? { capture: true, signal } : true,
         );
       },
     );
@@ -316,7 +337,7 @@ export function attachHandlers(config: Configuration): boolean {
             return { window: true };
           });
         },
-        true,
+        signal ? { capture: true, signal } : true,
       );
     });
 

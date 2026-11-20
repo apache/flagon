@@ -19,27 +19,78 @@ import type { Configuration } from "@/configure";
 import type { Logging } from "@/types";
 import type { ExportResult, LogExporter } from "./types";
 
+const MAX_PENDING_MESSAGES = 100;
+const WS_CONNECTING = 0;
+const WS_OPEN = 1;
+
 export class WebSocketExporter implements LogExporter {
   private wsock: WebSocket;
+  private pendingPayloads: string[] = [];
 
   constructor(config: Configuration) {
     this.wsock = new WebSocket(config.url);
+    if (typeof this.wsock.addEventListener === "function") {
+      this.wsock.addEventListener("open", () => {
+        this.drainPending();
+      });
+    }
+  }
+
+  private drainPending(): void {
+    const openState =
+      typeof WebSocket !== "undefined" ? WebSocket.OPEN : WS_OPEN;
+    if (this.wsock.readyState !== openState) {
+      return;
+    }
+    while (this.pendingPayloads.length > 0) {
+      if (this.wsock.readyState !== openState) {
+        break;
+      }
+      const next = this.pendingPayloads.shift()!;
+      this.wsock.send(next);
+    }
   }
 
   public async export(logs: Array<Logging.Log>): Promise<ExportResult> {
     const data = JSON.stringify(logs);
-    this.wsock.send(data);
-    return { success: true };
+    const openState =
+      typeof WebSocket !== "undefined" ? WebSocket.OPEN : WS_OPEN;
+    const connectingState =
+      typeof WebSocket !== "undefined" ? WebSocket.CONNECTING : WS_CONNECTING;
+
+    if (this.wsock.readyState === openState) {
+      this.wsock.send(data);
+      return { success: true };
+    }
+
+    if (this.wsock.readyState === connectingState) {
+      if (this.pendingPayloads.length >= MAX_PENDING_MESSAGES) {
+        this.pendingPayloads.shift();
+      }
+      this.pendingPayloads.push(data);
+      return { success: true };
+    }
+
+    return {
+      success: false,
+      error: new Error("WebSocket is not open"),
+    };
   }
 
   public async flush(): Promise<void> {
+    this.drainPending();
     return Promise.resolve();
   }
 
   public async shutdown(): Promise<void> {
+    this.pendingPayloads = [];
+    const openState =
+      typeof WebSocket !== "undefined" ? WebSocket.OPEN : WS_OPEN;
+    const connectingState =
+      typeof WebSocket !== "undefined" ? WebSocket.CONNECTING : WS_CONNECTING;
     if (
-      typeof WebSocket !== "undefined" &&
-      this.wsock.readyState === WebSocket.OPEN
+      this.wsock.readyState === openState ||
+      this.wsock.readyState === connectingState
     ) {
       this.wsock.close();
     }

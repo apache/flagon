@@ -16,25 +16,53 @@
  */
 
 import { Configuration } from "@/configure";
-import { Callbacks } from "@/types";
+import { Callbacks, type Settings } from "@/types";
 
 export let headersCallback: Callbacks.HeadersCallback | null = null;
+
+function isValidHeadersObject(value: unknown): value is Settings.HeaderObject {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return false;
+  }
+  for (const [key, val] of Object.entries(value)) {
+    if (typeof key !== "string" || typeof val !== "string") {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * Resolves the latest custom headers from headersCallback without mutating config.
+ * Returns null if no callback is registered or if invoking it fails validation.
+ */
+export function resolveCustomHeaders(): Settings.HeaderObject | null {
+  if (!headersCallback) {
+    return null;
+  }
+  try {
+    const result = headersCallback();
+    return isValidHeadersObject(result) ? { ...result } : null;
+  } catch (e) {
+    console.error(`Error encountered while setting the headers: ${e}`);
+    return null;
+  }
+}
 
 /**
  * Fetches the most up-to-date custom headers object from the headers callback
  * and updates the config object with the new value.
  * @param {Configuration} config Configuration object to be updated.
- * @param {Callbacks.HeadersCallback} headersCallback Callback used to fetch the newest headers.
  * @returns {void}
  */
 export function updateCustomHeaders(config: Configuration) {
   if (headersCallback) {
     try {
-      config.headers = headersCallback();
+      const result = headersCallback();
+      config.headers = isValidHeadersObject(result) ? result : null;
     } catch (e) {
-      // We should emit the error, but otherwise continue as this could be a temporary issue
-      // due to network connectivity or some logic inside the headersCallback which is the user's
-      // responsibility.
+      // Clear any previously cached custom headers when the callback fails.
+      config.headers = null;
       console.error(`Error encountered while setting the headers: ${e}`);
     }
   }
