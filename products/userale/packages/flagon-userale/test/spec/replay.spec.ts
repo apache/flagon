@@ -33,6 +33,7 @@ import {
   type ReplayEnvelope,
   type ReplayFrame,
 } from "@/replay";
+import type { Logging } from "@/types";
 
 const config = Configuration.getInstance();
 
@@ -111,6 +112,25 @@ describe("Session Replay & Behavioral DOM Telemetry (#104)", () => {
       expect(frames).toHaveLength(1);
       expect((frames[0].data as { v: number }).v).toBe(3);
     });
+
+    it("preserves prior Meta (type 4) anchor across checkout FullSnapshot and enforces maxBytes", () => {
+      const buffer = new ReplayRingBuffer(10_000, 100, 500);
+      buffer.push({ type: 4, data: { href: "https://ex" }, timestamp: 1_000 });
+      buffer.push({ type: 2, data: { v: 1 }, timestamp: 1_010 });
+      buffer.push({ type: 2, data: { v: 2 }, timestamp: 2_000 }, true);
+
+      const afterCheckout = buffer.getSnapshotFrames();
+      expect(afterCheckout.map((f) => f.type)).toEqual([4, 2]);
+
+      for (let i = 0; i < 10; i++) {
+        buffer.push({
+          type: 3,
+          data: { pad: "x".repeat(120) },
+          timestamp: 2_100 + i,
+        });
+      }
+      expect(buffer.size()).toBeLessThan(10);
+    });
   });
 
   describe("RageClickDetector", () => {
@@ -162,6 +182,28 @@ describe("Session Replay & Behavioral DOM Telemetry (#104)", () => {
         y: 400,
       });
       expect(third.isRageClick).toBe(false);
+    });
+
+    it("rejects empty targets and null pointer coordinates", () => {
+      const detector = new RageClickDetector(1_000, 3, 30);
+      for (let i = 0; i < 4; i++) {
+        expect(
+          detector.recordClick({
+            target: "",
+            timestamp: 1_000 + i * 10,
+            x: 10,
+            y: 10,
+          }).isRageClick,
+        ).toBe(false);
+        expect(
+          detector.recordClick({
+            target: "button#ok",
+            timestamp: 2_000 + i * 10,
+            x: null,
+            y: null,
+          }).isRageClick,
+        ).toBe(false);
+      }
     });
   });
 
@@ -338,6 +380,85 @@ describe("Session Replay & Behavioral DOM Telemetry (#104)", () => {
 
       expect(flushedEnvelopes).toHaveLength(1);
       expect(flushedEnvelopes[0].trigger).toBe("unhandledrejection");
+    });
+
+    it("forwards redact parity / maskAllText, ignores mutations when config.on is false, and routes >48KB flushes through OtlpJsonExporter", async () => {
+      let capturedRecorderOpts: any = null;
+      const mutatedLogs: Logging.Log[] = [];
+      initPackager(mutatedLogs, config);
+
+      startSessionReplay(
+        {
+          observeMutations: true,
+          detectRageClicks: false,
+          maskAllText: true,
+          recorder: (opts) => {
+            capturedRecorderOpts = opts;
+            return () => {};
+          },
+        },
+        config,
+      );
+      expect(capturedRecorderOpts.maskTextSelector).toBe("*");
+      stopSessionReplay();
+
+      startSessionReplay(
+        {
+          observeMutations: true,
+          detectRageClicks: false,
+          recorder: (opts) => {
+            capturedRecorderOpts = opts;
+            return () => {};
+          },
+        },
+        config,
+      );
+      expect(capturedRecorderOpts.maskTextSelector).toContain(
+        "[data-userale-redact]",
+      );
+
+      config.on = false;
+      const el = document.createElement("div");
+      document.body.appendChild(el);
+      await new Promise((r) => setTimeout(r, 80));
+      expect(mutatedLogs.filter((l) => l.logType === "mutation")).toHaveLength(
+        0,
+      );
+      stopSessionReplay();
+
+      const fetchSpy = jest.spyOn(globalThis, "fetch").mockResolvedValue({
+        ok: true,
+        status: 200,
+        statusText: "OK",
+      } as Response);
+      config.update({
+        on: true,
+        url: "http://localhost:4318",
+        exporterType: "otlp",
+      });
+
+      startSessionReplay(
+        {
+          observeMutations: false,
+          detectRageClicks: false,
+          recorder: ({ emit }) => {
+            emit({
+              type: 2,
+              data: { snapshot: "x".repeat(60_000) },
+              timestamp: 1_000,
+            });
+            return () => {};
+          },
+        },
+        config,
+      );
+
+      await flushSessionReplay("error");
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+      expect(fetchSpy.mock.calls[0]![0]).toBe("http://localhost:4318/v1/logs");
+      const body = JSON.parse(fetchSpy.mock.calls[0]![1]!.body as string);
+      expect(Array.isArray(body.resourceLogs)).toBe(true);
+      fetchSpy.mockRestore();
     });
   });
 });

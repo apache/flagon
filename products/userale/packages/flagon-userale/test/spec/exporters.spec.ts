@@ -31,6 +31,7 @@ import {
   toOtlpExportLogsServiceRequest,
   toProtoLogBatch,
   toUnixNanoString,
+  utf8ByteLength,
   WebSocketExporter,
 } from "@/exporters";
 import { LogBatchSchema, LogType } from "@/gen/apache/flagon/userale/v1/log_pb";
@@ -602,6 +603,224 @@ describe("exporters", () => {
           }),
         }),
       );
+    });
+
+    it("omits empty strings, empty arrays/objects, non-finite coords, and uses eventName when details is {}", async () => {
+      const mockLogger = { emit: jest.fn() };
+      const exporter = new OtelSdkExporter(mockLogger);
+      const res = await exporter.export([
+        {
+          pageUrl: "",
+          pageTitle: "",
+          pageReferrer: "",
+          userId: "",
+          sessionId: "",
+          target: "",
+          path: [],
+          attributes: {},
+          location: { x: Number.NaN, y: null },
+          type: "click",
+          logType: "raw",
+          clientTime: 1712000000000,
+          userAction: true,
+          details: {},
+        },
+      ]);
+
+      expect(res.success).toBe(true);
+      const emitted = mockLogger.emit.mock.calls[0]![0];
+      expect(emitted.body).toBe("userale.raw.click");
+      expect(emitted.attributes).toEqual({
+        "event.name": "userale.raw.click",
+        "flagon.log_type": "raw",
+        "flagon.event_type": "click",
+        "flagon.user_action": true,
+      });
+    });
+  });
+
+  describe("exporter hardening (#217)", () => {
+    it("respects explicit exporterType over otlpEndpoint and wires otel-sdk", () => {
+      config.update({
+        url: "http://localhost:8000",
+        otlpEndpoint: "http://localhost:4318",
+        exporterType: "proto-json",
+      });
+      expect(createExporter(config)).toBeInstanceOf(ProtoJsonExporter);
+
+      config.reset();
+      config.update({
+        url: "http://localhost:8000",
+        otlpEndpoint: "http://localhost:4318",
+        exporterType: "http-json",
+      });
+      expect(createExporter(config)).toBeInstanceOf(HttpJsonExporter);
+
+      config.reset();
+      const mockLogger = { emit: jest.fn() };
+      config.update({
+        exporterType: "otel-sdk",
+        otelLogger: mockLogger,
+      });
+      expect(createExporter(config)).toBeInstanceOf(OtelSdkExporter);
+    });
+
+    it("chunks multi-byte UTF-8 payloads, awaits keepalive sequentially, and disables keepalive for single oversized payloads", async () => {
+      // Multi-byte CJK chars occupy 3 UTF-8 bytes each despite length === 1
+      const cjkLogs = Array.from({ length: 4 }, (_, i) => ({
+        i,
+        text: "漢".repeat(7_000),
+      }));
+      const chunks = chunkLogsForKeepalive(cjkLogs, (b) => JSON.stringify(b));
+      expect(chunks.length).toBeGreaterThan(1);
+      for (const c of chunks) {
+        expect(utf8ByteLength(c)).toBeLessThanOrEqual(48 * 1024);
+      }
+
+      // Sequential keepalive: next fetch only fires after prior resolves
+      let inFlight = 0;
+      let maxConcurrent = 0;
+      const keepaliveFlags: boolean[] = [];
+      const fetchSpy = jest
+        .spyOn(globalThis, "fetch")
+        .mockImplementation(async (_url, init) => {
+          inFlight++;
+          maxConcurrent = Math.max(maxConcurrent, inFlight);
+          keepaliveFlags.push(Boolean(init?.keepalive));
+          await Promise.resolve();
+          inFlight--;
+          return new Response(null, { status: 200 });
+        });
+
+      config.update({ url: "https://collector.example/logs" });
+      const exporter = new HttpJsonExporter(config);
+      await exporter.export(cjkLogs, { keepalive: true });
+      expect(maxConcurrent).toBe(1);
+      expect(keepaliveFlags.every(Boolean)).toBe(true);
+
+      // Single oversized batch (> 48 KiB) downgrades to keepalive: false
+      keepaliveFlags.length = 0;
+      await exporter.export([{ big: "€".repeat(20_000) }], { keepalive: true });
+      expect(keepaliveFlags).toEqual([false]);
+      fetchSpy.mockRestore();
+    });
+
+    it("prevents OtlpJsonExporter from re-injecting config.sessionId on minimized logs or tracing when attachTraceContext is false", () => {
+      const globalAny = globalThis as Record<string, unknown>;
+      const origOtel = globalAny.opentelemetry;
+      const traceCtxSpy = jest.fn(() => ({
+        traceId: "4bf92f3577b34da6a3ce929d0e0e4736",
+        spanId: "00f067aa0ba902b7",
+      }));
+      globalAny.opentelemetry = {
+        trace: {
+          getActiveSpan: () => ({
+            spanContext: () => ({
+              traceId: "4bf92f3577b34da6a3ce929d0e0e4736",
+              spanId: "00f067aa0ba902b7",
+            }),
+          }),
+        },
+      };
+
+      try {
+        config.update({
+          sessionId: "leaked-config-session",
+          httpSessionId: "leaked-http",
+          traceContext: traceCtxSpy,
+          privacy: { preset: "strict" },
+        });
+        const minimizedLog: Logging.Log = {
+          logType: "raw",
+          type: "click",
+          clientTime: 1712000000000,
+          sessionId: null,
+          httpSessionId: null,
+          browserSessionId: null,
+          traceId: "4bf92f3577b34da6a3ce929d0e0e4736",
+          spanId: "00f067aa0ba902b7",
+        };
+        const req = toOtlpExportLogsServiceRequest([minimizedLog], config);
+        const resKeys = req.resourceLogs[0]!.resource.attributes.map(
+          (a) => a.key,
+        );
+        expect(resKeys).not.toContain("session.id");
+        expect(resKeys).not.toContain("flagon.http_session_id");
+        expect(resKeys).not.toContain("flagon.browser_session_id");
+        const rec = req.resourceLogs[0]!.scopeLogs[0]!.logRecords[0]!;
+        expect(rec.traceId).toBeUndefined();
+        expect(rec.spanId).toBeUndefined();
+        expect(traceCtxSpy).not.toHaveBeenCalled();
+      } finally {
+        if (origOtel === undefined) {
+          delete globalAny.opentelemetry;
+        } else {
+          globalAny.opentelemetry = origOtel;
+        }
+      }
+    });
+
+    it("guards NaN/Infinity in ProtoJsonExporter, omits empty location/scrnRes, preserves native Struct types, and maps mutation/replay/targetRect", () => {
+      const batch = toProtoLogBatch([
+        {
+          target: "",
+          path: [],
+          type: "click",
+          logType: "raw",
+          userAction: true,
+          clientTime: Number.NaN,
+          microTime: Number.POSITIVE_INFINITY,
+          location: null,
+          scrnRes: null,
+          targetRect: { x: 10, y: 20, width: 100, height: 40 },
+          attributes: { "data-num": 42, "data-flag": true, label: "save" },
+          traceId: "4bf92f3577b34da6a3ce929d0e0e4736",
+          spanId: "00f067aa0ba902b7",
+        },
+        {
+          type: "mutation",
+          logType: "mutation",
+          clientTime: 1712000000100,
+          userAction: false,
+          details: { addedCount: 2 },
+        },
+        {
+          type: "session_replay",
+          logType: "replay",
+          clientTime: 1712000000200,
+          userAction: false,
+          trigger: "manual",
+        },
+      ]);
+
+      const rawObj = (batch.logs as any[])[0]!.raw;
+      expect(rawObj.location).toBeUndefined();
+      expect(rawObj.microTime).toBeUndefined();
+      expect(rawObj.metadata.clientTime).toBe("0");
+      expect(rawObj.metadata.screenResolution).toBeUndefined();
+      expect(rawObj.attributes).toEqual({
+        "data-num": 42,
+        "data-flag": true,
+        label: "save",
+      });
+
+      const decoded = fromJson(LogBatchSchema, batch as unknown as JsonValue);
+      expect(decoded.logs).toHaveLength(3);
+      expect(decoded.logs[0]!.logType).toBe(LogType.RAW);
+      if (decoded.logs[0]!.log.case === "raw") {
+        expect(decoded.logs[0]!.log.value.location).toBeUndefined();
+        expect(decoded.logs[0]!.log.value.targetRect).toMatchObject({
+          x: 10,
+          y: 20,
+          width: 100,
+          height: 40,
+        });
+        expect(decoded.logs[0]!.log.value.metadata?.traceId).toBe(
+          "4bf92f3577b34da6a3ce929d0e0e4736",
+        );
+      }
+      expect(decoded.logs[1]!.logType).toBe(LogType.MUTATION);
+      expect(decoded.logs[2]!.logType).toBe(LogType.REPLAY);
     });
   });
 });

@@ -21,12 +21,22 @@ package apache.flagon.userale.v1;
 
 import "google/protobuf/struct.proto";
 
-// LogType discriminates the three categories of UserALE log entries.
+// LogType discriminates the categories of UserALE log entries.
 enum LogType {
   LOG_TYPE_UNSPECIFIED = 0;
   LOG_TYPE_RAW = 1;
   LOG_TYPE_INTERVAL = 2;
   LOG_TYPE_CUSTOM = 3;
+  LOG_TYPE_MUTATION = 4;
+  LOG_TYPE_REPLAY = 5;
+}
+
+// TargetRect captures the bounding client rectangle of an event target.
+message TargetRect {
+  int32 x = 1;
+  int32 y = 2;
+  int32 width = 3;
+  int32 height = 4;
 }
 
 // ScreenResolution captures the viewport dimensions at log time.
@@ -65,6 +75,10 @@ message LogMetadata {
   optional string tool_name = 11;
   optional string tool_version = 12;
   optional string userale_version = 13;
+
+  // Distributed trace correlation
+  optional string trace_id = 14;
+  optional string span_id = 15;
 }
 
 // RawLog captures a single DOM event (click, keydown, drag, etc.).
@@ -94,6 +108,9 @@ message RawLog {
 
   // Inline CSS properties of the target element
   google.protobuf.Struct style = 10;
+
+  // Bounding rectangle of the event target element
+  TargetRect target_rect = 11;
 }
 
 // IntervalLog captures an aggregated sequence of repeated events

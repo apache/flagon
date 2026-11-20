@@ -1,116 +1,223 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://flagon.incubator.apache.org/log.schema.json",
-    "title": "Log",
-    "description": "A raw or custom log produced by userale",
-    "type": "object",
-    "properties": {
-        "target": {
-            "type": "string"
-        },
-        "path": {
-            "type": "array",
-            "items": {
-                "type": "string"
-            },
-            "minItems": 1
-        },
-        "pageUrl": {
-            "type": "string"
-        },
-        "pageTitle": {
-            "type": "string"
-        },
-        "userAgent": {
-            "type": "string"
-        },
-        "clientTime": {
-            "type": "integer"
-        },
-        "microTime": {
-            "type": "number",
-            "minimum": 0,
-            "maxmaximumi": 1
-        },
-        "location": {
-          "type": "object",
-          "properties": {
-              "x": {
-                  "type": ["integer", "null"]
-              },
-              "y": {
-                  "type": ["integer", "null"]
-              }
-          },
-          "required" : ["x", "y"]
-        },
-        "scrnRes": {
-          "type": "object",
-          "properties": {
-              "height": {
-                  "type": "integer"
-              },
-              "width": {
-                  "type": "integer"
-              }
-          },
-          "required" : ["height", "width"]
-        },
-        "type": {
-          "type": "string"
-        },
-        "logType": {
-          "type": "string",
-          "enum": ["raw", "custom"]
-        },
-        "userAction": {
-          "type": "boolean"
-        },
-        "details": {
-          "type": ["object", "null"]
-        },
-        "userId": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://flagon.incubator.apache.org/log.schema.json",
+  "title": "Log",
+  "description": "A raw, interval, custom, mutation, or replay log produced by UserALE",
+  "type": "object",
+  "properties": {
+    "target": {
+      "type": ["string", "null"]
+    },
+    "path": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 0
+    },
+    "pageUrl": {
+      "type": "string"
+    },
+    "pageTitle": {
+      "type": "string"
+    },
+    "pageReferrer": {
+      "type": "string"
+    },
+    "browser": {
+      "type": ["object", "null"],
+      "properties": {
+        "browser": {
           "type": ["string", "null"]
         },
-        "toolVersion": {
-          "type":["string", "null"]
-        },
-        "toolName": {
+        "version": {
           "type": ["string", "null"]
-        },
-        "useraleVersion": {
-          "type": "string"
-        },
-        "sessionId": {
-          "type": "string"
         }
+      },
+      "required": ["browser", "version"]
     },
-    "required": [
-        "pageUrl",
-        "pageTitle",
-        "pageReferrer",
-        "userAgent",
-        "clientTime",
-        "scrnRes",
-        "logType",
-        "userAction",
-        "details",
-        "userId",
-        "toolVersion",
-        "toolName",
-        "useraleVersion",
-        "sessionId"
-    ],
-    "if": {
-        "properties": { "logType": { "const": "raw" } }
+    "userAgent": {
+      "type": ["string", "null"]
     },
-    "then": {
-        "required": [
-            "target",
-            "path",
-            "microTime",
-            "location",
-            "type"
-        ]
+    "clientTime": {
+      "type": "integer"
+    },
+    "microTime": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "location": {
+      "type": ["object", "null"],
+      "properties": {
+        "x": {
+          "type": ["integer", "number", "null"]
+        },
+        "y": {
+          "type": ["integer", "number", "null"]
+        }
+      },
+      "required": ["x", "y"]
+    },
+    "scrnRes": {
+      "type": ["object", "null"],
+      "properties": {
+        "height": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer"
+        }
+      },
+      "required": ["height", "width"]
+    },
+    "targetRect": {
+      "type": ["object", "null"],
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "width": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        }
+      },
+      "required": ["x", "y", "width", "height"]
+    },
+    "type": {
+      "type": ["string", "null"]
+    },
+    "logType": {
+      "type": "string",
+      "enum": ["raw", "custom", "interval", "mutation", "replay"]
+    },
+    "userAction": {
+      "type": "boolean"
+    },
+    "details": {
+      "type": ["object", "null"]
+    },
+    "attributes": {
+      "type": "object"
+    },
+    "style": {
+      "type": "object"
+    },
+    "userId": {
+      "type": ["string", "null"]
+    },
+    "toolVersion": {
+      "type": ["string", "null"]
+    },
+    "toolName": {
+      "type": ["string", "null"]
+    },
+    "useraleVersion": {
+      "type": ["string", "null"]
+    },
+    "sessionId": {
+      "type": ["string", "null"]
+    },
+    "httpSessionId": {
+      "type": ["string", "null"]
+    },
+    "browserSessionId": {
+      "type": ["string", "null"]
+    },
+    "traceId": {
+      "type": ["string", "null"]
+    },
+    "spanId": {
+      "type": ["string", "null"]
+    },
+    "count": {
+      "type": "integer"
+    },
+    "duration": {
+      "type": "integer"
+    },
+    "startTime": {
+      "type": "integer"
+    },
+    "endTime": {
+      "type": "integer"
+    },
+    "targetChange": {
+      "type": "boolean"
+    },
+    "typeChange": {
+      "type": "boolean"
     }
+  },
+  "required": [
+    "pageUrl",
+    "pageTitle",
+    "pageReferrer",
+    "userAgent",
+    "logType",
+    "userAction",
+    "userId",
+    "toolVersion",
+    "toolName",
+    "useraleVersion",
+    "sessionId"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": { "logType": { "const": "raw" } }
+      },
+      "then": {
+        "required": [
+          "target",
+          "path",
+          "clientTime",
+          "microTime",
+          "location",
+          "scrnRes",
+          "details",
+          "type"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": { "logType": { "const": "custom" } }
+      },
+      "then": {
+        "required": ["clientTime", "scrnRes", "details"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "logType": { "const": "interval" } }
+      },
+      "then": {
+        "required": [
+          "target",
+          "path",
+          "type",
+          "count",
+          "duration",
+          "startTime",
+          "endTime",
+          "targetChange",
+          "typeChange"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": { "logType": { "enum": ["mutation", "replay"] } }
+      },
+      "then": {
+        "required": ["clientTime", "details"]
+      }
+    }
+  ]
 }

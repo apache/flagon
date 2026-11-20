@@ -15,15 +15,18 @@
  * limitations under the License.
  */
 
+import { clonePrivacyOptions, DEFAULT_PRIVACY_OPTIONS } from "@/privacy";
 import type { Settings } from "./types";
 
-let sessionId: string | null = null;
-let httpSessionId: string | null = null;
+export const EXPLICIT_EXPORTER_MODE_SYM = Symbol.for(
+  "apache.flagon.userale.explicitExporterMode",
+);
 
 export interface InitialSettingsOverrides {
   persistSession?: boolean;
   sessionId?: string | null;
   autostart?: boolean;
+  skipScriptTag?: boolean;
 }
 
 function parseHeadersAttr(raw: string | null): Settings.Headers {
@@ -64,6 +67,7 @@ export function getInitialSettings(
       autostart: overrides?.autostart ?? isWorker,
       browserSessionId: null,
       custIndex: null,
+      events: null,
       exporter: null,
       exporterFormat: "http-json",
       exporterType: "http-json",
@@ -73,8 +77,10 @@ export function getInitialSettings(
       logDetails: false,
       maxQueueSize: 10000,
       observeMutations: false,
+      otelLogger: null,
       otlpEndpoint: null,
       persistSession: overrides?.persistSession ?? isWorker,
+      privacy: clonePrivacyOptions(DEFAULT_PRIVACY_OPTIONS),
       resolution: +500,
       sessionId:
         overrides?.sessionId !== undefined ? overrides.sessionId : null,
@@ -91,9 +97,9 @@ export function getInitialSettings(
     return settings;
   }
 
-  // Only inspect document.currentScript; never scrape an arbitrary last <script>
-  // in ESM bundles where document.currentScript is null.
-  const script = document.currentScript;
+  // Only inspect document.currentScript unless skipScriptTag is requested;
+  // never scrape an arbitrary last <script> in ESM bundles.
+  const script = overrides?.skipScriptTag ? null : document.currentScript;
   const get = script
     ? script.getAttribute.bind(script)
     : function () {
@@ -114,22 +120,15 @@ export function getInitialSettings(
     if (overrides?.sessionId !== undefined) {
       resolvedSessionId = overrides.sessionId;
     } else {
-      if (sessionId === null) {
-        sessionId = getsessionId(
-          "userAlesessionId",
-          "session_" + String(Date.now()),
-        );
-      }
-      resolvedSessionId = get("data-session") || sessionId;
+      resolvedSessionId =
+        get("data-session") ||
+        getsessionId("userAlesessionId", "session_" + String(Date.now()));
     }
 
-    if (httpSessionId === null) {
-      httpSessionId = getsessionId(
-        "userAleHttpSessionId",
-        generatehttpSessionId(),
-      );
-    }
-    resolvedHttpSessionId = httpSessionId;
+    resolvedHttpSessionId = getsessionId(
+      "userAleHttpSessionId",
+      generatehttpSessionId(),
+    );
   } else {
     resolvedSessionId =
       overrides?.sessionId !== undefined
@@ -140,9 +139,11 @@ export function getInitialSettings(
 
   const headers = get("data-headers");
   const otlpEndpoint = get("data-otlp-endpoint") || null;
-  const exporterAttr = (get("data-exporter-type") ||
+  const explicitExporterAttr =
+    get("data-exporter-type") ||
     get("data-exporter-format") ||
-    get("data-exporter") ||
+    get("data-exporter");
+  const exporterAttr = (explicitExporterAttr ||
     (otlpEndpoint ? "otlp" : "http-json")) as Settings.ExporterType;
   const defaultAutostart = get("data-autostart") === "false" ? false : true;
   const settings: Settings.Config = {
@@ -154,6 +155,7 @@ export function getInitialSettings(
         : defaultAutostart,
     browserSessionId: null,
     custIndex: get("data-index") || null,
+    events: null,
     exporter: null,
     exporterFormat: exporterAttr,
     exporterType: exporterAttr,
@@ -163,8 +165,10 @@ export function getInitialSettings(
     logDetails: get("data-log-details") === "true" ? true : false,
     maxQueueSize: +(get("data-max-queue-size") || 10000),
     observeMutations: get("data-observe-mutations") === "true" ? true : false,
+    otelLogger: null,
     otlpEndpoint: otlpEndpoint,
     persistSession: persistSession,
+    privacy: clonePrivacyOptions(DEFAULT_PRIVACY_OPTIONS),
     resolution: +(get("data-resolution") || 500),
     sessionId: resolvedSessionId,
     time: timeStampScale(document.createEvent("CustomEvent")),
@@ -177,6 +181,12 @@ export function getInitialSettings(
     userFromParams: get("data-user-from-params") || null,
     userId: get("data-user") || null,
   };
+  if (explicitExporterAttr) {
+    Object.defineProperty(settings, EXPLICIT_EXPORTER_MODE_SYM, {
+      value: true,
+      enumerable: false,
+    });
+  }
   return settings;
 }
 

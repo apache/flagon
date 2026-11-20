@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { OtelLogsApiLogger } from "./exporters/otel-sdk";
 import type { LogExporter } from "./exporters/types";
 
 export declare namespace Settings {
@@ -33,18 +34,61 @@ export declare namespace Settings {
     | "proto-json"
     | "otlp"
     | "otlp-json"
+    | "otel-sdk"
     | "websocket"
     | "custom";
   type CustomExporter = LogExporter | null;
   type OtlpEndpoint = string | null;
   type TraceContextCallback =
     (() => { traceId?: string; spanId?: string } | null) | null;
+  type DomSelectorMode = "full" | "structural" | "none";
+  type PrivacyPreset = "default" | "strict";
+
+  export interface PrivacyOptions {
+    preset?: PrivacyPreset;
+    allowlistSelector?: string | null;
+    capturePageUrl?: boolean;
+    capturePageTitle?: boolean;
+    capturePageReferrer?: boolean;
+    captureHost?: boolean;
+    captureUserAgent?: boolean;
+    captureScreenRes?: boolean;
+    captureLocation?: boolean;
+    captureTargetRect?: boolean;
+    captureDetails?: boolean;
+    captureMicroTime?: boolean;
+    attachTraceContext?: boolean;
+    ignoreUntrustedEvents?: boolean;
+    domSelectorMode?: DomSelectorMode;
+    allowedAttributes?: string[] | null;
+  }
+
+  export interface ResolvedPrivacyOptions {
+    preset: PrivacyPreset;
+    allowlistSelector: string | null;
+    capturePageUrl: boolean;
+    capturePageTitle: boolean;
+    capturePageReferrer: boolean;
+    captureHost: boolean;
+    captureUserAgent: boolean;
+    captureScreenRes: boolean;
+    captureLocation: boolean;
+    captureTargetRect: boolean;
+    captureDetails: boolean;
+    captureMicroTime: boolean;
+    attachTraceContext: boolean;
+    ignoreUntrustedEvents: boolean;
+    domSelectorMode: DomSelectorMode;
+    allowedAttributes: string[] | null;
+  }
+
   type ConfigValueTypes =
     | string
     | number
     | boolean
     | null
     | undefined
+    | string[]
     | Version
     | UserId
     | SessionId
@@ -57,6 +101,9 @@ export declare namespace Settings {
     | ExporterType
     | CustomExporter
     | OtlpEndpoint
+    | OtelLogsApiLogger
+    | PrivacyOptions
+    | ResolvedPrivacyOptions
     | TraceContextCallback;
 
   type TimeFunction = (() => number) | ((ts: number) => number);
@@ -71,6 +118,7 @@ export declare namespace Settings {
     authHeader: AuthHeader;
     browserSessionId: SessionId;
     custIndex: CustomIndex;
+    events?: string[] | null;
     exporter?: CustomExporter;
     exporterFormat?: ExporterType;
     exporterType?: ExporterType;
@@ -81,8 +129,10 @@ export declare namespace Settings {
     maxQueueSize?: number;
     observeMutations?: boolean;
     on?: boolean;
+    otelLogger?: OtelLogsApiLogger | null;
     otlpEndpoint?: OtlpEndpoint;
     persistSession?: boolean;
+    privacy?: PrivacyOptions | null;
     resolution: number;
     sessionId: SessionId;
     time: TimeFunction;

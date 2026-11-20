@@ -18,6 +18,7 @@
 import type { Configuration } from "@/configure";
 import {
   authCallback,
+  getConfigCredentialResolver,
   headersCallback,
   resolveAuthHeader,
   resolveCustomHeaders,
@@ -35,7 +36,24 @@ export function buildHeaders(config: Configuration): Headers {
     "Content-Type": "application/json;charset=UTF-8",
   });
 
-  if (authCallback) {
+  const instanceResolver = getConfigCredentialResolver(config);
+
+  if (instanceResolver) {
+    const resolvedAuth = instanceResolver.resolveAuthHeader();
+    if (resolvedAuth !== undefined) {
+      if (resolvedAuth) {
+        headers.set("Authorization", resolvedAuth);
+      }
+    } else if (config.authHeader) {
+      const authHeaderValue =
+        typeof config.authHeader === "function"
+          ? config.authHeader()
+          : String(config.authHeader);
+      if (authHeaderValue) {
+        headers.set("Authorization", authHeaderValue);
+      }
+    }
+  } else if (authCallback) {
     const dynamicAuth = resolveAuthHeader();
     if (dynamicAuth) {
       headers.set("Authorization", dynamicAuth);
@@ -55,9 +73,15 @@ export function buildHeaders(config: Configuration): Headers {
   }
 
   // Resolve custom headers last to allow them to override defaults cleanly.
-  const customHeaders = headersCallback
-    ? resolveCustomHeaders()
-    : config.headers;
+  let customHeaders: ReturnType<typeof resolveCustomHeaders> = config.headers;
+  if (instanceResolver) {
+    const resolvedCustom = instanceResolver.resolveCustomHeaders();
+    if (resolvedCustom !== undefined) {
+      customHeaders = resolvedCustom;
+    }
+  } else if (headersCallback) {
+    customHeaders = resolveCustomHeaders();
+  }
   if (customHeaders) {
     for (const [header, value] of Object.entries(customHeaders)) {
       headers.set(header, value);
