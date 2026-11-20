@@ -15,7 +15,8 @@
 # limitations under the License.
 
 import itertools
-from typing import Any, Dict, List, Callable
+from typing import Any, Dict, List
+
 from distill.core.feature_definition import FeatureDefinition
 
 
@@ -29,12 +30,13 @@ def pairwiseStag(iterable, *, split: bool = False):
     :return: returns list object(s)
     """
     a = iter(iterable)
-    pairs = zip(a, a)
+    pairs = list(zip(a, a))
     if split:
+        if not pairs:
+            return (), ()
         list1, list2 = zip(*pairs)
         return list1, list2
-    else:
-        return list(pairs)
+    return pairs
 
 
 def pairwiseSeq(iterable, *, split: bool = False):
@@ -48,12 +50,13 @@ def pairwiseSeq(iterable, *, split: bool = False):
     """
     a, b = itertools.tee(iterable, 2)
     next(b, None)
-    pairs = zip(a, b)
+    pairs = list(zip(a, b))
     if split:
+        if not pairs:
+            return (), ()
         list1, list2 = zip(*pairs)
         return list1, list2
-    else:
-        return list(pairs)
+    return pairs
     
 def label_features(
     logs: List[Dict[str, Any]], definitions: List[FeatureDefinition]

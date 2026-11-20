@@ -15,9 +15,31 @@
 # limitations under the License.
 
 import math
+from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional, Union
 
-from distill.schemas.userale import extract_logs
+from distill.schemas.userale import extract_logs, normalize_userale_dict
+
+
+def _to_epoch_ms(ts: Any) -> int:
+    if ts is None or isinstance(ts, bool):
+        return 0
+    if isinstance(ts, (int, float)):
+        return int(ts) if math.isfinite(ts) else 0
+    # pandas.Timestamp stores nanoseconds since UTC epoch in `.value`
+    if hasattr(ts, "value") and isinstance(getattr(ts, "value", None), int) and hasattr(
+        ts, "tz"
+    ):
+        return int(ts.value // 1_000_000)
+    if isinstance(ts, datetime):
+        return int(ts.timestamp() * 1000)
+    if isinstance(ts, str):
+        try:
+            parsed = float(ts)
+            return int(parsed) if math.isfinite(parsed) else 0
+        except ValueError:
+            return 0
+    return 0
 
 
 def _normalize_logs(
@@ -27,25 +49,29 @@ def _normalize_logs(
         if "logs" in logs_input or "resourceLogs" in logs_input:
             logs = extract_logs(logs_input)
         else:
-            logs = [v for v in logs_input.values() if isinstance(v, dict)]
+            logs = [
+                normalize_userale_dict(v)
+                for v in logs_input.values()
+                if isinstance(v, dict)
+            ]
     elif isinstance(logs_input, list):
         logs = extract_logs(logs_input)
     else:
-        logs = [item for item in logs_input if isinstance(item, dict)]
+        logs = [
+            normalize_userale_dict(item)
+            for item in logs_input
+            if isinstance(item, dict)
+        ]
 
-    return sorted(
-        logs,
-        key=lambda item: int(
-            item.get("clientTime", item.get("startTime", item.get("endTime", 0))) or 0
-        ),
-    )
+    return sorted(logs, key=_get_timestamp_ms)
 
 
 def _get_timestamp_ms(log: Dict[str, Any]) -> int:
     for key in ("clientTime", "startTime", "endTime"):
-        val = log.get(key)
-        if isinstance(val, (int, float)):
-            return int(val)
+        if key in log:
+            ts = _to_epoch_ms(log.get(key))
+            if ts or log.get(key) == 0:
+                return ts
     return 0
 
 
@@ -69,11 +95,12 @@ def detect_rage_clicks(
     for log in logs:
         if log.get("type") == "rage_click":
             ts = _get_timestamp_ms(log)
-            details = log.get("details") if isinstance(log.get("details"), dict) else {}
+            raw_details = log.get("details")
+            details = raw_details if isinstance(raw_details, dict) else {}
             click_count = int(details.get("clickCount", threshold))
             target_rect = details.get("targetRect") or log.get("targetRect")
             incident = {
-                "target": log.get("target") or "#document",
+                "target": log.get("target") or "",
                 "pageUrl": log.get("pageUrl", ""),
                 "sessionId": log.get("sessionId") or log.get("sessionID"),
                 "timestamp": ts,
@@ -85,45 +112,48 @@ def detect_rage_clicks(
             incidents.append(incident)
             explicit_windows.append(incident)
 
-    # 2. Retroactively scan raw click streams for bursts not already covered by explicit logs
+    # 2. Scan raw click streams for bursts not covered by explicit logs
     recent_clicks: List[Dict[str, Any]] = []
     for log in logs:
         if log.get("logType") != "raw" or log.get("type") != "click":
             continue
         target = log.get("target")
-        if not target or target == "Unknown":
+        if not target or target in ("Unknown", "#document"):
+            continue
+
+        loc = log.get("location")
+        if not isinstance(loc, dict):
+            continue
+        x = loc.get("x")
+        y = loc.get("y")
+        if (
+            not isinstance(x, (int, float))
+            or isinstance(x, bool)
+            or not isinstance(y, (int, float))
+            or isinstance(y, bool)
+            or not math.isfinite(x)
+            or not math.isfinite(y)
+        ):
             continue
 
         ts = _get_timestamp_ms(log)
-        loc = log.get("location") if isinstance(log.get("location"), dict) else {}
-        x = loc.get("x")
-        y = loc.get("y")
-
         cutoff = ts - window_ms
         recent_clicks = [c for c in recent_clicks if c["timestamp"] >= cutoff]
-        sample = {
+        sample: Dict[str, Any] = {
             "target": target,
             "timestamp": ts,
-            "x": float(x) if isinstance(x, (int, float)) else None,
-            "y": float(y) if isinstance(y, (int, float)) else None,
+            "x": float(x),
+            "y": float(y),
             "log": log,
         }
         recent_clicks.append(sample)
 
-        matching = []
-        for c in recent_clicks:
-            if c["target"] != target:
-                continue
-            if (
-                c["x"] is not None
-                and c["y"] is not None
-                and sample["x"] is not None
-                and sample["y"] is not None
-            ):
-                if math.hypot(c["x"] - sample["x"], c["y"] - sample["y"]) <= radius_px:
-                    matching.append(c)
-            else:
-                matching.append(c)
+        matching = [
+            c
+            for c in recent_clicks
+            if c["target"] == target
+            and math.hypot(c["x"] - sample["x"], c["y"] - sample["y"]) <= radius_px
+        ]
 
         if len(matching) >= threshold:
             already_explicit = any(
@@ -222,7 +252,8 @@ def detect_dom_thrash(
     for log in logs:
         if log.get("logType") != "mutation" and log.get("type") != "mutation":
             continue
-        details = log.get("details") if isinstance(log.get("details"), dict) else {}
+        raw_details = log.get("details")
+        details = raw_details if isinstance(raw_details, dict) else {}
         added = int(details.get("addedCount", 0) or 0)
         removed = int(details.get("removedCount", 0) or 0)
         attrs = int(details.get("attributeCount", 0) or 0)
@@ -235,11 +266,12 @@ def detect_dom_thrash(
         primary_target = log.get("target") or "#document"
         target_churn[primary_target] = target_churn.get(primary_target, 0) + churn
 
+        targets_val: Optional[Any] = details.get("targets", [primary_target])
         if churn >= churn_threshold:
             bursts.append(
                 {
                     "target": primary_target,
-                    "targets": details.get("targets", [primary_target]),
+                    "targets": targets_val,
                     "timestamp": _get_timestamp_ms(log),
                     "addedCount": added,
                     "removedCount": removed,

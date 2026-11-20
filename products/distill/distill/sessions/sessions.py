@@ -22,6 +22,7 @@ from distill.sessions.utils import (
     chunk_by_domain,
     chunk_by_idle_time,
     chunk_by_tabId,
+    extract_timestamp_ms,
     flatten_dict,
     group_by_user,
 )
@@ -132,10 +133,10 @@ class Sessions:
         chunk_data_by_users_sessions = {}
         for user in data_by_users:
             user_session_sets = {}
-            # Sort the logs associated by each users so we can create sets accordingly
+            # Sort the logs associated by each user cleanly
             sorted_data = sorted(
                 data_by_users[user],
-                key=lambda item: item.get("clientTime", item.get("endTime")),
+                key=extract_timestamp_ms,
             )
             chunked_group = {}
             # Separate by browser tab

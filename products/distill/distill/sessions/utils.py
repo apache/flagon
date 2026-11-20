@@ -14,8 +14,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import math
 import re
+from datetime import datetime
 from urllib.parse import urlparse
+
+
+def extract_timestamp_ms(item):
+    """
+    Extracts an epoch-millisecond timestamp from a UserALE log dict,
+    supporting raw (`clientTime`) and interval (`startTime`/`endTime`) logs
+    as well as integer/float/datetime/pandas.Timestamp values.
+    """
+    if not isinstance(item, dict):
+        return 0
+    for key in ("clientTime", "startTime", "endTime"):
+        if key not in item:
+            continue
+        val = item[key]
+        if val is None or isinstance(val, bool):
+            continue
+        if isinstance(val, (int, float)):
+            return int(val) if math.isfinite(val) else 0
+        if (
+            hasattr(val, "value")
+            and isinstance(getattr(val, "value", None), int)
+            and hasattr(val, "tz")
+        ):
+            return int(val.value // 1_000_000)
+        if isinstance(val, datetime):
+            return int(val.timestamp() * 1000)
+    return 0
 
 
 ##############################
@@ -49,50 +78,48 @@ def group_by_user(log):
 
 def chunk_by_idle_time(log, inactive_interval_s=60):
     """
-    This function will divide/chunk sets which clientTime is
-    separated by idle time where idle time is defined as
-    period of inactivity that exceeds the specified
-    inactive_interval (in seconds). By default, the
-    interval is 60 seconds.
+    Divides logs into sessions separated by inactivity exceeding
+    `inactive_interval_s` seconds. Each session is keyed by its own
+    starting timestamp (disambiguated cleanly if duplicates occur).
 
-    :param log: Userale log in the form of dictionary
-    :param inactive_interval_s: Threshold of inactivity (no logged activity) in seconds
-    :return: A dictionary that represent sets of logs separated by the idle time
+    :param log: Userale logs as a list of log dicts
+    :param inactive_interval_s: Inactivity threshold in seconds
+    :return: A dictionary mapping session keys to lists of logs
     """
+    if not log:
+        return {}
+
     separated_sets = {}
     current_set = []
-    # Assume that clientTime is in the integer (unix time) which expressed
-    # in milliseconds
     difference_in_ms = inactive_interval_s * 1000
 
-    # Initialize the current timestamp
-    if len(log) > 0:
-        if "clientTime" in log[0]:
-            previous_timestamp = log[0]["clientTime"]
-        else:
-            previous_timestamp = log[0]["endTime"]
+    first_ts = extract_timestamp_ms(log[0])
+    previous_timestamp = first_ts
+    chunk_start_timestamp = first_ts
+    seq = 0
+
+    def _emit_chunk(start_ts, items):
+        nonlocal seq
+        base_key = "time" + str(start_ts)
+        key = base_key
+        while key in separated_sets:
+            seq += 1
+            key = f"{base_key}_{seq}"
+        separated_sets[key] = items
 
     for item in log:
-        if "clientTime" in item:
-            current_timestamp = item["clientTime"]
-        else:
-            current_timestamp = item["endTime"]
+        current_timestamp = extract_timestamp_ms(item)
         if current_timestamp - previous_timestamp > difference_in_ms:
-            # If the current set is not empty, add it to the list of sets
             if current_set:
-                key = "time" + str(current_timestamp)
-                separated_sets[key] = current_set
+                _emit_chunk(chunk_start_timestamp, current_set)
                 current_set = []
+            chunk_start_timestamp = current_timestamp
 
-        # Add the current item to the current set and update the previous
-        # timestamp
         current_set.append(item)
         previous_timestamp = current_timestamp
 
-    # Add the last set if it's not empty
     if current_set:
-        key = "time" + str(current_timestamp)
-        separated_sets[key] = current_set
+        _emit_chunk(chunk_start_timestamp, current_set)
     return separated_sets
 
 
@@ -107,7 +134,7 @@ def chunk_by_tabId(log):
     for item in items:
         if not isinstance(item, dict):
             continue
-        # Depending on the log types, tabID can be inside httpSessionId, tabId, or details
+        # Tab identifiers may be stored in httpSessionId, tabId, or details
         tab_val = item.get("httpSessionId") or item.get("tabId")
         if tab_val is None and isinstance(item.get("details"), dict):
             tab_val = item["details"].get("tabId")
@@ -122,18 +149,35 @@ def chunk_by_tabId(log):
 
 
 def match_url(url, pattern):
-    # Escape dots in the pattern since dot is a special character in regex
-    # and replace '*' with '.*' to match any characters sequence
-    regex_pattern = re.escape(pattern).replace("\\*", ".*")
+    """
+    Matches `url` against wildcard `pattern` (where `*` matches zero or more
+    characters) in strictly linear O(|url| + |pattern|) time without ReDoS.
+    """
+    if not isinstance(url, str) or not isinstance(pattern, str):
+        return False
 
-    # Add anchors to match the entire string
-    regex_pattern = "^" + regex_pattern + "$"
+    collapsed = re.sub(r"\*+", "*", pattern)
+    parts = collapsed.split("*")
+    if len(parts) == 1:
+        return url == collapsed
 
-    # Compile the regex pattern
-    compiled_pattern = re.compile(regex_pattern)
+    prefix = parts[0]
+    if not url.startswith(prefix):
+        return False
+    pos = len(prefix)
 
-    # Check if the URL matches the pattern
-    return bool(compiled_pattern.match(url))
+    for mid in parts[1:-1]:
+        if not mid:
+            continue
+        idx = url.find(mid, pos)
+        if idx == -1:
+            return False
+        pos = idx + len(mid)
+
+    suffix = parts[-1]
+    if suffix and (len(url) - pos < len(suffix) or not url.endswith(suffix)):
+        return False
+    return True
 
 
 def flatten_dict(orig_dict, sep="_"):
@@ -160,24 +204,23 @@ def flatten_dict(orig_dict, sep="_"):
     return new_dict
 
 
-def chunk_by_domain(log, re):
+def chunk_by_domain(log, pattern="."):
     """
-    Separate logs by the site that users interact with
-    :param log: Userale log in the form of dictionary
-    :param log:
-    :return: A dictionary that represent sets separated by unique browserSessionId
+    Separate logs by the site domain extracted from `pageUrl`.
+    :param log: List of UserALE log dictionaries
+    :param pattern: Wildcard pattern to match domain against, or "." for all
+    :return: A dictionary mapping domain keys to lists of logs
     """
     grouped_data = {}
-    for key in log:
-        # Depending on the log types, tabID can be inside the details element
-        if "pageUrl" in key:
-            domain = "domain" + urlparse(key["pageUrl"]).netloc
-            # Filter with the "re" parameter
-            if re != ".":
-                if match_url(domain, re):
-                    domain_key = "domain" + re
+    for entry in log:
+        page_url = entry.get("pageUrl") if isinstance(entry, dict) else None
+        if isinstance(page_url, str) and page_url:
+            netloc = urlparse(page_url).netloc
+            domain = "domain" + netloc if netloc else "unknown"
+            if pattern != ".":
+                if match_url(domain, pattern):
+                    domain_key = "domain" + pattern
                 else:
-                    # Does not match, so we are skipping it
                     continue
             else:
                 domain_key = domain
@@ -186,5 +229,5 @@ def chunk_by_domain(log, re):
 
         if domain_key not in grouped_data:
             grouped_data[domain_key] = []
-        grouped_data[domain_key].append(key)
+        grouped_data[domain_key].append(entry)
     return grouped_data

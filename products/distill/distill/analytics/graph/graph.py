@@ -15,7 +15,7 @@
 # limitations under the License.
 
 import collections
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 
 import networkx as nx
 import plotly.express as px
@@ -29,7 +29,8 @@ def get_partition(log, partition_elements):
     :param partition_elements: Dictionary of elements mapped to colors
     :return: Partition
     """
-    partition = list(set(log["path"]) & set(partition_elements))
+    path = log.get("path") or []
+    partition = list(set(path) & set(partition_elements))
     if len(partition) == 1:
         return partition[0]
     if len(partition) == 0:
@@ -50,9 +51,12 @@ def get_color_graph(log_dict, color_dict, partition_func):
     partition_dict = {}
     label_dict = {}
     for log in log_dict.values():
-        targets.append("".join(log["path"]))
-        partition_dict[targets[-1]] = partition_func(log, color_dict.keys())
-        label_dict[targets[-1]] = log["target"]
+        path = log.get("path") or []
+        target = log.get("target") or ""
+        node_key = "".join(path) if path else target
+        targets.append(node_key)
+        partition_dict[node_key] = partition_func(log, color_dict.keys())
+        label_dict[node_key] = target
 
     edges = list(nx.utils.pairwise(targets))
 
@@ -62,7 +66,8 @@ def get_color_graph(log_dict, color_dict, partition_func):
     nx.set_node_attributes(graph, partition_dict, "partition")
     nx.set_node_attributes(graph, label_dict, "label")
     colors = [
-        color_dict[p] for p in nx.get_node_attributes(graph, "partition").values()
+        color_dict.get(p, "gray")
+        for p in nx.get_node_attributes(graph, "partition").values()
     ]
     return (graph, colors)
 
@@ -80,8 +85,8 @@ def show_color_sankey(graph, color_dict):
     edges = list(graph.edges(data=True))
     for node in graph.nodes(data=True):
         nodes.append(node[0])
-        labels.append(node[1]["label"])
-        colors.append(color_dict[node[1]["partition"]])
+        labels.append(node[1].get("label", ""))
+        colors.append(color_dict.get(node[1].get("partition"), "gray"))
 
     sources = [nodes.index(edge[0]) for edge in edges]
     targets = [nodes.index(edge[1]) for edge in edges]
@@ -166,7 +171,7 @@ def sankey(edges, node_labels=False, *, drop_recursions=False):
     )
 
 
-def funnel(edges, targets, node_labels=False, *, infer=True):
+def funnel(edges, targets, node_labels=False, *, infer=True, cutoff=10):
     """
     Creates Funnel Graph from defined edge list and optional user-provided labels
     :param edges: List of Tuples
@@ -177,6 +182,7 @@ def funnel(edges, targets, node_labels=False, *, infer=True):
     :param infer: Optional boolean, true = consider nondirect \
         paths between targets and elements after the last target,\
         false = only consider the provided elements
+    :param cutoff: Maximum path length when inferring simple paths
     :return: A Funnel graph
     """
 
@@ -198,7 +204,7 @@ def funnel(edges, targets, node_labels=False, *, infer=True):
         for i in range(len(targets) - 1):
             src, dst = targets[i], targets[i + 1]
             candidate_paths = (
-                list(nx.all_simple_paths(graph, src, dst))
+                list(nx.all_simple_paths(graph, src, dst, cutoff=cutoff))
                 if src in graph and dst in graph
                 else []
             )
@@ -216,7 +222,7 @@ def funnel(edges, targets, node_labels=False, *, infer=True):
         if last_target in graph:
             dests = [dest for dest in graph.nodes() if dest not in targets]
             paths = (
-                list(nx.all_simple_paths(graph, last_target, dests))
+                list(nx.all_simple_paths(graph, last_target, dests, cutoff=cutoff))
                 if dests
                 else []
             )
@@ -276,8 +282,8 @@ def transition_matrix(
 ):
     """
     Computes the first-order Markov state transition probability matrix
-    P(target_{t+1} | target_t) from an edge list or a sequence/dict of UserALE logs.
-    :param edges_or_logs: List of (source, target) edge tuples, or list/dict of UserALE logs
+    P(target_{t+1} | target_t) from an edge list or a list/dict of UserALE logs.
+    :param edges_or_logs: List of (source, target) tuples, or list/dict of logs
     :param drop_recursions: If True, removes self-transitions (target -> target)
     :param node_labels: Optional dictionary mapping raw target names to display labels
     :param as_dataframe: If True, returns a pandas.DataFrame; otherwise a nested dict
@@ -297,7 +303,11 @@ def transition_matrix(
         ]
         edges = list(nx.utils.pairwise(targets))
     else:
-        edges = [tuple(e) for e in items if isinstance(e, (tuple, list)) and len(e) == 2]
+        edges = [
+            tuple(e)
+            for e in items
+            if isinstance(e, (tuple, list)) and len(e) == 2
+        ]
 
     graph = createDiGraph(
         [], edges, drop_recursions=drop_recursions, node_labels=node_labels
@@ -332,15 +342,33 @@ def display_segments(segments, log_dict, get_partition, name_dict):
 
     segment_metadata = []
     for segment in segments:
-        first_log = log_dict[segment.get_segment_uids()[0]]
+        uids = segment.get_segment_uids()
+        if not uids or uids[0] not in log_dict:
+            continue
+        first_log = log_dict[uids[0]]
+        start_val, end_val = segment.get_start_end_val()
+        if isinstance(start_val, (int, float)):
+            start_dt = datetime.fromtimestamp(start_val / 1000, tz=timezone.utc)
+        else:
+            start_dt = start_val
+        if isinstance(end_val, (int, float)):
+            end_dt = datetime.fromtimestamp(end_val / 1000, tz=timezone.utc)
+        else:
+            end_dt = end_val
+        partition_key = get_partition(first_log, name_dict.keys())
         segment_metadata.append(
             {
-                "Start Time": segment.get_start_end_val()[0],
-                "End Time": segment.get_start_end_val()[1] + timedelta(seconds=0.5),
-                "Partition": name_dict[get_partition(first_log, name_dict.keys())],
+                "Start Time": start_dt,
+                "End Time": end_dt + timedelta(seconds=0.5),
+                "Partition": name_dict.get(partition_key, partition_key),
                 "Number of Clicks": segment.get_num_logs(),
             }
         )
+
+    if not segment_metadata:
+        fig = go.Figure()
+        fig.update_yaxes(autorange="reversed")
+        return fig
 
     fig = px.timeline(
         segment_metadata,

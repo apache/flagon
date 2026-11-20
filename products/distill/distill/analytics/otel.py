@@ -96,8 +96,8 @@ def extract_replay_envelopes(
     logs_input: Union[List[Dict[str, Any]], Dict[str, Any]]
 ) -> List[Dict[str, Any]]:
     """
-    Extracts all Layer 2 `rrweb`-compatible session replay envelopes (`logType == 'replay'`)
-    from a log stream, normalizing frames whether stored at top-level `frames` or inside `details.frames`.
+    Extracts Layer 2 `rrweb`-compatible replay envelopes (`logType == 'replay'`),
+    normalizing frames stored at top-level `frames` or inside `details.frames`.
     """
     logs = _normalize_logs(logs_input)
     envelopes: List[Dict[str, Any]] = []
@@ -106,7 +106,8 @@ def extract_replay_envelopes(
         if log.get("logType") != "replay" and log.get("type") != "session_replay":
             continue
 
-        details = log.get("details") if isinstance(log.get("details"), dict) else {}
+        raw_details = log.get("details")
+        details = raw_details if isinstance(raw_details, dict) else {}
         frames = log.get("frames")
         if not isinstance(frames, list):
             frames = details.get("frames", [])

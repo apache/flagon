@@ -68,26 +68,44 @@ layout = html.Div(
 )
 
 
+MAX_UPLOAD_BYTES = 50 * 1024 * 1024
+
+
 # def menu(app):
 def parse_contents(contents, filename, date):
-    content_type, content_string = contents.split(",")
+    if not isinstance(contents, str) or "," not in contents:
+        return html.Div(["Invalid file payload."])
+
+    _, content_string = contents.split(",", 1)
+    if len(content_string) > MAX_UPLOAD_BYTES * 4 // 3 + 4:
+        return html.Div(["Uploaded file exceeds maximum allowed size."])
 
     decoded = base64.b64decode(content_string)
+    if len(decoded) > MAX_UPLOAD_BYTES:
+        return html.Div(["Uploaded file exceeds maximum allowed size."])
+
+    df = None
+    lower_name = (filename or "").lower()
     try:
-        if "csv" in filename:
-            # Assume that the user uploaded a CSV file
+        if lower_name.endswith(".csv"):
             df = pd.read_csv(io.StringIO(decoded.decode("utf-8")))
-        elif "xls" in filename:
-            # Assume that the user uploaded an excel file
+        elif lower_name.endswith((".xls", ".xlsx")):
             df = pd.read_excel(io.BytesIO(decoded))
-    except Exception as e:
-        print(e)
+        else:
+            return html.Div(["Unsupported file type. Please upload CSV or Excel."])
+    except Exception:
         return html.Div(["There was an error processing this file."])
 
+    if df is None:
+        return html.Div(["There was an error processing this file."])
+
+    modified_display = (
+        str(datetime.datetime.fromtimestamp(date)) if date is not None else "Unknown"
+    )
     return html.Div(
         [
             html.H5(filename),
-            html.H6(datetime.datetime.fromtimestamp(date)),
+            html.H6(modified_display),
             html.P("Inset X axis data"),
             dcc.Dropdown(
                 id="xaxis-data", options=[{"label": x, "value": x} for x in df.columns]

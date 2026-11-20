@@ -39,14 +39,9 @@ classifiers = [
 ]
 dependencies = [
     "networkx>=2.5",
-    "numpy>=1.24.3",
     "pandas>=1.5.0,<3.0.0",
     "plotly>=5.5.0",
-    "matplotlib>=3.7.5",
-    "scipy>=1.9.3",
     "pydantic>=2.7.4",
-    "dateparser>=1.2.0",
-    "pksuid>=1.1.2",
 ]
 
 [project.urls]
@@ -68,7 +63,6 @@ lint = [
     "types-pyyaml>=6.0.12",
     "types-toml>=0.10.8",
     "pandas-stubs>=2.0.1",
-    "codespell>=2.2.0",
 ]
 docs = [
     "sphinx>=7.0.0",
@@ -117,7 +111,8 @@ ignore_missing_imports = false
 disallow_untyped_defs = false
 exclude = ["tests/data/", ".github/", "docs/", "examples/", "Dashboard"]
 [[tool.mypy.overrides]]
-module = "plotly.*"
+module = ["plotly", "plotly.*", "networkx", "networkx.*"]
+ignore_missing_imports = true
 ignore_errors = true
 
 #

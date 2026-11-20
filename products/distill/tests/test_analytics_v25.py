@@ -14,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import json
-
 import distill
 from distill.analytics.graph.graph import createDiGraph, funnel
 from distill.schemas.userale import UserAleRawSchema, normalize_userale_dict
@@ -143,7 +141,7 @@ def test_graph_immutability_empty_funnel_and_transition_matrix():
     # Caller's edges list must not be mutated
     assert edges == original_edges
 
-    # funnel with empty targets or unreached target should return a Figure rather than crash
+    # funnel with empty targets or unreached target should not crash
     fig_empty = funnel([("a", "b")], [])
     assert fig_empty is not None
     fig_unreached = funnel([("a", "b")], ["c"])
@@ -172,7 +170,7 @@ def test_graph_immutability_empty_funnel_and_transition_matrix():
 
 def test_frustration_analytics():
     logs = [
-        # 3 rapid clicks on the same non-interactive div within 400ms (rage click + dead clicks)
+        # 3 rapid clicks on the same div within 400ms (rage click + dead clicks)
         {
             "clientTime": 1000,
             "type": "click",

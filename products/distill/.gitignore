@@ -40,6 +40,8 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+.doctrees/
+doctrees/
 
 # Unit test / coverage reports
 htmlcov/
