@@ -37,13 +37,20 @@ def click_heatmap_data(
         if log.get("type") not in ("click", "dblclick", "rage_click"):
             continue
 
-        loc = log.get("location") if isinstance(log.get("location"), dict) else {}
+        raw_loc = log.get("location")
+        loc = raw_loc if isinstance(raw_loc, dict) else {}
         x = loc.get("x")
         y = loc.get("y")
-        if not isinstance(x, (int, float)) or not isinstance(y, (int, float)):
+        if (
+            not isinstance(x, (int, float))
+            or isinstance(x, bool)
+            or not isinstance(y, (int, float))
+            or isinstance(y, bool)
+        ):
             continue
 
-        scrn = log.get("scrnRes") if isinstance(log.get("scrnRes"), dict) else {}
+        raw_scrn = log.get("scrnRes")
+        scrn = raw_scrn if isinstance(raw_scrn, dict) else {}
         vp_w = scrn.get("width")
         vp_h = scrn.get("height")
 
@@ -58,7 +65,8 @@ def click_heatmap_data(
             else None
         )
 
-        details = log.get("details") if isinstance(log.get("details"), dict) else {}
+        raw_details = log.get("details")
+        details = raw_details if isinstance(raw_details, dict) else {}
         rect = log.get("targetRect") or details.get("targetRect")
         rel_x = None
         rel_y = None
@@ -107,14 +115,15 @@ def plot_click_heatmap(
     Creates an interactive Plotly 2D Histogram heatmap of click coordinates.
     """
     points = click_heatmap_data(logs_input, normalize_viewport=normalize_viewport)
-    xs = [
-        p["normX"] if normalize_viewport and p["normX"] is not None else p["x"]
-        for p in points
-    ]
-    ys = [
-        p["normY"] if normalize_viewport and p["normY"] is not None else p["y"]
-        for p in points
-    ]
+    if normalize_viewport:
+        points = [
+            p for p in points if p["normX"] is not None and p["normY"] is not None
+        ]
+        xs = [p["normX"] for p in points]
+        ys = [p["normY"] for p in points]
+    else:
+        xs = [p["x"] for p in points]
+        ys = [p["y"] for p in points]
 
     fig = go.Figure(
         data=[
@@ -142,17 +151,12 @@ def scroll_depth_summary(
     by_page: Dict[str, Dict[str, Any]] = {}
 
     for log in logs:
-        if log.get("type") not in ("scroll", "wheel"):
+        event_type = log.get("type")
+        if event_type not in ("scroll", "wheel"):
             continue
         page_url = log.get("pageUrl") or "unknown"
-        details = log.get("details") if isinstance(log.get("details"), dict) else {}
-        sx = details.get("x")
-        sy = details.get("y")
-        if not isinstance(sx, (int, float)) and not isinstance(sy, (int, float)):
-            continue
-
-        scrn = log.get("scrnRes") if isinstance(log.get("scrnRes"), dict) else {}
-        vp_h = scrn.get("height")
+        raw_details = log.get("details")
+        details = raw_details if isinstance(raw_details, dict) else {}
 
         entry = by_page.setdefault(
             page_url,
@@ -161,8 +165,33 @@ def scroll_depth_summary(
                 "maxScrollY": 0.0,
                 "scrollEventCount": 0,
                 "maxViewportMultiple": 0.0,
+                "wheelEventCount": 0,
+                "totalWheelDeltaX": 0.0,
+                "totalWheelDeltaY": 0.0,
             },
         )
+
+        if event_type == "wheel":
+            dx = details.get("deltaX", details.get("x"))
+            dy = details.get("deltaY", details.get("y"))
+            if not isinstance(dx, (int, float)) and not isinstance(dy, (int, float)):
+                continue
+            entry["wheelEventCount"] += 1
+            if isinstance(dx, (int, float)):
+                entry["totalWheelDeltaX"] += abs(float(dx))
+            if isinstance(dy, (int, float)):
+                entry["totalWheelDeltaY"] += abs(float(dy))
+            continue
+
+        sx = details.get("x")
+        sy = details.get("y")
+        if not isinstance(sx, (int, float)) and not isinstance(sy, (int, float)):
+            continue
+
+        raw_scrn = log.get("scrnRes")
+        scrn = raw_scrn if isinstance(raw_scrn, dict) else {}
+        vp_h = scrn.get("height")
+
         entry["scrollEventCount"] += 1
         if isinstance(sx, (int, float)):
             entry["maxScrollX"] = max(entry["maxScrollX"], abs(float(sx)))

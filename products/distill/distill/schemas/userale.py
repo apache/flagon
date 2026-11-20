@@ -13,8 +13,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
+from datetime import datetime, timezone
+from typing import Any, Dict, FrozenSet, List, Optional, Union
 
 from pydantic import (
     AliasGenerator,
@@ -48,6 +48,45 @@ class ScrnRes(BaseModel):
 class Details(BaseModel):
     model_config = ConfigDict(extra="allow")
     window: Optional[bool] = None
+
+
+RESERVED_USERALE_KEYS: FrozenSet[str] = frozenset(
+    {
+        "target",
+        "path",
+        "pageUrl",
+        "pageTitle",
+        "pageReferrer",
+        "browser",
+        "userAgent",
+        "type",
+        "logType",
+        "userAction",
+        "userId",
+        "toolVersion",
+        "toolName",
+        "useraleVersion",
+        "sessionId",
+        "httpSessionId",
+        "browserSessionId",
+        "clientTime",
+        "microTime",
+        "location",
+        "scrnRes",
+        "details",
+        "startTime",
+        "endTime",
+        "count",
+        "duration",
+        "targetChange",
+        "typeChange",
+        "traceId",
+        "spanId",
+        "attributes",
+        "style",
+        "targetRect",
+    }
+)
 
 
 def _otlp_any_value_to_python(val: Any) -> Any:
@@ -105,8 +144,9 @@ def normalize_userale_dict(
         inner = data.get(case_key)
         if isinstance(inner, dict):
             meta = inner.get("metadata") or {}
+            target_val = inner.get("target") if "target" in inner else None
             flat: Dict[str, Any] = {
-                "target": inner.get("target") or "#document",
+                "target": target_val,
                 "path": inner.get("path") or [],
                 "pageUrl": meta.get("pageUrl", ""),
                 "pageTitle": meta.get("pageTitle", ""),
@@ -136,23 +176,31 @@ def normalize_userale_dict(
                     }
                 )
             else:
-                scrn = meta.get("screenResolution") or {
-                    "width": 0,
-                    "height": 0,
-                }
-                loc = inner.get("location") or {"x": None, "y": None}
+                scrn = meta.get("screenResolution")
+                scrn_res = (
+                    {
+                        "width": int(scrn.get("width", 0)),
+                        "height": int(scrn.get("height", 0)),
+                    }
+                    if isinstance(scrn, dict)
+                    and ("width" in scrn or "height" in scrn)
+                    else None
+                )
+                loc = inner.get("location")
+                location_dict = (
+                    {
+                        "x": loc.get("x"),
+                        "y": loc.get("y"),
+                    }
+                    if isinstance(loc, dict)
+                    else None
+                )
                 flat.update(
                     {
                         "clientTime": int(meta.get("clientTime", 0)),
-                        "microTime": inner.get("microTime", 0),
-                        "location": {
-                            "x": loc.get("x"),
-                            "y": loc.get("y"),
-                        },
-                        "scrnRes": {
-                            "width": int(scrn.get("width", 0)),
-                            "height": int(scrn.get("height", 0)),
-                        },
+                        "microTime": inner.get("microTime"),
+                        "location": location_dict,
+                        "scrnRes": scrn_res,
                         "details": inner.get("details"),
                     }
                 )
@@ -161,7 +209,9 @@ def normalize_userale_dict(
                 if "style" in inner:
                     flat["style"] = inner["style"]
                 if isinstance(inner.get("customFields"), dict):
-                    flat.update(inner["customFields"])
+                    for k, v in inner["customFields"].items():
+                        if k not in RESERVED_USERALE_KEYS and k not in flat:
+                            flat[k] = v
             return flat
 
     # 2. OpenTelemetry OTLP/JSON LogRecord
@@ -181,7 +231,7 @@ def normalize_userale_dict(
         details = body_val if isinstance(body_val, dict) else None
 
         flat = {
-            "target": attrs.get("flagon.target") or "#document",
+            "target": attrs.get("flagon.target"),
             "path": attrs.get("flagon.path") or [],
             "pageUrl": attrs.get("url.full", ""),
             "pageTitle": attrs.get("page.title", ""),
@@ -229,19 +279,31 @@ def normalize_userale_dict(
                 }
             )
         else:
+            has_loc = "flagon.location.x" in attrs or "flagon.location.y" in attrs
+            location_dict = (
+                {
+                    "x": attrs.get("flagon.location.x"),
+                    "y": attrs.get("flagon.location.y"),
+                }
+                if has_loc
+                else None
+            )
+            has_scrn = "screen.width" in res and "screen.height" in res
+            scrn_res = (
+                {
+                    "width": int(res["screen.width"]),
+                    "height": int(res["screen.height"]),
+                }
+                if has_scrn
+                else None
+            )
             flat.update(
                 {
                     "clientTime": time_ms,
                     "microTime": (int(data["timeUnixNano"]) % 1_000_000)
                     / 1_000_000,
-                    "location": {
-                        "x": attrs.get("flagon.location.x"),
-                        "y": attrs.get("flagon.location.y"),
-                    },
-                    "scrnRes": {
-                        "width": int(res.get("screen.width", 0)),
-                        "height": int(res.get("screen.height", 0)),
-                    },
+                    "location": location_dict,
+                    "scrnRes": scrn_res,
                     "details": details,
                 }
             )
@@ -252,7 +314,9 @@ def normalize_userale_dict(
     return data
 
 
-def extract_logs(payload: Union[Dict[str, Any], List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
+def extract_logs(
+    payload: Union[Dict[str, Any], List[Dict[str, Any]]]
+) -> List[Dict[str, Any]]:
     """
     Extracts a list of normalized flat UserALE log dicts from:
     - a standard UserALE JSON array,
@@ -289,7 +353,7 @@ class UserAleBaseSchema(BaseSchema):
 
     target: Optional[str] = None
     path: Optional[List[str]] = None
-    page_url: str
+    page_url: Optional[str] = None
     page_title: Optional[str] = None
     page_referrer: Optional[str] = None
     browser: Optional[Browser] = None
@@ -340,8 +404,9 @@ class UserAleIntervalSchema(UserAleBaseSchema):
     type_change: bool
 
     @field_validator("start_time", "end_time")
+    @classmethod
     def validate_st(cls, st: float):
-        return datetime.fromtimestamp(st / 1000)
+        return datetime.fromtimestamp(st / 1000, tz=timezone.utc)
 
     @field_serializer("start_time", "end_time")
     def serialize_st(self, st: datetime):
@@ -375,8 +440,9 @@ class UserAleRawSchema(UserAleBaseSchema):
     details: Optional[Union[Dict[str, Any], str]] = None
 
     @field_validator("client_time")
+    @classmethod
     def validate_ct(cls, ct: float):
-        return datetime.fromtimestamp(ct / 1000)
+        return datetime.fromtimestamp(ct / 1000, tz=timezone.utc)
 
     @field_serializer("client_time")
     def serialize_ct(self, ct: datetime):

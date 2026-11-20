@@ -8,25 +8,23 @@
 #
 #   http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing,
-# software distributed under the License is distributed on an
-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-# KIND, either express or implied.  See the License for the
-# specific language governing permissions and limitations
-# under the License.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-from typing import Dict, List, Union
+from typing import TYPE_CHECKING, Dict, List, Union
 
 from pydantic.type_adapter import TypeAdapter
 from typing_extensions import TypeAliasType
 
-from distill.schemas.userale import UserAleRawSchema, UserAleIntervalSchema
+from distill.schemas.userale import UserAleIntervalSchema, UserAleRawSchema
 
-# TypeAliasType is necessary to avoid recursion error when validating this
-# type with Pydantic
-JSONSerializable = TypeAliasType(
-    "JSONSerializable",
-    Union[
+if TYPE_CHECKING:
+    from typing_extensions import TypeAlias
+
+    JSONSerializable: TypeAlias = Union[
         str,
         int,
         float,
@@ -34,10 +32,23 @@ JSONSerializable = TypeAliasType(
         None,
         List["JSONSerializable"],
         Dict[str, "JSONSerializable"],
-    ],
-)
-
-JsonDict = Dict[str, "JSONSerializable"]
+    ]
+    JsonDict: TypeAlias = Dict[str, JSONSerializable]
+else:
+    # TypeAliasType avoids recursion errors when validating with Pydantic v2
+    JSONSerializable = TypeAliasType(
+        "JSONSerializable",
+        Union[
+            str,
+            int,
+            float,
+            bool,
+            None,
+            List["JSONSerializable"],
+            Dict[str, "JSONSerializable"],
+        ],
+    )
+    JsonDict = Dict[str, JSONSerializable]
 
 Timestamp = Union[str, int, float]
 

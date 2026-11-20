@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+
 import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
@@ -331,4 +333,6 @@ def update_graph(option_segment):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True, port=3099)
+    app.run_server(
+        debug=os.environ.get("DASH_DEBUG", "").lower() == "true", port=3099
+    )

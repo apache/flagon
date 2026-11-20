@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import json
+
 
 def find_meta_values(key, dict, *, unique: bool = True):
     """
@@ -26,8 +28,20 @@ def find_meta_values(key, dict, *, unique: bool = True):
     :return: a list object with values for given key
     """
     value_list = [sub[key] for sub in dict.values() if key in sub]
-    if unique:
-        value_set = set(value_list)
-        return list(value_set)
-    else:
+    if not unique:
         return value_list
+
+    result = []
+    seen_hashable = set()
+    seen_canonical = set()
+    for val in value_list:
+        try:
+            if val not in seen_hashable:
+                seen_hashable.add(val)
+                result.append(val)
+        except TypeError:
+            canonical = json.dumps(val, sort_keys=True, default=str)
+            if canonical not in seen_canonical:
+                seen_canonical.add(canonical)
+                result.append(val)
+    return result

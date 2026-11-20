@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+
 import dash
 import dash_bootstrap_components as dbc
 import dash_labs as dl
@@ -87,4 +89,6 @@ def toggle_offcanvas(n1, is_open):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True, port=5000)
+    app.run_server(
+        debug=os.environ.get("DASH_DEBUG", "").lower() == "true", port=5000
+    )

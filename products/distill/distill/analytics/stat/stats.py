@@ -118,9 +118,9 @@ def session_summary(
     logs_input: Union[str, os.PathLike, List[Dict[str, Any]], Dict[str, Any]]
 ) -> Dict[str, Any]:
     """
-    Computes a comprehensive statistical summary for a UserALE session or log collection,
-    including counts by logType, click rate, rage clicks, mutations, unique targets/pages,
-    page load time, and OpenTelemetry trace IDs.
+    Computes a statistical summary for a UserALE session or log collection,
+    including counts by logType, click rate, rage clicks, mutations, unique
+    targets/pages, page load time, and OpenTelemetry trace IDs.
     """
     logs = _extract_log_list(logs_input)
     if not logs:
