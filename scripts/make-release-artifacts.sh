@@ -109,11 +109,11 @@ else
 fi
 
 userale_dir=$( pwd )
-working_dir=${TMPDIR:-/tmp}/release-working-dir
-rm -rf ${working_dir}
-staging_dir="${working_dir}/source/"
-src_staging_dir="${working_dir}/source/${release_name}-src"
-bin_staging_dir="${working_dir}/bin/"
+working_dir="$(mktemp -d "${TMPDIR:-/tmp}/flagon-release.XXXXXX")"
+trap 'rm -rf "${working_dir}"' EXIT
+staging_dir="${working_dir}/source"
+src_staging_dir="${staging_dir}/${release_name}-src"
+bin_staging_dir="${working_dir}/bin"
 artifact_dir="${release_script_dir}/${artifact_name}"
 
 echo "The version is ${current_version}"
@@ -166,19 +166,19 @@ gpg2 -o /dev/null --sign /dev/null
 # Source release
 echo "Creating source release folder called ${src_staging_dir} for ${release_name}"
 set -x
-mkdir -p ${src_staging_dir}
+mkdir -p "${src_staging_dir}"
 
 # exclude: 
 # * docs (which isn't part of the release, and adding license headers to js files is cumbersome)
-rsync -rtp --exclude .git\* --exclude userale-docs/ --exclude node_modules . ${staging_dir}/${release_name}-src
+rsync -rtp --exclude '.git*' --exclude 'userale-docs/' --exclude 'node_modules/' . "${staging_dir}/${release_name}-src"
 
-rm -rf ${artifact_dir}
-mkdir -p ${artifact_dir}
+rm -rf "${artifact_dir}"
+mkdir -p "${artifact_dir}"
 set +x
 echo "Creating artifact ${artifact_dir}/${artifact_name}-src.tar.gz and .zip"
 set -x
-( cd ${staging_dir} && tar czf ${artifact_dir}/${artifact_name}-src.tar.gz ${release_name}-src )
-( cd ${staging_dir} && zip -qr ${artifact_dir}/${artifact_name}-src.zip ${release_name}-src )
+( cd "${staging_dir}" && tar czf "${artifact_dir}/${artifact_name}-src.tar.gz" "${release_name}-src" )
+( cd "${staging_dir}" && zip -qr "${artifact_dir}/${artifact_name}-src.zip" "${release_name}-src" )
 
 # ###############################################################################
 # Binary release
@@ -186,28 +186,37 @@ set +x
 echo "Proceeding to build binary release in ${bin_staging_dir}"
 set -x
 
-mkdir -p ${bin_staging_dir}
+mkdir -p "${bin_staging_dir}"
 
 # Perform the build
-( cd ${src_staging_dir} && npm install && npm run build && npm test)
+if [ -f "${src_staging_dir}/products/userale/package.json" ]; then
+    ( cd "${src_staging_dir}/products/userale" && pnpm install && pnpm build && pnpm test )
+    built_dir="${src_staging_dir}/products/userale/packages/flagon-userale/build"
+elif [ -d "${src_staging_dir}/packages/flagon-userale" ]; then
+    ( cd "${src_staging_dir}" && pnpm install && pnpm build && pnpm test )
+    built_dir="${src_staging_dir}/packages/flagon-userale/build"
+else
+    ( cd "${src_staging_dir}" && pnpm install && pnpm build && pnpm test )
+    built_dir="${src_staging_dir}/build"
+fi
 
 set +x
 echo "Make artifacts"
 set -x
 
 # copy js, min version of userale.js, and webExt files
-mkdir ${bin_staging_dir}/${release_name}-bin
+mkdir -p "${bin_staging_dir}/${release_name}-bin"
 
-cp -R ${src_staging_dir}/build/* ${bin_staging_dir}/${release_name}-bin
+cp -R "${built_dir}/"* "${bin_staging_dir}/${release_name}-bin"
 
 # copy in the LICENSE, README and NOTICE
-cp ${src_staging_dir}/README.md ${bin_staging_dir}/${release_name}-bin
-cp ${src_staging_dir}/LICENSE ${bin_staging_dir}/${release_name}-bin
-cp ${src_staging_dir}/NOTICE ${bin_staging_dir}/${release_name}-bin
+cp "${src_staging_dir}/README.md" "${bin_staging_dir}/${release_name}-bin"
+cp "${src_staging_dir}/LICENSE" "${bin_staging_dir}/${release_name}-bin"
+cp "${src_staging_dir}/NOTICE" "${bin_staging_dir}/${release_name}-bin"
 
 
-( cd ${bin_staging_dir} && tar czf ${artifact_dir}/${artifact_name}-bin.tar.gz ${release_name}-bin )
-( cd ${bin_staging_dir} && zip -qr ${artifact_dir}/${artifact_name}-bin.zip ${release_name}-bin )
+( cd "${bin_staging_dir}" && tar czf "${artifact_dir}/${artifact_name}-bin.tar.gz" "${release_name}-bin" )
+( cd "${bin_staging_dir}" && zip -qr "${artifact_dir}/${artifact_name}-bin.zip" "${release_name}-bin" )
 
 ###############################################################################
 # Signatures and checksums
@@ -217,23 +226,23 @@ cp ${src_staging_dir}/NOTICE ${bin_staging_dir}/${release_name}-bin
 which sha1sum >/dev/null || alias sha1sum='shasum -a 1' && shopt -s expand_aliases
 which sha256sum >/dev/null || alias sha256sum='shasum -a 256' && shopt -s expand_aliases
 
-( cd ${artifact_dir} &&
+( cd "${artifact_dir}" &&
     for a in *.tar.gz *.zip; do
-        gpg2 --print-md SHA512 ${a} > ${a}.sha512
-        gpg2 --armor --output ${a}.asc --detach-sig ${a}
+        gpg2 --print-md SHA512 "${a}" > "${a}.sha512"
+        gpg2 --armor --output "${a}.asc" --detach-sig "${a}"
     done
 )
 
 ###############################################################################
 # Publish to dist repo
 
-if [ -z "${dry_run}" -a ! -z "${APACHE_DIST_SVN_DIR}" ] ; then (
-  cd ${APACHE_DIST_SVN_DIR}
-  [ -d ${artifact_name} ] && ( svn --non-interactive revert -R ${artifact_name}; svn --non-interactive rm --force ${artifact_name}; rm -rf ${artifact_name} )
-  cp -r ${artifact_dir} ${artifact_name}
-  svn --non-interactive add ${artifact_name}
+if [ -z "${dry_run}" ] && [ -n "${APACHE_DIST_SVN_DIR}" ] ; then (
+  cd "${APACHE_DIST_SVN_DIR}"
+  [ -d "${artifact_name}" ] && ( svn --non-interactive revert -R "${artifact_name}"; svn --non-interactive rm --force "${artifact_name}"; rm -rf "${artifact_name}" )
+  cp -r "${artifact_dir}" "${artifact_name}"
+  svn --non-interactive add "${artifact_name}"
   )
-  artifact_dir=${APACHE_DIST_SVN_DIR}/${artifact_name}
+  artifact_dir="${APACHE_DIST_SVN_DIR}/${artifact_name}"
 fi
 
 ###############################################################################
@@ -241,7 +250,7 @@ fi
 
 set +x
 echo "The release is done - here is what has been created:"
-ls ${artifact_dir}
+ls "${artifact_dir}"
 echo "You can find these files in: ${artifact_dir}"
 echo "The git commit IDs for the voting emails are:"
 echo -n "incubator-flagon-userale: " && git rev-parse HEAD

@@ -17,18 +17,23 @@
 name: Distill CI test suite
 run-name: ${{ github.actor }} running Distill CI test suite
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
       - master
     paths:
       - products/distill/**
+      - proto/**
       - .github/workflows/distill_ci.yml
   pull_request:
     branches:
       - master
     paths:
       - products/distill/**
+      - proto/**
       - .github/workflows/distill_ci.yml
 
 defaults:
@@ -50,7 +55,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v4
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
           enable-cache: true
 

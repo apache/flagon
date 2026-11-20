@@ -17,6 +17,10 @@
 
 name: License check
 run-name: ${{ github.actor }} running license check
+
+permissions:
+  contents: read
+
 on:
   push:
     branches:
