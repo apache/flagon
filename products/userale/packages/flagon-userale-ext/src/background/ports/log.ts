@@ -32,10 +32,10 @@ const handler: PlasmoMessaging.PortHandler = async (req, res) => {
   const allowListRegExp = getAllowListRegExp()
   if (
     allowListRegExp &&
+    typeof log?.pageUrl === "string" &&
     allowListRegExp.test(log.pageUrl) &&
     shouldLogByFilter(log)
   ) {
-    console.log(log)
     userale.log(log)
   }
 }
