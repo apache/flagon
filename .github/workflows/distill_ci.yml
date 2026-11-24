@@ -17,18 +17,23 @@
 name: Distill CI test suite
 run-name: ${{ github.actor }} running Distill CI test suite
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
       - master
     paths:
       - products/distill/**
+      - proto/**
       - .github/workflows/distill_ci.yml
   pull_request:
     branches:
       - master
     paths:
       - products/distill/**
+      - proto/**
       - .github/workflows/distill_ci.yml
 
 defaults:

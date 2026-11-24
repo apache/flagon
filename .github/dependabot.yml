@@ -16,6 +16,15 @@
 
 version: 2
 updates:
+  # Root tooling (ESLint, Prettier, TypeScript)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    target-branch: "master"
+    labels:
+      - "maintenance"
+
   # Userale
   - package-ecosystem: "npm"
     directory: "/products/userale"
@@ -25,10 +34,18 @@ updates:
     labels:
       - "maintenance"
 
-  
   # Distill
-  - package-ecosystem: "pip"
+  - package-ecosystem: "uv"
     directory: "/products/distill"
+    schedule:
+      interval: "monthly"
+    target-branch: "master"
+    labels:
+      - "maintenance"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
       interval: "monthly"
     target-branch: "master"

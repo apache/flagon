@@ -33,17 +33,17 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.2.5'
+        ruby-version: '3.2'
         
     - name: Set up Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v4
       with:
         # TODO: Lock done a specifc version for node and ruby and define
         # it in single place to be shared by this action and /site/Dockerfile
@@ -57,14 +57,16 @@ jobs:
 
     - name: Commit and push to asf-site branch
       run: |
+        SITE_TMP="$(mktemp -d)"
+        trap 'rm -rf "$SITE_TMP"' EXIT
         git config user.name "GitHub Actions Bot"
         git config user.email "action@github.com"
-        cp -r site/_site /tmp/
+        cp -R site/_site "$SITE_TMP/_site"
         git reset --hard
         git clean -fdx
         git checkout asf-site
-        rm -rf *
-        mv /tmp/_site ./content
+        git rm -rf --ignore-unmatch .
+        mv "$SITE_TMP/_site" ./content
         git add .
         git commit -m "Automatic Site Publish by Buildbot" || echo "No changes to commit"
         git push origin asf-site
