@@ -15,7 +15,10 @@
  * limitations under the License.
  */
 
-import { getInitialSettings } from "@/getInitialSettings";
+import {
+  getInitialSettings,
+  type InitialSettingsOverrides,
+} from "@/getInitialSettings";
 import type { Settings } from "@/types";
 
 // Singleton Configuration class
@@ -23,6 +26,7 @@ export class Configuration {
   [key: string]: Settings.ConfigValueTypes;
   // Private static property to hold the singleton instance
   private static instance: Configuration | null = null;
+  private initialized: boolean = false;
 
   // Public properties corresponding to fields in the Config interface
   public apiKey: Settings.ApiKey = null;
@@ -37,9 +41,11 @@ export class Configuration {
   public httpSessionId: Settings.SessionId = null;
   public logCountThreshold: number = 0;
   public logDetails: boolean = false;
+  public maxQueueSize: number = 10000;
   public observeMutations: boolean = false;
   public on: boolean = false;
   public otlpEndpoint: Settings.OtlpEndpoint = null;
+  public persistSession: boolean = true;
   public resolution: number = 0;
   public sessionId: Settings.SessionId = null;
   public time: Settings.TimeFunction = () => Date.now();
@@ -55,9 +61,8 @@ export class Configuration {
   public websocketsEnabled: boolean = false;
 
   // Private constructor to prevent external instantiation
-  private constructor() {
-    // Call the initialization method only if it's the first time instantiating
-    if (Configuration.instance === null) {
+  private constructor(skipInit: boolean = false) {
+    if (!skipInit && Configuration.instance === null) {
       this.initialize();
     }
   }
@@ -65,21 +70,31 @@ export class Configuration {
   // Static method to get the singleton instance
   public static getInstance(): Configuration {
     if (Configuration.instance === null) {
-      Configuration.instance = new Configuration();
+      Configuration.instance = new Configuration(false);
     }
     return Configuration.instance;
   }
 
-  private initialize(): void {
-    const settings = getInitialSettings();
+  // Creates an uninitialized Configuration instance without reading browser storage
+  public static createUninitialized(): Configuration {
+    return new Configuration(true);
+  }
+
+  public isInitialized(): boolean {
+    return this.initialized;
+  }
+
+  public initialize(overrides?: InitialSettingsOverrides): void {
+    const settings = getInitialSettings(overrides);
     this.update(settings);
+    this.initialized = true;
   }
 
   /**
    * Resets the configuration to its initial state.
    */
-  public reset(): void {
-    this.initialize();
+  public reset(overrides?: InitialSettingsOverrides): void {
+    this.initialize(overrides);
   }
 
   /**
@@ -121,6 +136,15 @@ export class Configuration {
         }
       }
     });
+
+    if (newConfig.persistSession === false) {
+      if (newConfig.httpSessionId === undefined) {
+        this.httpSessionId = null;
+      }
+      if (newConfig.sessionId === undefined) {
+        this.sessionId = null;
+      }
+    }
   }
 
   /**
@@ -129,6 +153,9 @@ export class Configuration {
    * @return {string | null}       The extracted/decoded userid, or null if none is found.
    */
   public static getUserIdFromParams(param: string) {
+    if (typeof window === "undefined" || !window.location?.href) {
+      return null;
+    }
     const userField = param;
     const regex = new RegExp("[?&]" + userField + "(=([^&#]*)|&|#|$)");
     const results = window.location.href.match(regex);

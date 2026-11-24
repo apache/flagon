@@ -112,8 +112,14 @@ export class HttpJsonExporter implements LogExporter {
       }
     }
 
-    await attemptSend(retries);
-    return { success: true };
+    try {
+      await attemptSend(retries);
+      return { success: true };
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error(String(err));
+      console.error(error);
+      return { success: false, error };
+    }
   }
 
   public async flush(): Promise<void> {

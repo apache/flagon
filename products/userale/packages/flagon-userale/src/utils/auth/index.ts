@@ -21,20 +21,36 @@ import { Callbacks } from "@/types";
 export let authCallback: Callbacks.AuthCallback | null = null;
 
 /**
+ * Resolves the latest auth header string from authCallback without mutating config.
+ * Returns null if no callback is registered or if invoking it throws or returns a non-string.
+ */
+export function resolveAuthHeader(): string | null {
+  if (!authCallback) {
+    return null;
+  }
+  try {
+    const result = authCallback();
+    return typeof result === "string" ? result : null;
+  } catch (e) {
+    console.error(`Error encountered while setting the auth header: ${e}`);
+    return null;
+  }
+}
+
+/**
  * Fetches the most up-to-date auth header string from the auth callback
  * and updates the config object with the new value.
  * @param {Configuration} config Configuration object to be updated.
- * @param {Function} authCallback Callback used to fetch the newest header.
  * @returns {void}
  */
 export function updateAuthHeader(config: Configuration) {
   if (authCallback) {
     try {
-      config.authHeader = authCallback();
+      const value = authCallback();
+      config.authHeader = typeof value === "string" ? value : null;
     } catch (e) {
-      // We should emit the error, but otherwise continue as this could be a temporary issue
-      // due to network connectivity or some logic inside the authCallback which is the user's
-      // responsibility.
+      // Clear any previously cached credential when the callback fails.
+      config.authHeader = null;
       console.error(`Error encountered while setting the auth header: ${e}`);
     }
   }

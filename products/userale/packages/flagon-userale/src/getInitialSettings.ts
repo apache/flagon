@@ -20,22 +20,48 @@ import type { Settings } from "./types";
 let sessionId: string | null = null;
 let httpSessionId: string | null = null;
 
+export interface InitialSettingsOverrides {
+  persistSession?: boolean;
+  sessionId?: string | null;
+  autostart?: boolean;
+}
+
+function parseHeadersAttr(raw: string | null): Settings.Headers {
+  if (!raw) {
+    return null;
+  }
+  try {
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? (parsed as Settings.HeaderObject)
+      : null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Extracts the initial configuration settings from the
  * currently executing script tag.
  * @return {Object} The extracted configuration object
  */
-export function getInitialSettings(): Settings.Config {
+export function getInitialSettings(
+  overrides?: InitialSettingsOverrides,
+): Settings.Config {
+  const isWorker =
+    typeof WorkerGlobalScope !== "undefined" &&
+    typeof self !== "undefined" &&
+    self instanceof WorkerGlobalScope;
+
   if (
-    (typeof WorkerGlobalScope !== "undefined" &&
-      self instanceof WorkerGlobalScope) ||
+    isWorker ||
     typeof document === "undefined" ||
     typeof window === "undefined"
   ) {
     const settings: Settings.Config = {
       apiKey: null,
       authHeader: null,
-      autostart: true,
+      autostart: overrides?.autostart ?? isWorker,
       browserSessionId: null,
       custIndex: null,
       exporter: null,
@@ -45,10 +71,13 @@ export function getInitialSettings(): Settings.Config {
       httpSessionId: null,
       logCountThreshold: +5,
       logDetails: false,
+      maxQueueSize: 10000,
       observeMutations: false,
       otlpEndpoint: null,
+      persistSession: overrides?.persistSession ?? isWorker,
       resolution: +500,
-      sessionId: sessionId,
+      sessionId:
+        overrides?.sessionId !== undefined ? overrides.sessionId : null,
       time: (ts?: number) => (ts !== undefined ? ts : Date.now()),
       toolName: null,
       toolVersion: null,
@@ -62,55 +91,82 @@ export function getInitialSettings(): Settings.Config {
     return settings;
   }
 
-  if (sessionId === null) {
-    sessionId = getsessionId(
-      "userAlesessionId",
-      "session_" + String(Date.now()),
-    );
-  }
-
-  if (httpSessionId === null) {
-    httpSessionId = getsessionId(
-      "userAleHttpSessionId",
-      generatehttpSessionId(),
-    );
-  }
-
-  const script =
-    document.currentScript ||
-    (function () {
-      const scripts = document.getElementsByTagName("script");
-      return scripts[scripts.length - 1];
-    })();
-
+  // Only inspect document.currentScript; never scrape an arbitrary last <script>
+  // in ESM bundles where document.currentScript is null.
+  const script = document.currentScript;
   const get = script
     ? script.getAttribute.bind(script)
     : function () {
         return null;
       };
+
+  const persistSession =
+    overrides?.persistSession !== undefined
+      ? overrides.persistSession
+      : get("data-persist-session") === "false"
+        ? false
+        : true;
+
+  let resolvedSessionId: string | null = null;
+  let resolvedHttpSessionId: string | null = null;
+
+  if (persistSession) {
+    if (overrides?.sessionId !== undefined) {
+      resolvedSessionId = overrides.sessionId;
+    } else {
+      if (sessionId === null) {
+        sessionId = getsessionId(
+          "userAlesessionId",
+          "session_" + String(Date.now()),
+        );
+      }
+      resolvedSessionId = get("data-session") || sessionId;
+    }
+
+    if (httpSessionId === null) {
+      httpSessionId = getsessionId(
+        "userAleHttpSessionId",
+        generatehttpSessionId(),
+      );
+    }
+    resolvedHttpSessionId = httpSessionId;
+  } else {
+    resolvedSessionId =
+      overrides?.sessionId !== undefined
+        ? overrides.sessionId
+        : get("data-session") || null;
+    resolvedHttpSessionId = null;
+  }
+
   const headers = get("data-headers");
   const otlpEndpoint = get("data-otlp-endpoint") || null;
   const exporterAttr = (get("data-exporter-type") ||
     get("data-exporter-format") ||
     get("data-exporter") ||
     (otlpEndpoint ? "otlp" : "http-json")) as Settings.ExporterType;
+  const defaultAutostart = get("data-autostart") === "false" ? false : true;
   const settings: Settings.Config = {
     apiKey: get("data-api-key") || null,
     authHeader: get("data-auth") || null,
-    autostart: get("data-autostart") === "false" ? false : true,
+    autostart:
+      overrides?.autostart !== undefined
+        ? overrides.autostart
+        : defaultAutostart,
     browserSessionId: null,
     custIndex: get("data-index") || null,
     exporter: null,
     exporterFormat: exporterAttr,
     exporterType: exporterAttr,
-    headers: headers ? JSON.parse(headers) : null,
-    httpSessionId: httpSessionId,
+    headers: parseHeadersAttr(headers),
+    httpSessionId: resolvedHttpSessionId,
     logCountThreshold: +(get("data-threshold") || 5),
     logDetails: get("data-log-details") === "true" ? true : false,
+    maxQueueSize: +(get("data-max-queue-size") || 10000),
     observeMutations: get("data-observe-mutations") === "true" ? true : false,
     otlpEndpoint: otlpEndpoint,
+    persistSession: persistSession,
     resolution: +(get("data-resolution") || 500),
-    sessionId: get("data-session") || sessionId,
+    sessionId: resolvedSessionId,
     time: timeStampScale(document.createEvent("CustomEvent")),
     toolName: get("data-tool") || null,
     toolVersion: get("data-version") || null,
@@ -131,12 +187,21 @@ export function getInitialSettings(): Settings.Config {
  *
  */
 export function getsessionId(sessionKey: string, value: any) {
-  if (self.sessionStorage.getItem(sessionKey) === null) {
-    self.sessionStorage.setItem(sessionKey, JSON.stringify(value));
+  try {
+    const storage =
+      typeof self !== "undefined" ? self.sessionStorage : undefined;
+    if (!storage) {
+      return value;
+    }
+    const existing = storage.getItem(sessionKey);
+    if (existing === null) {
+      storage.setItem(sessionKey, JSON.stringify(value));
+      return value;
+    }
+    return JSON.parse(existing);
+  } catch {
     return value;
   }
-
-  return JSON.parse(self.sessionStorage.getItem(sessionKey) || "");
 }
 
 /**
@@ -185,7 +250,13 @@ function generatehttpSessionId(): string {
   // 32 digit hex -> 128 bits of info -> 2^64 ~= 10^19 sessions needed for 50% chance of collison
   const len = 32;
   const arr = new Uint8Array(len / 2);
-  window.crypto.getRandomValues(arr);
+  if (
+    typeof globalThis !== "undefined" &&
+    globalThis.crypto &&
+    typeof globalThis.crypto.getRandomValues === "function"
+  ) {
+    globalThis.crypto.getRandomValues(arr);
+  }
   return Array.from(arr, (dec) => {
     return dec.toString(16).padStart(2, "0");
   }).join("");

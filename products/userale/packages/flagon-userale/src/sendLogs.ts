@@ -21,23 +21,51 @@ import { Logging } from "@/types";
 
 export { buildHeaders };
 
-let sendIntervalId: string | number | NodeJS.Timeout | undefined;
+let sendIntervalId: ReturnType<typeof setInterval> | undefined;
 let pagehideHandler: (() => void) | null = null;
+let pageshowHandler: ((event: Event) => void) | null = null;
 let activeExporter: LogExporter | null = null;
 let activeExporterKey: string | null = null;
 let activeCustomExporter: LogExporter | null = null;
+const inFlightExports = new Set<Promise<unknown>>();
+
+function trackExport(promise: Promise<unknown>): Promise<unknown> {
+  const tracked = promise.then(
+    () => undefined,
+    (error) => {
+      console.error(error);
+    },
+  );
+  inFlightExports.add(tracked);
+  tracked.finally(() => {
+    inFlightExports.delete(tracked);
+  });
+  return tracked;
+}
+
+function isWebSocketMode(config: Configuration): boolean {
+  return Boolean(
+    config.websocketsEnabled ||
+    (typeof config.url === "string" && /^wss?:/i.test(config.url)),
+  );
+}
 
 /**
  * Registers a custom LogExporter instance on the global Configuration singleton.
  * @param  {LogExporter | null} exporter Custom exporter instance or null to reset.
  * @return {boolean}                     Whether registration succeeded.
  */
-export function registerExporter(exporter: LogExporter | null): boolean {
+export function registerExporter(
+  exporter: LogExporter | null,
+  targetConfig?: Configuration,
+): boolean {
   if (exporter !== null && typeof exporter?.export !== "function") {
     return false;
   }
-  Configuration.getInstance().update({ exporter });
+  (targetConfig ?? Configuration.getInstance()).update({ exporter });
   activeExporter = null;
+  activeExporterKey = null;
+  activeCustomExporter = null;
   return true;
 }
 
@@ -68,8 +96,9 @@ function resolveExporter(config: Configuration): LogExporter {
  * @param  {Configuration} config Configuration object to use when logging.
  */
 export function initSender(logs: Array<Logging.Log>, config: Configuration) {
-  if (sendIntervalId) {
+  if (sendIntervalId !== undefined) {
     clearInterval(sendIntervalId);
+    sendIntervalId = undefined;
   }
 
   try {
@@ -91,11 +120,70 @@ export function initSender(logs: Array<Logging.Log>, config: Configuration) {
   resolveExporter(config);
 
   sendIntervalId = sendOnInterval(logs, config);
-  if (pagehideHandler && typeof self.removeEventListener === "function") {
-    self.removeEventListener("pagehide", pagehideHandler);
-    pagehideHandler = null;
+  if (typeof self !== "undefined") {
+    if (pagehideHandler && typeof self.removeEventListener === "function") {
+      self.removeEventListener("pagehide", pagehideHandler);
+      pagehideHandler = null;
+    }
+    if (pageshowHandler && typeof self.removeEventListener === "function") {
+      self.removeEventListener("pageshow", pageshowHandler);
+      pageshowHandler = null;
+    }
   }
   sendOnClose(logs, config);
+}
+
+/**
+ * Stops interval timers, removes lifecycle listeners, and shuts down the active exporter.
+ */
+export async function stopSender(): Promise<void> {
+  if (sendIntervalId !== undefined) {
+    clearInterval(sendIntervalId);
+    sendIntervalId = undefined;
+  }
+  if (
+    typeof self !== "undefined" &&
+    typeof self.removeEventListener === "function"
+  ) {
+    if (pagehideHandler) {
+      self.removeEventListener("pagehide", pagehideHandler);
+      pagehideHandler = null;
+    }
+    if (pageshowHandler) {
+      self.removeEventListener("pageshow", pageshowHandler);
+      pageshowHandler = null;
+    }
+  }
+  const exporter = activeExporter;
+  activeExporter = null;
+  activeExporterKey = null;
+  activeCustomExporter = null;
+  if (exporter && typeof exporter.shutdown === "function") {
+    try {
+      await exporter.shutdown();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+}
+
+/**
+ * Drains queued logs and awaits completion of all in-flight exports and exporter flush.
+ */
+export async function flushLogs(
+  logs: Array<Logging.Log>,
+  config: Configuration,
+): Promise<void> {
+  if (logs.length > 0) {
+    const batch = logs.splice(0);
+    await trackExport(sendLogs(batch, config, 0));
+  }
+  if (inFlightExports.size > 0) {
+    await Promise.allSettled(Array.from(inFlightExports));
+  }
+  if (activeExporter && typeof activeExporter.flush === "function") {
+    await activeExporter.flush();
+  }
 }
 
 /**
@@ -103,20 +191,20 @@ export function initSender(logs: Array<Logging.Log>, config: Configuration) {
  * if the queue has reached the threshold specified by the provided config.
  * @param  {Array<Logging.Log>} logs   Array of logs to read from.
  * @param  {Configuration} config Configuration singleton to be read from.
- * @return {Number}        The newly created interval id.
+ * @return {NodeJS.Timeout}        The newly created interval id.
  */
 export function sendOnInterval(
   logs: Array<Logging.Log>,
   config: Configuration,
-): NodeJS.Timeout {
+): ReturnType<typeof setInterval> {
   return setInterval(function () {
     if (!config.on) {
       return;
     }
 
     if (logs.length >= config.logCountThreshold) {
-      sendLogs(logs.slice(0), config, 0); // Send a copy
-      logs.splice(0); // Clear array reference (no reassignment)
+      const batch = logs.splice(0);
+      trackExport(sendLogs(batch, config, 0));
     }
   }, config.transmitInterval);
 }
@@ -130,22 +218,51 @@ export function sendOnClose(
   logs: Array<Logging.Log>,
   config: Configuration,
 ): void {
-  const listener = function () {
+  if (
+    typeof self === "undefined" ||
+    typeof self.addEventListener !== "function"
+  ) {
+    return;
+  }
+  const hideListener = function () {
     if (!config.on) {
       return;
     }
 
     if (logs.length > 0) {
-      const batch = logs.slice(0);
-      logs.splice(0); // clear log queue
+      const batch = logs.splice(0);
       const exporter = resolveExporter(config);
-      exporter.export(batch, { keepalive: true }).catch((error) => {
+      trackExport(
+        exporter.export(batch, { keepalive: true }).catch((error) => {
+          console.error(error);
+        }),
+      );
+    }
+
+    // Close WebSocket connections on pagehide so pages remain eligible for bfcache.
+    if (
+      activeExporter &&
+      isWebSocketMode(config) &&
+      typeof activeExporter.shutdown === "function"
+    ) {
+      const wsExporter = activeExporter;
+      activeExporter = null;
+      activeExporterKey = null;
+      void wsExporter.shutdown?.().catch((error) => {
         console.error(error);
       });
     }
   };
-  pagehideHandler = listener;
-  self.addEventListener("pagehide", listener);
+  const showListener = function (event: Event) {
+    const persisted = Boolean((event as PageTransitionEvent).persisted);
+    if (persisted && config.on && isWebSocketMode(config) && !activeExporter) {
+      resolveExporter(config);
+    }
+  };
+  pagehideHandler = hideListener;
+  pageshowHandler = showListener;
+  self.addEventListener("pagehide", hideListener);
+  self.addEventListener("pageshow", showListener);
 }
 
 /**
@@ -161,5 +278,8 @@ export async function sendLogs(
   retries: number,
 ): Promise<void> {
   const exporter = resolveExporter(config);
-  await exporter.export(logs, { retries });
+  const result = await exporter.export(logs, { retries });
+  if (result && result.success === false && result.error) {
+    console.error(result.error);
+  }
 }
