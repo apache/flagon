@@ -16,7 +16,7 @@
 
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 
 from pydantic import ValidationError
 
@@ -31,7 +31,7 @@ def test_log_constructor():
         _ = Log(data='{"garbage data": "bad"}')
     except ValidationError:
         exception_thrown = True
-    assert exception_thrown == True
+    assert exception_thrown
 
     data = load_log()
     data_object = json.loads(data)
@@ -66,7 +66,18 @@ def test_log_serialize():
     # Hardcoding this for now because creating a polymorphic model does not
     # preserve order in pydantic. Our data is still correct but not in the
     # original order. There doesn't seem to be an easy way to fix this right now
-    correct_str = '{"target":"#document","path":["Window"],"pageUrl":"https://github.com/apache/flagon/tree/master/docker","pageTitle":"flagon/docker at master · apache/flagon · GitHub","pageReferrer":"https://gov.teams.microsoft.us/","browser":{"browser":"chrome","version":"116.0.0"},"type":"load","logType":"raw","userAction":true,"userId":"nobody","toolVersion":null,"toolName":"test_app","useraleVersion":"2.3.0","sessionId":"session_1719530074303","httpSessionId":"72798a8ad776417183b1aa14e03c3132","browserSessionId":"06b0db1ab30e8e92819ba3d4091b83bc","clientTime":1719530111079,"microTime":0,"location":{"x":null,"y":null},"scrnRes":{"width":1349,"height":954},"details":{"window":true}}'
+    correct_str = (
+        '{"target":"#document","path":["Window"],"pageUrl":"https://github.com/apache/'
+        'flagon/tree/master/docker","pageTitle":"flagon/docker at master · apache/'
+        'flagon · GitHub","pageReferrer":"https://gov.teams.microsoft.us/","browser":'
+        '{"browser":"chrome","version":"116.0.0"},"type":"load","logType":"raw",'
+        '"userAction":true,"userId":"nobody","toolVersion":null,"toolName":'
+        '"test_app","useraleVersion":"2.3.0","sessionId":"session_1719530074303",'
+        '"httpSessionId":"72798a8ad776417183b1aa14e03c3132","browserSessionId":'
+        '"06b0db1ab30e8e92819ba3d4091b83bc","clientTime":1719530111079,"microTime":0,'
+        '"location":{"x":null,"y":null},"scrnRes":{"width":1349,"height":954},'
+        '"details":{"window":true}}'
+    )
     serialized_data = test_log.to_json()
     assert serialized_data == correct_str
 
@@ -87,7 +98,7 @@ def test_log_normalize_timestamp():
     # note provided UserAle schema has clientTime in milliseconds but need it in
     # seconds to be able to parse
     correct_ms = 1719530111079
-    correct_dt = datetime.fromtimestamp(correct_ms / 1000)
+    correct_dt = datetime.fromtimestamp(correct_ms / 1000, tz=timezone.utc)
 
     assert test_log.data.client_time == correct_dt
     assert test_log.to_dict()["clientTime"] == correct_ms
@@ -109,7 +120,7 @@ def test_log_comparison():
 
 
 def test_log_v2_5_and_wire_formats():
-    # 1. Modern UserALE v2.4/v2.5 raw log with float microTime, click details, userAgent, attributes, style
+    # Modern v2.4/v2.5 raw log with float microTime, click details, attributes
     v25_raw = {
         "target": "button#buy",
         "path": ["button#buy", "body"],

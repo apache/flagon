@@ -22,6 +22,20 @@ from enum import Enum
 from distill.segmentation.segments import Segments
 
 
+def _get_seg_time(log):
+    if "clientTime" in log:
+        return log["clientTime"]
+    if "startTime" in log:
+        return log["startTime"]
+    return log.get("endTime")
+
+
+def _sanitize_csv_cell(val):
+    if isinstance(val, str) and val.startswith(("=", "+", "-", "@", "\t", "\r")):
+        return "'" + val
+    return val
+
+
 class Segment_Type(Enum):
     CREATE = "create"
     GENERATE = "generate"
@@ -282,16 +296,17 @@ def create_segment(target_dict, segment_names, start_end_vals):
         uids = []
         for uid in target_dict:
             log = target_dict[uid]
+            log_time = _get_seg_time(log)
             if (
-                isinstance(log["clientTime"], int)
+                isinstance(log_time, int)
                 and isinstance(start_time, int)
                 and isinstance(end_time, int)
             ) or (
-                isinstance(log["clientTime"], datetime.datetime)
+                isinstance(log_time, datetime.datetime)
                 and isinstance(start_time, datetime.datetime)
                 and isinstance(end_time, datetime.datetime)
             ):
-                if log["clientTime"] >= start_time and log["clientTime"] <= end_time:
+                if log_time >= start_time and log_time <= end_time:
                     # Perform data collection on log
                     num_logs += 1
                     uids.append(uid)
@@ -386,7 +401,7 @@ def generate_segments(
 
             if matched:
                 # Matches values - Create segment
-                orig_start_time = target_dict[keys[i]]["clientTime"]
+                orig_start_time = _get_seg_time(target_dict[keys[i]])
                 if isinstance(orig_start_time, int):
                     start_time = orig_start_time - (start_time_limit * 1000)
                     end_time = orig_start_time + (end_time_limit * 1000)
@@ -452,8 +467,8 @@ def detect_deadspace(
     for i in range(len(key_list)):
         # Check for deadspace
         if i < len(key_list) - 1:
-            curr_time = target_dict[key_list[i]]["clientTime"]
-            next_time = target_dict[key_list[i + 1]]["clientTime"]
+            curr_time = _get_seg_time(target_dict[key_list[i]])
+            next_time = _get_seg_time(target_dict[key_list[i + 1]])
             if isinstance(curr_time, int) and isinstance(next_time, int):
                 time_delta = next_time - curr_time
                 if time_delta > deadspace_limit * 1000:
@@ -509,11 +524,16 @@ def generate_fixed_time_segments(target_dict, time, trim=False, label=""):
 
     :return: A Segments object containing newly created Segment objects.
     """
+    if time <= 0:
+        raise ValueError("time must be greater than 0")
+
     key_list = list(target_dict.keys())
+    if not key_list:
+        return Segments([])
 
     # Get overall start and end time
-    start = target_dict[key_list[0]]["clientTime"]
-    end = target_dict[key_list[len(key_list) - 1]]["clientTime"]
+    start = _get_seg_time(target_dict[key_list[0]])
+    end = _get_seg_time(target_dict[key_list[len(key_list) - 1]])
 
     start_end_vals = []
     segment_names = []
@@ -590,6 +610,8 @@ def generate_collapsing_window_segments(
         the returned dictionary keys.
     """
     key_list = list(target_dict.keys())
+    if not key_list:
+        return Segments([])
 
     start_end_val_lists = []
     start_end_vals = []
@@ -598,26 +620,31 @@ def generate_collapsing_window_segments(
     segment_started = False
 
     for i in range(len(key_list)):
-        field_values = target_dict[key_list[i]].get(field_name)
+        log_entry = target_dict[key_list[i]]
+        field_values = log_entry.get(field_name)
         if not isinstance(field_values, (list, tuple, set)):
             field_values = [field_values]
         if (
-            field_name in target_dict[key_list[i]]
-            and len(set(field_values_of_interest) & set(field_values)) > 0
+            field_name in log_entry
+            and any(
+                fv == target_val
+                for fv in field_values
+                for target_val in field_values_of_interest
+            )
         ):
             if not segment_started:
                 # Start a new Segment
-                start_end = [target_dict[key_list[i]]["clientTime"], None]
+                start_end = [_get_seg_time(log_entry), None]
                 start_end_val_lists.append(start_end)
                 segment_names.append(label + str(index))
                 segment_started = True
 
             # End Segment if end of dictionary
-            elif segment_started and i == (len(key_list) - 1):
+            if segment_started and i == (len(key_list) - 1):
                 # End the Segment
                 start_end_tuple = (
                     start_end_val_lists[index][0],
-                    target_dict[key_list[i]]["clientTime"],
+                    _get_seg_time(log_entry),
                 )
                 start_end_vals.append(start_end_tuple)
                 index += 1
@@ -627,7 +654,7 @@ def generate_collapsing_window_segments(
                 # End the Segment
                 start_end_tuple = (
                     start_end_val_lists[index][0],
-                    target_dict[key_list[i - 1]]["clientTime"],
+                    _get_seg_time(target_dict[key_list[i - 1]]),
                 )
                 start_end_vals.append(start_end_tuple)
                 index += 1
@@ -637,7 +664,7 @@ def generate_collapsing_window_segments(
         start_end_vals.append(
             (
                 start_end_val_lists[index][0],
-                target_dict[key_list[len(key_list) - 1]]["clientTime"],
+                _get_seg_time(target_dict[key_list[len(key_list) - 1]]),
             )
         )
 
@@ -680,13 +707,18 @@ def export_segments(path, segments):
         ]
         writer.writerow(header_row)
         for segment in segments:
+            matched_vals = (
+                _sanitize_csv_cell(str(segment.generate_matched_values))
+                if segment.generate_matched_values is not None
+                else None
+            )
             row = [
-                segment.segment_name,
-                str(segment.start_end_val[0]),
-                str(segment.start_end_val[1]),
+                _sanitize_csv_cell(segment.segment_name),
+                _sanitize_csv_cell(str(segment.start_end_val[0])),
+                _sanitize_csv_cell(str(segment.start_end_val[1])),
                 segment.num_logs,
-                segment.generate_field_name,
-                segment.generate_matched_values,
+                _sanitize_csv_cell(segment.generate_field_name),
+                matched_vals,
                 segment.segment_type,
             ]
             writer.writerow(row)

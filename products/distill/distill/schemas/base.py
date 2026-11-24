@@ -15,12 +15,7 @@
 # limitations under the License.
 import abc
 
-from enum import Enum
-from typing import List, Optional
-
-from pydantic import AliasGenerator, BaseModel, Field
-from pydantic.alias_generators import to_camel
-from pydantic.config import ConfigDict
+from pydantic import BaseModel
 
 
 class BaseSchema(BaseModel, abc.ABC):
