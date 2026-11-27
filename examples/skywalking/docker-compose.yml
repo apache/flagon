@@ -1,0 +1,68 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+services:
+  banyandb:
+    image: apache/skywalking-banyandb:0.7.0
+    container_name: flagon-skywalking-banyandb
+    command: standalone --stream-root-path /tmp/stream-data --measure-root-path /tmp/measure-data
+    ports:
+      - "17912:17912" # gRPC port for SkyWalking OAP communication
+      - "17913:17913" # HTTP / embedded UI port
+    healthcheck:
+      test: ["CMD", "sh", "-c", "nc -nz 127.0.0.1 17912"]
+      interval: 5s
+      timeout: 30s
+      retries: 30
+
+  oap:
+    image: apache/skywalking-oap-server:10.0.0
+    container_name: flagon-skywalking-oap
+    depends_on:
+      banyandb:
+        condition: service_healthy
+    environment:
+      SW_STORAGE: banyandb
+      SW_STORAGE_BANYANDB_TARGETS: banyandb:17912
+      SW_OTEL_RECEIVER: default
+      SW_OTEL_RECEIVER_ENABLED_HANDLERS: "otlp-metrics,otlp-traces,otlp-logs"
+      SW_HEALTH_CHECKER: default
+    ports:
+      - "11800:11800" # OTLP gRPC / SkyWalking gRPC receiver
+      - "12800:12800" # OTLP HTTP / SkyWalking UI GraphQL endpoint
+
+  skywalking-ui:
+    image: apache/skywalking-ui:10.0.0
+    container_name: flagon-skywalking-ui
+    depends_on:
+      - oap
+    environment:
+      SW_OAP_ADDRESS: http://oap:12800
+    ports:
+      - "8080:8080"
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.114.0
+    container_name: flagon-skywalking-otel-collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+    ports:
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP (/v1/logs, /v1/traces)
+    depends_on:
+      - oap
