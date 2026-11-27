@@ -43,7 +43,7 @@ jobs:
         ruby-version: '3.2'
         
     - name: Set up Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
         # TODO: Lock done a specifc version for node and ruby and define
         # it in single place to be shared by this action and /site/Dockerfile
