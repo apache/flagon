@@ -23,6 +23,7 @@ export type ExporterType =
   | "proto-json"
   | "otlp"
   | "otlp-json"
+  | "otel-sdk"
   | "websocket"
   | "custom";
 

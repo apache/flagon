@@ -34,6 +34,15 @@ export interface OtelLogsApiLogger {
   }): void;
 }
 
+function isNonEmptyPlainObject(val: unknown): val is Record<string, unknown> {
+  return (
+    Boolean(val) &&
+    typeof val === "object" &&
+    !Array.isArray(val) &&
+    Object.keys(val as Record<string, unknown>).length > 0
+  );
+}
+
 /**
  * Bridges UserALE logs directly into an existing OpenTelemetry JS Logs SDK
  * Logger instance (`@opentelemetry/api-logs`), allowing applications that
@@ -58,11 +67,14 @@ export class OtelSdkExporter implements LogExporter {
         const eventName = `userale.${logType}.${eventType}`;
 
         const timestamp =
-          typeof log.clientTime === "number"
+          typeof log.clientTime === "number" && Number.isFinite(log.clientTime)
             ? log.clientTime
-            : typeof log.endTime === "number"
+            : typeof log.endTime === "number" && Number.isFinite(log.endTime)
               ? log.endTime
-              : Date.now();
+              : typeof log.startTime === "number" &&
+                  Number.isFinite(log.startTime)
+                ? log.startTime
+                : Date.now();
 
         const attributes: Record<string, unknown> = {
           "event.name": eventName,
@@ -70,22 +82,28 @@ export class OtelSdkExporter implements LogExporter {
           "flagon.event_type": eventType,
         };
 
-        if (typeof log.pageUrl === "string") {
+        if (typeof log.pageUrl === "string" && log.pageUrl.length > 0) {
           attributes["url.full"] = log.pageUrl;
         }
-        if (typeof log.pageTitle === "string") {
+        if (typeof log.pageTitle === "string" && log.pageTitle.length > 0) {
           attributes["page.title"] = log.pageTitle;
         }
-        if (typeof log.userId === "string") {
+        if (
+          typeof log.pageReferrer === "string" &&
+          log.pageReferrer.length > 0
+        ) {
+          attributes["page.referrer"] = log.pageReferrer;
+        }
+        if (typeof log.userId === "string" && log.userId.length > 0) {
           attributes["user.id"] = log.userId;
         }
-        if (typeof log.sessionId === "string") {
+        if (typeof log.sessionId === "string" && log.sessionId.length > 0) {
           attributes["session.id"] = log.sessionId;
         }
-        if (typeof log.target === "string") {
+        if (typeof log.target === "string" && log.target.length > 0) {
           attributes["flagon.target"] = log.target;
         }
-        if (Array.isArray(log.path)) {
+        if (Array.isArray(log.path) && log.path.length > 0) {
           attributes["flagon.path"] = log.path;
         }
         if (typeof log.userAction === "boolean") {
@@ -95,13 +113,27 @@ export class OtelSdkExporter implements LogExporter {
         const loc = log.location as
           { x?: number | null; y?: number | null } | undefined;
         if (loc && typeof loc === "object") {
-          if (typeof loc.x === "number") {
+          if (typeof loc.x === "number" && Number.isFinite(loc.x)) {
             attributes["flagon.location.x"] = loc.x;
           }
-          if (typeof loc.y === "number") {
+          if (typeof loc.y === "number" && Number.isFinite(loc.y)) {
             attributes["flagon.location.y"] = loc.y;
           }
         }
+
+        if (isNonEmptyPlainObject(log.targetRect)) {
+          attributes["flagon.target_rect"] = log.targetRect;
+        }
+        if (isNonEmptyPlainObject(log.attributes)) {
+          attributes["flagon.element.attributes"] = log.attributes;
+        }
+
+        const hasNonEmptyBody =
+          log.details !== undefined &&
+          log.details !== null &&
+          (typeof log.details !== "object" ||
+            Array.isArray(log.details) ||
+            Object.keys(log.details as Record<string, unknown>).length > 0);
 
         this.logger.emit({
           timestamp,
@@ -109,7 +141,7 @@ export class OtelSdkExporter implements LogExporter {
           severityNumber: 9,
           severityText: "INFO",
           eventName,
-          body: log.details ?? eventName,
+          body: hasNonEmptyBody ? log.details : eventName,
           attributes,
         });
       }

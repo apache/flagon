@@ -244,6 +244,10 @@ function resolveTraceContext(
   log: Logging.Log,
   config?: Configuration,
 ): { traceId?: string; spanId?: string } {
+  if (config?.getResolvedPrivacy?.()?.attachTraceContext === false) {
+    return {};
+  }
+
   let rawTraceId = typeof log.traceId === "string" ? log.traceId : undefined;
   let rawSpanId = typeof log.spanId === "string" ? log.spanId : undefined;
 
@@ -262,7 +266,12 @@ function resolveTraceContext(
     }
   }
 
-  if (!rawTraceId || !rawSpanId) {
+  const allowGlobalOtel =
+    config === undefined ||
+    (typeof config.isPrivacyLocked === "function"
+      ? !config.isPrivacyLocked()
+      : true);
+  if ((!rawTraceId || !rawSpanId) && allowGlobalOtel) {
     const globalOtel = (
       globalThis as unknown as {
         opentelemetry?: {
@@ -343,18 +352,27 @@ export function buildOtlpResourceAttributes(
   }
 
   const sessionId =
-    (typeof first.sessionId === "string" && first.sessionId) ||
-    config?.sessionId;
+    "sessionId" in first
+      ? typeof first.sessionId === "string"
+        ? first.sessionId
+        : null
+      : config?.sessionId;
   pushStringAttr(attrs, "session.id", sessionId);
 
   const httpSessionId =
-    (typeof first.httpSessionId === "string" && first.httpSessionId) ||
-    config?.httpSessionId;
+    "httpSessionId" in first
+      ? typeof first.httpSessionId === "string"
+        ? first.httpSessionId
+        : null
+      : config?.httpSessionId;
   pushStringAttr(attrs, "flagon.http_session_id", httpSessionId);
 
   const browserSessionId =
-    (typeof first.browserSessionId === "string" && first.browserSessionId) ||
-    config?.browserSessionId;
+    "browserSessionId" in first
+      ? typeof first.browserSessionId === "string"
+        ? first.browserSessionId
+        : null
+      : config?.browserSessionId;
   pushStringAttr(attrs, "flagon.browser_session_id", browserSessionId);
 
   const scrnRes = first.scrnRes as
